@@ -1,0 +1,25 @@
+version: '3'
+services:
+  postgresql:
+    image: postgres
+    restart: always
+    env_file: 
+      - .env.production
+    volumes:
+      - /var/lib/postgresql/data:/var/lib/postgresql/data
+    ports: 
+      - 5432:5432
+  api:
+    image: ccsl-api:${CCSL_VERSION:-latest}
+    restart: always
+    ports: 
+      - 8888:8888
+    env_file: 
+      - .env.production
+    depends_on:
+      - postgresql
+    links: 
+      - postgresql
+    volumes: 
+      - /var/log/ccsl:/app/logs
+      - /etc/ccsl/app.prod.yml:/app/configs/app.prod.yml

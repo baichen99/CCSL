@@ -1,0 +1,32 @@
+.DS_Store
+node_modules
+/dist
+
+# local env files
+.env.local
+.env.*.local
+.env
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+logs/
+
+# Editor directories and files
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw*
+
+# binary execute file
+ccsl
+ccsl.exe
+docker.tar
+
+# production config file
+configs/app.prod.yml
+.env.production

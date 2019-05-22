@@ -1,0 +1,59 @@
+<template>
+  <el-card
+    shadow="hover"
+    :body-style="{ padding: '0px' }"
+  >
+    <video-player
+      class="vjs-big-play-centered"
+      :options="{
+        sources: [{ type: 'video/mp4', src: 'public/videos/'+video.videoPath }]
+      }"
+    />
+    <div
+      class="tags-container"
+      @click="onVideoClick(video)"
+    >
+      <div class="tags">
+        <span class="tag-value">{{ video.region }}</span>
+        <span class="tag-value">{{ video.chinese.split("（")[0] }}</span>
+      </div>
+    </div>
+  </el-card>
+</template>
+
+<script>
+export default {
+  name: "VideoCard",
+  props: {
+    video: {
+      type: Object,
+      required: true,
+      default: () => ({})
+    }
+  },
+  methods: {
+    onVideoClick(video) {
+      this.$emit("on-video-click", video);
+    }
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+.el-card {
+  background: #efefef;
+  .tags-container {
+    cursor: pointer;
+    padding: 10px 0;
+  }
+  .tags {
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+  .tag-label {
+    font-weight: bold;
+  }
+}
+</style>
