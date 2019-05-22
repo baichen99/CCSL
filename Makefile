@@ -8,9 +8,13 @@ build:
 compile:
 	@export CGO_ENABLED=0 && export GOOS=linux && export GOARCH=amd64 && go build
 
+download:
+	@go mod download
+
 # 创建开发数据库
 devdb:
 	@docker run --name ccsl-pg -e POSTGRES_PASSWORD=password -e POSTGRES_USER=ccsl -e POSTGRES_DB=ccsl -p 0.0.0.0:5432:5432 -d postgres
+
 # 清理环境
 clean:
 	@go mod tidy && rm -rf node_modules
