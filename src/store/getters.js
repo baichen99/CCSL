@@ -8,6 +8,7 @@ const getters = {
   permission_routes: state => state.permission.routes,
   sign: state => state.signlang.sign,
   regions: state => state.signlang.regions,
-  wordTypes: state => state.signlang.wordTypes
+  wordTypes: state => state.signlang.wordTypes,
+  letters: state => state.signlang.letters
 };
 export default getters;

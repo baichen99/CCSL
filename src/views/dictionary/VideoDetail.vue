@@ -1,35 +1,39 @@
 <template>
   <div>
-    <video-player
-      :options="{
+    <div class="video">
+      <video-player
+        :options="{
         sources: [{ type: 'video/mp4', src: 'public/videos/'+video.videoPath }]
       }"
-      width="100%"
-      class="vjs-big-play-centered"
-    />
+        width="100%"
+        class="vjs-big-play-centered"
+      />
+    </div>
+
     <div class="tags-container">
       <div class="tags">
         <span class="tag-label">地区</span>
         <span class="tag-value">{{ video.region }}</span>
-        <span class="tag-label">性别</span>
-        <span class="tag-value">{{ video.gender }}</span>
-      </div>
-      <div class="tags">
         <span class="tag-label">汉语转写</span>
         <span class="tag-value">{{ video.chinese }}</span>
+
+      </div>
+      <div class="tags">
+        <span class="tag-label">词性</span>
+        <span class="tag-value">{{ video.type }}</span>
         <span class="tag-label">英语转写</span>
         <span class="tag-value">{{ video.english }}</span>
       </div>
-      <div class="tags">
-        <span class="tag-label">汉语音序</span>
-        <span class="tag-value">{{ video.initial }}</span>
-        <span class="tag-label">词性</span>
-        <span class="tag-value">{{ video.type }}</span>
-      </div>
+      <!-- <div class="tags"> -->
+      <!-- <span class="tag-label">汉语音序</span>
+        <span class="tag-value">{{ video.initial }}</span> -->
+      <!-- <span class="tag-label">性别</span>
+        <span class="tag-value">{{ video.gender }}</span> -->
+      <!-- </div> -->
       <div class="tags">
         <span class="tag-label">构词方式</span>
         <span class="tag-value">{{ video.constructType || "暂无数据" }}</span>
-        <span class="tag-label">复合词构词词语</span>
+        <span class="tag-label">构词词语</span>
         <span class="tag-value">{{ video.constructWords || "暂无数据" }}</span>
       </div>
       <div
@@ -37,7 +41,7 @@
         class="tags"
       >
         <span class="tag-label">左手手型</span>
-        <span class="tag-value">
+        <span class="tag-value" style="width:50%">
           <span
             v-for="item in video.leftSign.split(',')"
             :key="item"
@@ -61,7 +65,7 @@
         class="tags"
       >
         <span class="tag-label">右手手型</span>
-        <span class="tag-value">
+        <span class="tag-value" style="width:50%">
           <span
             v-for="item in video.rightSign.split(',')"
             :key="item"
@@ -98,13 +102,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.video {
+  padding: 30px;
+}
+
 .tags {
+  text-align: center;
   padding: 10px 20px;
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-}
-.tag-label {
-  font-weight: bold;
+  line-height: 30px;
+  .tag-label {
+    width: 25%;
+    font-weight: bold;
+  }
+  .tag-value {
+    width: 25%;
+  }
 }
 </style>

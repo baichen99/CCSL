@@ -32,9 +32,8 @@ export const routes = [
     children: [
       {
         path: "/",
-        redirect: "/dictionary",
-        // name: "Index",
-        // component: () => import("@/views/home/Home.vue"),
+        name: "Index",
+        component: () => import("@/views/home/Home.vue"),
         hidden: true
       },
       {
