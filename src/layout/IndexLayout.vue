@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import SlHeader from "@/views/Header.vue";
-import SlFooter from "@/views/Footer.vue";
+import SlHeader from "@/layout/Header.vue";
+import SlFooter from "@/layout/Footer.vue";
 export default {
   name: "Index",
   components: {

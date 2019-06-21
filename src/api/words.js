@@ -1,8 +1,8 @@
 import request from "@/utils/request";
 
-export function getVideos(params) {
+export function getWords(params) {
   return request({
-    url: `/videos`,
+    url: `/words`,
     method: "get",
     params
   });

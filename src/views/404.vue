@@ -25,7 +25,7 @@
       </div>
       <div class="bullshit">
         <div class="bullshit__oops">OOPS!</div>
-        <div class="bullshit__headline">{{ message }}</div>
+        <div class="bullshit__headline">此路不通，正在施工中</div>
         <a
           href="/"
           class="bullshit__return-home"
@@ -37,23 +37,24 @@
 
 <script>
 export default {
-  name: "Page404",
-  computed: {
-    message() {
-      return "没有这个页面";
-    }
-  }
+  name: "Page404"
 };
 </script>
 
 <style lang="scss" scoped>
 .wscn-http404-container {
-  padding-top: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 .wscn-http404 {
   position: relative;
   width: 1200px;
   padding: 0 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
   .pic-404 {
     position: relative;

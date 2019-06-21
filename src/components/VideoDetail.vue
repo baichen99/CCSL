@@ -3,8 +3,8 @@
     <div class="video">
       <video-player
         :options="{
-        sources: [{ type: 'video/mp4', src: 'public/videos/'+video.videoPath }]
-      }"
+          sources: [{ type: 'video/mp4', src: 'public/videos/'+video.videoPath }]
+        }"
         width="100%"
         class="vjs-big-play-centered"
       />
@@ -24,12 +24,6 @@
         <span class="tag-label">英语转写</span>
         <span class="tag-value">{{ video.english }}</span>
       </div>
-      <!-- <div class="tags"> -->
-      <!-- <span class="tag-label">汉语音序</span>
-        <span class="tag-value">{{ video.initial }}</span> -->
-      <!-- <span class="tag-label">性别</span>
-        <span class="tag-value">{{ video.gender }}</span> -->
-      <!-- </div> -->
       <div class="tags">
         <span class="tag-label">构词方式</span>
         <span class="tag-value">{{ video.constructType || "暂无数据" }}</span>

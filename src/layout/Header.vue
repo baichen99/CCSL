@@ -13,35 +13,36 @@
         </div>
       </div>
       <el-menu
-        :default-active="'/'"
+        :default-active="defaultActive"
         mode="horizontal"
         :router="true"
         active-text-color="#2363C3"
       >
         <el-menu-item index="/">首页</el-menu-item>
-        <el-menu-item index="/dictionary">语料库</el-menu-item>
-        <el-submenu index="/academic">
-          <template slot="title">学术</template>
+        <el-menu-item index="/introduction">中心简介</el-menu-item>
+        <el-menu-item index="/team">研究团队</el-menu-item>
+        <el-submenu index="/research">
+          <template slot="title">研究成果</template>
           <el-menu-item
-            v-for="item in academy"
+            v-for="item in researches"
             :key="item.url"
             :index="item.url"
-            :route="item.route"
           >
             {{ item.title }}
           </el-menu-item>
         </el-submenu>
-        <el-submenu index="/about">
-          <template slot="title">关于</template>
+        <el-submenu index="/database">
+          <template slot="title">数据库</template>
           <el-menu-item
-            v-for="item in about"
+            v-for="item in databases"
             :key="item.url"
             :index="item.url"
-            :route="item.route"
           >
             {{ item.title }}
           </el-menu-item>
         </el-submenu>
+        <el-menu-item index="/learning-platform">学习平台</el-menu-item>
+        <el-menu-item index="/contact">联系我们</el-menu-item>
       </el-menu>
     </div>
   </header>
@@ -50,53 +51,47 @@
 <script>
 export default {
   name: "Header",
+
   data: () => ({
-    academy: [
+    defaultActive: "/",
+    researches: [
       {
-        url: "/team",
-        title: "研究团队",
-        route: {
-          name: "news-detail",
-          query: { data: "研究团队", type: "introduction" }
-        }
+        url: "/projects",
+        title: "科研项目"
       },
       {
-        url: "/research",
-        title: "研究成果",
-        route: { name: "news-list", query: { newsType: "研究成果" } }
+        url: "/papers",
+        title: "论文发表"
       },
       {
-        url: "/activity",
-        title: "学术活动",
-        route: { name: "news-list", query: { newsType: "学术活动" } }
+        url: "/books",
+        title: "专著出版"
       }
     ],
-    about: [
+    databases: [
       {
-        url: "/introduction",
-        title: "中心简介",
-        route: {
-          name: "news-detail",
-          query: { data: "中心简介", type: "introduction" }
-        }
+        url: "/universal-contrast",
+        title: "国家通用手语比对语料库"
       },
       {
-        url: "/inform",
-        title: "通知公告",
-        route: { name: "news-list", query: { newsType: "通知公告" } }
+        url: "/shanghai-verb",
+        title: "上海手语动词语料库"
       },
       {
-        url: "/download",
-        title: "资料下载",
-        route: { name: "news-list", query: { newsType: "资料下载" } }
+        url: "/proper-noun",
+        title: "专有名词语料库"
       },
       {
-        url: "/contact",
-        title: "联系我们",
-        route: {
-          name: "news-detail",
-          query: { data: "联系我们", type: "introduction" }
-        }
+        url: "/signlang-article",
+        title: "手语语篇数据库"
+      },
+      {
+        url: "/research-papers",
+        title: "手语研究文献数据库"
+      },
+      {
+        url: "signlang-term",
+        title: "手语研究术语库"
       }
     ]
   }),
@@ -109,12 +104,12 @@ export default {
       }
     }
   },
+  created() {
+    this.setActiveMenu();
+  },
   methods: {
-    getNews(newsType) {
-      this.$router.push({
-        name: "news-list",
-        params: { newsType }
-      });
+    setActiveMenu() {
+      this.defaultActive = this.$route.path;
     }
   }
 };
@@ -122,7 +117,7 @@ export default {
 
 <style lang="scss">
 header {
-  height: 62px;
+  height: 60px;
 
   div {
     height: 100%;

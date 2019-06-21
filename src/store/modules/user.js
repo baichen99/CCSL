@@ -1,4 +1,4 @@
-import { login, getInfo } from "@/api/user";
+import { login, getInfo } from "@/api/users";
 import { getToken, setToken, removeToken } from "@/utils/tools";
 // import { resetRouter } from "@/router";
 
@@ -66,8 +66,6 @@ const actions = {
         });
     });
   },
-
-  // user logout
   logout({ commit }) {
     return new Promise(resolve => {
       commit("SET_TOKEN", "");

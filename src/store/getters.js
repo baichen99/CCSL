@@ -9,6 +9,7 @@ const getters = {
   sign: state => state.signlang.sign,
   regions: state => state.signlang.regions,
   wordTypes: state => state.signlang.wordTypes,
-  letters: state => state.signlang.letters
+  letters: state => state.signlang.letters,
+  words: state => state.signlang.words
 };
 export default getters;

@@ -17,9 +17,9 @@ type WordController struct {
 
 // BeforeActivation will register routes for controllers
 func (c *WordController) BeforeActivation(app mvc.BeforeActivation) {
-	app.Handle("GET", "/", "GetWordsList", middlewares.CheckJWTToken)
+	app.Handle("GET", "/", "GetWordsList") //, middlewares.CheckJWTToken)
 	app.Handle("POST", "/", "CreateWord", middlewares.CheckJWTToken, middlewares.CheckAdmin)
-	app.Handle("GET", "/{id: string}", "GetWord", middlewares.CheckJWTToken)
+	app.Handle("GET", "/{id: string}", "GetWord") //, middlewares.CheckJWTToken)
 	app.Handle("PUT", "/{id: string}", "UpdateWord", middlewares.CheckJWTToken, middlewares.CheckAdmin)
 	app.Handle("DELETE", "/{id: string}", "DeleteWord", middlewares.CheckJWTToken, middlewares.CheckAdmin)
 }

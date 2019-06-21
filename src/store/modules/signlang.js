@@ -1,3 +1,5 @@
+import { getWords } from "@/api/words";
+
 const state = {
   sign: [
     "1",
@@ -138,7 +140,6 @@ const state = {
     "F",
     "G",
     "H",
-    // "I",
     "J",
     "K",
     "L",
@@ -150,16 +151,34 @@ const state = {
     "R",
     "S",
     "T",
-    "U",
-    // "V",
     "W",
     "X",
     "Y",
     "Z"
-  ]
+  ],
+  words: {}
+};
+
+const mutations = {
+  setWords(state, { initial, words }) {
+    state.words[initial] = words;
+  }
+};
+
+const actions = {
+  getWords({ commit }) {
+    for (let i = 0; i < state.letters.length; i++) {
+      const initial = state.letters[i];
+      getWords({ initial, limit: 0 }).then(res => {
+        commit("setWords", { initial, words: res.data.words });
+      });
+    }
+  }
 };
 
 export default {
   namespaced: true,
-  state
+  state,
+  actions,
+  mutations
 };

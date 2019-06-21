@@ -6,7 +6,7 @@
     <video-player
       class="vjs-big-play-centered"
       :options="{
-        sources: [{ type: 'video/mp4', src: 'public/videos/'+video.videoPath }]
+        sources: [{ type: 'video/mp4', src: 'public/videos/' + video.videoPath }]
       }"
     />
     <div
@@ -14,7 +14,10 @@
       @click="onVideoClick(video)"
     >
       <div class="tags">
-        <span class="tag-value">{{ video.region }}</span>
+        <span
+          v-if="showRegion"
+          class="tag-value"
+        >{{ video.region }}</span>
         <span class="tag-value">{{ video.chinese.split("（")[0] }}</span>
       </div>
     </div>
@@ -29,6 +32,10 @@ export default {
       type: Object,
       required: true,
       default: () => ({})
+    },
+    showRegion: {
+      type: Boolean,
+      default: () => true
     }
   },
   methods: {
@@ -44,10 +51,10 @@ export default {
   background: #efefef;
   .tags-container {
     cursor: pointer;
-    padding: 10px 0;
+    padding: 5px 0;
   }
   .tags {
-    padding: 10px 20px;
+    padding: 10px;
     display: flex;
     align-items: center;
     justify-content: space-evenly;

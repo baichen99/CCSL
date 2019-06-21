@@ -1,12 +1,12 @@
 <template>
-  <div class="dictionary">
+  <div class="universal-contrast">
     <el-card class="sidebar">
       <h3 class="title">手型检索</h3>
       <div class="sign">
         <div
-          class="sign-box"
           v-for="(item,index) in $store.getters.sign"
           :key="index"
+          class="sign-box"
         >
           <el-tooltip
             effect="dark"
@@ -14,10 +14,10 @@
             placement="top"
           >
             <img
-              @click="searchBySign(item)"
               style="width:100%"
               :src="'sign/'+item+'.jpg'"
               :alt="item"
+              @click="searchBySign(item)"
             >
           </el-tooltip>
         </div>
@@ -195,23 +195,35 @@
     <el-card class="sidebar">
       <h3 class="title">音序检索</h3>
       <div class="initial">
-        <el-button
-          v-for="letter in $store.getters.letters"
-          :key="letter"
-          plain
-          @click="searchByInitial(letter)"
-        >{{letter}}</el-button>
+        <el-collapse accordion>
+          <el-collapse-item
+            v-for="letter in $store.getters.letters"
+            :key="letter"
+            :title="letter"
+          >
+            <div
+              v-for="word in words[letter]"
+              :key="word.id"
+            >
+              <el-link
+                type="primary"
+                @click="searchByWord(word.id)"
+              >{{ word.chinese }}</el-link>
+            </div>
+          </el-collapse-item>
+        </el-collapse>
       </div>
     </el-card>
   </div>
 </template>
 
 <script>
-import VideoCard from "./VideoCard.vue";
-import VideoDetail from "./VideoDetail.vue";
-import { getVideos } from "@/api/video";
+import VideoCard from "@/components/VideoCard.vue";
+import VideoDetail from "@/components/VideoDetail.vue";
+import { getUniversalContrastVideos } from "@/api/videos";
+
 export default {
-  name: "Dictionary",
+  name: "UniversalContrast",
   components: {
     VideoCard,
     VideoDetail
@@ -222,6 +234,7 @@ export default {
       videoDetail: {},
       advancedSearch: false,
       videos: [],
+      wordID: "",
       keywordType: "",
       keyword: "",
       page: 1,
@@ -237,8 +250,14 @@ export default {
       constructWords: ""
     };
   },
+  computed: {
+    words() {
+      return this.$store.state.signlang.words;
+    }
+  },
   methods: {
     clearParams() {
+      this.wordID = "";
       this.gender = "";
       this.region = "";
       this.left = "";
@@ -252,6 +271,7 @@ export default {
     },
     getData() {
       let params = {
+        word: this.wordID,
         page: this.page,
         limit: this.limit,
         gender: this.gender,
@@ -268,13 +288,13 @@ export default {
       } else if (this.keywordType === "english") {
         params.english = this.keyword;
       }
-      getVideos(params).then(res => {
+      getUniversalContrastVideos(params).then(res => {
         this.videos = res.data.videos;
         this.page = res.data.page;
         this.limit = res.data.limit;
         this.total = res.data.total;
         if (this.videos.length === 0) {
-          this.$message("没有找到相关的视频哦～");
+          this.$message("没有找到相关的数据哦～");
         }
       });
     },
@@ -282,6 +302,7 @@ export default {
       this.page = 1;
       this.getData();
     },
+
     changePage(page) {
       this.page = page;
       this.getData();
@@ -291,12 +312,12 @@ export default {
       this.showDetail = true;
     },
     searchByButton() {
-      this.initial = "";
+      this.wordID = "";
       this.searchVideos();
     },
-    searchByInitial(initial) {
+    searchByWord(wordID) {
       this.clearParams();
-      this.initial = initial;
+      this.wordID = wordID;
       this.searchVideos();
     },
     searchBySign(sign) {
@@ -309,15 +330,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.dictionary {
+.universal-contrast {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   height: 100%;
   padding: 10px;
 
   .sidebar {
-    width: 20%;
+    width: 18%;
     height: 600px;
     overflow: scroll;
     .title {
@@ -331,22 +352,23 @@ export default {
     align-items: center;
     justify-content: center;
     .sign-box {
-      width: 33%;
+      width: 50%;
       img {
         cursor: pointer;
       }
     }
   }
+
   .initial {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    .el-button {
-      width: 60px;
-      margin: 5px;
+    .el-collapse {
+      width: 100%;
     }
   }
+
   .search {
     width: 60%;
     padding: 40px;
