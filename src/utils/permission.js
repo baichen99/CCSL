@@ -3,7 +3,8 @@ import store from "../store";
 import { Message } from "element-ui";
 import NProgress from "nprogress"; // progress bar
 import "nprogress/nprogress.css"; // progress bar style
-import { getToken, getPageTitle, hasPermission } from "@/utils/tools";
+// import { getToken, getPageTitle, hasPermission } from "@/utils/tools";
+import { getToken, getPageTitle } from "@/utils/tools";
 
 NProgress.configure({ showSpinner: false });
 

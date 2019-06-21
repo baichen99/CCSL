@@ -27,6 +27,7 @@
             v-for="item in researches"
             :key="item.url"
             :index="item.url"
+            style="text-align:center"
           >
             {{ item.title }}
           </el-menu-item>
@@ -37,6 +38,7 @@
             v-for="item in databases"
             :key="item.url"
             :index="item.url"
+            style="text-align:center;"
           >
             {{ item.title }}
           </el-menu-item>

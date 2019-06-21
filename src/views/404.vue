@@ -26,10 +26,11 @@
       <div class="bullshit">
         <div class="bullshit__oops">OOPS!</div>
         <div class="bullshit__headline">此路不通，正在施工中</div>
-        <a
-          href="/"
-          class="bullshit__return-home"
-        >返回首页</a>
+        <el-button
+          round
+          type="primary"
+          @click="$router.push('/')"
+        >返回首页</el-button>
       </div>
     </div>
   </div>
@@ -205,24 +206,6 @@ export default {
       animation-name: slideUp;
       animation-duration: 0.5s;
       animation-delay: 0.2s;
-      animation-fill-mode: forwards;
-    }
-    &__return-home {
-      display: block;
-      float: left;
-      width: 110px;
-      height: 36px;
-      background: #1482f0;
-      border-radius: 100px;
-      text-align: center;
-      color: #ffffff;
-      opacity: 0;
-      font-size: 14px;
-      line-height: 36px;
-      cursor: pointer;
-      animation-name: slideUp;
-      animation-duration: 0.5s;
-      animation-delay: 0.3s;
       animation-fill-mode: forwards;
     }
     @keyframes slideUp {

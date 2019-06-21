@@ -8,13 +8,13 @@ import VueVideoPlayer from "vue-video-player";
 // import locale from "element-ui/lib/locale/lang/zh-CN"; // lang i18n
 import "video.js/dist/video-js.css";
 // import "normalize.css/normalize.css"; // CSS resets
-import "element-ui/lib/theme-chalk/index.css";
-import "@/styles/index.scss"; // global css
+// import "@/styles/index.scss"; // element css
+import "@/styles/global.scss";
 import "@/icons"; // icon
 import "@/utils/permission"; // permission control
 
 Vue.use(ElementUI, {
-  zIndex: 3000,
+  zIndex: 3000
   // locale
 });
 Vue.use(VueVideoPlayer, settings.videojsOptions);

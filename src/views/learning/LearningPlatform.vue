@@ -42,7 +42,7 @@
             :key="video.id"
             :sm="24"
             :md="12"
-            :lg="8"
+            :lg="12"
           >
             <video-card
               :show-region="false"
@@ -90,7 +90,7 @@ export default {
       wordID: "",
       keyword: "",
       page: 1,
-      limit: 12,
+      limit: 4,
       total: 0
     };
   },
