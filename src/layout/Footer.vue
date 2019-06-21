@@ -1,6 +1,6 @@
 <template>
   <footer>
-    <div class="iconfont icon-logo_svg" />
+    <div class="iconfont icon-ccsl" />
     <div>沪ICP备 09014157号</div>
     <div>中国手语及聋人研究中心</div>
     <div>邮箱：ccsl@oa.shu.edu.cn &nbsp; 邮编：200444</div>
@@ -32,7 +32,7 @@ footer {
     text-align: center;
   }
 
-  .icon-logo_svg {
+  .icon-ccsl {
     font-size: 50px;
     padding: 20px;
   }

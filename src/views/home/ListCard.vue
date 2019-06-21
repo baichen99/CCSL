@@ -2,6 +2,7 @@
   <div class="list-card">
     <el-card shadow="hover">
       <div slot="header">
+        <span :class="['iconfont','icon-'+list.icon] " />
         <span>{{ list.title }}</span>
         <el-link
           class="list-more"
@@ -47,6 +48,11 @@ export default {
     .list-more {
       float: right;
       padding: 3px 0;
+    }
+    .iconfont {
+      font-size: 18px;
+      color: #2363c3;
+      padding-right: 15px;
     }
 
     .list-content {
