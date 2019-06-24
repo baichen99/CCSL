@@ -1,6 +1,5 @@
-
 module.exports = {
-  title: "CCSL SHU",
+  title: "中国手语及聋人研究中心",
   fixedHeader: false,
   sidebarLogo: true,
   videojsOptions: {

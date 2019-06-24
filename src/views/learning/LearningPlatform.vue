@@ -1,25 +1,30 @@
 <template>
   <div class="learning-platform">
-    <div class="search">
-      <h3>通用手语学习平台</h3>
-      <el-card class="initial-search">
-        <div class="initial">
-          <el-collapse accordion>
-            <el-collapse-item
-              v-for="letter in $store.getters.letters"
-              :key="letter"
-              :title="letter"
+    <el-card class="sidebar">
+      <h3 class="title">音序检索</h3>
+      <div class="initial">
+        <el-collapse accordion>
+          <el-collapse-item
+            v-for="letter in $store.getters.letters.slice(0,11)"
+            :key="letter"
+            :title="letter"
+          >
+            <div
+              v-for="word in words[letter]"
+              :key="word.id"
             >
               <el-link
-                v-for="word in words[letter]"
-                :key="word.id"
                 type="primary"
                 @click="searchByWord(word.id)"
               >{{ word.chinese }}</el-link>
-            </el-collapse-item>
-          </el-collapse>
-        </div>
-      </el-card>
+            </div>
+          </el-collapse-item>
+        </el-collapse>
+      </div>
+    </el-card>
+    <div class="search">
+      <h3>国家通用手语学习平台</h3>
+
       <el-input
         v-model="keyword"
         class="options"
@@ -67,6 +72,28 @@
         </el-dialog>
       </el-card>
     </div>
+    <el-card class="sidebar">
+      <h3 class="title">音序检索</h3>
+      <div class="initial">
+        <el-collapse accordion>
+          <el-collapse-item
+            v-for="letter in $store.getters.letters.slice(11)"
+            :key="letter"
+            :title="letter"
+          >
+            <div
+              v-for="word in words[letter]"
+              :key="word.id"
+            >
+              <el-link
+                type="primary"
+                @click="searchByWord(word.id)"
+              >{{ word.chinese }}</el-link>
+            </div>
+          </el-collapse-item>
+        </el-collapse>
+      </div>
+    </el-card>
   </div>
 </template>
 
@@ -153,10 +180,18 @@ export default {
 .learning-platform {
   display: flex;
   align-items: center;
-  flex-direction: column;
   justify-content: space-between;
   height: 100%;
-  padding: 10px;
+  padding: 10px 0;
+
+  .sidebar {
+    width: 18%;
+    height: 600px;
+    overflow: scroll;
+    .title {
+      text-align: center;
+    }
+  }
 
   .initial-search {
     height: 300px;
@@ -170,9 +205,6 @@ export default {
     justify-content: center;
     .el-collapse {
       width: 100%;
-    }
-    .el-link {
-      padding: 5px 10px;
     }
   }
 

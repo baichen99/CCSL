@@ -28,21 +28,28 @@ const routes = [
     children: [
       {
         path: "/",
-        name: "Index",
+        name: "Home",
         component: () => import("@/views/home/Home.vue"),
         hidden: true
       },
       {
         path: "/universal-contrast",
-        name: "ContrastDatabase",
+        name: "UniversalContrast",
         component: () => import("@/views/database/UniversalContrast.vue"),
-        hidden: true
+        hidden: true,
+        meta: {
+          title: "国家通用手语比对语料库",
+          auth: true
+        }
       },
       {
         path: "/learning-platform",
         name: "LearningPlatform",
         component: () => import("@/views/learning/LearningPlatform.vue"),
-        hidden: true
+        hidden: true,
+        meta: {
+          auth: true
+        }
       }
     ]
   },

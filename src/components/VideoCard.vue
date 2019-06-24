@@ -8,6 +8,7 @@
       :options="{
         sources: [{ type: 'video/mp4', src: 'public/videos/' + video.videoPath }]
       }"
+      @contextmenu.native.prevent=""
     />
     <div
       class="tags-container"

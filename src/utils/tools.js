@@ -1,7 +1,7 @@
 import defaultSettings from "@/settings";
 
 const title = defaultSettings.title;
-const TokenKey = "SIGN_LANG_JWT_TOKEN";
+const TokenKey = "CCSL_LANG_JWT_TOKEN";
 
 export function getToken() {
   return localStorage.getItem(TokenKey);

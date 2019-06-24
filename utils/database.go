@@ -63,64 +63,35 @@ func InitTestUser(pg *gorm.DB) {
 			Password: password,
 			UserType: "user",
 		},
-		models.User{
-			Username: "testqwedwuser@qq.com",
-			Password: password,
-			UserType: "user",
-		},
-		models.User{
-			Username: "testwefuser@icloud.com",
-			Password: password,
-			UserType: "user",
-		},
-		models.User{
-			Username: "adrifadean@qq.com",
-			Password: password,
-			UserType: "user",
-		},
-		models.User{
-			Username: "testuser@qq.com",
-			Password: password,
-			UserType: "user",
-		},
-		models.User{
-			Username: "testuse@icloud.com",
-			Password: password,
-			UserType: "user",
-		},
-		models.User{
-			Username: "adriand@qq.com",
-			Password: password,
-			UserType: "user",
-		},
-		models.User{
-			Username: "tesser@qq.com",
-			Password: password,
-			UserType: "user",
-		},
-		models.User{
-			Username: "teer@icloud.com",
-			Password: password,
-			UserType: "user",
-		},
-		models.User{
-			Username: "adriewfand@qq.com",
-			Password: password,
-			UserType: "user",
-		},
-		models.User{
-			Username: "tesseasr@qq.com",
-			Password: password,
-			UserType: "user",
-		},
-		models.User{
-			Username: "teeewqrr@icloud.com",
-			Password: password,
-			UserType: "user",
-		},
 	}
 	for _, user := range testUsers {
 		pg.Create(&user)
+	}
+}
+
+// InitProdUser inits user on production server
+func InitProdUser(pg *gorm.DB) {
+	password, _ := HashPassword("learning!CCSL")
+	users := []models.User{
+		models.User{
+			Username: "learning@ccsl.shu.edu.cn",
+			Password: password,
+			UserType: "user",
+			Name:     "学习平台公用账号",
+		},
+	}
+	for _, user := range users {
+		pg.Create(&user)
+	}
+	superUsers := []models.User{
+		models.User{
+			Username: "16121041",
+			UserType: "super",
+			Name:     "段靖",
+		},
+	}
+	for _, superUser := range superUsers {
+		pg.Create(&superUser)
 	}
 }
 

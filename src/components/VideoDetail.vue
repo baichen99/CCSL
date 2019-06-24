@@ -7,6 +7,7 @@
         }"
         width="100%"
         class="vjs-big-play-centered"
+        @contextmenu.native.prevent=""
       />
     </div>
 
@@ -35,7 +36,10 @@
         class="tags"
       >
         <span class="tag-label">左手手型</span>
-        <span class="tag-value" style="width:50%">
+        <span
+          class="tag-value"
+          style="width:50%"
+        >
           <span
             v-for="item in video.leftSign.split(',')"
             :key="item"
@@ -59,7 +63,10 @@
         class="tags"
       >
         <span class="tag-label">右手手型</span>
-        <span class="tag-value" style="width:50%">
+        <span
+          class="tag-value"
+          style="width:50%"
+        >
           <span
             v-for="item in video.rightSign.split(',')"
             :key="item"

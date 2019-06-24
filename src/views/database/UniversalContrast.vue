@@ -24,7 +24,7 @@
       </div>
     </el-card>
     <div class="search">
-      <h3>国家通用手语对比语料库</h3>
+      <h3>国家通用手语比对语料库</h3>
       <el-input
         v-model="keyword"
         class="options"
@@ -335,7 +335,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   height: 100%;
-  padding: 10px;
+  padding: 10px 0;
 
   .sidebar {
     width: 18%;
