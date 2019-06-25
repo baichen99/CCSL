@@ -160,7 +160,7 @@ const state = {
 };
 
 const mutations = {
-  setWords(state, { initial, words }) {
+  SET_WORDS(state, { initial, words }) {
     state.words[initial] = words;
   }
 };
@@ -170,7 +170,7 @@ const actions = {
     for (let i = 0; i < state.letters.length; i++) {
       const initial = state.letters[i];
       getWords({ initial, limit: 0 }).then(res => {
-        commit("setWords", { initial, words: res.data.words });
+        commit("SET_WORDS", { initial, words: res.data.words });
       });
     }
   }

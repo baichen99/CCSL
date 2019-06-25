@@ -1,6 +1,5 @@
 import { login, getInfo } from "@/api/users";
 import { getToken, setToken, removeToken } from "@/utils/tools";
-// import { resetRouter } from "@/router";
 
 const state = {
   token: getToken(),

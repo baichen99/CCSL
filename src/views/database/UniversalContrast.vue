@@ -252,7 +252,7 @@ export default {
   },
   computed: {
     words() {
-      return this.$store.state.signlang.words;
+      return this.$store.state.sign.words;
     }
   },
   methods: {
@@ -344,6 +344,11 @@ export default {
     .title {
       text-align: center;
     }
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    -ms-overflow-style: none;
+    overflow: -moz-scrollbars-none;
   }
 
   .sign {

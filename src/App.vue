@@ -8,7 +8,7 @@
 export default {
   name: "App",
   created() {
-    this.$store.dispatch("signlang/getWords");
+    this.$store.dispatch("sign/getWords");
   }
 };
 </script>
@@ -20,6 +20,11 @@ body {
   width: 100%;
   padding: 0;
   margin: 0;
+  -ms-overflow-style: none;
+  overflow: -moz-scrollbars-none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 #app {

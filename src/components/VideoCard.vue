@@ -36,7 +36,7 @@ export default {
     },
     showRegion: {
       type: Boolean,
-      default: () => true
+      default: true
     }
   },
   methods: {

@@ -46,10 +46,7 @@ const routes = [
         path: "/learning-platform",
         name: "LearningPlatform",
         component: () => import("@/views/learning/LearningPlatform.vue"),
-        hidden: true,
-        meta: {
-          auth: true
-        }
+        hidden: true
       }
     ]
   },

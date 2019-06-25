@@ -123,7 +123,7 @@ export default {
   },
   computed: {
     words() {
-      return this.$store.state.signlang.words;
+      return this.$store.state.sign.words;
     }
   },
   methods: {
