@@ -47,7 +47,10 @@
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
-
+      <el-checkbox
+        v-model="remember"
+        class="rem-pwd"
+      >记住登录状态</el-checkbox>
       <el-button
         :loading="loading"
         type="primary"
@@ -56,8 +59,8 @@
       >
         登录
       </el-button>
-
       <div class="tips">
+
         <div>如果您是校内用户，请使用一卡通账号和统一身份认证密码登录</div>
         <div>如果您是校外用户，请使用邮箱和密码登录</div>
       </div>
@@ -86,6 +89,7 @@ export default {
       }
     };
     return {
+      remember: false,
       loginForm: {
         username: "",
         password: ""
@@ -99,17 +103,8 @@ export default {
         ]
       },
       loading: false,
-      passwordType: "password",
-      redirect: undefined
+      passwordType: "password"
     };
-  },
-  watch: {
-    $route: {
-      handler: function(route) {
-        this.redirect = route.query && route.query.redirect;
-      },
-      immediate: true
-    }
   },
   methods: {
     showPwd() {
@@ -127,12 +122,18 @@ export default {
         if (valid) {
           this.loading = true;
           this.$store
-            .dispatch("user/login", this.loginForm)
+            .dispatch("user/login", {
+              username: this.loginForm.username,
+              password: this.loginForm.password,
+              remember: this.remember
+            })
             .then(() => {
-              this.$router.push({ path: this.redirect || "/" });
+              const redirect = this.$route.query.redirect;
+              this.$router.push({ path: redirect || "/" });
               this.loading = false;
             })
-            .catch(() => {
+            .catch(err => {
+              console.log(err);
               this.loading = false;
             });
         } else {
@@ -145,9 +146,6 @@ export default {
 </script>
 
 <style lang="scss">
-/* 修复input 背景不协调 和光标变色 */
-/* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
-
 $bg: #283443;
 $light_gray: #fff;
 $cursor: #fff;
@@ -188,6 +186,10 @@ $cursor: #fff;
     border-radius: 5px;
     color: #454545;
   }
+
+  .el-checkbox__inner {
+    background-color: $bg;
+  }
 }
 </style>
 
@@ -213,7 +215,7 @@ $light_gray: #eee;
 
   .tips {
     font-size: 10px;
-    color: #eeeeee;
+    color: $dark_gray;
     margin-bottom: 10px;
 
     div {
@@ -249,6 +251,10 @@ $light_gray: #eee;
     color: $dark_gray;
     cursor: pointer;
     user-select: none;
+  }
+  .rem-pwd {
+    color: $dark_gray;
+    margin-bottom: 10px;
   }
 }
 </style>

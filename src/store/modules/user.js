@@ -4,7 +4,7 @@ import { getToken, setToken, removeToken } from "@/utils/tools";
 const state = {
   token: getToken(),
   name: "",
-  avatar: "",
+  avatar: "https://axiom-public.axiomacademy.cn/static/default.png",
   id: "",
   roles: []
 };
@@ -28,15 +28,17 @@ const mutations = {
 };
 
 const actions = {
-  login({ commit }, userInfo) {
-    console.log("BEFORE_LOGIN");
-    const { username, password } = userInfo;
+  login({ commit }, user) {
+    const { username, password, remember } = user;
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password })
         .then(response => {
           const token = response.data;
           commit("SET_TOKEN", token);
-          setToken(token);
+          // If remember password, save JWT token to local storage
+          if (remember) {
+            setToken(token);
+          }
           const user = JSON.parse(atob(token.split(".")[1]));
           commit("SET_ID", user.user);
           resolve();
@@ -47,7 +49,18 @@ const actions = {
         });
     });
   },
-  getInfo({ commit, state }) {
+
+  logout({ commit }) {
+    return new Promise(resolve => {
+      commit("SET_TOKEN", "");
+      commit("SET_ID", "");
+      commit("SET_ROLES", []);
+      removeToken();
+      resolve();
+    });
+  },
+
+  getUserInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       getInfo(state.id)
         .then(response => {
@@ -63,15 +76,6 @@ const actions = {
         .catch(error => {
           reject(error);
         });
-    });
-  },
-  logout({ commit }) {
-    return new Promise(resolve => {
-      commit("SET_TOKEN", "");
-      commit("SET_ID", "");
-      commit("SET_ROLES", []);
-      removeToken();
-      resolve();
     });
   }
 };

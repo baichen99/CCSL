@@ -1,18 +1,18 @@
 import defaultSettings from "@/settings";
 
 const title = defaultSettings.title;
-const TokenKey = "CCSL_LANG_JWT_TOKEN";
+const TOKEN_KEY = "CCSL_LANG_TOKEN";
 
 export function getToken() {
-  return localStorage.getItem(TokenKey);
+  return localStorage.getItem(TOKEN_KEY);
 }
 
 export function setToken(token) {
-  return localStorage.setItem(TokenKey, token);
+  return localStorage.setItem(TOKEN_KEY, token);
 }
 
 export function removeToken() {
-  return localStorage.removeItem(TokenKey);
+  return localStorage.removeItem(TOKEN_KEY);
 }
 
 export function getPageTitle(pageTitle) {

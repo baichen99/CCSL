@@ -29,15 +29,16 @@ const routes = [
       {
         path: "/",
         name: "Home",
-        component: () => import("@/views/home/Home.vue"),
-        hidden: true
+        component: () => import("@/views/home/Home.vue")
+        // hidden: true
       },
       {
         path: "/universal-contrast",
         name: "UniversalContrast",
         component: () => import("@/views/database/UniversalContrast.vue"),
-        hidden: true,
+        // hidden: true,
         meta: {
+          roles: ["super", "admin", "user"],
           title: "国家通用手语比对语料库",
           auth: true
         }
@@ -45,31 +46,28 @@ const routes = [
       {
         path: "/learning-platform",
         name: "LearningPlatform",
-        component: () => import("@/views/learning/LearningPlatform.vue"),
-        hidden: true
+        component: () => import("@/views/learning/LearningPlatform"),
+        meta: {
+          title: "国家通用手语学习平台",
+          auth: true
+        }
+        // hidden: true
       }
     ]
   },
   {
-    path: "/404",
-    name: "404Error",
-    component: () => import("@/views/404"),
-    hidden: true
-  },
-  {
     path: "/login",
     name: "Login",
-    component: () => import("@/views/login/index"),
+    component: () => import("@/views/login/Login"),
     hidden: true
   },
-
   {
     path: "/dashboard",
     component: AdminLayout,
     // redirect: "/dashboard",
     children: [
       {
-        path: "/",
+        path: "/dashboard",
         name: "Dashboard",
         component: () => import("@/views/dashboard/index"),
         meta: { title: "Dashboard", icon: "dashboard" }
@@ -81,7 +79,7 @@ const routes = [
     component: AdminLayout,
     redirect: "/example/table",
     name: "Example",
-    meta: { title: "Example", icon: "example", requireAuth: true },
+    meta: { title: "Example", icon: "example" },
     children: [
       {
         path: "table",
@@ -97,7 +95,21 @@ const routes = [
       }
     ]
   },
+  {
+    path: "/404",
+    name: "404Error",
+    component: () => import("@/views/error/404"),
+    hidden: true
+  },
+  {
+    path: "/401",
+    name: "401Error",
+    component: () => import("@/views/error/401"),
+    hidden: true
+  },
   { path: "*", redirect: "/404", hidden: true }
 ];
+
+export const adminRoutes = [];
 
 export default routes;
