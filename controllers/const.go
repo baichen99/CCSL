@@ -123,3 +123,45 @@ func (f performerUpdateForm) ConvertToModel() (performer models.Performer) {
 	}
 	return
 }
+
+// >>> VIDEO <<<
+// ============
+
+type videoCreateForm struct {
+	ConstructType  string    `json:"constructType" validate:"required"`  // 构词方式
+	ConstructWords string    `json:"constructWords" validate:"required"` // 构词词语
+	LeftSign       string    `json:"leftSign" validate:"required"`       // 左手手势
+	RightSign      string    `json:"rightSign" validate:"required"`      // 右手手势
+	VideoPath      string    `json:"videoPath" validate:"required"`      // 视频文件路径
+}
+
+
+func (f videoCreateForm) ConvertToModel() (video models.Video) {
+   video = models.Video{
+        ConstructType: f.ConstructType,
+        ConstructWords: f.ConstructWords,
+        LeftSign: f.LeftSign,
+        RightSign: f.RightSign,
+        VideoPath: f.VideoPath,
+   }
+   return
+}
+
+type videoUpdateForm struct {
+    ConstructType  string    `json:"constructType" validate:"required"`  // 构词方式
+	ConstructWords string    `json:"constructWords" validate:"required"` // 构词词语
+	LeftSign       string    `json:"leftSign" validate:"required"`       // 左手手势
+	RightSign      string    `json:"rightSign" validate:"required"`      // 右手手势
+	VideoPath      string    `json:"videoPath" validate:"required"`      // 视频文件路径
+}
+
+func (f videoUpdateForm) ConvertToModel() (video models.Video) {
+    video = models.Video{
+        ConstructType: f.ConstructType,
+        ConstructWords: f.ConstructWords,
+        LeftSign: f.LeftSign,
+        RightSign: f.RightSign,
+        VideoPath: f.VideoPath,
+    }
+    return
+}
