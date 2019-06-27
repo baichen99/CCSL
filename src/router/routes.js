@@ -59,6 +59,15 @@ const routes = [
         }
       },
       {
+        path: "/contact",
+        name: "Contact",
+        component: () => import("@/views/about/Contact.vue"),
+        meta: {
+          title: "联系我们",
+          auth: false
+        }
+      },
+      {
         path: "/learning-platform",
         name: "LearningPlatform",
         component: () => import("@/views/learning/LearningPlatform"),
