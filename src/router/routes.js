@@ -50,6 +50,15 @@ const routes = [
         }
       },
       {
+        path: "/introduction",
+        name: "Introduction",
+        component: () => import("@/views/about/Introduction.vue"),
+        meta: {
+          title: "中心简介",
+          auth: false
+        }
+      },
+      {
         path: "/learning-platform",
         name: "LearningPlatform",
         component: () => import("@/views/learning/LearningPlatform"),

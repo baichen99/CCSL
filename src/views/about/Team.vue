@@ -1,6 +1,6 @@
 <template>
   <div class="team">
-    <h2 class="title" style="margin-top: 2rem">研究中心人员构成</h2>
+    <h1 class="title">研究中心人员构成</h1>
     <div class="list-container">
       <el-table class="table" :data="EMPList" stripe>
         <el-table-column prop="cls" label="类别">
@@ -75,8 +75,8 @@ export default {
     width: 900px;
     margin: 1rem auto;    
   }
-  .table {
-    // margin-bottom: 1rem auto ;
-  }
+}
+.title {
+   margin: 1rem;
 }
 </style>
