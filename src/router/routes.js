@@ -33,6 +33,12 @@ const routes = [
         // hidden: true
       },
       {
+        path: "/team",
+        component: () => import("@/views/about/Team"),
+        name: "Team",
+        meta: { title: "研究团队", auth: false}
+      },
+      {
         path: "/universal-contrast",
         name: "UniversalContrast",
         component: () => import("@/views/database/UniversalContrast.vue"),
