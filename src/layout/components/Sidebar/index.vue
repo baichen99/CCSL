@@ -35,7 +35,10 @@ import variables from "@/styles/variables.scss";
 export default {
   components: { SidebarItem, Logo },
   computed: {
-    ...mapGetters(["sidebar"]),
+    ...mapGetters(["permission_routes", "sidebar"]),
+    routes() {
+      return this.$router.options.routes;
+    },
     activeMenu() {
       const route = this.$route;
       const { meta, path } = route;
@@ -53,9 +56,6 @@ export default {
     },
     isCollapse() {
       return !this.sidebar.opened;
-    },
-    routes() {
-      return this.$router.options.routes;
     }
   }
 };
