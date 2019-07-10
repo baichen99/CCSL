@@ -106,3 +106,17 @@ type GetVideoListParameters struct {
 	PerformerID    string
 	WordID         string
 }
+
+type GetNewsListParameters struct {
+	GetListParameters
+	Column   string
+	Title    string
+	Type     string
+	Text     string
+	Language string
+}
+
+type GetCarouselListParameters struct {
+	GetListParameters
+	Title string
+}

@@ -3,7 +3,6 @@ package services
 import (
 	"ccsl/models"
 	"ccsl/utils"
-	"fmt"
 
 	"github.com/jinzhu/gorm"
 )
@@ -56,7 +55,7 @@ func (s *VideoService) GetVideosList(parameters utils.GetVideoListParameters) (v
 		return
 	}
 	// Fetching the items to be returned by the query.
-	orderQuery := fmt.Sprintf("%s %s", parameters.OrderBy, parameters.Order)
+	orderQuery := parameters.OrderBy + " " + parameters.Order
 	if parameters.Limit != 0 {
 		err = query.Order(orderQuery).Limit(parameters.Limit).Offset(parameters.Limit * (parameters.Page - 1)).Scan(&videos).Error
 
@@ -75,12 +74,12 @@ func (s *VideoService) GetVideo(videoID string) (video models.Video, err error) 
 	return
 }
 func (s *VideoService) UpdateVideo(videoID string, updatedData models.Video) (err error) {
-    var video models.Video
-    err = s.PG.Where("id = ?", videoID).Take(&video).Model(&video).Updates(updatedData).Error
+	var video models.Video
+	err = s.PG.Where("id = ?", videoID).Take(&video).Model(&video).Updates(updatedData).Error
 	return
 }
 func (s *VideoService) DeleteVideo(videoID string) (err error) {
-    var video models.Video
+	var video models.Video
 	err = s.PG.Where("id = ?", videoID).Delete(&video).Error
 	return
 }

@@ -3,7 +3,6 @@ package services
 import (
 	"ccsl/models"
 	"ccsl/utils"
-	"fmt"
 
 	"github.com/jinzhu/gorm"
 )
@@ -47,7 +46,7 @@ func (s *WordService) GetWordsList(parameters utils.GetWordListParameters) (word
 	}
 
 	// Fetching the items to be returned by the query.
-	orderQuery := fmt.Sprintf("%s %s", parameters.OrderBy, parameters.Order)
+	orderQuery := parameters.OrderBy + " " + parameters.Order
 	if parameters.Limit != 0 {
 		err = db.Order(orderQuery).Limit(parameters.Limit).Offset(parameters.Limit * (parameters.Page - 1)).Find(&words).Error
 	} else {

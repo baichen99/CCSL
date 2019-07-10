@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"ccsl/models"
+	"time"
 )
 
 const (
@@ -14,6 +15,80 @@ const (
 	limitKey  string = "limit"
 	paramsKey string = "params"
 )
+
+// >>> CAROUSEL <<<
+// ============
+
+type carouselCreateForm struct {
+	Title string `json:"title" validate:"required"`
+	Image string `json:"image" validate:"required"`
+}
+
+func (f carouselCreateForm) ConvertToModel() (carousel models.Carousel) {
+	carousel = models.Carousel{
+		Title: f.Title,
+		Image: f.Image,
+	}
+	return
+}
+
+type carouselUpdateForm struct {
+	Title string `json:"title" validate:"omitempty"`
+	Image string `json:"image" validate:"omitempty"`
+}
+
+func (f carouselUpdateForm) ConvertToModel() (carousel models.Carousel) {
+	carousel = models.Carousel{
+		Title: f.Title,
+		Image: f.Image,
+	}
+	return
+}
+
+// >>> NEWS <<<
+// ============
+
+type newsCreateForm struct {
+	Column   string    `json:"column" validate:"required"`
+	Date     time.Time `json:"date" validate:"required"`
+	Title    string    `json:"title" validate:"required"`
+	Type     string    `json:"type" validate:"required,oneof=link document"`     // Type can be 'link' or 'document'
+	Text     string    `json:"text" validate:"required"`                         // Text
+	Language string    `json:"language"  validate:"omitempty,oneof=zh-CN en-US"` // Can be zh-CN or en-US
+}
+
+func (f newsCreateForm) ConvertToModel() (news models.News) {
+	news = models.News{
+		Column:   f.Column,
+		Date:     f.Date,
+		Title:    f.Title,
+		Type:     f.Type,
+		Text:     f.Text,
+		Language: f.Language,
+	}
+	return
+}
+
+type newsUpdateForm struct {
+	Column   string    `json:"column"  validate:"omitempty"`
+	Date     time.Time `json:"date"  validate:"omitempty"`
+	Title    string    `json:"title"  validate:"omitempty"`
+	Type     string    `json:"type"  validate:"omitempty,oneof=link document"`
+	Text     string    `json:"text"  validate:"omitempty"`
+	Language string    `json:"language"  validate:"omitempty"`
+}
+
+func (f newsUpdateForm) ConvertToModel() (news models.News) {
+	news = models.News{
+		Column:   f.Column,
+		Date:     f.Date,
+		Title:    f.Title,
+		Type:     f.Type,
+		Text:     f.Text,
+		Language: f.Language,
+	}
+	return
+}
 
 // >>> USER <<<
 // ============

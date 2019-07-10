@@ -12,10 +12,11 @@ type Carousel struct {
 // News model
 type News struct {
 	Base
-	Column   string    `gorm:"NOT NULL" json:"column"` // Column：'通知公告','研究成果','学术活动','资料下载'
-	Date     time.Time `gorm:"NOT NULL" json:"date"`   // Data
-	Title    string    `gorm:"NOT NULL" json:"title"`  // Title
-	Type     string    `gorm:"NOT NULL" json:"type"`   // Type can be 'link' or 'text'
-	Text     string    `gorm:"NOT NULL" json:"text"`   // Text
-	Language string    `gorm:"NOT NULL" json:"language"`
+	Column string `gorm:"NOT NULL" json:"column"`
+	// Column：'新闻动态'-> news ,'研究成果' -> research,'学术活动->activity','通知公告'->notice
+	Date     time.Time `gorm:"NOT NULL" json:"date"`
+	Title    string    `gorm:"NOT NULL" json:"title"`
+	Type     string    `gorm:"NOT NULL" json:"type"` // Type can be 'link' or 'document'
+	Text     string    `gorm:"NOT NULL" json:"text"`
+	Language string    `gorm:"NOT NULL;DEFAULT:'zh-CN'" json:"language"`
 }
