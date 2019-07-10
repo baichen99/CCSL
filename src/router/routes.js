@@ -33,6 +33,12 @@ const routes = [
         // hidden: true
       },
       {
+        path: "/team",
+        component: () => import("@/views/about/Team"),
+        name: "Team",
+        meta: { title: "研究团队", auth: false}
+      },
+      {
         path: "/universal-contrast",
         name: "UniversalContrast",
         component: () => import("@/views/database/UniversalContrast.vue"),
@@ -41,6 +47,24 @@ const routes = [
           roles: ["super", "admin", "user"],
           title: "国家通用手语比对语料库",
           auth: true
+        }
+      },
+      {
+        path: "/introduction",
+        name: "Introduction",
+        component: () => import("@/views/about/Introduction.vue"),
+        meta: {
+          title: "中心简介",
+          auth: false
+        }
+      },
+      {
+        path: "/contact",
+        name: "Contact",
+        component: () => import("@/views/about/Contact.vue"),
+        meta: {
+          title: "联系我们",
+          auth: false
         }
       },
       {
