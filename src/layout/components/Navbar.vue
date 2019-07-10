@@ -23,7 +23,7 @@
           class="right-menu-item hover-effect"
         />
 
-        <el-tooltip
+        <!-- <el-tooltip
           content="Global Size"
           effect="dark"
           placement="bottom"
@@ -32,7 +32,7 @@
             id="size-select"
             class="right-menu-item hover-effect"
           />
-        </el-tooltip>
+        </el-tooltip> -->
 
       </template>
 
@@ -80,12 +80,12 @@
 
 <script>
 import { mapGetters } from "vuex";
-import Breadcrumb from "@/components/Breadcrumb";
+import Breadcrumb from "@/components/Breadcrumb.vue";
 import Hamburger from "@/components/Hamburger";
-import ErrorLog from "@/components/ErrorLog";
+// import ErrorLog from "@/components/ErrorLog";
 import Screenfull from "@/components/Screenfull";
-import SizeSelect from "@/components/SizeSelect";
-import Search from "@/components/HeaderSearch";
+// import SizeSelect from "@/components/SizeSelect";
+// import Search from "@/components/HeaderSearch";
 
 export default {
   components: {
@@ -93,7 +93,7 @@ export default {
     Hamburger,
     // ErrorLog,
     Screenfull,
-    SizeSelect,
+    // SizeSelect
     // Search
   },
   computed: {

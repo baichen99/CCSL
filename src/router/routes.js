@@ -36,7 +36,7 @@ const routes = [
         path: "/team",
         component: () => import("@/views/about/Team"),
         name: "Team",
-        meta: { title: "研究团队", auth: false}
+        meta: { title: "研究团队" }
       },
       {
         path: "/universal-contrast",
@@ -54,8 +54,7 @@ const routes = [
         name: "Introduction",
         component: () => import("@/views/about/Introduction.vue"),
         meta: {
-          title: "中心简介",
-          auth: false
+          title: "中心简介"
         }
       },
       {
@@ -63,8 +62,7 @@ const routes = [
         name: "Contact",
         component: () => import("@/views/about/Contact.vue"),
         meta: {
-          title: "联系我们",
-          auth: false
+          title: "联系我们"
         }
       },
       {

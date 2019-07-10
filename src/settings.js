@@ -2,6 +2,7 @@ module.exports = {
   title: "中国手语及聋人研究中心",
   fixedHeader: false,
   sidebarLogo: true,
+  tagsView: false,
   videojsOptions: {
     options: {
       controls: true,

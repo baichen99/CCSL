@@ -38,7 +38,8 @@ router.beforeEach(async (to, from, next) => {
       const accessibleRoles = to.meta.roles && to.meta.roles.length > 0;
       // 如果指定了用户权限，那么检查用户权限
       if (accessibleRoles) {
-        console.log(accessibleRoles);
+        console.log(store.getters.roles[0]);
+        console.log(to.meta.roles);
       } else {
         // 否则所有登录用户都可以访问
         next();

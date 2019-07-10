@@ -8,7 +8,6 @@
       <el-col :span="12">
         <el-card shadow="hover">
           <el-table
-            :show-header="flase"
             :data="tableData"
           >
             <el-table-column
