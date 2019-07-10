@@ -7,9 +7,9 @@ import settings from "./settings";
 import VueVideoPlayer from "vue-video-player";
 // import locale from "element-ui/lib/locale/lang/zh-CN"; // lang i18n
 import "video.js/dist/video-js.css";
-// import "normalize.css/normalize.css"; // CSS resets
-// import "@/styles/index.scss"; // element css
-import "@/styles/global.scss";
+import "normalize.css/normalize.css"; // CSS resets
+import "@/styles/element-variables.scss";
+import "@/styles/index.scss"; // element css
 import "@/icons"; // icon
 import "@/utils/permission"; // permission control
 
