@@ -30,6 +30,7 @@
 import { mapGetters } from "vuex";
 import Logo from "./Logo";
 import SidebarItem from "./SidebarItem";
+import { filterRoutes } from "@/utils/tools";
 import variables from "@/styles/variables.scss";
 
 export default {
@@ -37,7 +38,10 @@ export default {
   computed: {
     ...mapGetters(["permission_routes", "sidebar"]),
     routes() {
-      return this.$router.options.routes;
+      return filterRoutes(
+        this.$router.options.routes,
+        this.$store.getters.roles
+      );
     },
     activeMenu() {
       const route = this.$route;

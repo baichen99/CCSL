@@ -4,6 +4,7 @@ import { getToken, setToken, removeToken } from "@/utils/tools";
 const state = {
   token: getToken(),
   name: "",
+  username: "",
   avatar: "https://axiom-public.axiomacademy.cn/static/default.png",
   id: "",
   roles: []
@@ -24,6 +25,9 @@ const mutations = {
   },
   SET_ROLES: (state, role) => {
     state.roles = [role];
+  },
+  SET_USERNAME: (state, username) => {
+    state.username = username;
   }
 };
 
@@ -40,8 +44,22 @@ const actions = {
             setToken(token);
           }
           const user = JSON.parse(atob(token.split(".")[1]));
-          commit("SET_ID", user.user);
-          resolve();
+          const userID = user.user;
+          getInfo(userID)
+            .then(response => {
+              const { data } = response;
+              if (!data) {
+                reject("身份校验失败，请重新登录");
+              }
+              commit("SET_ID", data.id);
+              commit("SET_NAME", data.name);
+              commit("SET_ROLES", data.userType);
+              commit("SET_USERNAME", data.username);
+              resolve(data);
+            })
+            .catch(err => {
+              reject(err);
+            });
         })
         .catch(error => {
           console.log("LOGIN_ERROR");

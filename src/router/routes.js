@@ -30,7 +30,6 @@ const routes = [
         path: "/",
         name: "Home",
         component: () => import("@/views/home/Home.vue")
-        // hidden: true
       },
       {
         path: "/team",
@@ -42,7 +41,6 @@ const routes = [
         path: "/universal-contrast",
         name: "UniversalContrast",
         component: () => import("@/views/database/UniversalContrast.vue"),
-        // hidden: true,
         meta: {
           roles: ["super", "admin", "user"],
           title: "国家通用手语比对语料库",
@@ -73,7 +71,6 @@ const routes = [
           title: "国家通用手语学习平台",
           auth: true
         }
-        // hidden: true
       }
     ]
   },
@@ -86,34 +83,63 @@ const routes = [
   {
     path: "/dashboard",
     component: AdminLayout,
-    // redirect: "/dashboard",
     children: [
       {
         path: "/dashboard",
         name: "Dashboard",
-        component: () => import("@/views/dashboard/index"),
-        meta: { title: "Dashboard", icon: "dashboard" }
+        component: () => import("@/views/dashboard/Dashboard"),
+        meta: {
+          title: "控制中心",
+          icon: "dashboard",
+          auth: true,
+          roles: ["super", "admin"]
+        }
       }
     ]
   },
   {
-    path: "/example",
+    path: "/website",
     component: AdminLayout,
-    redirect: "/example/table",
-    name: "Example",
-    meta: { title: "Example", icon: "example" },
+    redirect: "/website/carousel",
+    name: "Website",
+    meta: {
+      title: "网站设置",
+      icon: "example",
+      auth: true,
+      roles: ["super", "admin"]
+    },
     children: [
       {
-        path: "table",
-        name: "Table",
-        component: () => import("@/views/table/index"),
-        meta: { title: "Table", icon: "table" }
+        path: "carousel",
+        name: "Carousel",
+        component: () => import("@/views/dashboard/CarouselsSetting"),
+        meta: {
+          title: "轮播图片设置",
+          icon: "table"
+        }
       },
       {
-        path: "tree",
-        name: "Tree",
-        component: () => import("@/views/tree/index"),
-        meta: { title: "Tree", icon: "tree" }
+        path: "news",
+        name: "News",
+        component: () => import("@/views/dashboard/NewsSetting"),
+        meta: { title: "网站新闻设置", icon: "tree-table" }
+      }
+    ]
+  },
+  {
+    path: "/users",
+    component: AdminLayout,
+    children: [
+      {
+        path: "/users",
+        name: "Users",
+        component: () => import("@/views/dashboard/UserSetting"),
+        meta: {
+          title: "用户设置",
+          icon: "peoples",
+          auth: true,
+          roles: ["super"]
+        }
       }
     ]
   },
@@ -131,7 +157,5 @@ const routes = [
   },
   { path: "*", redirect: "/404", hidden: true }
 ];
-
-export const adminRoutes = [];
 
 export default routes;

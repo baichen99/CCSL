@@ -8,7 +8,7 @@
         v-if="collapse"
         key="collapse"
         class="sidebar-logo-link"
-        to="/"
+        to="/dashboard"
       >
         <img
           src="@/assets/logo.svg"
@@ -20,7 +20,7 @@
         v-else
         key="expand"
         class="sidebar-logo-link"
-        to="/"
+        to="/dashboard"
       >
         <img
           src="@/assets/logo.svg"

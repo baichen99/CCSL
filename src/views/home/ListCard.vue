@@ -16,7 +16,8 @@
         :key="item.title"
         class="list-content"
       >
-        <el-link class="list-desc"><i class="dot">&bull;</i>
+        <i class="dot">&bull;</i>
+        <el-link class="list-desc">
           {{ item.title }}
         </el-link>
         <div class="list-time">{{ item.time }}</div>
@@ -65,21 +66,20 @@ export default {
     }
 
     .list-content {
-      padding-top: 0.6rem;
+      padding: 0.3rem;
     }
-
+    .dot {
+      color: #2363c3;
+      padding: 0.2rem;
+    }
     .list-desc {
       display: inline-block;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      width: 300px;
+      max-width: 260px;
       font-size: 1rem;
-      font-weight: normal;
-      .dot {
-        color: #2363c3;
-        padding: 0 0.8rem;
-      }
+      // font-weight: normal;
 
       // @media only screen and (max-device-width: 480px) {
       //   width: 50vw;
@@ -90,7 +90,7 @@ export default {
       float: right;
       color: #a0a0a0;
       height: 100%;
-      padding-top: 0.3rem;
+      padding-top: 0.2rem;
     }
   }
 }

@@ -61,102 +61,107 @@
         </el-radio-group>
       </div>
 
-      <el-card v-if="advancedSearch">
-        <div class="options">
-          <span>性别</span>
-          <el-radio-group v-model="gender">
-            <el-radio label="">无限制</el-radio>
-            <el-radio label="男">男</el-radio>
-            <el-radio label="女">女</el-radio>
-          </el-radio-group>
-        </div>
-        <div class="options">
-          <el-select
-            v-model="region"
-            clearable
-            placeholder="请选择区域"
-          >
-            <el-option
-              v-for="(item,index) in $store.getters.regions"
-              :key="index"
-              :label="item"
-              :value="item"
+      <transition name="fade" :duration="{ enter: 500, leave: 800 }">
+        <el-card
+          v-if="advancedSearch"
+          class="advance"
+        >
+          <div class="options">
+            <span>性别</span>
+            <el-radio-group v-model="gender">
+              <el-radio label="">无限制</el-radio>
+              <el-radio label="男">男</el-radio>
+              <el-radio label="女">女</el-radio>
+            </el-radio-group>
+          </div>
+          <div class="options">
+            <el-select
+              v-model="region"
+              clearable
+              placeholder="请选择区域"
             >
-              {{ item }}
-            </el-option>
-          </el-select>
-          <el-select
-            v-model="left"
-            clearable
-            placeholder="请选择左手手型"
-          >
-            <el-option
-              v-for="(item,index) in $store.getters.sign"
-              :key="index"
-              :label="item"
-              :value="item"
-            >
-              <span>{{ item }}</span>
-              <img
-                style="float: right;height:100%"
-                :src="'sign/'+item+'.jpg'"
-                :alt="item"
+              <el-option
+                v-for="(item,index) in $store.getters.regions"
+                :key="index"
+                :label="item"
+                :value="item"
               >
-            </el-option>
-          </el-select>
-          <el-select
-            v-model="right"
-            clearable
-            placeholder="请选择右手手型"
-          >
-            <el-option
-              v-for="(item,index) in $store.getters.sign"
-              :key="index"
-              :label="item"
-              :value="item"
+                {{ item }}
+              </el-option>
+            </el-select>
+            <el-select
+              v-model="leftSign"
+              clearable
+              placeholder="请选择左手手型"
             >
-              <span>{{ item }}</span>
-              <img
-                style="float: right;height:100%"
-                :src="'sign/'+item+'.jpg'"
-                :alt="item"
+              <el-option
+                v-for="(item,index) in $store.getters.sign"
+                :key="index"
+                :label="item"
+                :value="item"
               >
-            </el-option>
-          </el-select>
-          <el-select
-            v-model="type"
-            clearable
-            placeholder="请选择词性"
-          >
-            <el-option
-              v-for="(item,index) in $store.getters.wordTypes"
-              :key="index"
-              :label="item"
-              :value="item"
+                <span>{{ item }}</span>
+                <img
+                  style="float: right;height:100%"
+                  :src="'sign/'+item+'.jpg'"
+                  :alt="item"
+                >
+              </el-option>
+            </el-select>
+            <el-select
+              v-model="rightSign"
+              clearable
+              placeholder="请选择右手手型"
+            >
+              <el-option
+                v-for="(item,index) in $store.getters.sign"
+                :key="index"
+                :label="item"
+                :value="item"
+              >
+                <span>{{ item }}</span>
+                <img
+                  style="float: right;height:100%"
+                  :src="'sign/'+item+'.jpg'"
+                  :alt="item"
+                >
+              </el-option>
+            </el-select>
+            <el-select
+              v-model="type"
+              clearable
+              placeholder="请选择词性"
+            >
+              <el-option
+                v-for="(item,index) in $store.getters.wordTypes"
+                :key="index"
+                :label="item"
+                :value="item"
+              />
+            </el-select>
+            <el-select
+              v-model="constructType"
+              clearable
+              placeholder="请选择构词方式"
+            >
+              <el-option
+                label="单纯词"
+                value="单纯词"
+              />
+              <el-option
+                label="复合词"
+                value="复合词"
+              />
+            </el-select>
+            <el-input
+              v-model="constructWords"
+              clearable
+              style="width:200px"
+              placeholder="请输入复合词构成词语"
             />
-          </el-select>
-          <el-select
-            v-model="constructType"
-            clearable
-            placeholder="请选择构词方式"
-          >
-            <el-option
-              label="单纯词"
-              value="单纯词"
-            />
-            <el-option
-              label="复合词"
-              value="复合词"
-            />
-          </el-select>
-          <el-input
-            v-model="constructWords"
-            clearable
-            style="width:200px"
-            placeholder="请输入复合词构成词语"
-          />
-        </div>
-      </el-card>
+          </div>
+        </el-card>
+      </transition>
 
       <el-card
         v-if="videos.length!==0"
@@ -242,8 +247,8 @@ export default {
       total: 0,
       gender: "",
       region: "",
-      left: "",
-      right: "",
+      leftSign: "",
+      rightSign: "",
       type: "",
       initial: "",
       constructType: "",
@@ -260,8 +265,8 @@ export default {
       this.wordID = "";
       this.gender = "";
       this.region = "";
-      this.left = "";
-      this.right = "";
+      this.leftSign = "";
+      this.rightSign = "";
       this.type = "";
       this.keywordType = "";
       this.keyword = "";
@@ -275,9 +280,9 @@ export default {
         page: this.page,
         limit: this.limit,
         gender: this.gender,
-        left: this.left,
+        leftSign: this.leftSign,
+        rightSign: this.rightSign,
         initial: this.initial,
-        right: this.right,
         region: this.region,
         type: this.type,
         constructType: this.constructType,
@@ -322,7 +327,7 @@ export default {
     },
     searchBySign(sign) {
       this.clearParams();
-      this.right = sign;
+      this.rightSign = sign;
       this.searchVideos();
     }
   }

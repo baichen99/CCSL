@@ -21,7 +21,7 @@ type userCreateForm struct {
 	Name     string `json:"name" validate:"required"`
 	Username string `json:"username" validate:"required,numeric|email"`
 	Password string `json:"password" validate:"omitempty"`
-	UserType string `json:"userType" validate:"required,oneof=admin user"`
+	UserType string `json:"userType" validate:"required,oneof=admin user learner"`
 }
 
 func (f userCreateForm) ConvertToModel() (user models.User) {
@@ -128,40 +128,39 @@ func (f performerUpdateForm) ConvertToModel() (performer models.Performer) {
 // ============
 
 type videoCreateForm struct {
-	ConstructType  string    `json:"constructType" validate:"required"`  // 构词方式
-	ConstructWords string    `json:"constructWords" validate:"required"` // 构词词语
-	LeftSign       string    `json:"leftSign" validate:"required"`       // 左手手势
-	RightSign      string    `json:"rightSign" validate:"required"`      // 右手手势
-	VideoPath      string    `json:"videoPath" validate:"required"`      // 视频文件路径
+	ConstructType  string `json:"constructType" validate:"required"`  // 构词方式
+	ConstructWords string `json:"constructWords" validate:"required"` // 构词词语
+	LeftSign       string `json:"leftSign" validate:"required"`       // 左手手势
+	RightSign      string `json:"rightSign" validate:"required"`      // 右手手势
+	VideoPath      string `json:"videoPath" validate:"required"`      // 视频文件路径
 }
 
-
 func (f videoCreateForm) ConvertToModel() (video models.Video) {
-   video = models.Video{
-        ConstructType: f.ConstructType,
-        ConstructWords: f.ConstructWords,
-        LeftSign: f.LeftSign,
-        RightSign: f.RightSign,
-        VideoPath: f.VideoPath,
-   }
-   return
+	video = models.Video{
+		ConstructType:  f.ConstructType,
+		ConstructWords: f.ConstructWords,
+		LeftSign:       f.LeftSign,
+		RightSign:      f.RightSign,
+		VideoPath:      f.VideoPath,
+	}
+	return
 }
 
 type videoUpdateForm struct {
-    ConstructType  string    `json:"constructType" validate:"required"`  // 构词方式
-	ConstructWords string    `json:"constructWords" validate:"required"` // 构词词语
-	LeftSign       string    `json:"leftSign" validate:"required"`       // 左手手势
-	RightSign      string    `json:"rightSign" validate:"required"`      // 右手手势
-	VideoPath      string    `json:"videoPath" validate:"required"`      // 视频文件路径
+	ConstructType  string `json:"constructType" validate:"omitempty"`  // 构词方式
+	ConstructWords string `json:"constructWords" validate:"omitempty"` // 构词词语
+	LeftSign       string `json:"leftSign" validate:"omitempty"`       // 左手手势
+	RightSign      string `json:"rightSign" validate:"omitempty"`      // 右手手势
+	VideoPath      string `json:"videoPath" validate:"omitempty"`      // 视频文件路径
 }
 
 func (f videoUpdateForm) ConvertToModel() (video models.Video) {
-    video = models.Video{
-        ConstructType: f.ConstructType,
-        ConstructWords: f.ConstructWords,
-        LeftSign: f.LeftSign,
-        RightSign: f.RightSign,
-        VideoPath: f.VideoPath,
-    }
-    return
+	video = models.Video{
+		ConstructType:  f.ConstructType,
+		ConstructWords: f.ConstructWords,
+		LeftSign:       f.LeftSign,
+		RightSign:      f.RightSign,
+		VideoPath:      f.VideoPath,
+	}
+	return
 }

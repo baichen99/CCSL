@@ -1,6 +1,6 @@
 import router from "@/router";
 import store from "@/store";
-// import { Message } from "element-ui";
+import { Message } from "element-ui";
 import NProgress from "nprogress"; // progress bar
 import "nprogress/nprogress.css"; // progress bar style
 // import { getToken, getPageTitle, hasPermission } from "@/utils/tools";
@@ -35,54 +35,40 @@ router.beforeEach(async (to, from, next) => {
       });
     } else {
       // 已登录，再检查用户权限
+      const hasRoles = store.getters.roles && store.getters.roles.length > 0;
       const accessibleRoles = to.meta.roles && to.meta.roles.length > 0;
-      // 如果指定了用户权限，那么检查用户权限
-      if (accessibleRoles) {
-        console.log(store.getters.roles[0]);
-        console.log(to.meta.roles);
+      if (hasRoles) {
+        // 如果指定了用户权限，那么检查用户权限
+        if (accessibleRoles) {
+          const userRole = store.getters.roles[0];
+          const allowRole = to.meta.roles;
+          if (allowRole.includes(userRole)) {
+            next();
+          } else {
+            next({ replace: true, name: "401Error" });
+          }
+        } else {
+          // 否则所有登录用户都可以访问
+          next();
+        }
       } else {
-        // 否则所有登录用户都可以访问
-        next();
+        try {
+          console.log("GET USER INFO");
+          const data = await store.dispatch("user/getInfo");
+          store.commit("user/SET_ROLES", data.userType);
+          next({ ...to, replace: true });
+        } catch (error) {
+          await store.dispatch("user/logout");
+          Message.error(error || "Error");
+          next(`/login?redirect=${to.path}`);
+          NProgress.done();
+        }
       }
     }
   } else {
     // 不需要授权
     next();
   }
-
-  // if (hasToken) {
-  //   if (to.path === "/login") {
-  //     next({ path: "/" });
-  //     NProgress.done();
-  //   } else {
-  //     const hasRoles = store.getters.roles && store.getters.roles.length > 0;
-  //     if (hasRoles) {
-  //       next();
-  //     } else {
-  //       try {
-  //         const { roles } = await store.dispatch("user/getInfo");
-  //         const accessRoutes = await store.dispatch(
-  //           "permission/generateRoutes",
-  //           roles
-  //         );
-  //         router.addRoutes(accessRoutes);
-  //         next({ ...to, replace: true });
-  //       } catch (error) {
-  //         await store.dispatch("user/logout");
-  //         Message.error(error || "出错了");
-  //         next(`/login?redirect=${to.path}`);
-  //         NProgress.done();
-  //       }
-  //     }
-  //   }
-  // } else {
-  //   if (blackList.indexOf(to.path) === -1) {
-  //     next();
-  //   } else {
-  //     next(`/login?redirect=${to.path}`);
-  //     NProgress.done();
-  //   }
-  // }
 });
 
 router.afterEach(() => {

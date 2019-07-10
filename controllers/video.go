@@ -1,8 +1,8 @@
 package controllers
 
 import (
-    "ccsl/middlewares"
-    "ccsl/services"
+	"ccsl/middlewares"
+	"ccsl/services"
 	"ccsl/utils"
 
 	"github.com/kataras/iris"
@@ -39,8 +39,8 @@ func (c *VideoController) GetVideosList() {
 	name := c.Context.URLParamDefault("name", "")
 	region := c.Context.URLParamDefault("region", "")
 	gender := c.Context.URLParamDefault("gender", "")
-	leftSign := c.Context.URLParamDefault("left", "")
-	rightSign := c.Context.URLParamDefault("right", "")
+	leftSign := c.Context.URLParamDefault("leftSign", "")
+	rightSign := c.Context.URLParamDefault("rightSign", "")
 	constructWords := c.Context.URLParamDefault("constructWords", "")
 	constructType := c.Context.URLParamDefault("constructType", "")
 	performerID := c.Context.URLParamDefault("performer", "")
@@ -100,20 +100,20 @@ func (c *VideoController) CreateVideo() {
 }
 
 func (c *VideoController) GetVideo() {
-    defer c.Context.Next()
-    videoID := c.Context.Params().Get("id")
-    video, err := c.VideoService.GetVideo(videoID)
-    if err != nil {
-        utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "VideoService::GetVideo", err)
-    }
-    c.Context.JSON(iris.Map{
-            message: success,
-            data: video,
-        })
+	defer c.Context.Next()
+	videoID := c.Context.Params().Get("id")
+	video, err := c.VideoService.GetVideo(videoID)
+	if err != nil {
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "VideoService::GetVideo", err)
+	}
+	c.Context.JSON(iris.Map{
+		message: success,
+		data:    video,
+	})
 }
 
 func (c *VideoController) UpdateVideo() {
-    defer c.Context.Next()
+	defer c.Context.Next()
 
 	// Getting ID from parameters in the URL
 	videoID := c.Context.Params().Get("id")
@@ -135,7 +135,6 @@ func (c *VideoController) UpdateVideo() {
 	// Returns with 204 No Content status.
 	c.Context.StatusCode(iris.StatusNoContent)
 }
-
 
 func (c *VideoController) DeleteVideo() {
 	defer c.Context.Next()

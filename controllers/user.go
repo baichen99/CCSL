@@ -98,7 +98,7 @@ func (c *UserController) GetUser() {
 	// Only super admin and user
 	tokenUser, tokenRole := middlewares.GetJWTParams(c.Context)
 
-	if tokenRole != "super" || tokenUser != userID {
+	if !(tokenRole == "super" || tokenUser == userID) {
 		utils.SetResponseError(c.Context, iris.StatusForbidden, "Not super user or self", errors.New("RoleError"))
 		return
 	}
