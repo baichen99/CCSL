@@ -21,10 +21,14 @@ func main() {
 	app := initApp()
 	pg := initDB(app)
 	defer pg.Close()
+	mvc.New(app).Handle(new(controllers.RootController))
 	mvc.Configure(app.Party("/files"), func(app *mvc.Application) {
 		app.Handle(new(controllers.FileController))
 	})
-	mvc.New(app).Handle(new(controllers.RootController))
+	mvc.Configure(app.Party("/carousels"), func(app *mvc.Application) {
+		app.Register(services.NewCarouselService(pg))
+		app.Handle(new(controllers.CarouselController))
+	})
 	mvc.Configure(app.Party("/news"), func(app *mvc.Application) {
 		app.Register(services.NewNewsService(pg))
 		app.Handle(new(controllers.NewsController))
