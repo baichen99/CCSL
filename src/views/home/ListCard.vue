@@ -2,8 +2,8 @@
   <div class="list-card">
     <el-card shadow="hover">
       <div slot="header">
-        <span :class="['iconfont','icon-'+list.icon] " />
-        <span>{{ list.title }}</span>
+        <span :class="['iconfont','icon-'+(icon+1)] " />
+        <span class="list-title">{{ list.title }}</span>
         <el-link
           class="list-more"
           type="primary"
@@ -16,7 +16,9 @@
         :key="item.title"
         class="list-content"
       >
-        <div class="list-desc"><i class="dot">&bull;</i> {{ item.title }}</div>
+        <el-link class="list-desc"><i class="dot">&bull;</i>
+          {{ item.title }}
+        </el-link>
         <div class="list-time">{{ item.time }}</div>
       </div>
     </el-card>
@@ -33,6 +35,10 @@ export default {
         title: "",
         content: []
       })
+    },
+    icon: {
+      type: Number,
+      default: 0
     }
   }
 };
@@ -43,32 +49,36 @@ export default {
 <style lang="scss" scoped>
 .list-card {
   .el-card {
-    margin: 10px 0;
+    margin: 1rem 0;
     width: 430px;
+    .list-title {
+      font-weight: bolder;
+      color: #2363c3;
+    }
     .list-more {
       float: right;
       padding: 3px 0;
     }
     .iconfont {
-      font-size: 18px;
       color: #2363c3;
-      padding-right: 15px;
+      padding-right: 1.2rem;
     }
 
     .list-content {
-      padding-top: 0.2rem;
+      padding-top: 0.6rem;
     }
 
     .list-desc {
-      cursor: pointer;
       display: inline-block;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      width: 280px;
+      width: 300px;
+      font-size: 1rem;
+      font-weight: normal;
       .dot {
         color: #2363c3;
-        padding: 0 5px;
+        padding: 0 0.8rem;
       }
 
       // @media only screen and (max-device-width: 480px) {
@@ -79,6 +89,8 @@ export default {
     .list-time {
       float: right;
       color: #a0a0a0;
+      height: 100%;
+      padding-top: 0.3rem;
     }
   }
 }

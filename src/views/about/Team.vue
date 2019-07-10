@@ -10,14 +10,19 @@
         <el-table-column
           prop="cls"
           label="类别"
+          align="center"
+          width="200"
         />
         <el-table-column
           prop="name"
           label="姓名"
+          align="center"
+          width="150"
         />
         <el-table-column
           prop="unit"
           label="单位"
+          align="center"
         />
 
       </el-table>
@@ -30,10 +35,12 @@
         <el-table-column
           prop="cls"
           label="类别"
+          align="center"
         />
         <el-table-column
           prop="name"
           label="姓名"
+          align="center"
         />
       </el-table>
     </div>
@@ -132,13 +139,15 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-radius: 5px;
+  .title {
+    margin: 1rem;
+  }
   .list-container {
     width: 900px;
     margin: 1rem auto;
+    .el-table {
+      border-radius: 5px;
+    }
   }
-}
-.title {
-  margin: 1rem;
 }
 </style>

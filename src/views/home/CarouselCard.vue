@@ -39,7 +39,7 @@ export default {
 .carousel-card {
   width: 900px;
   height: 506px;
-  border-radius: 10px;
+  border-radius: 5px;
   margin: 1rem;
 
   // @media only screen and (max-device-width: 480px) {

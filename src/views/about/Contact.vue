@@ -1,16 +1,15 @@
 <template>
   <div class="contact">
-    <h1 class="title">联系方式</h1>
+    <h1 class="title">联系我们</h1>
     <el-row
       :gutter="20"
       class="container"
     >
       <el-col :span="12">
-        <el-card class="card">
+        <el-card shadow="hover">
           <el-table
             :show-header="flase"
             :data="tableData"
-            class="table"
           >
             <el-table-column
               prop="key"
@@ -22,7 +21,7 @@
         </el-card>
       </el-col>
       <el-col :span="12">
-        <el-card class="card">
+        <el-card shadow="hover">
           <h3>微信公众号</h3>
           <img src="@/assets/wechat.png">
         </el-card>
@@ -36,7 +35,7 @@ export default {
   name: "Contact",
   data: () => ({
     tableData: [
-      { key: "网址", value: "www.ccsl.shu.edu.cn" },
+      { key: "网址", value: "ccsl.shu.edu.cn" },
       { key: "地址", value: "上海市宝山区南陈路333号上海大学东区文学院105室" },
       { key: "邮编", value: "200443" },
       { key: "邮箱", value: "ccsl@oa.shu.edu.cn" },
@@ -54,19 +53,20 @@ export default {
   justify-content: center;
   align-items: center;
   border-radius: 5px;
+  .title {
+    margin: 1rem;
+  }
+
   .container {
     margin: 1rem auto;
   }
-  .card {
+  .el-card {
     width: 450px;
     height: 350px;
     text-align: center;
   }
-  .table {
+  .el-table {
     margin-bottom: 2rem;
   }
-}
-.title {
-  margin: 1rem;
 }
 </style>

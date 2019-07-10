@@ -12,7 +12,10 @@
           :md="12"
           :sm="24"
         >
-          <list-card :list="item" />
+          <list-card
+            :list="item"
+            :icon="index"
+          />
         </el-col>
       </el-row>
     </div>
