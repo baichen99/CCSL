@@ -9,7 +9,7 @@
         <p>
           该中心依托上海大学综合大学多学科的优势，在语言学、心理学、社会学、计算机、人工智能、脑科学等学科领域进行手语的研究和探索，并积极进行手语的应用研究。
         </p>
-      </div> 
+      </div>
     </el-card>
   </div>
 </template>
@@ -34,6 +34,6 @@ export default {
   }
 }
 .title {
-   margin: 1rem;
+  margin: 1rem;
 }
 </style>
