@@ -22,6 +22,8 @@
   </div>
 </template>
 <script>
+import { GetCarouselList } from "@/api/carousel";
+import { GetNewsList } from "@/api/news";
 import CarouselCard from "@/views/home/CarouselCard.vue";
 import ListCard from "@/views/home/ListCard.vue";
 export default {
@@ -30,30 +32,9 @@ export default {
     CarouselCard,
     ListCard
   },
+
   data: () => ({
-    carousels: [
-      {
-        id: 1,
-        image: "carousels/carousel1.png",
-        title: "国家通用手语比对语料库和监督测查项目启动研讨会在上海大学召开"
-      },
-      {
-        id: 2,
-        image: "carousels/carousel2.png",
-        title:
-          "上海大学中国手语及聋人研究中心成立仪式暨中国手语语言学研讨会在上海大学举行"
-      },
-      {
-        id: 3,
-        image: "carousels/carousel6.png",
-        title: "中国手语研究论坛在我校召开"
-      },
-      {
-        id: 4,
-        image: "carousels/carousel5.png",
-        title: "中国手语及聋人研究中心成功举办手语语料库标注研讨会"
-      }
-    ],
+    carousels: [],
     list: [
       {
         icon: 1,
@@ -156,7 +137,17 @@ export default {
         ]
       }
     ]
-  })
+  }),
+  created() {
+    GetCarouselList().then(res => {
+      const { data } = res;
+      this.carousels = data.carousels;
+    });
+    GetNewsList().then(res => {
+      const { data } = res;
+      console.log(data);
+    });
+  }
 };
 </script>
 

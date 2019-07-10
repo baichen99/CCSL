@@ -104,9 +104,7 @@ const routes = [
     name: "Website",
     meta: {
       title: "网站设置",
-      icon: "example",
-      auth: true,
-      roles: ["super", "admin"]
+      icon: "example"
     },
     children: [
       {
@@ -115,14 +113,18 @@ const routes = [
         component: () => import("@/views/dashboard/CarouselsSetting"),
         meta: {
           title: "轮播图片设置",
-          icon: "table"
+          icon: "table",
+          auth: true,
+          roles: ["super", "admin"]
         }
       },
       {
         path: "news",
         name: "News",
         component: () => import("@/views/dashboard/NewsSetting"),
-        meta: { title: "网站新闻设置", icon: "tree-table" }
+        meta: { title: "网站新闻设置", icon: "tree-table" },
+        auth: true,
+        roles: ["super", "admin"]
       }
     ]
   },

@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"ccsl/configs"
+	"ccsl/middlewares"
 	"ccsl/utils"
 	"io"
 	"os"
@@ -22,7 +23,7 @@ const maxSize = 5 << 20 // 5MB
 
 // BeforeActivation will register routes for controllers
 func (c *FileController) BeforeActivation(app mvc.BeforeActivation) {
-	app.Handle("POST", "/", "UploadFile", iris.LimitRequestBodySize(maxSize+1<<20))
+	app.Handle("POST", "/", "UploadFile", middlewares.CheckJWTToken, iris.LimitRequestBodySize(maxSize+1<<20))
 }
 
 // UploadFile saves file and returns file name

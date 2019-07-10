@@ -1,4 +1,4 @@
-import { login, getInfo } from "@/api/users";
+import { Login, GetUser } from "@/api/users";
 import { getToken, setToken, removeToken } from "@/utils/tools";
 
 const state = {
@@ -35,7 +35,7 @@ const actions = {
   login({ commit }, user) {
     const { username, password, remember } = user;
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password })
+      Login({ username: username.trim(), password: password })
         .then(response => {
           const token = response.data;
           commit("SET_TOKEN", token);
@@ -45,7 +45,7 @@ const actions = {
           }
           const user = JSON.parse(atob(token.split(".")[1]));
           const userID = user.user;
-          getInfo(userID)
+          GetUser(userID)
             .then(response => {
               const { data } = response;
               if (!data) {
@@ -80,7 +80,7 @@ const actions = {
 
   getUserInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      getInfo(state.id)
+      GetUser(state.id)
         .then(response => {
           const { data } = response;
           console.log(data);

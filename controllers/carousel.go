@@ -24,7 +24,7 @@ func (c *CarouselController) BeforeActivation(app mvc.BeforeActivation) {
 
 func (c *CarouselController) GetCarouselsList() {
 	defer c.Context.Next()
-	listParams, err := utils.GetListParamsFromContext(c.Context, "create_at")
+	listParams, err := utils.GetListParamsFromContext(c.Context, "created_at")
 	if err != nil {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "order only accepts 'asc' or 'desc'", err)
 		return
