@@ -26,7 +26,7 @@ frontend:
 	@npm run dev
 
 deploy-backend:
-	@make build && scp docker.tar ccsl:/home/ccsl/
+	@make build && scp docker.tar ccsl@ccsl.shu.edu.cn:/home/ccsl/
 
 deploy-frontend:
-	@npm run build && scp -r dist/* ccsl:/home/ccsl/web/
+	@npm run build && scp -r dist/* ccsl@ccsl.shu.edu.cn:/home/ccsl/web/
