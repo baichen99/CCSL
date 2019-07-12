@@ -2,11 +2,10 @@
   <header>
     <div>
       <div>
-        <img
-          src="@/assets/logo.svg"
-          alt="logo"
-          height="35px"
-        >
+        <svg-icon
+          icon-class="logo"
+          class="logo"
+        />
         <div class="title">
           <span>中国手语及聋人研究中心</span>
           <span class="en">Center for CSL and Deaf Studies</span>
@@ -118,6 +117,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/styles/element-variables.scss";
 header {
   height: 60px;
 
@@ -128,10 +128,14 @@ header {
     align-items: center;
     justify-content: space-between;
 
-    img {
-      @media only screen and (max-device-width: 480px) {
-        display: none;
-      }
+    // img {
+    //   @media only screen and (max-device-width: 480px) {
+    //     display: none;
+    //   }
+    // }
+    .logo {
+      fill: $--color-primary !important;
+      font-size: 70px;
     }
 
     .title {
@@ -142,9 +146,9 @@ header {
       justify-content: center;
       font-size: 18px;
 
-      @media only screen and (max-device-width: 480px) {
-        display: none;
-      }
+      // @media only screen and (max-device-width: 480px) {
+      //   display: none;
+      // }
 
       .en {
         font-size: 12px;

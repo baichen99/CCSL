@@ -1,7 +1,13 @@
 <template>
   <footer>
-    <div class="iconfont icon-ccsl" />
-    <div style="cursor: pointer;" @click="$router.push('/dashboard')">管理登录</div>
+    <svg-icon
+      icon-class="logo"
+      class="logo"
+    />
+    <div
+      style="cursor: pointer;"
+      @click="$router.push('/dashboard')"
+    >管理登录</div>
     <div>沪ICP备 09014157号</div>
     <div>中国手语及聋人研究中心</div>
     <div>邮箱：ccsl@oa.shu.edu.cn &nbsp; 邮编：200444</div>
@@ -12,17 +18,18 @@
 
 
 <style lang="scss" scoped>
+@import "@/styles/element-variables.scss";
 footer {
   padding: 20px;
   font-size: 14px;
-  height: 240px;
+  min-height: 240px;
   line-height: 24px;
   background-image: linear-gradient(
     to top,
-    darken(#2363c3, 20%) 0%,
-    #2363c3 100%
+    darken($--color-primary, 20%) 0%,
+    $--color-primary 100%
   );
-  color: #ffffff;
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -33,9 +40,9 @@ footer {
     text-align: center;
   }
 
-  .icon-ccsl {
-    font-size: 50px;
-    padding: 20px;
+  .logo {
+    font-size: 100px;
+    fill: #fff !important;
   }
 }
 </style>

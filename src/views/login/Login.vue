@@ -91,8 +91,8 @@ export default {
     return {
       remember: false,
       loginForm: {
-        username: "474558417@qq.com",
-        password: "P@ssw0rd"
+        username: "",
+        password: ""
       },
       loginRules: {
         username: [
@@ -105,6 +105,14 @@ export default {
       loading: false,
       passwordType: "password"
     };
+  },
+  created() {
+    if (process.env.NODE_ENV === "development") {
+      this.loginForm = {
+        username: "474558417@qq.com",
+        password: "P@ssw0rd"
+      };
+    }
   },
   methods: {
     showPwd() {

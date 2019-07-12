@@ -19,6 +19,16 @@ Vue.use(ElementUI, {
 });
 Vue.use(VueVideoPlayer, settings.videojsOptions);
 Vue.config.productionTip = false;
+Vue.filter("timestamp2String", timestamp => {
+  const date = new Date(timestamp);
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const seconds = date.getSeconds();
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+});
 
 new Vue({
   el: "#app",

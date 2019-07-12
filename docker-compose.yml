@@ -23,3 +23,4 @@ services:
     volumes: 
       - /var/log/ccsl:/app/logs
       - /etc/ccsl/app.prod.yml:/app/configs/app.prod.yml
+      - /home/ccsl/public/files:/home/ccsl/public/files

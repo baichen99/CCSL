@@ -48,20 +48,21 @@ export default {
 
 
 <style lang="scss" scoped>
+@import "@/styles/element-variables.scss";
 .list-card {
   .el-card {
     margin: 1rem 0;
     width: 430px;
     .list-title {
       font-weight: bolder;
-      color: #2363c3;
+      color: $--color-primary;
     }
     .list-more {
       float: right;
       padding: 3px 0;
     }
     .iconfont {
-      color: #2363c3;
+      color: $--color-primary;
       padding-right: 1.2rem;
     }
 

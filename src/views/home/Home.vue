@@ -139,7 +139,7 @@ export default {
     ]
   }),
   created() {
-    GetCarouselList().then(res => {
+    GetCarouselList({ order: "desc" }).then(res => {
       const { data } = res;
       this.carousels = data.carousels;
     });

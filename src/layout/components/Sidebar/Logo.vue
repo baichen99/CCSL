@@ -10,10 +10,11 @@
         class="sidebar-logo-link"
         to="/dashboard"
       >
-        <img
-          src="@/assets/logo.svg"
+        <svg-icon
+          icon-class="logo"
           class="sidebar-logo"
-        >
+          style="margin:0"
+        />
         <h1 class="sidebar-title">{{ title }} </h1>
       </router-link>
       <router-link
@@ -22,10 +23,11 @@
         class="sidebar-logo-link"
         to="/dashboard"
       >
-        <img
-          src="@/assets/logo.svg"
+        <svg-icon
+          icon-class="logo"
           class="sidebar-logo"
-        >
+          style="margin:0"
+        />
         <h1 class="sidebar-title">{{ title }} </h1>
       </router-link>
     </transition>
@@ -43,7 +45,7 @@ export default {
   },
   data() {
     return {
-      title: "CCSL后台管理系统",
+      title: "后台管理系统"
     };
   }
 };
@@ -76,12 +78,13 @@ export default {
       width: 32px;
       height: 32px;
       vertical-align: middle;
-      margin-right: 12px;
+      // margin-right: 0;
+      fill: #fff !important;
     }
 
     & .sidebar-title {
       display: inline-block;
-      margin: 0;
+      margin: 0 16px;
       color: #fff;
       font-weight: 600;
       line-height: 50px;
