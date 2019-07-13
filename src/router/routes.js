@@ -68,6 +68,7 @@ const routes = [
         name: "LearningPlatform",
         component: () => import("@/views/learning/LearningPlatform"),
         meta: {
+          roles: ["super", "admin", "learner"],
           title: "国家通用手语学习平台",
           auth: true
         }

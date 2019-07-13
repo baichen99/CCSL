@@ -27,41 +27,29 @@ func ConnectPostgres(app *iris.Application) *gorm.DB {
 	return pg
 }
 
-// InitSuper creates super admin users
-func InitSuper(pg *gorm.DB) {
-	superUsers := []models.User{
-		models.User{
-			Username: "16121041",
-			UserType: "super",
-		},
-		models.User{
-			Username: "15121709",
-			UserType: "super",
-		},
-	}
-	for _, superUser := range superUsers {
-		pg.Create(&superUser)
-	}
-}
-
 // InitTestUser creates test users
 func InitTestUser(pg *gorm.DB) {
 	password, _ := HashPassword("P@ssw0rd")
 	testUsers := []models.User{
 		models.User{
-			Username: "adrianduan@icloud.com",
+			Username: "admin@ccsl.shu.edu.cn",
 			Password: password,
 			UserType: "admin",
 		},
 		models.User{
-			Username: "474558417@qq.com",
+			Username: "user@ccsl.shu.edu.cn",
 			Password: password,
 			UserType: "user",
 		},
 		models.User{
-			Username: "adrwefian@qq.com",
+			Username: "learner@ccsl.shu.edu.cn",
 			Password: password,
-			UserType: "user",
+			UserType: "learner",
+		},
+		models.User{
+			Username: "super@ccsl.shu.edu.cn",
+			Password: password,
+			UserType: "super",
 		},
 	}
 	for _, user := range testUsers {
@@ -88,6 +76,11 @@ func InitProdUser(pg *gorm.DB) {
 			Username: "16121041",
 			UserType: "super",
 			Name:     "段靖",
+		},
+		models.User{
+			Username: "10008119",
+			UserType: "super",
+			Name:     "倪兰",
 		},
 	}
 	for _, superUser := range superUsers {
