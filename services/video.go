@@ -51,16 +51,18 @@ func (s *VideoService) GetVideosList(parameters utils.GetVideoListParameters) (v
 
 	err = query.Count(&count).Error
 
+	regionOrder := "array_position(array['通用手语','浦东新区','黄浦区','静安区','徐汇区','长宁区','普陀区','虹口区','杨浦区','宝山区','闵行区','嘉定区','金山区','松江区','青浦区','奉贤区','崇明区'], region) asc"
+
 	if err != nil {
 		return
 	}
 	// Fetching the items to be returned by the query.
 	orderQuery := parameters.OrderBy + " " + parameters.Order
 	if parameters.Limit != 0 {
-		err = query.Order(orderQuery).Limit(parameters.Limit).Offset(parameters.Limit * (parameters.Page - 1)).Scan(&videos).Error
+		err = query.Order(regionOrder).Order(orderQuery).Limit(parameters.Limit).Offset(parameters.Limit * (parameters.Page - 1)).Scan(&videos).Error
 
 	} else {
-		err = query.Order(orderQuery).Scan(&videos).Error
+		err = query.Order(regionOrder).Order(orderQuery).Scan(&videos).Error
 	}
 	return
 }

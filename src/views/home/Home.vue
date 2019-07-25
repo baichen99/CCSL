@@ -139,14 +139,14 @@ export default {
     ]
   }),
   created() {
-    GetCarouselList({ order: "desc" }).then(res => {
+    GetCarouselList({ order: "desc", limit: 5 }).then(res => {
       const { data } = res;
       this.carousels = data.carousels;
     });
-    GetNewsList().then(res => {
-      const { data } = res;
-      console.log(data);
-    });
+    // GetNewsList().then(res => {
+    //   const { data } = res;
+    //   console.log(data);
+    // });
   }
 };
 </script>

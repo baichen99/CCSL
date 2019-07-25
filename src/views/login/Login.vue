@@ -140,8 +140,7 @@ export default {
               this.$router.push({ path: redirect || "/" });
               this.loading = false;
             })
-            .catch(err => {
-              console.log(err);
+            .catch(() => {
               this.loading = false;
             });
         } else {

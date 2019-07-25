@@ -6,10 +6,7 @@
 
 <script>
 export default {
-  name: "App",
-  created() {
-    this.$store.dispatch("sign/getWords");
-  }
+  name: "App"
 };
 </script>
 

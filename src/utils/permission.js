@@ -53,7 +53,6 @@ router.beforeEach(async (to, from, next) => {
         }
       } else {
         try {
-          console.log("GET USER INFO");
           const data = await store.dispatch("user/getUserInfo");
           store.commit("user/SET_ROLES", data.userType);
           next({ ...to, replace: true });

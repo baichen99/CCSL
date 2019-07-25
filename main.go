@@ -73,8 +73,7 @@ func initDB(app *iris.Application) *gorm.DB {
 	pg.AutoMigrate(&models.User{}, &models.Word{}, &models.Video{}, &models.Performer{}, &models.Carousel{}, &models.News{})
 	pg.Model(&models.Video{}).AddForeignKey("word_id", "words(id)", "RESTRICT", "CASCADE")
 	pg.Model(&models.Video{}).AddForeignKey("performer_id", "performers(id)", "RESTRICT", "CASCADE")
-	utils.InitProdUser(pg)
-	// utils.InitSuper(pg)
+	// utils.InitProdUser(pg)
 	// utils.InitTestUser(pg)
 	return pg
 }

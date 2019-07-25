@@ -54,12 +54,12 @@ func ErrorHandler(ctx iris.Context) {
 	}
 	if errMessage != "" {
 		ctx.JSON(iris.Map{
-			message: msg,
+			message: ctx.Translate(msg),
 			errinfo: ctx.Translate(errMessage),
 		})
 		return
 	}
 	ctx.JSON(iris.Map{
-		message: msg,
+		message: ctx.Translate(msg),
 	})
 }

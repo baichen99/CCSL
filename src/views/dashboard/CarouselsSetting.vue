@@ -56,8 +56,8 @@
         align="center"
         label="发布时间"
       >
-        <template slot-scope="scope">
-          <span>{{ scope.row.createdAt | timestamp2String }}</span>
+        <template slot-scope="{row}">
+          <span>{{ row.createdAt | timestamp2String }}</span>
         </template>
       </el-table-column>
 
@@ -207,7 +207,7 @@ export default {
     },
     confirmDelete(row) {
       const id = row.id;
-      DeleteCarousel(id).then(res => {
+      DeleteCarousel(id).then(() => {
         this.$message({
           message: "删除成功",
           type: "success"

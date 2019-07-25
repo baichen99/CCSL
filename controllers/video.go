@@ -27,7 +27,7 @@ func (c *VideoController) BeforeActivation(app mvc.BeforeActivation) {
 // GetVideosList returns videos list with given parameters
 func (c *VideoController) GetVideosList() {
 	defer c.Context.Next()
-	listParams, err := utils.GetListParamsFromContext(c.Context, "initial, region")
+	listParams, err := utils.GetListParamsFromContext(c.Context, "initial")
 	if err != nil {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "order only accepts 'asc' or 'desc'", err)
 		return

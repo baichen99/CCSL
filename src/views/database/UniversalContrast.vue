@@ -61,7 +61,10 @@
         </el-radio-group>
       </div>
 
-      <transition name="fade" :duration="{ enter: 500, leave: 800 }">
+      <transition
+        name="fade"
+        :duration="{ enter: 500, leave: 800 }"
+      >
         <el-card
           v-if="advancedSearch"
           class="advance"
@@ -259,6 +262,9 @@ export default {
     words() {
       return this.$store.state.sign.words;
     }
+  },
+  created() {
+    this.$store.dispatch("sign/getWords");
   },
   methods: {
     clearParams() {

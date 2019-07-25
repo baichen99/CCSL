@@ -49,7 +49,7 @@ func FilterByArray(columnName string, value string, escape string) func(db *gorm
 // GetListParamsFromContext gets list params from context
 func GetListParamsFromContext(c iris.Context, orderName string) (listParmas GetListParameters, err error) {
 	listParmas.Page = c.URLParamIntDefault("page", 1)
-	listParmas.Limit = c.URLParamIntDefault("limit", 0) // 0 means no limit
+	listParmas.Limit = c.URLParamIntDefault("limit", 10) // 0 means no limit
 	listParmas.Order = c.URLParamDefault("order", "asc")
 	listParmas.OrderBy = c.URLParamDefault("orderBy", orderName)
 	if !(listParmas.Order == "asc" || listParmas.Order == "desc") {

@@ -1,5 +1,12 @@
 import { Login, GetUser } from "@/api/users";
-import { getToken, setToken, removeToken } from "@/utils/tools";
+import {
+  getToken,
+  setToken,
+  removeToken,
+  setUser,
+  getUser,
+  removeUser
+} from "@/utils/tools";
 
 const state = {
   token: getToken(),
@@ -40,11 +47,12 @@ const actions = {
           const token = response.data;
           commit("SET_TOKEN", token);
           // If remember password, save JWT token to local storage
-          if (remember) {
-            setToken(token);
-          }
           const user = JSON.parse(atob(token.split(".")[1]));
           const userID = user.user;
+          if (remember) {
+            setToken(token);
+            setUser(userID);
+          }
           GetUser(userID)
             .then(response => {
               const { data } = response;
@@ -62,7 +70,6 @@ const actions = {
             });
         })
         .catch(error => {
-          console.log("LOGIN_ERROR");
           reject(error);
         });
     });
@@ -73,26 +80,24 @@ const actions = {
       commit("SET_TOKEN", "");
       commit("SET_ID", "");
       commit("SET_ROLES", []);
+      // commit("SET_AVATAR", "");
       removeToken();
+      removeUser();
       resolve();
     });
   },
 
   getUserInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      GetUser(state.id)
-        .then(response => {
-          const { data } = response;
-          console.log(data);
-          if (!data) {
-            reject("验证失败，请重新登录");
-          }
-          commit("SET_ROLES", data.userType);
-          commit("SET_NAME", data.name);
-          resolve(data);
+      const userID = getUser() || state.id;
+      GetUser(userID)
+        .then(res => {
+          commit("SET_ROLES", res.data.userType);
+          commit("SET_NAME", res.data.name);
+          resolve(res.data);
         })
-        .catch(error => {
-          reject(error);
+        .catch(err => {
+          reject(err);
         });
     });
   }

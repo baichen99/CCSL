@@ -126,6 +126,9 @@ export default {
       return this.$store.state.sign.words;
     }
   },
+  created() {
+    this.$store.dispatch("sign/getWords");
+  },
   methods: {
     clearParams() {
       this.wordID = "";
