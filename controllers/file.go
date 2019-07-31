@@ -86,7 +86,7 @@ func (c *FileController) ResizeAndReplaceScreen() {
 		return
 	}
 	// replace background
-	dstFileName := filePrefix.String() + strconv.FormatInt(time.Now().Unix(), 10) + ".avi"
+	dstFileName := filePrefix.String() + strconv.FormatInt(time.Now().Unix(), 10) + fileSuffix
 	dstFilePath := configs.Conf.File.Dir + dstFileName
 	err = utils.Convert(resizeFilePath, dstFilePath, 230, 230, 230)
 	if err != nil {
