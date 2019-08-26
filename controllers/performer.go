@@ -48,12 +48,10 @@ func (c *PerformerController) GetPerformersList() {
 	}
 	c.Context.JSON(iris.Map{
 		message: success,
-		data: iris.Map{
-			"performers": performers,
-			pageKey:      listParams.Page,
-			limitKey:     listParams.Limit,
-			totalKey:     count,
-		},
+		data:    performers,
+		page:    listParams.Page,
+		limit:   listParams.Limit,
+		total:   count,
 	})
 }
 
@@ -63,7 +61,7 @@ func (c *PerformerController) CreatePerformer() {
 	var form performerCreateForm
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, paramsKey, err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "PerformerController::ParamsError", err)
 		return
 	}
 	// PSQL - Create performer in database.
@@ -108,7 +106,7 @@ func (c *PerformerController) UpdatePerformer() {
 
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, paramsKey, err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "PerformerController::ParamsError", err)
 		return
 	}
 	updateData := form.ConvertToModel()

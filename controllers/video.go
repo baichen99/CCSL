@@ -68,12 +68,10 @@ func (c *VideoController) GetVideosList() {
 	}
 	c.Context.JSON(iris.Map{
 		message: success,
-		data: iris.Map{
-			"videos": videos,
-			pageKey:  listParams.Page,
-			limitKey: listParams.Limit,
-			totalKey: count,
-		},
+		data:    videos,
+		page:    listParams.Page,
+		limit:   listParams.Limit,
+		total:   count,
 	})
 }
 
@@ -82,7 +80,7 @@ func (c *VideoController) CreateVideo() {
 	var form videoCreateForm
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, paramsKey, err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "VideoController::ParamsError", err)
 		return
 	}
 	// PSQL - Create video in database.
@@ -121,7 +119,7 @@ func (c *VideoController) UpdateVideo() {
 
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, paramsKey, err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "VideoController::ParamsError", err)
 		return
 	}
 	updateData := form.ConvertToModel()

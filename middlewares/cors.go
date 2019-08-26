@@ -91,7 +91,7 @@ func NewCorsMiddleware(options corsConfig) context.Handler {
 	// Allowed Headers
 	if len(options.AllowedHeaders) == 0 {
 		// Use sensible defaults
-		c.allowedHeaders = []string{"Origin", "Accept", "Content-Type", "X-Requested-With"}
+		c.allowedHeaders = []string{"Origin", "Accept", "Content-Type", "X-Requested-With", "Authorization"}
 	} else {
 		// Origin is always appended as some browsers will always request for this header at preflight
 		c.allowedHeaders = convert(append(options.AllowedHeaders, "Origin"), http.CanonicalHeaderKey)
@@ -106,7 +106,7 @@ func NewCorsMiddleware(options corsConfig) context.Handler {
 	// Allowed Methods
 	if len(options.AllowedMethods) == 0 {
 		// Default is spec's "simple" methods
-		c.allowedMethods = []string{"GET", "POST", "HEAD"}
+		c.allowedMethods = []string{"GET", "POST", "HEAD", "PUT", "DELETE"}
 	} else {
 		c.allowedMethods = convert(options.AllowedMethods, strings.ToUpper)
 	}

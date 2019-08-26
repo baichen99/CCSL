@@ -6,14 +6,14 @@ import (
 )
 
 const (
-	data      string = "data"
-	message   string = "message"
-	success   string = "success" // 200 OK
-	errinfo   string = "error"
-	pageKey   string = "page"
-	totalKey  string = "total"
-	limitKey  string = "limit"
-	paramsKey string = "params"
+	data     string = "data"
+	message  string = "message"
+	success  string = "success" // 200 OK
+	errinfo  string = "error"
+	page     string = "page"
+	total    string = "total"
+	limit    string = "limit"
+	language string = "language"
 )
 
 // >>> CAROUSEL <<<

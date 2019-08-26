@@ -6,7 +6,15 @@
 
 <script>
 export default {
-  name: "App"
+  name: "App",
+  created() {
+    this.initData();
+  },
+  methods: {
+    initData() {
+      this.$store.dispatch("sign/getWordsDict");
+    }
+  }
 };
 </script>
 

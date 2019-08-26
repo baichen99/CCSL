@@ -126,9 +126,6 @@ export default {
       return this.$store.state.sign.words;
     }
   },
-  created() {
-    this.$store.dispatch("sign/getWords");
-  },
   methods: {
     clearParams() {
       this.wordID = "";
@@ -144,10 +141,10 @@ export default {
         chinese: this.keyword
       };
       getUniversalContrastVideos(params).then(res => {
-        this.videos = res.data.videos;
-        this.page = res.data.page;
-        this.limit = res.data.limit;
-        this.total = res.data.total;
+        this.videos = res.data;
+        this.page = res.page;
+        this.limit = res.limit;
+        this.total = res.total;
         if (this.videos.length === 0) {
           this.$message("没有找到相关的数据哦～");
         }

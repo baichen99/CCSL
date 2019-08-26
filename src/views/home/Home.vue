@@ -23,7 +23,7 @@
 </template>
 <script>
 import { GetCarouselList } from "@/api/carousel";
-import { GetNewsList } from "@/api/news";
+// import { GetNewsList } from "@/api/news";
 import CarouselCard from "@/views/home/CarouselCard.vue";
 import ListCard from "@/views/home/ListCard.vue";
 export default {
@@ -141,7 +141,7 @@ export default {
   created() {
     GetCarouselList({ order: "desc", limit: 5 }).then(res => {
       const { data } = res;
-      this.carousels = data.carousels;
+      this.carousels = data;
     });
     // GetNewsList().then(res => {
     //   const { data } = res;

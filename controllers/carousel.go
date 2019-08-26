@@ -9,6 +9,7 @@ import (
 	"github.com/kataras/iris/mvc"
 )
 
+// CarouselController is for carousels CRUD
 type CarouselController struct {
 	Context         iris.Context
 	CarouselService services.CarouselInterface
@@ -41,12 +42,10 @@ func (c *CarouselController) GetCarouselsList() {
 	}
 	c.Context.JSON(iris.Map{
 		message: success,
-		data: iris.Map{
-			"carousels": carousels,
-			pageKey:     listParams.Page,
-			limitKey:    listParams.Limit,
-			totalKey:    count,
-		},
+		data:    carousels,
+		page:    listParams.Page,
+		limit:   listParams.Limit,
+		total:   count,
 	})
 }
 
@@ -55,7 +54,7 @@ func (c *CarouselController) CreateCarousel() {
 	var form carouselCreateForm
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, paramsKey, err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "CarouselCroller::ParamsError", err)
 		return
 	}
 	// PSQL - Create carousel in database.
@@ -77,7 +76,7 @@ func (c *CarouselController) GetCarousel() {
 	carouselID := c.Context.Params().Get("id")
 	carousel, err := c.CarouselService.GetCarousel(carouselID)
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "WordService::GetWord", err)
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "CarouselCroller::GetCarousel", err)
 		return
 	}
 	c.Context.JSON(iris.Map{
@@ -94,7 +93,7 @@ func (c *CarouselController) UpdateCarousel() {
 
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, paramsKey, err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "CarouselCroller::ParamsError", err)
 		return
 	}
 	updateData := form.ConvertToModel()

@@ -48,12 +48,10 @@ func (c *UserController) GetUsersList() {
 	}
 	c.Context.JSON(iris.Map{
 		message: success,
-		data: iris.Map{
-			"users":  users,
-			pageKey:  listParams.Page,
-			limitKey: listParams.Limit,
-			totalKey: count,
-		},
+		data:    users,
+		page:    listParams.Page,
+		limit:   listParams.Limit,
+		total:   count,
 	})
 }
 
@@ -63,14 +61,14 @@ func (c *UserController) CreateUser() {
 	var form userCreateForm
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, paramsKey, err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "UserController::ParamsError", err)
 		return
 	}
 
 	// If user not shu account, must have password set
 	if form.Password == "" {
 		if !utils.IsShuUser(form.Username) {
-			utils.SetResponseError(c.Context, iris.StatusBadRequest, paramsKey, errors.New("Password required"))
+			utils.SetResponseError(c.Context, iris.StatusBadRequest, "UserController::ParamsError", errors.New("PasswordRequired"))
 			return
 		}
 	}
@@ -127,7 +125,7 @@ func (c *UserController) UpdateUser() {
 
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, paramsKey, err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "UserController::ParamsError", err)
 		return
 	}
 
@@ -176,7 +174,7 @@ func (c *UserController) UserLogin() {
 
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, paramsKey, err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "UserController::ParamsError", err)
 		return
 	}
 

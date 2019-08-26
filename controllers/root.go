@@ -15,7 +15,7 @@ func (c *RootController) Get() {
 	hello := c.Context.Translate("Hello")
 	lang := c.Context.Values().GetString(c.Context.Application().ConfigurationReadOnly().GetTranslateLanguageContextKey())
 	c.Context.JSON(iris.Map{
-		message:    hello,
-		"language": lang,
+		message:  hello,
+		language: lang,
 	})
 }

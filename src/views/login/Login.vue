@@ -109,7 +109,7 @@ export default {
   created() {
     if (process.env.NODE_ENV === "development") {
       this.loginForm = {
-        username: "474558417@qq.com",
+        username: "super@ccsl.shu.edu.cn",
         password: "P@ssw0rd"
       };
     }

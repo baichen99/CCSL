@@ -1,28 +1,7 @@
 <template>
   <div class="universal-contrast">
-    <el-card class="sidebar">
-      <h3 class="title">手型检索</h3>
-      <div class="sign">
-        <div
-          v-for="(item,index) in $store.getters.sign"
-          :key="index"
-          class="sign-box"
-        >
-          <el-tooltip
-            effect="dark"
-            :content="item"
-            placement="top"
-          >
-            <img
-              style="width:100%"
-              :src="'sign/'+item+'.jpg'"
-              :alt="item"
-              @click="searchBySign(item)"
-            >
-          </el-tooltip>
-        </div>
-      </div>
-    </el-card>
+    <sign-selector />
+
     <div class="search">
       <h3>国家通用手语比对语料库</h3>
       <el-input
@@ -200,41 +179,26 @@
         </el-dialog>
       </el-card>
     </div>
-    <el-card class="sidebar">
-      <h3 class="title">音序检索</h3>
-      <div class="initial">
-        <el-collapse accordion>
-          <el-collapse-item
-            v-for="letter in $store.getters.letters"
-            :key="letter"
-            :title="letter"
-          >
-            <div
-              v-for="word in words[letter]"
-              :key="word.id"
-            >
-              <el-link
-                type="primary"
-                @click="searchByWord(word.id)"
-              >{{ word.chinese }}</el-link>
-            </div>
-          </el-collapse-item>
-        </el-collapse>
-      </div>
-    </el-card>
+
+    <word-selector />
   </div>
 </template>
 
 <script>
 import VideoCard from "@/components/VideoCard.vue";
 import VideoDetail from "@/components/VideoDetail.vue";
+import WordSelector from "@/components/WordSelector.vue";
+import SignSelector from "@/components/SignSelector.vue";
 import { getUniversalContrastVideos } from "@/api/videos";
+import { mapGetters } from "vuex";
 
 export default {
   name: "UniversalContrast",
   components: {
     VideoCard,
-    VideoDetail
+    VideoDetail,
+    WordSelector,
+    SignSelector
   },
   data() {
     return {
@@ -257,14 +221,6 @@ export default {
       constructType: "",
       constructWords: ""
     };
-  },
-  computed: {
-    words() {
-      return this.$store.state.sign.words;
-    }
-  },
-  created() {
-    this.$store.dispatch("sign/getWords");
   },
   methods: {
     clearParams() {
@@ -300,10 +256,10 @@ export default {
         params.english = this.keyword;
       }
       getUniversalContrastVideos(params).then(res => {
-        this.videos = res.data.videos;
-        this.page = res.data.page;
-        this.limit = res.data.limit;
-        this.total = res.data.total;
+        this.videos = res.data;
+        this.page = res.page;
+        this.limit = res.limit;
+        this.total = res.total;
         if (this.videos.length === 0) {
           this.$message("没有找到相关的数据哦～");
         }
@@ -347,43 +303,6 @@ export default {
   justify-content: space-between;
   height: 100%;
   padding: 10px 0;
-
-  .sidebar {
-    width: 18%;
-    height: 600px;
-    overflow: scroll;
-    .title {
-      text-align: center;
-    }
-    &::-webkit-scrollbar {
-      display: none;
-    }
-    -ms-overflow-style: none;
-    overflow: -moz-scrollbars-none;
-  }
-
-  .sign {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    .sign-box {
-      width: 50%;
-      img {
-        cursor: pointer;
-      }
-    }
-  }
-
-  .initial {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    .el-collapse {
-      width: 100%;
-    }
-  }
 
   .search {
     width: 60%;

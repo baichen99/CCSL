@@ -129,7 +129,7 @@
 import {
   GetCarouselList,
   CreateCarousel,
-  UpdateCarousel,
+  // UpdateCarousel,
   DeleteCarousel
 } from "@/api/carousel";
 export default {
@@ -180,7 +180,7 @@ export default {
     async getList() {
       this.listLoading = true;
       const { data } = await GetCarouselList(this.listQuery);
-      const items = data.carousels;
+      const items = data;
       this.list = items.map(v => {
         this.$set(v, "edit", false);
         v.originalTitle = v.title;
@@ -200,6 +200,7 @@ export default {
       row.edit = false;
       row.originalTitle = row.title;
       const id = row.id;
+      console.log(id);
       this.$message({
         message: "已保存修改",
         type: "success"

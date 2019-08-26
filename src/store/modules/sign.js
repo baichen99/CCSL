@@ -131,48 +131,27 @@ const state = {
     "形容词",
     "疑问代词"
   ],
-  letters: [
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "H",
-    "J",
-    "K",
-    "L",
-    "M",
-    "N",
-    "O",
-    "P",
-    "Q",
-    "R",
-    "S",
-    "T",
-    "W",
-    "X",
-    "Y",
-    "Z"
-  ],
   words: {}
 };
 
 const mutations = {
-  SET_WORDS(state, { initial, words }) {
-    state.words[initial] = words;
+  SET_WORDS(state, { initial, item }) {
+    if (state.words[initial]) {
+      state.words[initial].push(item);
+    } else {
+      state.words[initial] = [item];
+    }
   }
 };
 
 const actions = {
-  getWords({ commit }) {
-    for (let i = 0; i < state.letters.length; i++) {
-      const initial = state.letters[i];
-      getWords({ initial, limit: 0 }).then(res => {
-        commit("SET_WORDS", { initial, words: res.data.words });
+  getWordsDict({ commit }) {
+    getWords({ limit: 0 }).then(res => {
+      res.data.map(item => {
+        const initial = item.initial;
+        commit("SET_WORDS", { initial, item });
       });
-    }
+    });
   }
 };
 

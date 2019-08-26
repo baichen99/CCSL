@@ -50,12 +50,10 @@ func (c *WordController) GetWordsList() {
 	}
 	c.Context.JSON(iris.Map{
 		message: success,
-		data: iris.Map{
-			"words":  words,
-			pageKey:  listParams.Page,
-			limitKey: listParams.Limit,
-			totalKey: count,
-		},
+		data:    words,
+		page:    listParams.Page,
+		limit:   listParams.Limit,
+		total:   count,
 	})
 }
 
@@ -65,7 +63,7 @@ func (c *WordController) CreateWord() {
 	var form wordCreateForm
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, paramsKey, err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "WordController::ParamsError", err)
 		return
 	}
 	// PSQL - Create word in database.
@@ -111,7 +109,7 @@ func (c *WordController) UpdateWord() {
 
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, paramsKey, err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "WordController::ParamsError", err)
 		return
 	}
 	updateData := form.ConvertToModel()

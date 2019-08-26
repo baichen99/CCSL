@@ -52,12 +52,10 @@ func (c *NewsController) GetNewsList() {
 	}
 	c.Context.JSON(iris.Map{
 		message: success,
-		data: iris.Map{
-			"news":   news,
-			pageKey:  listParams.Page,
-			limitKey: listParams.Limit,
-			totalKey: count,
-		},
+		data:    news,
+		page:    listParams.Page,
+		limit:   listParams.Limit,
+		total:   count,
 	})
 }
 
@@ -66,7 +64,7 @@ func (c *NewsController) CreateNews() {
 	var form newsCreateForm
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, paramsKey, err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "NewsController::ParamsError", err)
 		return
 	}
 	// PSQL - Create news in database.
@@ -109,7 +107,7 @@ func (c *NewsController) UpdateNews() {
 
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, paramsKey, err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "NewsController::ParamsError", err)
 		return
 	}
 	updateData := form.ConvertToModel()
