@@ -11,7 +11,7 @@ type NewsInterface interface {
 	GetNewsList(parameters utils.GetNewsListParameters) (news []models.News, count int, err error)
 	GetNews(newsID string) (news models.News, err error)
 	CreateNews(news models.News) (err error)
-	UpdateNews(newsID string, updatedData models.News) (err error)
+	UpdateNews(newsID string, updatedData map[string]interface{}) (err error)
 	DeleteNews(newsID string) (err error)
 }
 
@@ -56,7 +56,7 @@ func (s *NewsService) CreateNews(news models.News) (err error) {
 	return
 }
 
-func (s *NewsService) UpdateNews(newsID string, updatedData models.News) (err error) {
+func (s *NewsService) UpdateNews(newsID string, updatedData map[string]interface{}) (err error) {
 	var news models.News
 	err = s.PG.Where("id = ?", newsID).Take(&news).Model(&news).Updates(updatedData).Error
 	return

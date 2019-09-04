@@ -12,7 +12,7 @@ type UserInterface interface {
 	GetUsersList(parameters utils.GetUserListParameters) (users []models.User, count int, err error)
 	CreateUser(user models.User) (err error)
 	GetUser(key string, value string) (user models.User, err error)
-	UpdateUser(userID string, updatedData models.User) (err error)
+	UpdateUser(userID string, updatedData map[string]interface{}) (err error)
 	DeleteUser(userID string) (err error)
 }
 
@@ -75,11 +75,11 @@ func (s *UserService) GetUser(key string, value string) (user models.User, err e
 }
 
 // UpdateUser updates user model
-func (s *UserService) UpdateUser(userID string, updatedData models.User) (err error) {
+func (s *UserService) UpdateUser(userID string, updatedData map[string]interface{}) (err error) {
 	var user models.User
-	if updatedData.Password != "" {
-		updatedData.Password, err = utils.HashPassword(updatedData.Password)
-	}
+	// if updatedData.Password != "" {
+	// 	updatedData.Password, err = utils.HashPassword(updatedData.Password)
+	// }
 	err = s.PG.Where("id = ?", userID).Take(&user).Model(&user).Updates(updatedData).Error
 	return
 }

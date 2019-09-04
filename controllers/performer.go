@@ -109,7 +109,7 @@ func (c *PerformerController) UpdatePerformer() {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "PerformerController::ParamsError", err)
 		return
 	}
-	updateData := form.ConvertToModel()
+	updateData := utils.MakeUpdateData(form)
 	// PSQL - Looking for specified performer via the ID.
 
 	if err := c.PerformerService.UpdatePerformer(performerID, updateData); err != nil {

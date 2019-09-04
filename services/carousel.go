@@ -11,7 +11,7 @@ type CarouselInterface interface {
 	GetCarouselList(parameters utils.GetCarouselListParameters) (carousels []models.Carousel, count int, err error)
 	GetCarousel(carouselID string) (carousel models.Carousel, err error)
 	CreateCarousel(carousel models.Carousel) (err error)
-	UpdateCarousel(carouselID string, updatedData models.Carousel) (err error)
+	UpdateCarousel(carouselID string, updatedData map[string]interface{}) (err error)
 	DeleteCarousel(carouselID string) (err error)
 }
 
@@ -52,7 +52,7 @@ func (s *CarouselService) CreateCarousel(carousel models.Carousel) (err error) {
 	return
 }
 
-func (s *CarouselService) UpdateCarousel(carouselID string, updatedData models.Carousel) (err error) {
+func (s *CarouselService) UpdateCarousel(carouselID string, updatedData map[string]interface{}) (err error) {
 	var carousel models.Carousel
 	err = s.PG.Where("id = ?", carouselID).Take(&carousel).Model(&carousel).Updates(updatedData).Error
 	return

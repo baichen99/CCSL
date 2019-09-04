@@ -12,7 +12,7 @@ type VideoInterface interface {
 	GetVideosList(parameters utils.GetVideoListParameters) (videos []models.VideoResult, count int, err error)
 	CreateVideo(video models.Video) (err error)
 	GetVideo(videoID string) (video models.Video, err error)
-	UpdateVideo(videoID string, updatedData models.Video) (err error)
+	UpdateVideo(videoID string, updatedData map[string]interface{}) (err error)
 	DeleteVideo(videoID string) (err error)
 }
 
@@ -75,7 +75,7 @@ func (s *VideoService) GetVideo(videoID string) (video models.Video, err error) 
 	err = s.PG.Where("id = ?", videoID).Take(&video).Error
 	return
 }
-func (s *VideoService) UpdateVideo(videoID string, updatedData models.Video) (err error) {
+func (s *VideoService) UpdateVideo(videoID string, updatedData map[string]interface{}) (err error) {
 	var video models.Video
 	err = s.PG.Where("id = ?", videoID).Take(&video).Model(&video).Updates(updatedData).Error
 	return

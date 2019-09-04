@@ -122,7 +122,8 @@ func (c *VideoController) UpdateVideo() {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "VideoController::ParamsError", err)
 		return
 	}
-	updateData := form.ConvertToModel()
+
+	updateData := utils.MakeUpdateData(form)
 
 	// PSQL - Update of the given ID
 	if err := c.VideoService.UpdateVideo(videoID, updateData); err != nil {

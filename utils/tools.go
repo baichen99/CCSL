@@ -2,6 +2,7 @@ package utils
 
 import (
 	"math/rand"
+	"reflect"
 	"regexp"
 	"runtime"
 	"time"
@@ -27,6 +28,38 @@ func LogInfo(context iris.Context, info string) {
 		lineNumber = 0
 	}
 	context.Application().Logger().Infof("[%s:%d] %s - ", fileName, lineNumber, info)
+}
+
+// MakeUpdateData returns a map of update data model
+func MakeUpdateData(dataStruct interface{}) map[string]interface{} {
+	t := reflect.TypeOf(dataStruct)
+	v := reflect.ValueOf(dataStruct)
+	updateData := make(map[string]interface{})
+	for i := 0; i < v.NumField(); i++ {
+		if v.Field(i).CanInterface() {
+			key := t.Field(i).Name
+			value := v.Field(i)
+			if !value.IsNil() {
+				dataInterface := value.Interface()
+				if data, ok := dataInterface.(*string); ok {
+					updateData[key] = *data
+				} else if data, ok := dataInterface.(*int); ok {
+					updateData[key] = *data
+				} else if data, ok := dataInterface.(*int64); ok {
+					updateData[key] = *data
+				} else if data, ok := dataInterface.(*int32); ok {
+					updateData[key] = *data
+				} else if data, ok := dataInterface.(*float32); ok {
+					updateData[key] = *data
+				} else if data, ok := dataInterface.(*float64); ok {
+					updateData[key] = *data
+				} else {
+					updateData[key] = data
+				}
+			}
+		}
+	}
+	return updateData
 }
 
 // RandomString returns given bytes of radom string

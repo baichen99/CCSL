@@ -96,7 +96,7 @@ func (c *CarouselController) UpdateCarousel() {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "CarouselCroller::ParamsError", err)
 		return
 	}
-	updateData := form.ConvertToModel()
+	updateData := utils.MakeUpdateData(form)
 	// PSQL - Update of the given ID
 	if err := c.CarouselService.UpdateCarousel(carouselID, updateData); err != nil {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "CarouselService::UpdateCarousel", err)

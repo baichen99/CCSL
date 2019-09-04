@@ -12,7 +12,7 @@ type WordInterface interface {
 	GetWordsList(parameters utils.GetWordListParameters) (words []models.Word, count int, err error)
 	CreateWord(word models.Word) (err error)
 	GetWord(wordID string) (word models.Word, err error)
-	UpdateWord(wordID string, updatedData models.Word) (err error)
+	UpdateWord(wordID string, updatedData map[string]interface{}) (err error)
 	DeleteWord(wordID string) (err error)
 }
 
@@ -69,7 +69,7 @@ func (s *WordService) GetWord(wordID string) (word models.Word, err error) {
 }
 
 // UpdateWord updates word with given id
-func (s *WordService) UpdateWord(wordID string, updatedData models.Word) (err error) {
+func (s *WordService) UpdateWord(wordID string, updatedData map[string]interface{}) (err error) {
 	var word models.Word
 	err = s.PG.Where("id = ?", wordID).Take(&word).Model(&word).Updates(updatedData).Error
 	return

@@ -33,16 +33,8 @@ func (f carouselCreateForm) ConvertToModel() (carousel models.Carousel) {
 }
 
 type carouselUpdateForm struct {
-	Title string `json:"title" validate:"omitempty"`
-	Image string `json:"image" validate:"omitempty"`
-}
-
-func (f carouselUpdateForm) ConvertToModel() (carousel models.Carousel) {
-	carousel = models.Carousel{
-		Title: f.Title,
-		Image: f.Image,
-	}
-	return
+	Title *string `json:"title" validate:"omitempty"`
+	Image *string `json:"image" validate:"omitempty"`
 }
 
 // >>> NEWS <<<
@@ -70,24 +62,12 @@ func (f newsCreateForm) ConvertToModel() (news models.News) {
 }
 
 type newsUpdateForm struct {
-	Column   string    `json:"column"  validate:"omitempty"`
-	Date     time.Time `json:"date"  validate:"omitempty"`
-	Title    string    `json:"title"  validate:"omitempty"`
-	Type     string    `json:"type"  validate:"omitempty,oneof=link document"`
-	Text     string    `json:"text"  validate:"omitempty"`
-	Language string    `json:"language"  validate:"omitempty"`
-}
-
-func (f newsUpdateForm) ConvertToModel() (news models.News) {
-	news = models.News{
-		Column:   f.Column,
-		Date:     f.Date,
-		Title:    f.Title,
-		Type:     f.Type,
-		Text:     f.Text,
-		Language: f.Language,
-	}
-	return
+	Column   *string `json:"column"  validate:"omitempty"`
+	Date     *string `json:"date"  validate:"omitempty"`
+	Title    *string `json:"title"  validate:"omitempty"`
+	Type     *string `json:"type"  validate:"omitempty,oneof=link document"`
+	Text     *string `json:"text"  validate:"omitempty"`
+	Language *string `json:"language"  validate:"omitempty"`
 }
 
 // >>> USER <<<
@@ -110,18 +90,9 @@ func (f userCreateForm) ConvertToModel() (user models.User) {
 }
 
 type userUpdateForm struct {
-	Name     string `json:"name" validate:"omitempty"`
-	Username string `json:"username" validate:"omitempty,numeric|email"`
-	Password string `json:"password" validate:"omitempty,min=6"`
-}
-
-func (f userUpdateForm) ConvertToModel() (user models.User) {
-	user = models.User{
-		Name:     f.Name,
-		Username: f.Username,
-		Password: f.Password,
-	}
-	return
+	Name     *string `json:"name" validate:"omitempty"`
+	Username *string `json:"username" validate:"omitempty,numeric|email"`
+	Password *string `json:"password" validate:"omitempty,min=6"`
 }
 
 type userLoginForm struct {
@@ -150,20 +121,10 @@ func (f wordCreateForm) ConvertToModel() (word models.Word) {
 }
 
 type wordUpdateForm struct {
-	Initial string `json:"initial" validate:"omitempty"`
-	Chinese string `json:"chinese" validate:"omitempty"`
-	English string `json:"english" validate:"omitempty"`
-	Type    string `json:"type" validate:"omitempty"`
-}
-
-func (f wordUpdateForm) ConvertToModel() (word models.Word) {
-	word = models.Word{
-		Initial: f.Initial,
-		Chinese: f.Chinese,
-		English: f.English,
-		Type:    f.Type,
-	}
-	return
+	Initial *string `json:"initial" validate:"omitempty"`
+	Chinese *string `json:"chinese" validate:"omitempty"`
+	English *string `json:"english" validate:"omitempty"`
+	Type    *string `json:"type" validate:"omitempty"`
 }
 
 // >>> PERFORMER <<<
@@ -185,18 +146,9 @@ func (f performerCreateForm) ConvertToModel() (performer models.Performer) {
 }
 
 type performerUpdateForm struct {
-	Name   string `json:"name" validate:"omitempty"`
-	Region string `json:"region" validate:"omitempty"`
-	Gender string `json:"gender" validate:"omitempty"`
-}
-
-func (f performerUpdateForm) ConvertToModel() (performer models.Performer) {
-	performer = models.Performer{
-		Name:   f.Name,
-		Region: f.Region,
-		Gender: f.Gender,
-	}
-	return
+	Name   *string `json:"name" validate:"omitempty"`
+	Region *string `json:"region" validate:"omitempty"`
+	Gender *string `json:"gender" validate:"omitempty"`
 }
 
 // >>> VIDEO <<<
@@ -222,20 +174,9 @@ func (f videoCreateForm) ConvertToModel() (video models.Video) {
 }
 
 type videoUpdateForm struct {
-	ConstructType  string `json:"constructType" validate:"omitempty"`  // 构词方式
-	ConstructWords string `json:"constructWords" validate:"omitempty"` // 构词词语
-	LeftSign       string `json:"leftSign" validate:"omitempty"`       // 左手手势
-	RightSign      string `json:"rightSign" validate:"omitempty"`      // 右手手势
-	VideoPath      string `json:"videoPath" validate:"omitempty"`      // 视频文件路径
-}
-
-func (f videoUpdateForm) ConvertToModel() (video models.Video) {
-	video = models.Video{
-		ConstructType:  f.ConstructType,
-		ConstructWords: f.ConstructWords,
-		LeftSign:       f.LeftSign,
-		RightSign:      f.RightSign,
-		VideoPath:      f.VideoPath,
-	}
-	return
+	ConstructType  *string `json:"constructType" validate:"omitempty"`  // 构词方式
+	ConstructWords *string `json:"constructWords" validate:"omitempty"` // 构词词语
+	LeftSign       *string `json:"leftSign" validate:"omitempty"`       // 左手手势
+	RightSign      *string `json:"rightSign" validate:"omitempty"`      // 右手手势
+	VideoPath      *string `json:"videoPath" validate:"omitempty"`      // 视频文件路径
 }

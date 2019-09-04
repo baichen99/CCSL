@@ -137,7 +137,7 @@ func (c *UserController) UpdateUser() {
 		return
 	}
 
-	updateData := form.ConvertToModel()
+	updateData := utils.MakeUpdateData(form)
 
 	// PSQL - Update of the given user ID.
 	if err := c.UserService.UpdateUser(userID, updateData); err != nil {

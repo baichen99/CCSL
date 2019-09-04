@@ -11,7 +11,7 @@ type PerformerInterface interface {
 	GetPerformersList(parameters utils.GetPerformerListParameters) (performers []models.Performer, count int, err error)
 	CreatePerformer(performer models.Performer) (err error)
 	GetPerformer(performerID string) (performer models.Performer, err error)
-	UpdatePerformer(performerID string, updatedData models.Performer) (err error)
+	UpdatePerformer(performerID string, updatedData map[string]interface{}) (err error)
 	DeletePerformer(performerID string) (err error)
 }
 
@@ -60,7 +60,7 @@ func (s *PerformerService) GetPerformer(performerID string) (performer models.Pe
 	return
 }
 
-func (s *PerformerService) UpdatePerformer(performerID string, updatedData models.Performer) (err error) {
+func (s *PerformerService) UpdatePerformer(performerID string, updatedData map[string]interface{}) (err error) {
 	var performer models.Performer
 	err = s.PG.Where("id = ?", performerID).Take(&performer).Model(&performer).Updates(updatedData).Error
 	return

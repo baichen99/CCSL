@@ -112,7 +112,8 @@ func (c *WordController) UpdateWord() {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "WordController::ParamsError", err)
 		return
 	}
-	updateData := form.ConvertToModel()
+
+	updateData := utils.MakeUpdateData(form)
 
 	// PSQL - Update of the given ID
 	if err := c.WordService.UpdateWord(wordID, updateData); err != nil {

@@ -110,7 +110,7 @@ func (c *NewsController) UpdateNews() {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "NewsController::ParamsError", err)
 		return
 	}
-	updateData := form.ConvertToModel()
+	updateData := utils.MakeUpdateData(form)
 
 	// PSQL - Update of the given ID
 	if err := c.NewsService.UpdateNews(newsID, updateData); err != nil {
