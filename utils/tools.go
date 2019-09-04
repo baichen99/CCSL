@@ -40,22 +40,7 @@ func MakeUpdateData(dataStruct interface{}) map[string]interface{} {
 			key := t.Field(i).Name
 			value := v.Field(i)
 			if !value.IsNil() {
-				dataInterface := value.Interface()
-				if data, ok := dataInterface.(*string); ok {
-					updateData[key] = *data
-				} else if data, ok := dataInterface.(*int); ok {
-					updateData[key] = *data
-				} else if data, ok := dataInterface.(*int64); ok {
-					updateData[key] = *data
-				} else if data, ok := dataInterface.(*int32); ok {
-					updateData[key] = *data
-				} else if data, ok := dataInterface.(*float32); ok {
-					updateData[key] = *data
-				} else if data, ok := dataInterface.(*float64); ok {
-					updateData[key] = *data
-				} else {
-					updateData[key] = data
-				}
+				updateData[key] = reflect.ValueOf(value.Interface()).Elem()
 			}
 		}
 	}

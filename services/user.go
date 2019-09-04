@@ -77,10 +77,7 @@ func (s *UserService) GetUser(key string, value string) (user models.User, err e
 // UpdateUser updates user model
 func (s *UserService) UpdateUser(userID string, updatedData map[string]interface{}) (err error) {
 	var user models.User
-	// if updatedData.Password != "" {
-	// 	updatedData.Password, err = utils.HashPassword(updatedData.Password)
-	// }
-	err = s.PG.Where("id = ?", userID).Take(&user).Model(&user).Updates(updatedData).Error
+	err = s.PG.Model(&user).Where("id = ?", userID).Updates(updatedData).Error
 	return
 }
 

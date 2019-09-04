@@ -54,7 +54,7 @@ func (s *CarouselService) CreateCarousel(carousel models.Carousel) (err error) {
 
 func (s *CarouselService) UpdateCarousel(carouselID string, updatedData map[string]interface{}) (err error) {
 	var carousel models.Carousel
-	err = s.PG.Where("id = ?", carouselID).Take(&carousel).Model(&carousel).Updates(updatedData).Error
+	err = s.PG.Model(&carousel).Where("id = ?", carouselID).Updates(updatedData).Error
 	return
 }
 

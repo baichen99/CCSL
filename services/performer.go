@@ -62,7 +62,7 @@ func (s *PerformerService) GetPerformer(performerID string) (performer models.Pe
 
 func (s *PerformerService) UpdatePerformer(performerID string, updatedData map[string]interface{}) (err error) {
 	var performer models.Performer
-	err = s.PG.Where("id = ?", performerID).Take(&performer).Model(&performer).Updates(updatedData).Error
+	err = s.PG.Model(&performer).Where("id = ?", performerID).Updates(updatedData).Error
 	return
 }
 

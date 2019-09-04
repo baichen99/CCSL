@@ -71,7 +71,7 @@ func (s *WordService) GetWord(wordID string) (word models.Word, err error) {
 // UpdateWord updates word with given id
 func (s *WordService) UpdateWord(wordID string, updatedData map[string]interface{}) (err error) {
 	var word models.Word
-	err = s.PG.Where("id = ?", wordID).Take(&word).Model(&word).Updates(updatedData).Error
+	err = s.PG.Model(&word).Where("id = ?", wordID).Updates(updatedData).Error
 	return
 }
 

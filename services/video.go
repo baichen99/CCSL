@@ -77,7 +77,7 @@ func (s *VideoService) GetVideo(videoID string) (video models.Video, err error) 
 }
 func (s *VideoService) UpdateVideo(videoID string, updatedData map[string]interface{}) (err error) {
 	var video models.Video
-	err = s.PG.Where("id = ?", videoID).Take(&video).Model(&video).Updates(updatedData).Error
+	err = s.PG.Model(&video).Where("id = ?", videoID).Updates(updatedData).Error
 	return
 }
 func (s *VideoService) DeleteVideo(videoID string) (err error) {

@@ -62,12 +62,12 @@ func (f newsCreateForm) ConvertToModel() (news models.News) {
 }
 
 type newsUpdateForm struct {
-	Column   *string `json:"column"  validate:"omitempty"`
-	Date     *string `json:"date"  validate:"omitempty"`
-	Title    *string `json:"title"  validate:"omitempty"`
-	Type     *string `json:"type"  validate:"omitempty,oneof=link document"`
-	Text     *string `json:"text"  validate:"omitempty"`
-	Language *string `json:"language"  validate:"omitempty"`
+	Column   *string    `json:"column"  validate:"omitempty"`
+	Date     *time.Time `json:"date"  validate:"omitempty"`
+	Title    *string    `json:"title"  validate:"omitempty"`
+	Type     *string    `json:"type"  validate:"omitempty,oneof=link document"`
+	Text     *string    `json:"text"  validate:"omitempty"`
+	Language *string    `json:"language"  validate:"omitempty"`
 }
 
 // >>> USER <<<
@@ -92,7 +92,7 @@ func (f userCreateForm) ConvertToModel() (user models.User) {
 type userUpdateForm struct {
 	Name     *string `json:"name" validate:"omitempty"`
 	Username *string `json:"username" validate:"omitempty,numeric|email"`
-	Password *string `json:"password" validate:"omitempty,min=6"`
+	// Password *string `json:"password" validate:"omitempty,min=6"`
 }
 
 type userLoginForm struct {

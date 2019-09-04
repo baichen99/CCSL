@@ -58,7 +58,7 @@ func (s *NewsService) CreateNews(news models.News) (err error) {
 
 func (s *NewsService) UpdateNews(newsID string, updatedData map[string]interface{}) (err error) {
 	var news models.News
-	err = s.PG.Where("id = ?", newsID).Take(&news).Model(&news).Updates(updatedData).Error
+	err = s.PG.Model(&news).Where("id = ?", newsID).Updates(updatedData).Error
 	return
 }
 
