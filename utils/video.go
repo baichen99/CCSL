@@ -1,143 +1,137 @@
 package utils
 
-import (
-	"fmt"
+// "gocv.io/x/gocv"
 
-	"image"
+// // CreateImgByBGR create a solid image based on params
+// func CreateImgByBGR(sizex int, sizey int, b float64, g float64, r float64) gocv.Mat {
+// 	img := gocv.NewMatWithSizeFromScalar(gocv.NewScalar(b, g, r, 255), sizex, sizey, gocv.MatTypeCV8UC3)
+// 	return img
+// }
 
-	"gocv.io/x/gocv"
-)
+// // AviToMp4 convert src avi to mp4type
+// func AviToMp4(srcPath string, dstPath string) (err error) {
+// 	capt, err := gocv.VideoCaptureFile(srcPath)
+// 	defer capt.Close()
+// 	if err != nil {
+// 		return
+// 	}
 
-// CreateImgByBGR create a solid image based on params
-func CreateImgByBGR(sizex int, sizey int, b float64, g float64, r float64) gocv.Mat {
-	img := gocv.NewMatWithSizeFromScalar(gocv.NewScalar(b, g, r, 255), sizex, sizey, gocv.MatTypeCV8UC3)
-	return img
-}
+// 	fps := capt.Get(gocv.VideoCaptureFPS)
+// 	width := int(capt.Get(gocv.VideoCaptureFrameWidth))
+// 	height := int(capt.Get(gocv.VideoCaptureFrameHeight))
+// 	writer, err := gocv.VideoWriterFile(dstPath, "mp4v", fps, width, height, true)
+// 	defer writer.Close()
+// 	if err != nil {
+// 		return
+// 	}
 
-// AviToMp4 convert src avi to mp4type
-func AviToMp4(srcPath string, dstPath string) (err error) {
-	capt, err := gocv.VideoCaptureFile(srcPath)
-	defer capt.Close()
-	if err != nil {
-		return
-	}
+// 	frame := gocv.NewMat()
+// 	defer frame.Close()
+// 	for {
+// 		if ok := capt.Read(&frame); ok {
+// 			err = writer.Write(frame)
+// 			if err != nil {
+// 				return
+// 			}
+// 		} else {
+// 			break
+// 		}
+// 	}
+// 	return nil
+// }
 
-	fps := capt.Get(gocv.VideoCaptureFPS)
-	width := int(capt.Get(gocv.VideoCaptureFrameWidth))
-	height := int(capt.Get(gocv.VideoCaptureFrameHeight))
-	writer, err := gocv.VideoWriterFile(dstPath, "mp4v", fps, width, height, true)
-	defer writer.Close()
-	if err != nil {
-		return
-	}
+// // ResizeVideo resize a video, sizeX/Y refer to width/height
+// func ResizeVideo(srcPath string, dstPath string, sizeX, sizeY int) (err error) {
+// 	capt, err := gocv.VideoCaptureFile(srcPath)
+// 	defer capt.Close()
+// 	if err != nil {
+// 		return
+// 	}
 
-	frame := gocv.NewMat()
-	defer frame.Close()
-	for {
-		if ok := capt.Read(&frame); ok {
-			err = writer.Write(frame)
-			if err != nil {
-				return
-			}
-		} else {
-			break
-		}
-	}
-	return nil
-}
+// 	fps := capt.Get(gocv.VideoCaptureFPS)
+// 	writer, err := gocv.VideoWriterFile(dstPath, "avc1", fps, sizeX, sizeY, true)
+// 	defer writer.Close()
+// 	if err != nil {
+// 		return
+// 	}
 
-// ResizeVideo resize a video, sizeX/Y refer to width/height
-func ResizeVideo(srcPath string, dstPath string, sizeX, sizeY int) (err error) {
-	capt, err := gocv.VideoCaptureFile(srcPath)
-	defer capt.Close()
-	if err != nil {
-		return
-	}
+// 	frame := gocv.NewMat()
+// 	dstFrame := gocv.NewMat()
+// 	defer frame.Close()
+// 	defer dstFrame.Close()
+// 	for {
+// 		if ok := capt.Read(&frame); ok {
+// 			gocv.Resize(frame, &dstFrame, image.Pt(sizeX, sizeY), 0, 0, gocv.InterpolationLinear)
+// 			err = writer.Write(dstFrame)
+// 			if err != nil {
+// 				return
+// 			}
+// 		} else {
+// 			break
+// 		}
+// 	}
+// 	return nil
+// }
 
-	fps := capt.Get(gocv.VideoCaptureFPS)
-	writer, err := gocv.VideoWriterFile(dstPath, "avc1", fps, sizeX, sizeY, true)
-	defer writer.Close()
-	if err != nil {
-		return
-	}
+// // Convert replace green screen with a custom color
+// func Convert(srcPath string, dstPath string, r, g, b float64) (err error) {
+// 	lb := gocv.NewScalar(68, 84, 153, 255)
+// 	ub := gocv.NewScalar(80, 255, 255, 255)
 
-	frame := gocv.NewMat()
-	dstFrame := gocv.NewMat()
-	defer frame.Close()
-	defer dstFrame.Close()
-	for {
-		if ok := capt.Read(&frame); ok {
-			gocv.Resize(frame, &dstFrame, image.Pt(sizeX, sizeY), 0, 0, gocv.InterpolationLinear)
-			err = writer.Write(dstFrame)
-			if err != nil {
-				return
-			}
-		} else {
-			break
-		}
-	}
-	return nil
-}
+// 	hsv := gocv.NewMat()
+// 	defer hsv.Close()
+// 	mask := gocv.NewMat()
+// 	defer mask.Close()
+// 	mask_inv := gocv.NewMat()
+// 	defer mask.Close()
+// 	frame := gocv.NewMat()
+// 	defer frame.Close()
+// 	kernel := gocv.GetStructuringElement(gocv.MorphRect, image.Pt(3, 3))
+// 	defer kernel.Close()
+// 	result := gocv.NewMat()
+// 	defer result.Close()
 
-// Convert replace green screen with a custom color
-func Convert(srcPath string, dstPath string, r, g, b float64) (err error) {
-	lb := gocv.NewScalar(68, 84, 153, 255)
-	ub := gocv.NewScalar(80, 255, 255, 255)
+// 	capt, err := gocv.VideoCaptureFile(srcPath)
+// 	defer capt.Close()
+// 	if err != nil {
+// 		return
+// 	}
 
-	hsv := gocv.NewMat()
-	defer hsv.Close()
-	mask := gocv.NewMat()
-	defer mask.Close()
-	mask_inv := gocv.NewMat()
-	defer mask.Close()
-	frame := gocv.NewMat()
-	defer frame.Close()
-	kernel := gocv.GetStructuringElement(gocv.MorphRect, image.Pt(3, 3))
-	defer kernel.Close()
-	result := gocv.NewMat()
-	defer result.Close()
+// 	fps := capt.Get(gocv.VideoCaptureFPS)
+// 	width := int(capt.Get(gocv.VideoCaptureFrameWidth))
+// 	height := int(capt.Get(gocv.VideoCaptureFrameHeight))
+// 	writer, err := gocv.VideoWriterFile(dstPath, "mp4v", fps, width, height, true)
+// 	defer writer.Close()
 
-	capt, err := gocv.VideoCaptureFile(srcPath)
-	defer capt.Close()
-	if err != nil {
-		return
-	}
+// 	if err != nil {
+// 		return
+// 	}
 
-	fps := capt.Get(gocv.VideoCaptureFPS)
-	width := int(capt.Get(gocv.VideoCaptureFrameWidth))
-	height := int(capt.Get(gocv.VideoCaptureFrameHeight))
-	writer, err := gocv.VideoWriterFile(dstPath, "mp4v", fps, width, height, true)
-	defer writer.Close()
+// 	ColorBg := CreateImgByBGR(height, width, b, g, r)
+// 	for {
+// 		person := gocv.NewMat()
+// 		BgPerson := gocv.NewMat()
+// 		if ok := capt.Read(&frame); ok {
+// 			gocv.CvtColor(frame, &hsv, gocv.ColorBGRToHSV)
+// 			gocv.InRangeWithScalar(hsv, lb, ub, &mask)
 
-	if err != nil {
-		return
-	}
+// 			gocv.BitwiseNot(mask, &mask_inv)
 
-	ColorBg := CreateImgByBGR(height, width, b, g, r)
-	for {
-		person := gocv.NewMat()
-		BgPerson := gocv.NewMat()
-		if ok := capt.Read(&frame); ok {
-			gocv.CvtColor(frame, &hsv, gocv.ColorBGRToHSV)
-			gocv.InRangeWithScalar(hsv, lb, ub, &mask)
+// 			gocv.Erode(mask_inv, &mask, kernel)
+// 			gocv.BitwiseNot(mask, &mask_inv)
+// 			gocv.BitwiseAndWithMask(frame, frame, &person, mask)
 
-			gocv.BitwiseNot(mask, &mask_inv)
+// 			gocv.BitwiseAndWithMask(ColorBg, ColorBg, &BgPerson, mask_inv)
 
-			gocv.Erode(mask_inv, &mask, kernel)
-			gocv.BitwiseNot(mask, &mask_inv)
-			gocv.BitwiseAndWithMask(frame, frame, &person, mask)
+// 			gocv.Add(BgPerson, person, &result)
 
-			gocv.BitwiseAndWithMask(ColorBg, ColorBg, &BgPerson, mask_inv)
-
-			gocv.Add(BgPerson, person, &result)
-
-			err = writer.Write(result)
-			if err != nil {
-				fmt.Printf("err occur when write frame: %s", err)
-			}
-		} else {
-			break
-		}
-	}
-	return nil
-}
+// 			err = writer.Write(result)
+// 			if err != nil {
+// 				fmt.Printf("err occur when write frame: %s", err)
+// 			}
+// 		} else {
+// 			break
+// 		}
+// 	}
+// 	return nil
+// }
