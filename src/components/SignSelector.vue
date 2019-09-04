@@ -1,5 +1,8 @@
 <template>
-  <el-card class="sidebar">
+  <el-card
+    class="sign-search"
+    shadow="hover"
+  >
     <h3 class="title">右手手形检索</h3>
     <div class="sign">
       <div
@@ -29,14 +32,14 @@ export default {
   name: "SignSelector",
   methods: {
     onSignSelected(sign) {
-      console.log(sign);
+      this.$emit("sign-selected", sign);
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.sidebar {
+.sign-search {
   width: 18%;
   height: 600px;
   overflow: scroll;

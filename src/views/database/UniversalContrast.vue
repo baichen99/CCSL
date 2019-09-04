@@ -1,6 +1,6 @@
 <template>
   <div class="universal-contrast">
-    <sign-selector />
+    <sign-selector @sign-selected="searchBySign" />
 
     <div class="search">
       <h3>国家通用手语比对语料库</h3>
@@ -145,65 +145,35 @@
         </el-card>
       </transition>
 
-      <el-card
-        v-if="videos.length!==0"
-        shadow="never"
-      >
-        <el-row :gutter="20">
-          <el-col
-            v-for="video in videos"
-            :key="video.id"
-            :sm="12"
-            :md="8"
-            :lg="6"
-          >
-            <video-card
-              :video="video"
-              @on-video-click="showDetailModal"
-            />
-          </el-col>
-        </el-row>
-        <el-pagination
-          background
-          layout="total, prev, pager, next"
-          :current-page.sync="page"
-          :total="total"
-          :page-size="limit"
-          @current-change="changePage"
-        />
-        <el-dialog
-          :visible.sync="showDetail"
-          top="40px"
-        >
-          <video-detail :video="videoDetail" />
-        </el-dialog>
-      </el-card>
+      <video-search-result
+        :videos="videos"
+        :limit="limit"
+        :page="page"
+        :total="total"
+        @change-page="changePage"
+      />
+
     </div>
 
-    <word-selector />
+    <word-selector @word-selected="searchByWord" />
   </div>
 </template>
 
 <script>
-import VideoCard from "@/components/VideoCard.vue";
-import VideoDetail from "@/components/VideoDetail.vue";
+import VideoSearchResult from "@/components/VideoSearchResult.vue";
 import WordSelector from "@/components/WordSelector.vue";
 import SignSelector from "@/components/SignSelector.vue";
 import { getUniversalContrastVideos } from "@/api/videos";
-import { mapGetters } from "vuex";
 
 export default {
   name: "UniversalContrast",
   components: {
-    VideoCard,
-    VideoDetail,
+    VideoSearchResult,
     WordSelector,
     SignSelector
   },
   data() {
     return {
-      showDetail: false,
-      videoDetail: {},
       advancedSearch: false,
       videos: [],
       wordID: "",
@@ -274,15 +244,12 @@ export default {
       this.page = page;
       this.getData();
     },
-    showDetailModal(video) {
-      this.videoDetail = video;
-      this.showDetail = true;
-    },
     searchByButton() {
       this.wordID = "";
       this.searchVideos();
     },
     searchByWord(wordID) {
+      console.log(wordID);
       this.clearParams();
       this.wordID = wordID;
       this.searchVideos();
@@ -313,17 +280,6 @@ export default {
 
     .options {
       margin: 5px 0;
-      text-align: center;
-    }
-
-    .el-card {
-      margin: 10px 0;
-      .el-select {
-        margin: 5px 0;
-      }
-    }
-
-    .el-pagination {
       text-align: center;
     }
   }
