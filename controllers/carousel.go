@@ -7,6 +7,7 @@ import (
 
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/mvc"
+	uuid "github.com/satori/go.uuid"
 )
 
 // CarouselController is for carousels CRUD
@@ -15,6 +16,7 @@ type CarouselController struct {
 	CarouselService services.CarouselInterface
 }
 
+// BeforeActivation will register routes for controllers
 func (c *CarouselController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Handle("GET", "/", "GetCarouselsList")
 	app.Handle("POST", "/", "CreateCarousel", middlewares.CheckJWTToken, middlewares.CheckAdmin)
@@ -23,6 +25,7 @@ func (c *CarouselController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Handle("DELETE", "/{id: string}", "DeleteCarousel", middlewares.CheckJWTToken, middlewares.CheckAdmin)
 }
 
+// GetCarouselsList GET
 func (c *CarouselController) GetCarouselsList() {
 	defer c.Context.Next()
 	listParams, err := utils.GetListParamsFromContext(c.Context, "created_at")
@@ -49,6 +52,7 @@ func (c *CarouselController) GetCarouselsList() {
 	})
 }
 
+// CreateCarousel POST /carousels
 func (c *CarouselController) CreateCarousel() {
 	defer c.Context.Next()
 	var form carouselCreateForm
@@ -59,6 +63,10 @@ func (c *CarouselController) CreateCarousel() {
 	}
 	// PSQL - Create carousel in database.
 	carousel := form.ConvertToModel()
+	// Set createor ID
+	tokenUser, _ := middlewares.GetJWTParams(c.Context)
+	tokenID, _ := uuid.FromString(tokenUser)
+	carousel.CreatorID = tokenID
 	if err := c.CarouselService.CreateCarousel(carousel); err != nil {
 		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "Carouselervice::CreateCarousel", err)
 		return
@@ -70,6 +78,7 @@ func (c *CarouselController) CreateCarousel() {
 	})
 }
 
+// GetCarousel GET /carousels
 func (c *CarouselController) GetCarousel() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
@@ -85,6 +94,7 @@ func (c *CarouselController) GetCarousel() {
 	})
 }
 
+// UpdateCarousel POST /carousels/{id:string}
 func (c *CarouselController) UpdateCarousel() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
@@ -106,6 +116,7 @@ func (c *CarouselController) UpdateCarousel() {
 	c.Context.StatusCode(iris.StatusNoContent)
 }
 
+// DeleteCarousel DELETE /carousels/{id:string}
 func (c *CarouselController) DeleteCarousel() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL

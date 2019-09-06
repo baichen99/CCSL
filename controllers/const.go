@@ -20,21 +20,24 @@ const (
 // ============
 
 type carouselCreateForm struct {
-	Title string `json:"title" validate:"required"`
-	Image string `json:"image" validate:"required"`
+	Title  string `json:"title" validate:"required"`
+	Image  string `json:"image" validate:"required"`
+	Status string `json:"status" validate:"omitempty,oneof=draft published"`
 }
 
 func (f carouselCreateForm) ConvertToModel() (carousel models.Carousel) {
 	carousel = models.Carousel{
-		Title: f.Title,
-		Image: f.Image,
+		Title:  f.Title,
+		Image:  f.Image,
+		Status: f.Status,
 	}
 	return
 }
 
 type carouselUpdateForm struct {
-	Title *string `json:"title" validate:"omitempty"`
-	Image *string `json:"image" validate:"omitempty"`
+	Title  *string `json:"title" validate:"omitempty"`
+	Image  *string `json:"image" validate:"omitempty"`
+	Status *string `json:"status" validate:"omitempty,oneof=draft published"`
 }
 
 // >>> NEWS <<<
@@ -47,6 +50,7 @@ type newsCreateForm struct {
 	Type     string    `json:"type" validate:"required,oneof=link document"`     // Type can be 'link' or 'document'
 	Text     string    `json:"text" validate:"required"`                         // Text
 	Language string    `json:"language"  validate:"omitempty,oneof=zh-CN en-US"` // Can be zh-CN or en-US
+	Status   string    `json:"status" validate:"omitempty,oneof=draft published"`
 }
 
 func (f newsCreateForm) ConvertToModel() (news models.News) {
@@ -57,6 +61,7 @@ func (f newsCreateForm) ConvertToModel() (news models.News) {
 		Type:     f.Type,
 		Text:     f.Text,
 		Language: f.Language,
+		Status:   f.Status,
 	}
 	return
 }
@@ -67,7 +72,8 @@ type newsUpdateForm struct {
 	Title    *string    `json:"title"  validate:"omitempty"`
 	Type     *string    `json:"type"  validate:"omitempty,oneof=link document"`
 	Text     *string    `json:"text"  validate:"omitempty"`
-	Language *string    `json:"language"  validate:"omitempty"`
+	Language *string    `json:"language" validate:"omitempty,oneof=zh-CN en-US"`
+	Status   *string    `json:"status" validate:"omitempty,oneof=draft published"`
 }
 
 // >>> USER <<<

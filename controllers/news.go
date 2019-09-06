@@ -7,6 +7,7 @@ import (
 
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/mvc"
+	uuid "github.com/satori/go.uuid"
 )
 
 // NewsController is for news CURD
@@ -59,6 +60,7 @@ func (c *NewsController) GetNewsList() {
 	})
 }
 
+// CreateNews POST /news
 func (c *NewsController) CreateNews() {
 	defer c.Context.Next()
 	var form newsCreateForm
@@ -69,6 +71,10 @@ func (c *NewsController) CreateNews() {
 	}
 	// PSQL - Create news in database.
 	news := form.ConvertToModel()
+	// Set createor ID
+	tokenUser, _ := middlewares.GetJWTParams(c.Context)
+	tokenID, _ := uuid.FromString(tokenUser)
+	news.CreatorID = tokenID
 	if err := c.NewsService.CreateNews(news); err != nil {
 		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "NewsService::CreateNews", err)
 		return
@@ -80,6 +86,7 @@ func (c *NewsController) CreateNews() {
 	})
 }
 
+// GetNews GET /news/{id:string}
 func (c *NewsController) GetNews() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
@@ -98,6 +105,7 @@ func (c *NewsController) GetNews() {
 	})
 }
 
+// UpdateNews PUT /news/{id:string}
 func (c *NewsController) UpdateNews() {
 	defer c.Context.Next()
 
@@ -122,6 +130,7 @@ func (c *NewsController) UpdateNews() {
 	c.Context.StatusCode(iris.StatusNoContent)
 }
 
+// DeleteNews DELETE /news/{id:string}
 func (c *NewsController) DeleteNews() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL

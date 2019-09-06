@@ -71,9 +71,10 @@ func initDB(app *iris.Application) *gorm.DB {
 	pg.SetLogger(configs.GetPostgresLogger())
 	pg.LogMode(true)
 	pg.AutoMigrate(&models.User{}, &models.Word{}, &models.Video{}, &models.Performer{}, &models.Carousel{}, &models.News{})
+	// Manually Add foreign key for tables
 	pg.Model(&models.Video{}).AddForeignKey("word_id", "words(id)", "RESTRICT", "CASCADE")
 	pg.Model(&models.Video{}).AddForeignKey("performer_id", "performers(id)", "RESTRICT", "CASCADE")
-	// utils.InitProdUser(pg)
-	// utils.InitTestUser(pg)
+	pg.Model(&models.News{}).AddForeignKey("creator_id", "users(id)", "RESTRICT", "CASCADE")
+	pg.Model(&models.Carousel{}).AddForeignKey("creator_id", "users(id)", "RESTRICT", "CASCADE")
 	return pg
 }

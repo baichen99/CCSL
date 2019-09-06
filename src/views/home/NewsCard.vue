@@ -1,5 +1,5 @@
 <template>
-  <div class="list-card">
+  <div class="news-card">
     <el-card shadow="hover">
       <div slot="header">
         <span :class="['iconfont','icon-'+(icon+1)] " />
@@ -28,7 +28,7 @@
 
 <script>
 export default {
-  name: "ListCard",
+  name: "NewsCard",
   props: {
     list: {
       type: Object,
@@ -49,7 +49,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/styles/element-variables.scss";
-.list-card {
+.news-card {
   .el-card {
     margin: 1rem 0;
     width: 430px;

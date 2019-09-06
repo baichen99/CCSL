@@ -15,6 +15,7 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
+// FileController is for uploading files
 type FileController struct {
 	Context iris.Context
 }

@@ -9,7 +9,7 @@
       :key="item.id"
     >
       <img
-        :src="'public/files/'+item.image"
+        :src="'/public/files/'+item.image"
         :alt="item.id"
         width="100%"
         height="100%"

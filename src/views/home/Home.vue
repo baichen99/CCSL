@@ -12,7 +12,7 @@
           :md="12"
           :sm="24"
         >
-          <list-card
+          <news-card
             :list="item"
             :icon="index"
           />
@@ -25,12 +25,12 @@
 import { GetCarouselList } from "@/api/carousel";
 // import { GetNewsList } from "@/api/news";
 import CarouselCard from "@/views/home/CarouselCard.vue";
-import ListCard from "@/views/home/ListCard.vue";
+import NewsCard from "@/views/home/NewsCard.vue";
 export default {
   name: "Home",
   components: {
     CarouselCard,
-    ListCard
+    NewsCard
   },
 
   data: () => ({

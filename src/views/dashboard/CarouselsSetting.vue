@@ -4,29 +4,16 @@
       class="new"
       type="primary"
       @click="create"
-    >上传新图片</el-button>
+    >增加</el-button>
 
     <el-dialog
       :visible.sync="show"
       center
       @closed="onDialogClose"
     >
-      <el-upload
-        ref="uploader"
-        class="upload-container"
-        drag
-        :limit="1"
-        :headers="{
-          Authorization: `Bearer ${$store.getters.token}`
-        }"
-        action="/api/files"
-        :on-success="onUploadSuccess"
-        :on-remove="onImageRemove"
-      >
-        <i class="el-icon-upload" />
-        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em><br>只能上传jpg/png文件，且大小不超过5Mb<br>建议图片尺寸为16:9，否则会拉伸变形</div>
-      </el-upload>
-
+      <image-uploader
+        v-model="image"
+      />
       <el-input
         v-model="title"
         placeholder="请输入滚动图片标题"
@@ -57,7 +44,7 @@
         label="发布时间"
       >
         <template slot-scope="{row}">
-          <span>{{ row.createdAt | timestamp2String }}</span>
+          <span>{{ $d(new Date(row.createdAt), 'long') }}</span>
         </template>
       </el-table-column>
 
@@ -129,11 +116,14 @@
 import {
   GetCarouselList,
   CreateCarousel,
-  // UpdateCarousel,
   DeleteCarousel
 } from "@/api/carousel";
+import ImageUploader from "@/components/ImageUploader";
 export default {
   name: "CarouselsSetting",
+  components: {
+    ImageUploader
+  },
   data() {
     return {
       show: false,
@@ -168,14 +158,6 @@ export default {
     onDialogClose() {
       this.image = "";
       this.title = "";
-      this.$refs.uploader.clearFiles();
-    },
-    onUploadSuccess(data) {
-      const filename = data.data;
-      this.image = filename;
-    },
-    onImageRemove() {
-      this.image = "";
     },
     async getList() {
       this.listLoading = true;
