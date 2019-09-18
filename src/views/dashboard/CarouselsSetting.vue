@@ -7,13 +7,12 @@
     >增加</el-button>
 
     <el-dialog
+      width="1000px"
       :visible.sync="show"
       center
       @closed="onDialogClose"
     >
-      <image-uploader
-        v-model="image"
-      />
+      <image-uploader v-model="image" />
       <el-input
         v-model="title"
         placeholder="请输入滚动图片标题"
@@ -35,7 +34,6 @@
       stripe
       fit
       highlight-current-row
-      style="width: 100%"
     >
 
       <el-table-column
@@ -141,15 +139,14 @@ export default {
     this.getList();
   },
   methods: {
-    save() {
+    async save() {
       const data = { image: this.image, title: this.title };
-      CreateCarousel(data).then(() => {
-        this.$message({
-          message: "上传成功",
-          type: "success"
-        });
-        this.getList();
+      await CreateCarousel(data);
+      this.$message({
+        message: "上传成功",
+        type: "success"
       });
+      this.getList();
       this.show = false;
     },
     create() {
