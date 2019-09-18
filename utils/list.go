@@ -120,3 +120,8 @@ type GetCarouselListParameters struct {
 	GetListParameters
 	Title string
 }
+
+type GetSignListParameters struct {
+    GetListParameters
+    Name string
+}
