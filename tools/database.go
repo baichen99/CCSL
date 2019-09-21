@@ -37,8 +37,10 @@ func Migrate(db *gorm.DB) {
                     db.Table("signs").Where("name = ?", n).Scan(&sign)
                     err = db.Table("video_leftsign").Create(&VideoSign{VideoID: v.ID, SignID: sign.ID}).Error
                 } else {
-                    // 如果找到, 建立关系
-                    err = db.Table("video_leftsign").Create(&VideoSign{VideoID: v.ID, SignID: sign.ID}).Error
+                // 如果找到, 建立关系
+                    if db.Table("video_leftsign").Where("video_id = ?", v.ID).Where("sign_id = ?", sign.ID).Find(&VideoSign{}).RecordNotFound() {
+                        err = db.Table("video_leftsign").Create(&VideoSign{VideoID: v.ID, SignID: sign.ID}).Error
+                    }
                 }
                 if err != nil  {
                     return
@@ -56,8 +58,10 @@ func Migrate(db *gorm.DB) {
                     db.Table("signs").Where("name = ?", n).Scan(&sign)
                     err = db.Table("video_rightsign").Create(&VideoSign{VideoID: v.ID, SignID: sign.ID}).Error
                 } else {
-                    // 如果找到, 建立关系
-                    err = db.Table("video_rightsign").Create(&VideoSign{VideoID: v.ID, SignID: sign.ID}).Error
+                // 如果找到, 建立关系
+                    if db.Table("video_rightsign").Where("video_id = ?", v.ID).Where("sign_id = ?", sign.ID).Find(&VideoSign{}).RecordNotFound() {
+                        err = db.Table("video_rightsign").Create(&VideoSign{VideoID: v.ID, SignID: sign.ID}).Error
+                    }
                 }
                 if err != nil  {
                     return
