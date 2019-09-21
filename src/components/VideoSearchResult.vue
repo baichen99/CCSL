@@ -1,38 +1,41 @@
 <template>
-  <el-card
-    v-if="videos.length!==0"
-    shadow="hover"
-  >
-    <el-row :gutter="20">
-      <el-col
-        v-for="video in videos"
-        :key="video.id"
-        :sm="sm"
-        :md="md"
-        :lg="lg"
-      >
-        <video-card
-          :show-region="false"
-          :video="video"
-          @on-video-click="showDetailModal"
-        />
-      </el-col>
-    </el-row>
-    <el-pagination
-      background
-      layout="total, prev, pager, next"
-      :current-page.sync="page"
-      :total="total"
-      :page-size="limit"
-      @current-change="changePage"
-    />
-    <el-dialog
-      :visible.sync="showDetail"
-      top="40px"
+  <transition name="slide-fade">
+    <el-card
+      v-if="videos.length!==0"
+      shadow="hover"
     >
-      <video-detail :video="videoDetail" />
-    </el-dialog>
-  </el-card>
+      <el-row :gutter="20">
+        <el-col
+          v-for="video in videos"
+          :key="video.id"
+          :sm="sm"
+          :md="md"
+          :lg="lg"
+        >
+          <video-card
+            :show-region="showRegion"
+            :video="video"
+            @on-video-click="showDetailModal"
+          />
+        </el-col>
+      </el-row>
+      <el-pagination
+        background
+        layout="total, prev, pager, next"
+        :current-page.sync="page"
+        :total="total"
+        :page-size="limit"
+        @current-change="changePage"
+      />
+      <el-dialog
+        :visible.sync="showDetail"
+        top="40px"
+      >
+        <video-detail :video="videoDetail" />
+      </el-dialog>
+    </el-card>
+  </transition>
+
 </template>
 
 <script>
@@ -45,6 +48,10 @@ export default {
     VideoDetail
   },
   props: {
+    showRegion: {
+      type: Boolean,
+      default: true
+    },
     sm: {
       type: Number,
       default: 12

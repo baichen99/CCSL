@@ -41,7 +41,8 @@ export default {
 <style lang="scss" scoped>
 .sign-search {
   width: 18%;
-  height: 600px;
+  min-height: 600px;
+  max-height: 80vh;
   overflow: scroll;
   .title {
     text-align: center;

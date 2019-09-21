@@ -1,5 +1,6 @@
 <template>
   <div class="learning-platform">
+
     <word-selector
       start="A"
       end="L"
@@ -30,6 +31,7 @@
         :sm="24"
         :md="12"
         :lg="12"
+        :show-region="false"
         @change-page="changePage"
       />
 

@@ -59,10 +59,10 @@ func (s *VideoService) GetVideosList(parameters utils.GetVideoListParameters) (v
 	// Fetching the items to be returned by the query.
 	orderQuery := parameters.OrderBy + " " + parameters.Order
 	if parameters.Limit != 0 {
-		err = query.Order(regionOrder).Order(orderQuery).Limit(parameters.Limit).Offset(parameters.Limit * (parameters.Page - 1)).Scan(&videos).Error
+		err = query.Order("word_id asc").Order(regionOrder).Order(orderQuery).Limit(parameters.Limit).Offset(parameters.Limit * (parameters.Page - 1)).Scan(&videos).Error
 
 	} else {
-		err = query.Order(regionOrder).Order(orderQuery).Scan(&videos).Error
+		err = query.Order("word_id asc").Order(regionOrder).Order(orderQuery).Scan(&videos).Error
 	}
 	return
 }

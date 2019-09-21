@@ -40,10 +40,7 @@
         </el-radio-group>
       </div>
 
-      <transition
-        name="fade"
-        :duration="{ enter: 500, leave: 800 }"
-      >
+      <transition name="slide-fade">
         <el-card
           v-if="advancedSearch"
           class="advance"
@@ -150,6 +147,9 @@
         :limit="limit"
         :page="page"
         :total="total"
+        :sm="24"
+        :md="12"
+        :lg="12"
         @change-page="changePage"
       />
 
@@ -180,7 +180,7 @@ export default {
       keywordType: "",
       keyword: "",
       page: 1,
-      limit: 12,
+      limit: 4,
       total: 0,
       gender: "",
       region: "",

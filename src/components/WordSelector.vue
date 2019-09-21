@@ -1,5 +1,8 @@
 <template>
-  <el-card class="sidebar" shadow="hover">
+  <el-card
+    class="sidebar"
+    shadow="hover"
+  >
     <h3 class="title">音序检索</h3>
     <div class="initial">
       <el-collapse accordion>
@@ -50,7 +53,6 @@ export default {
   },
   methods: {
     onWordSelected(wordID) {
-      console.log(wordID)
       this.$emit("word-selected", wordID);
     }
   }
@@ -60,7 +62,8 @@ export default {
 <style lang="scss" scoped>
 .sidebar {
   width: 18%;
-  height: 600px;
+  min-height: 600px;
+  max-height: 80vh;
   overflow: scroll;
   .title {
     text-align: center;
