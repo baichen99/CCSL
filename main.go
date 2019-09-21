@@ -81,6 +81,6 @@ func initDB(app *iris.Application) *gorm.DB {
 	pg.Model(&models.News{}).AddForeignKey("creator_id", "users(id)", "RESTRICT", "CASCADE")
 	pg.Model(&models.Carousel{}).AddForeignKey("creator_id", "users(id)", "RESTRICT", "CASCADE")
 	// utils.InitTestUser(pg)
-	utils.Migrate(pg)
+	// utils.Migrate(pg)
 	return pg
 }
