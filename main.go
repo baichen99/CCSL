@@ -1,30 +1,26 @@
 package main
 
 import (
-    "ccsl/configs"
-    "ccsl/controllers"
-    "ccsl/middlewares"
-    "ccsl/models"
-    "ccsl/services"
-    "ccsl/tools"
-    "ccsl/utils"
-    "strconv"
+	"ccsl/configs"
+	"ccsl/controllers"
+	"ccsl/middlewares"
+	"ccsl/models"
+	"ccsl/services"
+	"ccsl/utils"
+	"strconv"
 
-    "github.com/jinzhu/gorm"
-    _ "github.com/jinzhu/gorm/dialects/postgres"
-    "github.com/kataras/iris"
-    "github.com/kataras/iris/middleware/logger"
-    "github.com/kataras/iris/middleware/recover"
-    "github.com/kataras/iris/mvc"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"github.com/kataras/iris"
+	"github.com/kataras/iris/middleware/logger"
+	"github.com/kataras/iris/middleware/recover"
+	"github.com/kataras/iris/mvc"
 )
 
 func main() {
 	app := initApp()
 	pg := initDB(app)
 	defer pg.Close()
-	utils.InitTestUser(pg)
-	tools.Migrate(pg)
-
 	mvc.New(app).Handle(new(controllers.RootController))
 	mvc.Configure(app.Party("/files"), func(app *mvc.Application) {
 		app.Handle(new(controllers.FileController))
@@ -54,9 +50,9 @@ func main() {
 		app.Handle(new(controllers.UserController))
 	})
 	mvc.Configure(app.Party("/signs"), func(app *mvc.Application) {
-	    app.Register(services.NewSignService(pg))
-	    app.Handle(new(controllers.SignController))
-    })
+		app.Register(services.NewSignService(pg))
+		app.Handle(new(controllers.SignController))
+	})
 	host := configs.Conf.Listener.Server + ":" + strconv.Itoa(configs.Conf.Listener.Port)
 	app.Run(iris.Addr(host), iris.WithOptimizations, iris.WithoutStartupLog)
 }
@@ -84,5 +80,7 @@ func initDB(app *iris.Application) *gorm.DB {
 	pg.Model(&models.Video{}).AddForeignKey("performer_id", "performers(id)", "RESTRICT", "CASCADE")
 	pg.Model(&models.News{}).AddForeignKey("creator_id", "users(id)", "RESTRICT", "CASCADE")
 	pg.Model(&models.Carousel{}).AddForeignKey("creator_id", "users(id)", "RESTRICT", "CASCADE")
+	// utils.InitTestUser(pg)
+	// utils.Migrate(pg)
 	return pg
 }

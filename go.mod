@@ -49,6 +49,7 @@ require (
 	github.com/yudai/pp v2.0.1+incompatible // indirect
 	gocv.io/x/gocv v0.20.0
 	golang.org/x/crypto v0.0.0-20190411191339-88737f569e3a
+	golang.org/x/tools/gopls v0.1.7 // indirect
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/go-playground/validator.v9 v9.28.0
 	gopkg.in/ini.v1 v1.42.0
