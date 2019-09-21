@@ -14,10 +14,10 @@ type Video struct {
 	ConstructType  string    `gorm:"DEFAULT:NULL" json:"constructType"`           // 构词方式
 	ConstructWords string    `gorm:"DEFAULT:NULL" json:"constructWords"`          // 构词词语
 	VideoPath      string    `gorm:"DEFAULT:NULL" json:"videoPath"`               // 视频文件路径
-	LeftSigns      []Sign    `gorm:"many2many:video_leftsign;" json:"leftSign"`   // 左手手势
-	RightSigns     []Sign    `gorm:"many2many:video_rightsign;" json:"rightSign"` // 右手手势
-	// LeftSign       string    `gorm:"DEFAULT:NULL" json:"leftSign"`               // 左手手势
-	// RightSign      string    `gorm:"DEFAULT:NULL" json:"rightSign"`              // 右手手势
+	//LeftSigns      []Sign    `gorm:"many2many:video_leftsign;" json:"leftSign"`   // 左手手势
+	//RightSigns     []Sign    `gorm:"many2many:video_rightsign;" json:"rightSign"` // 右手手势
+	LeftSign       string    `gorm:"DEFAULT:NULL" json:"leftSign"`               // 左手手势
+	RightSign      string    `gorm:"DEFAULT:NULL" json:"rightSign"`              // 右手手势
 }
 
 type VideoResult struct {

@@ -6,6 +6,7 @@ import (
     "ccsl/middlewares"
     "ccsl/models"
     "ccsl/services"
+    "ccsl/tools"
     "ccsl/utils"
     "strconv"
 
@@ -22,7 +23,7 @@ func main() {
 	pg := initDB(app)
 	defer pg.Close()
 	utils.InitTestUser(pg)
-	//tools.Migrate(pg)
+	tools.Migrate(pg)
 
 	mvc.New(app).Handle(new(controllers.RootController))
 	mvc.Configure(app.Party("/files"), func(app *mvc.Application) {
