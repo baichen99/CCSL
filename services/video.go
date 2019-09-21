@@ -71,15 +71,18 @@ func (s *VideoService) CreateVideo(video models.Video) (err error) {
 	err = s.PG.Create(&video).Error
 	return
 }
+
 func (s *VideoService) GetVideo(videoID string) (video models.Video, err error) {
 	err = s.PG.Where("id = ?", videoID).Take(&video).Error
 	return
 }
+
 func (s *VideoService) UpdateVideo(videoID string, updatedData map[string]interface{}) (err error) {
 	var video models.Video
 	err = s.PG.Model(&video).Where("id = ?", videoID).Updates(updatedData).Error
 	return
 }
+
 func (s *VideoService) DeleteVideo(videoID string) (err error) {
 	var video models.Video
 	err = s.PG.Where("id = ?", videoID).Delete(&video).Error
