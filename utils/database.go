@@ -150,31 +150,33 @@ func Migrate(db *gorm.DB) {
 	// 遍历videos表中的数据, 迁移到新表
 	var videos []models.Video
 	var sign models.Sign
-	err := db.Find(&videos).Error
+	err := db.Raw("SELECT * FROM videos WHERE left_sign NOTNULL OR right_sign NOTNULL").Scan(&videos).Error
 	if err != nil {
 		cmd := exec.Command("/bin/bash", "-c", "echo '"+err.Error()+"' >> error.txt")
 		cmd.Output()
 		return
 	}
 	for _, v := range videos {
-		nums := strings.Split(v.LeftSign, ",")
-		for _, n := range nums {
-			if db.Table("signs").Where("name = ?", n).Scan(&sign).RecordNotFound() {
-				// 如果在signs表中没找到, 新建一个sign记录
-				db.Table("signs").Create(&models.Sign{Name: n})
-				//  然后建立关系
-				db.Table("signs").Where("name = ?", n).Scan(&sign)
-				err = db.Table("video_leftsign").Create(&VideoSign{VideoID: v.ID, SignID: sign.ID}).Error
-			} else {
-				// 如果找到, 建立关系
-				if db.Table("video_leftsign").Where("video_id = ?", v.ID).Where("sign_id = ?", sign.ID).Find(&VideoSign{}).RecordNotFound() {
+		if v.LeftSign != "" {
+			nums := strings.Split(v.LeftSign, ",")
+			for _, n := range nums {
+				if db.Table("signs").Where("name = ?", n).Scan(&sign).RecordNotFound() {
+					// 如果在signs表中没找到, 新建一个sign记录
+					db.Table("signs").Create(&models.Sign{Name: n})
+					//  然后建立关系
+					db.Table("signs").Where("name = ?", n).Scan(&sign)
 					err = db.Table("video_leftsign").Create(&VideoSign{VideoID: v.ID, SignID: sign.ID}).Error
+				} else {
+					// 如果找到, 建立关系
+					if db.Table("video_leftsign").Where("video_id = ?", v.ID).Where("sign_id = ?", sign.ID).Find(&VideoSign{}).RecordNotFound() {
+						err = db.Table("video_leftsign").Create(&VideoSign{VideoID: v.ID, SignID: sign.ID}).Error
+					}
 				}
-			}
-			if err != nil {
-				cmd := exec.Command("/bin/bash", "-c", "echo '"+err.Error()+"' >> error.txt")
-				cmd.Output()
-				continue
+				if err != nil {
+					cmd := exec.Command("/bin/bash", "-c", "echo '"+err.Error()+"' >> error.txt")
+					cmd.Output()
+					continue
+				}
 			}
 		}
 
