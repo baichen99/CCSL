@@ -116,12 +116,18 @@ type GetNewsListParameters struct {
 	Language string
 }
 
+type GetMemberListParameters struct {
+	GetListParameters
+	NameZh string
+	NameEn string
+}
+
 type GetCarouselListParameters struct {
 	GetListParameters
 	Title string
 }
 
 type GetSignListParameters struct {
-    GetListParameters
-    Name string
+	GetListParameters
+	Name string
 }

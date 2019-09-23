@@ -33,6 +33,10 @@ func main() {
 		app.Register(services.NewNewsService(pg))
 		app.Handle(new(controllers.NewsController))
 	})
+	mvc.Configure(app.Party("/members"), func(app *mvc.Application) {
+		app.Register(services.NewMemberService(pg))
+		app.Handle(new(controllers.MemberController))
+	})
 	mvc.Configure(app.Party("/performers"), func(app *mvc.Application) {
 		app.Register(services.NewPerformerServices(pg))
 		app.Handle(new(controllers.PerformerController))
@@ -74,13 +78,13 @@ func initDB(app *iris.Application) *gorm.DB {
 	pg := utils.ConnectPostgres(app)
 	pg.SetLogger(configs.GetPostgresLogger())
 	pg.LogMode(true)
-	pg.AutoMigrate(&models.User{}, &models.Word{}, &models.Video{}, &models.Sign{}, &models.Performer{}, &models.Carousel{}, &models.News{})
+	pg.AutoMigrate(&models.User{}, &models.Word{}, &models.Video{}, &models.Sign{}, &models.Performer{}, &models.Carousel{}, &models.News{}, &models.Member{})
 	// Manually Add foreign key for tables
 	pg.Model(&models.Video{}).AddForeignKey("word_id", "words(id)", "RESTRICT", "CASCADE")
 	pg.Model(&models.Video{}).AddForeignKey("performer_id", "performers(id)", "RESTRICT", "CASCADE")
 	pg.Model(&models.News{}).AddForeignKey("creator_id", "users(id)", "RESTRICT", "CASCADE")
 	pg.Model(&models.Carousel{}).AddForeignKey("creator_id", "users(id)", "RESTRICT", "CASCADE")
-	// utils.InitTestUser(pg)
-	// utils.Migrate(pg)
+	utils.InitTestUser(pg)
+	utils.Migrate(pg)
 	return pg
 }

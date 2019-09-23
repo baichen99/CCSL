@@ -99,7 +99,7 @@ func GetLogger(log string) io.Writer {
 
 // GetPostgresLogger returns logger for Postgresql Database
 func GetPostgresLogger() SQLLogger {
-	return SQLLogger{log.New(GetLogger("postgrsql"), "\033[0;32m[SQLS]\033[0m ", 0)}
+	return SQLLogger{log.New(GetLogger("postgresql"), "\033[0;32m[SQLS]\033[0m ", 0)}
 }
 
 // LogWriter provides interface for sql logger
