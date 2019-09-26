@@ -80,7 +80,7 @@ func (conf *Config) ReadConfig() *Config {
 }
 
 // GetLogger : stdout for dev environment and file for prod environment
-func GetLogger(log string) io.Writer {
+func GetLogger(logName string) io.Writer {
 	if env := os.Getenv("CCSL_ENV"); env == "dev" {
 		return os.Stdout
 	}
@@ -88,8 +88,7 @@ func GetLogger(log string) io.Writer {
 	if err != nil {
 		panic(err)
 	}
-	filename := time.Now().Format("2006-01-02") + "." + log + ".log"
-	filePath := workPath + "/logs/" + filename
+	filePath := workPath + "/logs/" + todayFileName(logName)
 	f, err := os.OpenFile(filePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		panic(err)
@@ -99,7 +98,7 @@ func GetLogger(log string) io.Writer {
 
 // GetPostgresLogger returns logger for Postgresql Database
 func GetPostgresLogger() SQLLogger {
-	return SQLLogger{log.New(GetLogger("postgresql"), "\033[0;32m[SQLS]\033[0m ", 0)}
+	return SQLLogger{log.New(GetLogger("sql"), "\033[0;32m[SQLS]\033[0m ", 0)}
 }
 
 // LogWriter provides interface for sql logger
@@ -187,4 +186,8 @@ func isPrintable(s string) bool {
 		}
 	}
 	return true
+}
+
+func todayFileName(logName string) string {
+	return logName + "." + time.Now().Format("2006-01-02") + ".log"
 }

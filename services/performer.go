@@ -19,7 +19,7 @@ type PerformerService struct {
 	PG *gorm.DB
 }
 
-func NewPerformerServices(pg *gorm.DB) PerformerInterface {
+func NewPerformerService(pg *gorm.DB) PerformerInterface {
 	return &PerformerService{
 		PG: pg,
 	}

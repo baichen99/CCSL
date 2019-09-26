@@ -7,7 +7,12 @@ import (
 	"ccsl/models"
 	"ccsl/services"
 	"ccsl/utils"
+	"context"
+	"os"
+	"os/signal"
 	"strconv"
+	"syscall"
+	"time"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -38,7 +43,7 @@ func main() {
 		app.Handle(new(controllers.MemberController))
 	})
 	mvc.Configure(app.Party("/performers"), func(app *mvc.Application) {
-		app.Register(services.NewPerformerServices(pg))
+		app.Register(services.NewPerformerService(pg))
 		app.Handle(new(controllers.PerformerController))
 	})
 	mvc.Configure(app.Party("/words"), func(app *mvc.Application) {
@@ -57,8 +62,9 @@ func main() {
 		app.Register(services.NewSignService(pg))
 		app.Handle(new(controllers.SignController))
 	})
+	go gracefulShutdown(app)
 	host := configs.Conf.Listener.Server + ":" + strconv.Itoa(configs.Conf.Listener.Port)
-	app.Run(iris.Addr(host), iris.WithOptimizations, iris.WithoutStartupLog)
+	app.Run(iris.Addr(host), iris.WithOptimizations, iris.WithoutStartupLog, iris.WithoutInterruptHandler)
 }
 
 func initApp() *iris.Application {
@@ -84,7 +90,28 @@ func initDB(app *iris.Application) *gorm.DB {
 	pg.Model(&models.Video{}).AddForeignKey("performer_id", "performers(id)", "RESTRICT", "CASCADE")
 	pg.Model(&models.News{}).AddForeignKey("creator_id", "users(id)", "RESTRICT", "CASCADE")
 	pg.Model(&models.Carousel{}).AddForeignKey("creator_id", "users(id)", "RESTRICT", "CASCADE")
-	utils.InitTestUser(pg)
-	utils.Migrate(pg)
+	// utils.InitTestUser(pg)
+	// utils.Migrate(pg)
 	return pg
+}
+
+func gracefulShutdown(app *iris.Application) {
+	ch := make(chan os.Signal, 1)
+	// Catch exit sign and shutdown server gracefully
+	// kill -SIGINT XXXX Or Ctrl+c
+	signal.Notify(ch,
+		os.Interrupt,
+		syscall.SIGINT,
+		os.Kill,
+		syscall.SIGKILL,
+		syscall.SIGTERM,
+	)
+	select {
+	case <-ch:
+		app.Logger().Info("SHUTDOWN: receive shutdown sign")
+		timeout := 5 * time.Second
+		ctx, cancel := context.WithTimeout(context.Background(), timeout)
+		defer cancel()
+		app.Shutdown(ctx)
+	}
 }
