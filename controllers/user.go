@@ -8,6 +8,7 @@ import (
 
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/mvc"
+	uuid "github.com/satori/go.uuid"
 )
 
 // UserController is for user CURD
@@ -24,6 +25,7 @@ func (c *UserController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Handle("PUT", "/{id: string}", "UpdateUser", middlewares.CheckJWTToken)               // super admin and user
 	app.Handle("DELETE", "/{id: string}", "DeleteUser", middlewares.CheckJWTToken)
 	app.Handle("POST", "/login", "UserLogin")
+	app.Handle("GET", "/refresh", "RefreshToken", middlewares.CheckJWTToken)
 }
 
 // GetUsersList GET /users
@@ -87,7 +89,7 @@ func (c *UserController) CreateUser() {
 	})
 }
 
-// GetUser GET /user/{id:string}
+// GetUser GET /users/{id:string}
 func (c *UserController) GetUser() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
@@ -115,7 +117,7 @@ func (c *UserController) GetUser() {
 	})
 }
 
-// UpdateUser Controller: PUT /user/{id: string}
+// UpdateUser Controller: PUT /users/{id: string}
 func (c *UserController) UpdateUser() {
 	defer c.Context.Next()
 
@@ -150,7 +152,7 @@ func (c *UserController) UpdateUser() {
 
 }
 
-// DeleteUser Controller: DELETE /user/{id: string}
+// DeleteUser Controller: DELETE /users/{id: string}
 func (c *UserController) DeleteUser() {
 	defer c.Context.Next()
 
@@ -167,7 +169,7 @@ func (c *UserController) DeleteUser() {
 	c.Context.StatusCode(iris.StatusNoContent)
 }
 
-// UserLogin POST /user/login
+// UserLogin POST /users/login
 func (c *UserController) UserLogin() {
 	defer c.Context.Next()
 	var form userLoginForm
@@ -199,7 +201,27 @@ func (c *UserController) UserLogin() {
 			return
 		}
 	}
-	token, _ := middlewares.SignJWTToken(user.ID, user.UserType)
+	token, err := middlewares.SignJWTToken(user.ID, user.UserType)
+	if err != nil {
+		utils.SetResponseError(c.Context, iris.StatusUnauthorized, "Sign Token Error", errors.New("AuthFailed"))
+		return
+	}
+	c.Context.JSON(iris.Map{
+		message: success,
+		data:    token,
+	})
+}
+
+// RefreshToken POST /users/refresh
+func (c *UserController) RefreshToken() {
+	defer c.Context.Next()
+	tokenUser, tokenRole := middlewares.GetJWTParams(c.Context)
+	userID, _ := uuid.FromString(tokenUser)
+	token, err := middlewares.SignJWTToken(userID, tokenRole)
+	if err != nil {
+		utils.SetResponseError(c.Context, iris.StatusUnauthorized, "Sign Token Error", errors.New("AuthFailed"))
+		return
+	}
 	c.Context.JSON(iris.Map{
 		message: success,
 		data:    token,

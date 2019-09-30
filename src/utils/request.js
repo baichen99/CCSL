@@ -2,7 +2,7 @@ import axios from "axios";
 import store from "@/store";
 import router from "@/router";
 import { Message } from "element-ui";
-import { getToken, removeToken, removeUser } from "@/utils/tools";
+import { getToken } from "@/utils/tools";
 
 // create an axios instance
 const service = axios.create({
@@ -45,8 +45,7 @@ service.interceptors.response.use(
     });
     switch (statusCode) {
       case 401:
-        removeToken();
-        removeUser();
+        store.dispatch("user/logout");
         router.push("/login");
         break;
 

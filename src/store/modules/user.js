@@ -80,7 +80,6 @@ const actions = {
       commit("SET_TOKEN", "");
       commit("SET_ID", "");
       commit("SET_ROLES", []);
-      // commit("SET_AVATAR", "");
       removeToken();
       removeUser();
       resolve();
