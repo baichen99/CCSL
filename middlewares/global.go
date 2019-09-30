@@ -16,7 +16,6 @@ var (
 		},
 		SigningMethod: jwt.SigningMethodES512,
 		Debug:         configs.Conf.JWT.Debug,
-		Expiration:    true,
 		ContextKey:    "JWT",
 	}
 	// CorsConf is config for Cross-Origin Resource Sharing

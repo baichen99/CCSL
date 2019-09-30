@@ -26,7 +26,6 @@ type jwtConfig struct {
 	Debug               bool
 	EnableAuthOnOptions bool
 	SigningMethod       jwt.SigningMethod
-	Expiration          bool
 }
 
 type JwtMiddleware struct {
@@ -149,15 +148,14 @@ func (m *JwtMiddleware) CheckJWT(ctx context.Context) error {
 			m.logf(ctx, "No credentials found (CredentialsOptional=true)")
 			return nil
 		}
-		errorMsg := "Required authorization token not found"
+		errorMsg := "TokenNotFound"
 		m.jwtConfig.ErrorHandler(ctx, errorMsg)
 		m.logf(ctx, "Error: No credentials found (CredentialsOptional=false)")
 		return fmt.Errorf(errorMsg)
 	}
 	parsedToken, err := jwt.Parse(token, m.jwtConfig.ValidationKeyGetter)
 	if err != nil {
-		m.logf(ctx, "Error parsing token: %v", err)
-		m.jwtConfig.ErrorHandler(ctx, err.Error())
+		m.jwtConfig.ErrorHandler(ctx, "ExpiredToken")
 		return fmt.Errorf("Error parsing token: %v", err)
 	}
 	if m.jwtConfig.SigningMethod != nil && m.jwtConfig.SigningMethod.Alg() != parsedToken.Header["alg"] {
@@ -170,15 +168,8 @@ func (m *JwtMiddleware) CheckJWT(ctx context.Context) error {
 	}
 	if !parsedToken.Valid {
 		m.logf(ctx, "Token is invalid")
-		m.jwtConfig.ErrorHandler(ctx, "The token isn't valid")
+		m.jwtConfig.ErrorHandler(ctx, "InvalidToken")
 		return fmt.Errorf("Token is invalid")
-	}
-	if m.jwtConfig.Expiration {
-		if claims, ok := parsedToken.Claims.(jwt.MapClaims); ok {
-			if expired := claims.VerifyExpiresAt(time.Now().Unix(), true); !expired {
-				return fmt.Errorf("Eexpired Token")
-			}
-		}
 	}
 	m.logf(ctx, "JWT: %v", parsedToken)
 	ctx.Values().Set(m.jwtConfig.ContextKey, parsedToken)

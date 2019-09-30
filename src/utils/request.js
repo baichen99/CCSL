@@ -1,7 +1,8 @@
 import axios from "axios";
-import { Message } from "element-ui";
 import store from "@/store";
-import { getToken } from "@/utils/tools";
+import router from "@/router";
+import { Message } from "element-ui";
+import { getToken, removeToken, removeUser } from "@/utils/tools";
 
 // create an axios instance
 const service = axios.create({
@@ -36,12 +37,22 @@ service.interceptors.response.use(
   },
   error => {
     const res = error.response.data;
-    console.log(res);
+    const statusCode = error.response.status;
     Message({
       message: res.error,
       type: "error",
       duration: 5 * 1000
     });
+    switch (statusCode) {
+      case 401:
+        removeToken();
+        removeUser();
+        router.push("/login");
+        break;
+
+      default:
+        break;
+    }
     return Promise.reject(error);
   }
 );

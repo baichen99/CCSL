@@ -3,7 +3,7 @@
     <div class="video">
       <video-player
         :options="{
-          sources: [{ type: 'video/mp4', src: 'public/videos/'+video.videoPath }]
+          sources: [{ type: 'video/mp4', src: 'https://ccsl.shu.edu.cn/public/videos/'+video.videoPath }]
         }"
         width="100%"
         class="vjs-big-play-centered"
