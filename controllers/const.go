@@ -79,16 +79,16 @@ type newsUpdateForm struct {
 // >> MEMBER <<
 // ============
 type memberCreateForm struct {
-	Profile       string `json:"Profile" validate:"required"`
-	Type          string `json:"Type" validate:"required"`
-	NameZh        string `json:"NameZh" validate:"required"`
-	NameEn        string `json:"NameEn" validate:"required"`
-	PositionZh    string `json:"PositionZh" validate:"required"`
-	PositionEn    string `json:"PositionEn" validate:"required"`
-	EmployerZh    string `json:"EmployerZh" validate:"required"`
-	EmployerEn    string `json:"EmployerEn" validate:"required"`
-	DescriptionZh string `json:"DescriptionZh" validate:"required"`
-	DescriptionEn string `json:"DescriptionEn" validate:"required"`
+	Profile       string `json:"profile" validate:"required"`
+	Type          string `json:"type" validate:"required"`
+	NameZh        string `json:"nameZh" validate:"required"`
+	NameEn        string `json:"nameEn" validate:"required"`
+	PositionZh    string `json:"positionZh" validate:"required"`
+	PositionEn    string `json:"positionEn" validate:"required"`
+	EmployerZh    string `json:"employerZh" validate:"required"`
+	EmployerEn    string `json:"employerEn" validate:"required"`
+	DescriptionZh string `json:"descriptionZh" validate:"required"`
+	DescriptionEn string `json:"descriptionEn" validate:"required"`
 }
 
 func (f memberCreateForm) ConvertToModel() (member models.Member) {
@@ -108,17 +108,17 @@ func (f memberCreateForm) ConvertToModel() (member models.Member) {
 }
 
 type memberUpdateForm struct {
-	Profile       *string `json:"Profile" validate:"omitempty"`
-	Type          *string `json:"Type" validate:"omitempty"`
-	Text          *string `json:"Text" validate:"omitempty"`
-	NameZh        *string `json:"NameZh" validate:"omitempty"`
-	NameEn        *string `json:"NameEn" validate:"omitempty"`
-	PositionZh    *string `json:"PositionZh" validate:"omitempty"`
-	PositionEn    *string `json:"PositionEn" validate:"omitempty"`
-	EmployerZh    *string `json:"EmployerZh" validate:"omitempty"`
-	EmployerEn    *string `json:"EmployerEn" validate:"omitempty"`
-	DescriptionZh *string `json:"DescriptionZh" validate:"omitempty"`
-	DescriptionEn *string `json:"DescriptionEn" validate:"omitempty"`
+	Profile       *string `json:"profile" validate:"omitempty"`
+	Type          *string `json:"type" validate:"omitempty"`
+	Text          *string `json:"text" validate:"omitempty"`
+	NameZh        *string `json:"nameZh" validate:"omitempty"`
+	NameEn        *string `json:"nameEn" validate:"omitempty"`
+	PositionZh    *string `json:"positionZh" validate:"omitempty"`
+	PositionEn    *string `json:"positionEn" validate:"omitempty"`
+	EmployerZh    *string `json:"employerZh" validate:"omitempty"`
+	EmployerEn    *string `json:"employerEn" validate:"omitempty"`
+	DescriptionZh *string `json:"descriptionZh" validate:"omitempty"`
+	DescriptionEn *string `json:"descriptionEn" validate:"omitempty"`
 }
 
 // >>> USER <<<
@@ -208,8 +208,8 @@ type performerUpdateForm struct {
 type videoCreateForm struct {
 	ConstructType  string `json:"constructType" validate:"required"`  // 构词方式
 	ConstructWords string `json:"constructWords" validate:"required"` // 构词词语
-	//LeftSign       string `json:"leftSign" validate:"required"`       // 左手手势
-	//RightSign      string `json:"rightSign" validate:"required"`      // 右手手势
+	// LeftSign       string `json:"leftSign" validate:"required"`       // 左手手势
+	// RightSign      string `json:"rightSign" validate:"required"`      // 右手手势
 	VideoPath string `json:"videoPath" validate:"required"` // 视频文件路径
 }
 

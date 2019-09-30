@@ -29,10 +29,12 @@ func (c *MemberController) GetMemberList() {
 	if err != nil {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "order only accepts 'asc' or 'desc'", err)
 	}
-	nameZh := c.Context.URLParamDefault("nameZh", "")
+	nameZh := c.Context.URLParamDefault("name_zh", "")
+	nameEn := c.Context.URLParamDefault("name_en", "")
 	listParameters := utils.GetMemberListParameters{
 		GetListParameters: listParams,
 		NameZh:            nameZh,
+		NameEn:            nameEn,
 	}
 	members, count, err := c.MemberService.GetMemberList(listParameters)
 	c.Context.JSON(iris.Map{

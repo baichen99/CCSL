@@ -26,13 +26,20 @@ func NewMemberService(pg *gorm.DB) MemberInterface {
 }
 
 func (s *MemberService) GetMemberList(parameters utils.GetMemberListParameters) (members []models.Member, count int, err error) {
-	// TODO: find out what needs here?
 	db := s.PG.Scopes(
-		utils.FilterByColumn("name_zh", parameters.NameZh),
-		utils.FilterByColumn("name_en", parameters.NameEn),
+		utils.SearchByColumn("name_zh", parameters.NameZh),
+		utils.SearchByColumn("name_en", parameters.NameEn),
 	)
-	// TODO: orderQuery?
 	err = db.Find(&members).Count(&count).Error
+	orderQuery := parameters.OrderBy + " " + parameters.Order
+	if err != nil {
+		return
+	}
+	if parameters.Limit != 0 {
+		err = db.Order(orderQuery).Limit(parameters.Limit).Offset(parameters.Limit * (parameters.Page - 1)).Find(&members).Error
+	} else {
+		err = db.Order(orderQuery).Find(&members).Error
+	}
 	return
 }
 
