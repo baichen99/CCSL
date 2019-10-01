@@ -1,4 +1,4 @@
-import { Login, GetUser } from "@/api/users";
+import { Login, RefreshToken, GetUser } from "@/api/users";
 import {
   getToken,
   setToken,
@@ -98,6 +98,23 @@ const actions = {
         .catch(err => {
           reject(err);
         });
+    });
+  },
+
+  refreshToken({ commit }) {
+    return new Promise((resolve, reject) => {
+      if (getToken()) {
+        RefreshToken()
+          .then(res => {
+            commit("SET_TOKEN", res.data);
+            setToken(res.data);
+            resolve();
+          })
+          .catch(err => {
+            reject(err);
+          });
+      }
+      resolve();
     });
   }
 };

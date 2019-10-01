@@ -22,10 +22,9 @@
       <el-pagination
         background
         layout="total, prev, pager, next"
-        :current-page.sync="page"
+        :current-page.sync="pageNumber"
         :total="total"
         :page-size="limit"
-        @current-change="changePage"
       />
       <el-dialog
         :visible.sync="showDetail"
@@ -85,10 +84,17 @@ export default {
     videoDetail: {},
     showDetail: false
   }),
+  computed: {
+    pageNumber: {
+      get() {
+        return this.page;
+      },
+      set(page) {
+        this.$emit("change-page", page);
+      }
+    }
+  },
   methods: {
-    changePage(page) {
-      this.$emit("change-page", page);
-    },
     showDetailModal(video) {
       this.videoDetail = video;
       this.showDetail = true;

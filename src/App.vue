@@ -7,12 +7,12 @@
 <script>
 export default {
   name: "App",
-  created() {
+  mounted() {
     this.initData();
   },
   methods: {
     initData() {
-      this.$store.dispatch("sign/getWordsDict");
+      this.$store.dispatch("user/refreshToken");
     }
   }
 };

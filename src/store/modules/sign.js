@@ -137,7 +137,15 @@ const state = {
 const mutations = {
   SET_WORDS(state, { initial, item }) {
     if (state.words[initial]) {
-      state.words[initial].push(item);
+      let itemFound = false;
+      state.words[initial].map(word => {
+        if (word.id === item.id) {
+          itemFound = true;
+        }
+      });
+      if (!itemFound) {
+        state.words[initial].push(item);
+      }
     } else {
       state.words[initial] = [item];
     }

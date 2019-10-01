@@ -8,9 +8,18 @@ export function Login(data) {
   });
 }
 
+export function RefreshToken() {
+  return request({
+    url: "/users/refresh",
+    method: "get"
+  });
+}
+
 export function GetUser(userID) {
   return request({
     url: `/users/${userID}`,
     method: "get"
   });
 }
+
+

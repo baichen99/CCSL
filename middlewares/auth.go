@@ -36,13 +36,13 @@ type JwtMiddleware struct {
 func SignJWTToken(userID uuid.UUID, role string) (string, error) {
 	tokenID := uuid.NewV4()
 	payload := jwt.NewWithClaims(jwt.SigningMethodES512, jwt.MapClaims{
-		"iss":  configs.Conf.App.Name,                                                            // Issuer
-		"iat":  time.Now().Unix(),                                                                // Issued At
-		"nbf":  time.Now().Unix(),                                                                // Not Before
-		"jti":  tokenID,                                                                          // JWT Token ID
-		"exp":  time.Now().Add(time.Second * time.Duration(configs.Conf.JWT.ExpireHours)).Unix(), // Expiration Time
-		"user": userID.String(),                                                                  // Username
-		"role": role,                                                                             // Role of User: Admin/User/etc...
+		"iss":  configs.Conf.App.Name,                                                          // Issuer
+		"iat":  time.Now().Unix(),                                                              // Issued At
+		"nbf":  time.Now().Unix(),                                                              // Not Before
+		"jti":  tokenID,                                                                        // JWT Token ID
+		"exp":  time.Now().Add(time.Hour * time.Duration(configs.Conf.JWT.ExpireHours)).Unix(), // Expiration Time
+		"user": userID.String(),                                                                // Username
+		"role": role,                                                                           // Role of User: Admin/User/etc...
 	})
 	key, _ := jwt.ParseECPrivateKeyFromPEM([]byte(configs.Conf.JWT.PrivateKey))
 	token, err := payload.SignedString(key)

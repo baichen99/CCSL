@@ -44,6 +44,7 @@ service.interceptors.response.use(
       duration: 5 * 1000
     });
     switch (statusCode) {
+      // If returns 401, then clean user token and force login
       case 401:
         store.dispatch("user/logout");
         router.push("/login");

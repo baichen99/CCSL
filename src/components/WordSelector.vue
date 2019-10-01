@@ -7,7 +7,7 @@
     <div class="initial">
       <el-collapse accordion>
         <el-collapse-item
-          v-for="(value, key) in initWords"
+          v-for="(value, key) in words"
           :key="key"
           :title="key"
         >
@@ -27,6 +27,7 @@
 </template>
 
 <script>
+// import { mapState } from "vuex";
 export default {
   name: "WordSelector",
   props: {
@@ -40,20 +41,38 @@ export default {
     }
   },
   computed: {
-    initWords() {
-      let dict = {};
-      const words = this.$store.getters.words;
-      for (let key in words) {
-        if (this.start <= key && key <= this.end) {
-          dict[key] = words[key];
-        }
-      }
-      return dict;
+    words() {
+      return this.getWordsDict();
     }
+    // ...mapState({
+    //   words(state) {
+    //     let dict = {};
+    //     const wordsArray = state.sign.words;
+    //     for (let key in wordsArray) {
+    //       if (this.start <= key && key <= this.end) {
+    //         dict[key] = wordsArray[key];
+    //       }
+    //     }
+    //     return dict;
+    //   }
+    // })
+  },
+  created() {
+    this.$store.dispatch("sign/getWordsDict");
   },
   methods: {
     onWordSelected(wordID) {
       this.$emit("word-selected", wordID);
+    },
+    getWordsDict() {
+      let dict = {};
+      const wordsArray = this.$store.state.sign.words;
+      for (let key in wordsArray) {
+        if (this.start <= key && key <= this.end) {
+          dict[key] = wordsArray[key];
+        }
+      }
+      return dict;
     }
   }
 };
