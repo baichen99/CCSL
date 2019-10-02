@@ -1,5 +1,5 @@
 <template>
-  <transition name="slide-fade">
+  <transition name="el-zoom-in-top">
     <el-card
       v-if="videos.length!==0"
       shadow="hover"
@@ -38,8 +38,8 @@
 </template>
 
 <script>
-import VideoCard from "@/components/VideoCard.vue";
-import VideoDetail from "@/components/VideoDetail.vue";
+import VideoCard from "@/components/video/VideoCard.vue";
+import VideoDetail from "@/components/video/VideoDetail.vue";
 export default {
   name: "VideoSearchResult",
   components: {

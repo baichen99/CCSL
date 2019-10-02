@@ -12,19 +12,19 @@ import (
 // WordController is for word CURD
 type WordController struct {
 	Context     iris.Context
-	WordService services.WordInterface
+	WordService services.LexicalWordInterface
 }
 
 // BeforeActivation will register routes for controllers
 func (c *WordController) BeforeActivation(app mvc.BeforeActivation) {
-	app.Handle("GET", "/", "GetWordsList") //, middlewares.CheckJWTToken)
+	app.Handle("GET", "/", "GetWordsList", middlewares.CheckJWTToken)
 	app.Handle("POST", "/", "CreateWord", middlewares.CheckJWTToken, middlewares.CheckAdmin)
-	app.Handle("GET", "/{id: string}", "GetWord") //, middlewares.CheckJWTToken)
+	app.Handle("GET", "/{id: string}", "GetWord", middlewares.CheckJWTToken)
 	app.Handle("PUT", "/{id: string}", "UpdateWord", middlewares.CheckJWTToken, middlewares.CheckAdmin)
 	app.Handle("DELETE", "/{id: string}", "DeleteWord", middlewares.CheckJWTToken, middlewares.CheckAdmin)
 }
 
-// GetWordsList GET /words
+// GetWordsList GET /lexical/words
 func (c *WordController) GetWordsList() {
 	defer c.Context.Next()
 	listParams, err := utils.GetListParamsFromContext(c.Context, "initial")
@@ -32,13 +32,13 @@ func (c *WordController) GetWordsList() {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "order only accepts 'asc' or 'desc'", err)
 		return
 	}
-	wordType := c.Context.URLParamDefault("type", "")
+	pos := c.Context.URLParamDefault("pos", "")
 	wordInitial := c.Context.URLParamDefault("initial", "")
 	searchChinese := c.Context.URLParamDefault("chinese", "")
 	searchEnglish := c.Context.URLParamDefault("english", "")
 	listParameters := utils.GetWordListParameters{
 		GetListParameters: listParams,
-		Type:              wordType,
+		Pos:               pos,
 		Initial:           wordInitial,
 		Chinese:           searchChinese,
 		English:           searchEnglish,
@@ -57,10 +57,10 @@ func (c *WordController) GetWordsList() {
 	})
 }
 
-// CreateWord POST /words
+// CreateWord POST /lexical/words
 func (c *WordController) CreateWord() {
 	defer c.Context.Next()
-	var form wordCreateForm
+	var form lexicalWordCreateForm
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "WordController::ParamsError", err)
@@ -79,7 +79,7 @@ func (c *WordController) CreateWord() {
 	})
 }
 
-// GetWord GET /words/{id:string}
+// GetWord GET /lexical/words/{id:string}
 func (c *WordController) GetWord() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
@@ -99,13 +99,13 @@ func (c *WordController) GetWord() {
 	})
 }
 
-// UpdateWord PUT /words/{id:string}
+// UpdateWord PUT /lexical/words/{id:string}
 func (c *WordController) UpdateWord() {
 	defer c.Context.Next()
 
 	// Getting ID from parameters in the URL
 	wordID := c.Context.Params().Get("id")
-	var form wordUpdateForm
+	var form lexicalWordUpdateForm
 
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
@@ -125,7 +125,7 @@ func (c *WordController) UpdateWord() {
 	c.Context.StatusCode(iris.StatusNoContent)
 }
 
-// DeleteWord DELETE /words/{id:string}
+// DeleteWord DELETE /lexical/words/{id:string}
 func (c *WordController) DeleteWord() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL

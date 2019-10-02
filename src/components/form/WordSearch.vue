@@ -27,9 +27,9 @@
 </template>
 
 <script>
-// import { mapState } from "vuex";
+import { getLexicalWords } from "@/api/words";
 export default {
-  name: "WordSelector",
+  name: "WordSearch",
   props: {
     start: {
       type: String,
@@ -40,39 +40,35 @@ export default {
       default: "Z"
     }
   },
-  computed: {
-    words() {
-      return this.getWordsDict();
-    }
-    // ...mapState({
-    //   words(state) {
-    //     let dict = {};
-    //     const wordsArray = state.sign.words;
-    //     for (let key in wordsArray) {
-    //       if (this.start <= key && key <= this.end) {
-    //         dict[key] = wordsArray[key];
-    //       }
-    //     }
-    //     return dict;
-    //   }
-    // })
+  data() {
+    return {
+      words: {}
+    };
   },
   created() {
-    this.$store.dispatch("sign/getWordsDict");
+    getLexicalWords({ limit: 0 }).then(res => {
+      let wordsDict = {};
+      const wordsArray = res.data;
+      wordsArray.map(item => {
+        const initial = item.initial;
+        if (wordsDict[initial]) {
+          wordsDict[initial].push(item);
+        } else {
+          wordsDict[initial] = [item];
+        }
+      });
+      let dict = {};
+      for (let key in wordsDict) {
+        if (this.start <= key && key <= this.end) {
+          dict[key] = wordsDict[key];
+        }
+      }
+      this.words = dict;
+    });
   },
   methods: {
     onWordSelected(wordID) {
       this.$emit("word-selected", wordID);
-    },
-    getWordsDict() {
-      let dict = {};
-      const wordsArray = this.$store.state.sign.words;
-      for (let key in wordsArray) {
-        if (this.start <= key && key <= this.end) {
-          dict[key] = wordsArray[key];
-        }
-      }
-      return dict;
     }
   }
 };

@@ -1,17 +1,12 @@
 <template>
-  <div class="learning-platform">
-    <word-search
-      start="A"
-      end="L"
-      @word-selected="searchByWord"
-    />
+  <div class="lexical-database">
+    <sign-search @sign-selected="searchBySign" />
 
     <div class="search">
-      <h3>国家通用手语学习平台</h3>
+      <h3>国家通用手语比对语料库</h3>
 
       <video-search-input
         v-model="params"
-        :show-advance="false"
         @search-clicked="searchByButton"
       />
 
@@ -19,21 +14,16 @@
         :videos="videos"
         :limit="params.limit"
         :page="params.page"
-        :total="params.total"
+        :total="total"
         :sm="24"
         :md="12"
         :lg="12"
-        :show-region="false"
         @change-page="changePage"
       />
 
     </div>
 
-    <word-search
-      start="M"
-      end="Z"
-      @word-selected="searchByWord"
-    />
+    <word-search @word-selected="searchByWord" />
   </div>
 </template>
 
@@ -41,41 +31,63 @@
 import VideoSearchInput from "@/components/video/VideoSearchInput.vue";
 import VideoSearchResult from "@/components/video/VideoSearchResult.vue";
 import WordSearch from "@/components/form/WordSearch.vue";
+import SignSearch from "@/components/form/SignSearch.vue";
+
 // import { getLexicalVideos } from "@/api/videos";
 
 export default {
-  name: "LearningPlatform",
+  name: "LexicalDatabase",
   components: {
     VideoSearchResult,
     VideoSearchInput,
-    WordSearch
+    WordSearch,
+    SignSearch
   },
   data() {
     return {
       videos: [],
+      total: 0,
       params: {
-        word: "",
-        gender: "男",
-        region: 100000,
         page: 1,
         limit: 4,
-        total: 0
+        word: "",
+        chinese: "",
+        english: "",
+        gender: "",
+        region: undefined,
+        leftSign: "", // 左手手形
+        rightSign: "", // 右手手形
+        sign: "", // 任意手形
+        pos: "", // 词性
+        initial: "",
+        constructType: "",
+        constructWords: ""
       }
     };
   },
   methods: {
     clearParams() {
       this.params.word = "";
+      this.params.gender = "";
+      this.params.region = "";
+      this.params.leftSign = "";
+      this.params.rightSign = "";
+      this.params.sign = "";
+      this.params.pos = "";
+      this.params.chinese = "";
+      this.params.english = "";
+      this.params.initial = "";
+      this.params.constructType = "";
+      this.params.constructWords = "";
     },
     getData() {
-      let params = this.params;
-      console.log(params);
+      console.log(this.params);
       // getLexicalVideos(params).then(res => {
       //   this.videos = res.data;
-      //   this.page = res.page;
-      //   this.limit = res.limit;
+      //   this.params.page = res.page;
+      //   this.params.limit = res.limit;
       //   this.total = res.total;
-      //   if (this.videos.length === 0) {
+      //   if (this.total === 0) {
       //     this.$message("没有找到相关的数据哦～");
       //   }
       // });
@@ -86,6 +98,7 @@ export default {
     },
     searchByButton() {
       this.params.word = "";
+      this.params.sign = "";
       this.params.page = 1;
       this.getData();
     },
@@ -94,13 +107,19 @@ export default {
       this.params.word = word;
       this.params.page = 1;
       this.getData();
+    },
+    searchBySign(sign) {
+      this.clearParams();
+      this.params.sign = sign;
+      this.params.page = 1;
+      this.getData();
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.learning-platform {
+.lexical-database {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -111,11 +130,6 @@ export default {
     width: 60%;
     padding: 40px;
     h3 {
-      text-align: center;
-    }
-
-    .options {
-      margin: 5px 0;
       text-align: center;
     }
   }

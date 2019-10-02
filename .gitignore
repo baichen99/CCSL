@@ -30,4 +30,5 @@ docker.tar
 
 # production config file
 configs/app.prod.yml
+configs/.version
 .env.production

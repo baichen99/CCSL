@@ -3,23 +3,23 @@
     class="sign-search"
     shadow="hover"
   >
-    <h3 class="title">右手手形检索</h3>
+    <h3 class="title">手形检索</h3>
     <div class="sign">
       <div
-        v-for="(item,index) in $store.getters.sign"
-        :key="index"
+        v-for="item in signs"
+        :key="item.id"
         class="sign-box"
       >
         <el-tooltip
           effect="dark"
-          :content="item"
+          :content="item.name"
           placement="top"
         >
           <img
             style="width:100%"
-            :src="'sign/'+item+'.jpg'"
-            :alt="item"
-            @click="onSignSelected(item)"
+            :src="'https://ccsl.shu.edu.cn/public/signs/'+item.image"
+            :alt="item.name"
+            @click="onSignSelected(item.id)"
           >
         </el-tooltip>
       </div>
@@ -28,8 +28,19 @@
 </template>
 
 <script>
+import { getSigns } from "@/api/signs";
 export default {
-  name: "SignSelector",
+  name: "SignSearch",
+  data() {
+    return {
+      signs: []
+    };
+  },
+  created() {
+    getSigns({ limit: 0 }).then(res => {
+      this.signs = res.data;
+    });
+  },
   methods: {
     onSignSelected(sign) {
       this.$emit("sign-selected", sign);
@@ -59,9 +70,11 @@ export default {
     align-items: center;
     justify-content: center;
     .sign-box {
-      width: 50%;
+      width: 33%;
+      padding: 5px;
       img {
         cursor: pointer;
+        max-height: 60px;
       }
     }
   }

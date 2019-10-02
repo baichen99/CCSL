@@ -1,8 +1,10 @@
 import request from "@/utils/request";
 
+const baseURL = "/users";
+
 export function Login(data) {
   return request({
-    url: "/users/login",
+    url: `${baseURL}/login`,
     method: "post",
     data
   });
@@ -10,16 +12,22 @@ export function Login(data) {
 
 export function RefreshToken() {
   return request({
-    url: "/users/refresh",
+    url: `${baseURL}/refresh`,
     method: "get"
   });
 }
 
 export function GetUser(userID) {
   return request({
-    url: `/users/${userID}`,
+    url: `${baseURL}/${userID}`,
     method: "get"
   });
 }
 
-
+export function GetUsersList(params) {
+  return request({
+    url: baseURL,
+    method: "get",
+    params
+  });
+}

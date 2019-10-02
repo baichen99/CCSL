@@ -2,7 +2,7 @@
 
 # 构建Docker镜像
 build:
-	@make compile && read -p "Input API Version:" CCSL_VERSION && echo Deploying API Version $${CCSL_VERSION} now...&& git tag $${CCSL_VERSION} && git push origin --tags && docker build -t ccsl-api:$${CCSL_VERSION} . && docker save ccsl-api:$${CCSL_VERSION} > docker.tar
+	@make compile && read -p "Input API Version:" CCSL_VERSION && echo Deploying API Version $${CCSL_VERSION} now...&& git tag $${CCSL_VERSION} && git push origin --tags && echo $${CCSL_VERSION} > configs/.version  && docker build -t ccsl-api:$${CCSL_VERSION} . && docker save ccsl-api:$${CCSL_VERSION} > docker.tar
 
 # 编译二进制Linux可执行文件
 compile:

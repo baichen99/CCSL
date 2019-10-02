@@ -14,6 +14,7 @@ const (
 	total    string = "total"
 	limit    string = "limit"
 	language string = "language"
+	version  string = "version"
 )
 
 // >>> CAROUSEL <<<
@@ -151,39 +152,12 @@ type userLoginForm struct {
 	Password string `json:"password" validate:"required"`
 }
 
-// >>> WORD <<<
-// ============
-
-type wordCreateForm struct {
-	Initial string `json:"initial" validate:"required"`
-	Chinese string `json:"chinese" validate:"required"`
-	English string `json:"english" validate:"required"`
-	Type    string `json:"type" validate:"required"`
-}
-
-func (f wordCreateForm) ConvertToModel() (word models.Word) {
-	word = models.Word{
-		Initial: f.Initial,
-		Chinese: f.Chinese,
-		English: f.English,
-		Type:    f.Type,
-	}
-	return
-}
-
-type wordUpdateForm struct {
-	Initial *string `json:"initial" validate:"omitempty"`
-	Chinese *string `json:"chinese" validate:"omitempty"`
-	English *string `json:"english" validate:"omitempty"`
-	Type    *string `json:"type" validate:"omitempty"`
-}
-
 // >>> PERFORMER <<<
 // ============
 
 type performerCreateForm struct {
 	Name   string `json:"name" validate:"required"`
-	Region string `json:"region" validate:"required"`
+	Region int    `json:"region" validate:"required"`
 	Gender string `json:"gender" validate:"required"`
 }
 
@@ -198,38 +172,8 @@ func (f performerCreateForm) ConvertToModel() (performer models.Performer) {
 
 type performerUpdateForm struct {
 	Name   *string `json:"name" validate:"omitempty"`
-	Region *string `json:"region" validate:"omitempty"`
+	Region *int    `json:"region" validate:"omitempty"`
 	Gender *string `json:"gender" validate:"omitempty"`
-}
-
-// >>> VIDEO <<<
-// ============
-
-type videoCreateForm struct {
-	ConstructType  string `json:"constructType" validate:"required"`  // 构词方式
-	ConstructWords string `json:"constructWords" validate:"required"` // 构词词语
-	// LeftSign       string `json:"leftSign" validate:"required"`       // 左手手势
-	// RightSign      string `json:"rightSign" validate:"required"`      // 右手手势
-	VideoPath string `json:"videoPath" validate:"required"` // 视频文件路径
-}
-
-func (f videoCreateForm) ConvertToModel() (video models.Video) {
-	video = models.Video{
-		ConstructType:  f.ConstructType,
-		ConstructWords: f.ConstructWords,
-		//LeftSign:       f.LeftSign,
-		//RightSign:      f.RightSign,
-		VideoPath: f.VideoPath,
-	}
-	return
-}
-
-type videoUpdateForm struct {
-	ConstructType  *string `json:"constructType" validate:"omitempty"`  // 构词方式
-	ConstructWords *string `json:"constructWords" validate:"omitempty"` // 构词词语
-	LeftSign       *string `json:"leftSign" validate:"omitempty"`       // 左手手势
-	RightSign      *string `json:"rightSign" validate:"omitempty"`      // 右手手势
-	VideoPath      *string `json:"videoPath" validate:"omitempty"`      // 视频文件路径
 }
 
 // >>> SIGN <<<
@@ -248,4 +192,61 @@ func (f signCreateForm) ConvertToModel() (user models.Sign) {
 
 type signUpdateForm struct {
 	Name *string `json:"name" validate:"omitempty"`
+}
+
+// >>> LEXICAL_WORD <<<
+// ============
+
+type lexicalWordCreateForm struct {
+	Initial string `json:"initial" validate:"required"`
+	Chinese string `json:"chinese" validate:"required"`
+	English string `json:"english" validate:"required"`
+	Pos     string `json:"pos" validate:"required"`
+}
+
+func (f lexicalWordCreateForm) ConvertToModel() (word models.LexicalWord) {
+	word = models.LexicalWord{
+		Initial: f.Initial,
+		Chinese: f.Chinese,
+		English: f.English,
+		Pos:     f.Pos,
+	}
+	return
+}
+
+type lexicalWordUpdateForm struct {
+	Initial *string `json:"initial" validate:"omitempty"`
+	Chinese *string `json:"chinese" validate:"omitempty"`
+	English *string `json:"english" validate:"omitempty"`
+	Pos     *string `json:"pos" validate:"omitempty"`
+}
+
+// >>> LEXICAL_VIDEO <<<
+// ============
+
+type lexicalVideoCreateForm struct {
+	ConstructType  string `json:"constructType" validate:"required"`  // 构词方式
+	ConstructWords string `json:"constructWords" validate:"required"` // 构词词语
+	// LeftSign       string `json:"leftSign" validate:"required"`       // 左手手势
+	// RightSign      string `json:"rightSign" validate:"required"`      // 右手手势
+	VideoPath string `json:"videoPath" validate:"required"` // 视频文件路径
+}
+
+func (f lexicalVideoCreateForm) ConvertToModel() (video models.LexicalVideo) {
+	video = models.LexicalVideo{
+		ConstructType:  f.ConstructType,
+		ConstructWords: f.ConstructWords,
+		//LeftSign:       f.LeftSign,
+		//RightSign:      f.RightSign,
+		VideoPath: f.VideoPath,
+	}
+	return
+}
+
+type lexicalVideoUpdateForm struct {
+	ConstructType  *string `json:"constructType" validate:"omitempty"`  // 构词方式
+	ConstructWords *string `json:"constructWords" validate:"omitempty"` // 构词词语
+	// LeftSign       *string `json:"leftSign" validate:"omitempty"`       // 左手手势
+	// RightSign      *string `json:"rightSign" validate:"omitempty"`      // 右手手势
+	VideoPath *string `json:"videoPath" validate:"omitempty"` // 视频文件路径
 }

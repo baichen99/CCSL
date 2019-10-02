@@ -7,32 +7,32 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// WordInterface struct
-type WordInterface interface {
-	GetWordsList(parameters utils.GetWordListParameters) (words []models.Word, count int, err error)
-	CreateWord(word models.Word) (err error)
-	GetWord(wordID string) (word models.Word, err error)
+// LexicalWordInterface struct
+type LexicalWordInterface interface {
+	GetWordsList(parameters utils.GetWordListParameters) (words []models.LexicalWord, count int, err error)
+	CreateWord(word models.LexicalWord) (err error)
+	GetWord(wordID string) (word models.LexicalWord, err error)
 	UpdateWord(wordID string, updatedData map[string]interface{}) (err error)
 	DeleteWord(wordID string) (err error)
 }
 
-// WordService implements word interface
-type WordService struct {
+// LexicalWordService implements word interface
+type LexicalWordService struct {
 	PG *gorm.DB
 }
 
-// NewWordService returns new word serivce
-func NewWordService(pg *gorm.DB) WordInterface {
-	return &WordService{
+// NewLexicalWordService returns new word serivce
+func NewLexicalWordService(pg *gorm.DB) LexicalWordInterface {
+	return &LexicalWordService{
 		PG: pg,
 	}
 }
 
 // GetWordsList returns words list
-func (s *WordService) GetWordsList(parameters utils.GetWordListParameters) (words []models.Word, count int, err error) {
+func (s *LexicalWordService) GetWordsList(parameters utils.GetWordListParameters) (words []models.LexicalWord, count int, err error) {
 	// Adding custom scopes to the query based on get list parameters.
 	db := s.PG.Scopes(
-		utils.FilterByColumn("type", parameters.Type),
+		utils.FilterByColumn("pos", parameters.Pos),
 		utils.FilterByColumn("initial", parameters.Initial),
 		utils.SearchByColumn("chinese", parameters.Chinese),
 		utils.SearchByColumn("english", parameters.English),
@@ -57,27 +57,27 @@ func (s *WordService) GetWordsList(parameters utils.GetWordListParameters) (word
 }
 
 // CreateWord creates a new word
-func (s *WordService) CreateWord(word models.Word) (err error) {
+func (s *LexicalWordService) CreateWord(word models.LexicalWord) (err error) {
 	err = s.PG.Create(&word).Error
 	return
 }
 
 // GetWord returns word with given id
-func (s *WordService) GetWord(wordID string) (word models.Word, err error) {
+func (s *LexicalWordService) GetWord(wordID string) (word models.LexicalWord, err error) {
 	err = s.PG.Where("id = ?", wordID).Take(&word).Error
 	return
 }
 
 // UpdateWord updates word with given id
-func (s *WordService) UpdateWord(wordID string, updatedData map[string]interface{}) (err error) {
-	var word models.Word
+func (s *LexicalWordService) UpdateWord(wordID string, updatedData map[string]interface{}) (err error) {
+	var word models.LexicalWord
 	err = s.PG.Model(&word).Where("id = ?", wordID).Updates(updatedData).Error
 	return
 }
 
 // DeleteWord soft deletes a word with given id
-func (s *WordService) DeleteWord(wordID string) (err error) {
-	var word models.Word
+func (s *LexicalWordService) DeleteWord(wordID string) (err error) {
+	var word models.LexicalWord
 	err = s.PG.Where("id = ?", wordID).Delete(&word).Error
 	return
 }

@@ -1,8 +1,10 @@
 import request from "@/utils/request";
 
-export function getLexicalWords(params) {
+const baseURL = "/signs";
+
+export function getSigns(params) {
   return request({
-    url: "/lexical/words",
+    url: baseURL,
     method: "get",
     params
   });

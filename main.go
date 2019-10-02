@@ -42,26 +42,38 @@ func main() {
 		app.Register(services.NewMemberService(pg))
 		app.Handle(new(controllers.MemberController))
 	})
-	mvc.Configure(app.Party("/performers"), func(app *mvc.Application) {
-		app.Register(services.NewPerformerService(pg))
-		app.Handle(new(controllers.PerformerController))
-	})
-	mvc.Configure(app.Party("/words"), func(app *mvc.Application) {
-		app.Register(services.NewWordService(pg))
-		app.Handle(new(controllers.WordController))
-	})
-	mvc.Configure(app.Party("/videos"), func(app *mvc.Application) {
-		app.Register(services.NewVideoService(pg))
-		app.Handle(new(controllers.VideoController))
-	})
 	mvc.Configure(app.Party("/users"), func(app *mvc.Application) {
 		app.Register(services.NewUserService(pg))
 		app.Handle(new(controllers.UserController))
 	})
+	// sign language basic elements
 	mvc.Configure(app.Party("/signs"), func(app *mvc.Application) {
 		app.Register(services.NewSignService(pg))
 		app.Handle(new(controllers.SignController))
 	})
+	mvc.Configure(app.Party("/performers"), func(app *mvc.Application) {
+		app.Register(services.NewPerformerService(pg))
+		app.Handle(new(controllers.PerformerController))
+	})
+	// Lexical Database for Chinese National Sign Language
+	mvc.Configure(app.Party("/lexical/words"), func(app *mvc.Application) {
+		app.Register(services.NewLexicalWordService(pg))
+		app.Handle(new(controllers.WordController))
+	})
+	mvc.Configure(app.Party("/lexical/videos"), func(app *mvc.Application) {
+		app.Register(services.NewLexicalVideoService(pg))
+		app.Handle(new(controllers.VideoController))
+	})
+	// Corpus for Shanghai Sign Language Verb
+	// TODO
+	// Corpus for Proper Nouns in CSL
+	// TODO
+	// Chinese Sign Language Corpus for Sign Texts
+	// TODO
+	// Literature Database for Sign Language Research
+	// TODO
+	// Database for Technical Terms in Sign Linguistics
+	// TODO
 	go gracefulShutdown(app)
 	host := configs.Conf.Listener.Server + ":" + strconv.Itoa(configs.Conf.Listener.Port)
 	app.Run(iris.Addr(host), iris.WithOptimizations, iris.WithoutStartupLog, iris.WithoutInterruptHandler)
@@ -84,14 +96,17 @@ func initDB(app *iris.Application) *gorm.DB {
 	pg := utils.ConnectPostgres(app)
 	pg.SetLogger(configs.GetPostgresLogger())
 	pg.LogMode(true)
-	pg.AutoMigrate(&models.User{}, &models.Word{}, &models.Video{}, &models.Sign{}, &models.Performer{}, &models.Carousel{}, &models.News{}, &models.Member{})
+	pg.AutoMigrate(&models.User{}, &models.LexicalWord{}, &models.LexicalVideo{}, &models.Sign{}, &models.Performer{}, &models.Carousel{}, &models.News{}, &models.Member{}, &models.District{}, &models.City{}, &models.Province{})
 	// Manually Add foreign key for tables
-	pg.Model(&models.Video{}).AddForeignKey("word_id", "words(id)", "RESTRICT", "CASCADE")
-	pg.Model(&models.Video{}).AddForeignKey("performer_id", "performers(id)", "RESTRICT", "CASCADE")
+	pg.Model(&models.District{}).AddForeignKey("city_code", "cities(code)", "RESTRICT", "RESTRICT").AddForeignKey("province_code", "provinces(code)", "RESTRICT", "RESTRICT")
+	pg.Model(&models.City{}).AddForeignKey("province_code", "provinces(code)", "RESTRICT", "RESTRICT")
+	pg.Model(&models.LexicalVideo{}).AddForeignKey("lexical_word_id", "lexical_words(id)", "RESTRICT", "CASCADE")
+	pg.Model(&models.LexicalVideo{}).AddForeignKey("performer_id", "performers(id)", "RESTRICT", "CASCADE")
 	pg.Model(&models.News{}).AddForeignKey("creator_id", "users(id)", "RESTRICT", "CASCADE")
 	pg.Model(&models.Carousel{}).AddForeignKey("creator_id", "users(id)", "RESTRICT", "CASCADE")
-	// utils.InitTestUser(pg)
-	// utils.Migrate(pg)
+	pg.Model(&models.Performer{}).AddForeignKey("region", "districts(code)", "RESTRICT", "CASCADE")
+	pg.Table("lexical_left_sign").AddForeignKey("lexical_video_id", "lexical_videos(id)", "RESTRICT", "CASCADE").AddForeignKey("sign_id", "signs(id)", "RESTRICT", "CASCADE")
+	pg.Table("lexical_right_sign").AddForeignKey("lexical_video_id", "lexical_videos(id)", "RESTRICT", "CASCADE").AddForeignKey("sign_id", "signs(id)", "RESTRICT", "CASCADE")
 	return pg
 }
 

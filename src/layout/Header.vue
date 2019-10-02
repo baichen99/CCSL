@@ -67,15 +67,15 @@ export default {
     researches: [
       { url: "/projects", title: "科研项目" },
       { url: "/papers", title: "论文发表" },
-      { url: "/books", title: "专著出版" }
+      { url: "/literature", title: "专著出版" }
     ],
     databases: [
-      { url: "/universal-contrast", title: "国家通用手语比对语料库" },
-      { url: "/shanghai-verb", title: "上海手语动词语料库" },
-      { url: "/proper-noun", title: "专有名词语料库" },
-      { url: "/signlang-article", title: "手语语篇数据库" },
-      { url: "/research-papers", title: "手语研究文献数据库" },
-      { url: "signlang-term", title: "手语研究术语库" }
+      { url: "/lexical-database", title: "国家通用手语比对语料库" },
+      { url: "/verb-corpus", title: "上海手语动词语料库" },
+      { url: "/proper-nouns-corpus", title: "专有名词语料库" },
+      { url: "/text-corpus", title: "手语语篇数据库" },
+      { url: "/literature-database", title: "手语研究文献数据库" },
+      { url: "/term-database", title: "手语研究术语库" }
     ],
     about: [
       { url: "/introduction", title: "中心介绍" },

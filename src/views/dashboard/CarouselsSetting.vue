@@ -116,7 +116,7 @@ import {
   CreateCarousel,
   DeleteCarousel
 } from "@/api/carousel";
-import ImageUploader from "@/components/ImageUploader";
+import ImageUploader from "@/components/form/ImageUploader";
 export default {
   name: "CarouselsSetting",
   components: {

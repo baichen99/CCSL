@@ -21,14 +21,14 @@
       </div>
       <div class="tags">
         <span class="tag-label">词性</span>
-        <span class="tag-value">{{ video.type }}</span>
+        <span class="tag-value">{{ video.pos }}</span>
         <span class="tag-label">英语转写</span>
         <span class="tag-value">{{ video.english }}</span>
       </div>
       <div class="tags">
         <span class="tag-label">构词方式</span>
         <span class="tag-value">{{ video.constructType || "暂无数据" }}</span>
-        <span class="tag-label">构词词语</span>
+        <span class="tag-label">构词词根</span>
         <span class="tag-value">{{ video.constructWords || "暂无数据" }}</span>
       </div>
       <div
@@ -51,7 +51,7 @@
             >
               <img
                 style="width:100px"
-                :src="'sign/'+item+'.jpg'"
+                :src="'https://ccsl.shu.edu.cn/public/signs/'+item+'.svg'"
                 :alt="item"
               >
             </el-tooltip>

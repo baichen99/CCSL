@@ -36,9 +36,9 @@ const routes = [
         meta: { title: "研究团队" }
       },
       {
-        path: "/universal-contrast",
-        name: "UniversalContrast",
-        component: () => import("@/views/database/UniversalContrast.vue"),
+        path: "/lexical-database",
+        name: "LexicalDatabase",
+        component: () => import("@/views/database/LexicalDatabase.vue"),
         meta: {
           roles: ["super", "admin", "user"],
           title: "国家通用手语比对语料库",

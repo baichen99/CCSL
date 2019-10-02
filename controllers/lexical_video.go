@@ -12,7 +12,7 @@ import (
 // VideoController is for video CURD
 type VideoController struct {
 	Context      iris.Context
-	VideoService services.VideoInterface
+	VideoService services.LexicalVideoInterface
 }
 
 // BeforeActivation will register routes for controllers
@@ -24,7 +24,7 @@ func (c *VideoController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Handle("DELETE", "/{id: string}", "DeleteVideo", middlewares.CheckJWTToken, middlewares.CheckAdmin)
 }
 
-// GetVideosList returns videos list with given parameters
+// GetVideosList GET /lexical/videos
 func (c *VideoController) GetVideosList() {
 	defer c.Context.Next()
 	listParams, err := utils.GetListParamsFromContext(c.Context, "initial")
@@ -75,9 +75,10 @@ func (c *VideoController) GetVideosList() {
 	})
 }
 
+// CreateVideo POST /lexical/videos
 func (c *VideoController) CreateVideo() {
 	defer c.Context.Next()
-	var form videoCreateForm
+	var form lexicalVideoCreateForm
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "VideoController::ParamsError", err)
@@ -97,6 +98,7 @@ func (c *VideoController) CreateVideo() {
 
 }
 
+// GetVideo GET /lexical/videos/{id:string}
 func (c *VideoController) GetVideo() {
 	defer c.Context.Next()
 	videoID := c.Context.Params().Get("id")
@@ -110,12 +112,13 @@ func (c *VideoController) GetVideo() {
 	})
 }
 
+// UpdateVideo PUT /lexical/videos/{id:string}
 func (c *VideoController) UpdateVideo() {
 	defer c.Context.Next()
 
 	// Getting ID from parameters in the URL
 	videoID := c.Context.Params().Get("id")
-	var form videoUpdateForm
+	var form lexicalVideoUpdateForm
 
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
@@ -135,6 +138,7 @@ func (c *VideoController) UpdateVideo() {
 	c.Context.StatusCode(iris.StatusNoContent)
 }
 
+// DeleteVideo DELETE /lexical/videos/{id:string}
 func (c *VideoController) DeleteVideo() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL

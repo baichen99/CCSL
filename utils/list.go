@@ -47,11 +47,11 @@ func FilterByArray(columnName string, value string, escape string) func(db *gorm
 }
 
 // GetListParamsFromContext gets list params from context
-func GetListParamsFromContext(c iris.Context, orderName string) (listParmas GetListParameters, err error) {
+func GetListParamsFromContext(c iris.Context, defaultOrderName string) (listParmas GetListParameters, err error) {
 	listParmas.Page = c.URLParamIntDefault("page", 1)
 	listParmas.Limit = c.URLParamIntDefault("limit", 10) // 0 means no limit
 	listParmas.Order = c.URLParamDefault("order", "asc")
-	listParmas.OrderBy = c.URLParamDefault("orderBy", orderName)
+	listParmas.OrderBy = c.URLParamDefault("orderBy", defaultOrderName)
 	if !(listParmas.Order == "asc" || listParmas.Order == "desc") {
 		err = errors.New("PramsError")
 	}
@@ -74,15 +74,15 @@ type GetUserListParameters struct {
 }
 
 // GetWordListParameters parameters for get word list queries
-
 type GetWordListParameters struct {
 	GetListParameters
-	Type    string
 	Initial string
 	Chinese string
 	English string
+	Pos     string
 }
 
+// GetPerformerListParameters parameters for get performers list queries
 type GetPerformerListParameters struct {
 	GetListParameters
 	Name   string
@@ -90,6 +90,7 @@ type GetPerformerListParameters struct {
 	Gender string
 }
 
+// GetVideoListParameters parameters for get videos list queries
 type GetVideoListParameters struct {
 	GetListParameters
 	Initial        string
@@ -101,12 +102,14 @@ type GetVideoListParameters struct {
 	Gender         string
 	LeftSign       string
 	RightSign      string
+	Sign           string
 	ConstructType  string
 	ConstructWords string
 	PerformerID    string
 	WordID         string
 }
 
+// GetNewsListParameters parameters for get list queries
 type GetNewsListParameters struct {
 	GetListParameters
 	Column   string
@@ -116,17 +119,20 @@ type GetNewsListParameters struct {
 	Language string
 }
 
+// GetMemberListParameters parameters for get members list queris
 type GetMemberListParameters struct {
 	GetListParameters
 	NameZh string
 	NameEn string
 }
 
+// GetCarouselListParameters parameters for get carousel list queris
 type GetCarouselListParameters struct {
 	GetListParameters
 	Title string
 }
 
+// GetSignListParameters parameters for get sign list queries
 type GetSignListParameters struct {
 	GetListParameters
 	Name string

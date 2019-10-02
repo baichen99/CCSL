@@ -1,8 +1,8 @@
 import request from "@/utils/request";
 
-export function getUniversalContrastVideos(params) {
+export function getLexicalVideos(params) {
   return request({
-    url: `/videos`,
+    url: "/lexical/videos",
     method: "get",
     params
   });
