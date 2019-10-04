@@ -1,7 +1,9 @@
 package controllers
 
 import (
+	"io/ioutil"
 	"os"
+	"strings"
 
 	"github.com/kataras/iris"
 )
@@ -16,10 +18,15 @@ func (c *RootController) Get() {
 	defer c.Context.Next()
 	hello := c.Context.Translate("Hello")
 	lang := c.Context.Values().GetString(c.Context.Application().ConfigurationReadOnly().GetTranslateLanguageContextKey())
-	ver := os.Getenv("CCSL_VERSION")
+	workPath, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+	versionFile := workPath + "/configs/.version"
+	ver, _ := ioutil.ReadFile(versionFile)
 	c.Context.JSON(iris.Map{
 		message:  hello,
 		language: lang,
-		version:  ver,
+		version:  strings.Replace(string(ver), "\n", "", -1),
 	})
 }
