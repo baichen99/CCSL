@@ -14,16 +14,16 @@
     <div class="tags-container">
       <div class="tags">
         <span class="tag-label">地区</span>
-        <span class="tag-value">{{ video.region }}</span>
+        <span class="tag-value">{{ video.performer.region.name }}</span>
         <span class="tag-label">汉语转写</span>
-        <span class="tag-value">{{ video.chinese }}</span>
+        <span class="tag-value">{{ video.word.chinese }}</span>
 
       </div>
       <div class="tags">
         <span class="tag-label">词性</span>
-        <span class="tag-value">{{ video.pos }}</span>
+        <span class="tag-value">{{ video.word.pos }}</span>
         <span class="tag-label">英语转写</span>
-        <span class="tag-value">{{ video.english }}</span>
+        <span class="tag-value">{{ video.word.english }}</span>
       </div>
       <div class="tags">
         <span class="tag-label">构词方式</span>
@@ -32,7 +32,7 @@
         <span class="tag-value">{{ video.constructWords || "暂无数据" }}</span>
       </div>
       <div
-        v-if="video.leftSign"
+        v-if="video.leftSigns.length !== 0"
         class="tags"
       >
         <span class="tag-label">左手手型</span>
@@ -41,25 +41,25 @@
           style="width:50%"
         >
           <span
-            v-for="item in video.leftSign.split(',')"
-            :key="item"
+            v-for="item in video.leftSigns"
+            :key="item.id"
           >
             <el-tooltip
               effect="dark"
-              :content="item"
+              :content="item.name"
               placement="top"
             >
               <img
                 style="width:100px"
-                :src="'https://ccsl.shu.edu.cn/public/signs/'+item+'.svg'"
-                :alt="item"
+                :src="'https://ccsl.shu.edu.cn/public/signs/'+item.image"
+                :alt="item.name"
               >
             </el-tooltip>
           </span>
         </span>
       </div>
       <div
-        v-if="video.rightSign"
+        v-if="video.rightSigns.length !== 0"
         class="tags"
       >
         <span class="tag-label">右手手型</span>
@@ -68,18 +68,18 @@
           style="width:50%"
         >
           <span
-            v-for="item in video.rightSign.split(',')"
-            :key="item"
+            v-for="item in video.rightSigns"
+            :key="item.id"
           >
             <el-tooltip
               effect="dark"
-              :content="item"
+              :content="item.name"
               placement="top"
             >
               <img
                 style="width:100px"
-                :src="'sign/'+item+'.jpg'"
-                :alt="item"
+                :src="'https://ccsl.shu.edu.cn/public/signs/'+item.image"
+                :alt="item.name"
               >
             </el-tooltip>
           </span>
@@ -104,7 +104,9 @@ export default {
 
 <style lang="scss" scoped>
 .video {
-  padding: 30px;
+  margin: 5px;
+  border-radius: 5px;
+  overflow: hidden;
 }
 
 .tags {
@@ -119,6 +121,10 @@ export default {
     font-weight: bold;
   }
   .tag-value {
+    img {
+      height: 120px;
+      padding: 10px;
+    }
     width: 25%;
   }
 }

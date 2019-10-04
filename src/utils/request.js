@@ -1,7 +1,7 @@
 import axios from "axios";
 import store from "@/store";
 import router from "@/router";
-import { Message } from "element-ui";
+import { Message, Loading } from "element-ui";
 import { getToken } from "@/utils/tools";
 
 // create an axios instance
@@ -10,9 +10,35 @@ const service = axios.create({
   timeout: 5000
 });
 
+let loading;
+let needLoadingRequestCount = 0;
+
+function showFullScreenLoading() {
+  if (needLoadingRequestCount === 0) {
+    loading = Loading.service({
+      lock: true,
+      text: "努力加载中...",
+      background: "rgba(0,0,0,0.5)",
+      target: document.querySelector(".loading-area")
+    });
+  }
+  needLoadingRequestCount++;
+}
+
+function hideFullScreenLoading() {
+  if (needLoadingRequestCount <= 0) return;
+  needLoadingRequestCount--;
+  if (needLoadingRequestCount === 0) {
+    loading.close();
+  }
+}
+
 // request interceptor
 service.interceptors.request.use(
   config => {
+    if (config.loading === true) {
+      showFullScreenLoading();
+    }
     const token = getToken() || store.getters.token;
     if (token) {
       config.headers["Authorization"] = "Bearer " + token;
@@ -20,6 +46,7 @@ service.interceptors.request.use(
     return config;
   },
   error => {
+    hideFullScreenLoading();
     Message({
       message: error,
       type: "error",
@@ -32,10 +59,12 @@ service.interceptors.request.use(
 // response interceptor
 service.interceptors.response.use(
   response => {
+    hideFullScreenLoading();
     const res = response.data;
     return res;
   },
   error => {
+    hideFullScreenLoading();
     const res = error.response.data;
     const statusCode = error.response.status;
     Message({

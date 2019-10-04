@@ -156,24 +156,24 @@ type userLoginForm struct {
 // ============
 
 type performerCreateForm struct {
-	Name   string `json:"name" validate:"required"`
-	Region int    `json:"region" validate:"required"`
-	Gender string `json:"gender" validate:"required"`
+	Name     string `json:"name" validate:"required"`
+	RegionID int    `json:"region" validate:"required"`
+	Gender   string `json:"gender" validate:"required"`
 }
 
 func (f performerCreateForm) ConvertToModel() (performer models.Performer) {
 	performer = models.Performer{
-		Name:   f.Name,
-		Region: f.Region,
-		Gender: f.Gender,
+		Name:     f.Name,
+		RegionID: f.RegionID,
+		Gender:   f.Gender,
 	}
 	return
 }
 
 type performerUpdateForm struct {
-	Name   *string `json:"name" validate:"omitempty"`
-	Region *int    `json:"region" validate:"omitempty"`
-	Gender *string `json:"gender" validate:"omitempty"`
+	Name     *string `json:"name" validate:"omitempty"`
+	RegionID *int    `json:"region" validate:"omitempty"`
+	Gender   *string `json:"gender" validate:"omitempty"`
 }
 
 // >>> SIGN <<<

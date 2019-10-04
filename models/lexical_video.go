@@ -1,16 +1,18 @@
 package models
 
 import (
+	"time"
+
 	uuid "github.com/satori/go.uuid"
 )
 
-// LexicalVideo  Lexical Database for Chinese National Sign Language
+// LexicalVideo mdoel for Lexical Database
 type LexicalVideo struct {
 	Base
-	LexicalWord    LexicalWord `gorm:"PRELOAD:true" json:"word"`
-	LexicalWordID  uuid.UUID   `gorm:"NOT NULL" json:"wordID"`
-	Performer      Performer   `gorm:"PRELOAD:true" json:"performer"`
-	PerformerID    uuid.UUID   `gorm:"NOT NULL" json:"performerID"`                     // 表演者
+	LexicalWord    LexicalWord `gorm:"FOREIGNKEY:LexicalWordID" json:"word"`
+	LexicalWordID  uuid.UUID   `gorm:"NOT NULL;INDEX:lexical_word_id" json:"-"`
+	Performer      Performer   `gorm:"FOREIGNKEY:PerformerID" json:"performer"`
+	PerformerID    uuid.UUID   `gorm:"NOT NULL;INDEX:performer_id" json:"-"`            // 表演者
 	ConstructType  string      `gorm:"DEFAULT:NULL" json:"constructType"`               // 构词方式
 	ConstructWords string      `gorm:"DEFAULT:NULL" json:"constructWords"`              // 构词词语
 	VideoPath      string      `gorm:"DEFAULT:NULL" json:"videoPath"`                   // 视频文件路径
@@ -18,18 +20,25 @@ type LexicalVideo struct {
 	RightSigns     []Sign      `gorm:"many2many:lexical_right_sign;" json:"rightSigns"` // 右手手势
 }
 
-type LexicalVideoResult struct {
-	ID             string `json:"id"`
-	Initial        string `json:"initial"`
-	Chinese        string `json:"chinese"`
-	English        string `json:"english"`
-	Type           string `json:"type"`
-	Name           string `json:"name"`
-	Region         string `json:"region"`
-	Gender         string `json:"gender"`
-	ConstructType  string `json:"constructType"`
-	ConstructWords string `json:"constructWords"`
-	LeftSigns      string `json:"leftSigns"`
-	RightSigns     string `json:"rightSigns"`
-	VideoPath      string `json:"videoPath"`
+// VideoSign model
+type VideoSign struct {
+	LexicalVideoID uuid.UUID
+	SignID         uuid.UUID
+}
+
+// VideoSearchResult model
+type VideoSearchResult struct {
+	ID             uuid.UUID `json:"id"`
+	CreatedAt      time.Time `json:"createdAt"`
+	Initial        string    `json:"initial"`
+	Chinese        string    `json:"chinese"`
+	English        string    `json:"english"`
+	Pos            string    `json:"pos"`
+	Name           string    `json:"name"`
+	RegionID       int       `json:"regionID"`
+	Region         string    `json:"region"`
+	Gender         string    `json:"gender"`
+	ConstructType  string    `json:"constructType"`
+	ConstructWords string    `json:"constructWords"`
+	VideoPath      string    `json:"videoPath"`
 }

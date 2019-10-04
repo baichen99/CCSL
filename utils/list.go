@@ -21,7 +21,7 @@ func SearchByColumn(columnName string, searchString string) func(db *gorm.DB) *g
 	}
 }
 
-// FilterByColumn general function used to create a where clause for string type columns
+// FilterByColumn generate function used to create a where clause for string type columns
 func FilterByColumn(columnName string, value string) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		// SQL select: SELECT * FROM column_name WHERE query = value
@@ -31,6 +31,17 @@ func FilterByColumn(columnName string, value string) func(db *gorm.DB) *gorm.DB 
 		}
 		return db
 
+	}
+}
+
+// FilterInSubQuery generate function used to select in array
+func FilterInSubQuery(columnName string, subQuery string) func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		if subQuery != "" {
+			query := columnName + " IN (" + subQuery + ")"
+			return db.Where(query)
+		}
+		return db
 	}
 }
 
@@ -93,20 +104,19 @@ type GetPerformerListParameters struct {
 // GetVideoListParameters parameters for get videos list queries
 type GetVideoListParameters struct {
 	GetListParameters
+	WordID         string
 	Initial        string
 	Chinese        string
 	English        string
-	Type           string
-	Name           string
-	Region         string
+	Pos            string
+	RegionID       string
 	Gender         string
-	LeftSign       string
-	RightSign      string
-	Sign           string
+	LeftSignID     string
+	RightSignID    string
+	SignID         string
 	ConstructType  string
 	ConstructWords string
 	PerformerID    string
-	WordID         string
 }
 
 // GetNewsListParameters parameters for get list queries

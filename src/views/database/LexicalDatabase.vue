@@ -33,7 +33,7 @@ import VideoSearchResult from "@/components/video/VideoSearchResult.vue";
 import WordSearch from "@/components/form/WordSearch.vue";
 import SignSearch from "@/components/form/SignSearch.vue";
 
-// import { getLexicalVideos } from "@/api/videos";
+import { getLexicalVideos } from "@/api/videos";
 
 export default {
   name: "LexicalDatabase",
@@ -81,16 +81,15 @@ export default {
       this.params.constructWords = "";
     },
     getData() {
-      console.log(this.params);
-      // getLexicalVideos(params).then(res => {
-      //   this.videos = res.data;
-      //   this.params.page = res.page;
-      //   this.params.limit = res.limit;
-      //   this.total = res.total;
-      //   if (this.total === 0) {
-      //     this.$message("没有找到相关的数据哦～");
-      //   }
-      // });
+      getLexicalVideos(this.params).then(res => {
+        this.videos = res.data;
+        this.params.page = res.page;
+        this.params.limit = res.limit;
+        this.total = res.total;
+        if (this.total === 0) {
+          this.$message("没有找到相关的数据哦～");
+        }
+      });
     },
     changePage(page) {
       this.params.page = page;

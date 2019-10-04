@@ -3,6 +3,7 @@ package services
 import (
 	"ccsl/models"
 	"ccsl/utils"
+	"fmt"
 
 	"github.com/jinzhu/gorm"
 )
@@ -31,42 +32,51 @@ func NewLexicalVideoService(pg *gorm.DB) LexicalVideoInterface {
 // GetVideosList returns video list
 func (s *LexicalVideoService) GetVideosList(parameters utils.GetVideoListParameters) (videos []models.LexicalVideo, count int, err error) {
 	// Adding custom scopes to the query based on get list parameters.
-	// db := s.PG.Scopes(
-	// 	utils.FilterByColumn("initial", parameters.Initial),
-	// 	utils.SearchByColumn("chinese", parameters.Chinese),
-	// 	utils.FilterByArray("english", parameters.English, " "),
-	// 	utils.FilterByColumn("type", parameters.Type),
-	// 	utils.SearchByColumn("name", parameters.Name),
-	// 	utils.SearchByColumn("region", parameters.Region),
-	// 	utils.FilterByColumn("gender", parameters.Gender),
-	// 	utils.FilterByArray("left_sign", parameters.LeftSign, ","),
-	// 	utils.FilterByArray("right_sign", parameters.RightSign, ","),
-	// 	utils.FilterByColumn("construct_type", parameters.ConstructType),
-	// 	utils.SearchByColumn("construct_words", parameters.ConstructWords),
-	// 	utils.FilterByColumn("performer_id", parameters.PerformerID),
-	// 	utils.FilterByColumn("word_id", parameters.WordID),
-	// )
 
-	// Fetching the total number of rows based on the conditions provided.
-	// query := db.Table("videos").Select("videos.id, words.initial, words.chinese, words.english, words.type, performers.name, performers.region, performers.gender, videos.construct_type, videos.construct_words,videos.left_sign, videos.right_sign, videos.video_path").Joins("LEFT JOIN words ON words.id = videos.word_id").Joins("LEFT JOIN performers ON performers.id = videos.performer_id")
+	var (
+		leftSignSubQuery  string
+		rightSignSubQuery string
+		signSubQuery      string
+	)
 
-	// err = query.Count(&count).Error
+	if parameters.LeftSignID != "" {
+		leftSignSubQuery = fmt.Sprintf("SELECT lexical_video_id FROM lexical_left_sign WHERE sign_id = '%s' ", parameters.LeftSignID)
+	}
 
-	// regionOrder := "array_position(array['通用手语','浦东新区','黄浦区','静安区','徐汇区','长宁区','普陀区','虹口区','杨浦区','宝山区','闵行区','嘉定区','金山区','松江区','青浦区','奉贤区','崇明区'], region) asc"
+	if parameters.RightSignID != "" {
+		rightSignSubQuery = fmt.Sprintf("SELECT lexical_video_id FROM lexical_right_sign WHERE sign_id = '%s'", parameters.RightSignID)
+	}
 
-	// if err != nil {
-	// 	return
-	// }
-	// // Fetching the items to be returned by the query.
-	// orderQuery := parameters.OrderBy + " " + parameters.Order
-	// if parameters.Limit != 0 {
-	// 	err = query.Order("word_id asc").Order(orderQuery).Limit(parameters.Limit).Offset(parameters.Limit * (parameters.Page - 1)).Scan(&videos).Error
+	if parameters.SignID != "" {
+		signSubQuery = fmt.Sprintf("SELECT lexical_video_id FROM lexical_left_sign WHERE sign_id = '%s' UNION SELECT lexical_video_id FROM lexical_right_sign WHERE sign_id = '%s'", parameters.SignID, parameters.SignID)
+	}
 
-	// } else {
-	// 	err = query.Order("word_id asc").Order(orderQuery).Scan(&videos).Error
-	// }
+	db := s.PG.Scopes(
+		utils.FilterByColumn("lexical_words.id", parameters.WordID),
+		utils.SearchByColumn("lexical_words.chinese", parameters.Chinese),
+		utils.FilterByArray("lexical_words.english", parameters.English, " "),
+		utils.FilterByColumn("lexical_words.pos", parameters.Pos),
+		utils.FilterByColumn("performers.region_id", parameters.RegionID),
+		utils.FilterByColumn("performers.gender", parameters.Gender),
+		utils.FilterByColumn("performers.id", parameters.PerformerID),
+		utils.FilterInSubQuery("lexical_videos.id", leftSignSubQuery),
+		utils.FilterInSubQuery("lexical_videos.id", rightSignSubQuery),
+		utils.FilterInSubQuery("lexical_videos.id", signSubQuery),
+		utils.FilterByColumn("lexical_videos.construct_type", parameters.ConstructType),
+		utils.SearchByColumn("lexical_videos.construct_words", parameters.ConstructWords),
+	)
 
-	// query := s.PG.Table("")
+	orderQuery := fmt.Sprintf("%s %s", parameters.OrderBy, parameters.Order)
+
+	queryExp := db.Joins("JOIN performers ON performers.id = lexical_videos.performer_id").Joins("JOIN lexical_words ON lexical_words.id = lexical_videos.lexical_word_id").Joins("JOIN districts ON districts.code = performers.region_id").Order("lexical_videos.lexical_word_id asc").Order("performers.region_id asc").Order(orderQuery)
+
+	err = queryExp.Find(&videos).Count(&count).Error
+
+	if err != nil {
+		return
+	}
+
+	err = queryExp.Set("gorm:auto_preload", true).Limit(parameters.Limit).Offset(parameters.Limit * (parameters.Page - 1)).Find(&videos).Error
 
 	return
 }

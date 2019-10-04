@@ -30,6 +30,21 @@ func LogInfo(context iris.Context, info string) {
 	context.Application().Logger().Infof("[%s:%d] %s - ", fileName, lineNumber, info)
 }
 
+// ToSlice will convert array to []interface{}
+func ToSlice(arr interface{}) []interface{} {
+	v := reflect.ValueOf(arr)
+	if v.Kind() != reflect.Slice {
+		var ret []interface{}
+		return ret
+	}
+	l := v.Len()
+	ret := make([]interface{}, l)
+	for i := 0; i < l; i++ {
+		ret[i] = v.Index(i).Interface()
+	}
+	return ret
+}
+
 // MakeUpdateData returns a map of update data model
 func MakeUpdateData(dataStruct interface{}) map[string]interface{} {
 	t := reflect.TypeOf(dataStruct)

@@ -41,7 +41,7 @@
 import VideoSearchInput from "@/components/video/VideoSearchInput.vue";
 import VideoSearchResult from "@/components/video/VideoSearchResult.vue";
 import WordSearch from "@/components/form/WordSearch.vue";
-// import { getLexicalVideos } from "@/api/videos";
+import { getLexicalVideos } from "@/api/videos";
 
 export default {
   name: "LearningPlatform",
@@ -56,7 +56,7 @@ export default {
       params: {
         word: "",
         gender: "男",
-        region: 100000,
+        region: "100000",
         page: 1,
         limit: 4,
         total: 0
@@ -69,16 +69,15 @@ export default {
     },
     getData() {
       let params = this.params;
-      console.log(params);
-      // getLexicalVideos(params).then(res => {
-      //   this.videos = res.data;
-      //   this.page = res.page;
-      //   this.limit = res.limit;
-      //   this.total = res.total;
-      //   if (this.videos.length === 0) {
-      //     this.$message("没有找到相关的数据哦～");
-      //   }
-      // });
+      getLexicalVideos(params).then(res => {
+        this.videos = res.data;
+        this.page = res.page;
+        this.limit = res.limit;
+        this.total = res.total;
+        if (this.total === 0) {
+          this.$message("没有找到相关的数据哦～");
+        }
+      });
     },
     changePage(page) {
       this.params.page = page;

@@ -31,10 +31,12 @@ func (s *MemberService) GetMemberList(parameters utils.GetMemberListParameters) 
 		utils.SearchByColumn("name_en", parameters.NameEn),
 	)
 	err = db.Find(&members).Count(&count).Error
-	orderQuery := parameters.OrderBy + " " + parameters.Order
+
 	if err != nil {
 		return
 	}
+
+	orderQuery := parameters.OrderBy + " " + parameters.Order
 	if parameters.Limit != 0 {
 		err = db.Order(orderQuery).Limit(parameters.Limit).Offset(parameters.Limit * (parameters.Page - 1)).Find(&members).Error
 	} else {
