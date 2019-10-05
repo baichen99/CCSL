@@ -192,6 +192,7 @@ export default {
       params: {
         limit: 8,
         page: 1,
+        order: "desc",
         title: "",
         state: ""
       },
