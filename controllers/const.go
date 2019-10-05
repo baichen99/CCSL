@@ -180,18 +180,21 @@ type performerUpdateForm struct {
 // ============
 
 type signCreateForm struct {
-	Name string `json:"name" validate:"required"`
+	Name  string `json:"name" validate:"required"`
+	Image string `json:"image" validate:"required"`
 }
 
 func (f signCreateForm) ConvertToModel() (user models.Sign) {
 	user = models.Sign{
-		Name: f.Name,
+		Name:  f.Name,
+		Image: f.Image,
 	}
 	return
 }
 
 type signUpdateForm struct {
-	Name *string `json:"name" validate:"omitempty"`
+	Name  *string `json:"name" validate:"omitempty"`
+	Image *string `json:"image" validate:"omitempty"`
 }
 
 // >>> LEXICAL_WORD <<<

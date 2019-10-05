@@ -10,6 +10,21 @@ export function getSigns(params) {
   });
 }
 
+export function createSign(data) {
+  return request({
+    url: baseURL,
+    method: "post",
+    data
+  });
+}
+
+export function getSign(id) {
+  return request({
+    url: `${baseURL}/${id}`,
+    method: "get"
+  });
+}
+
 export function updateSign(id, data) {
   return request({
     url: `${baseURL}/${id}`,

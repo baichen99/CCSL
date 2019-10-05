@@ -91,7 +91,7 @@
 
     <el-pagination
       background
-      layout="prev, pager, next"
+      layout="total,prev, pager, next"
       :total="total"
       :page-size.sync="params.limit"
       :current-page.sync="params.page"
@@ -108,7 +108,7 @@
     >
       <div class="form-drawer__content">
         <sign-form
-          :data="data"
+          :data="originalData"
           :mode="mode"
         />
         <div class="form-drawer__footer">
@@ -118,7 +118,7 @@
             type="primary"
             :loading="loading"
             @click="handleSave"
-          >{{ loading ? '保存中 ...' : '确 定' }}</el-button>
+          >{{ loading ? '保存中 ...' : '保 存' }}</el-button>
         </div>
       </div>
     </el-drawer>
@@ -128,7 +128,7 @@
 
 <script>
 import SignForm from "@/views/dashboard/forms/SignForm";
-import { getSigns } from "@/api/signs";
+import { getSigns, deleteSign, createSign, updateSign } from "@/api/signs";
 export default {
   name: "AllSigns",
   components: {
@@ -138,6 +138,7 @@ export default {
     return {
       show: false,
       mode: "",
+      originalData: {},
       data: {},
       params: {
         name: "",
@@ -148,6 +149,21 @@ export default {
       loading: false,
       list: []
     };
+  },
+  computed: {
+    checkDiff() {
+      if (this.mode === "create") {
+        return true;
+      } else {
+        let diffFound = false;
+        for (let key in this.data) {
+          if (this.originalData[key] !== this.data[key]) {
+            diffFound = true;
+          }
+        }
+        return diffFound;
+      }
+    }
   },
   watch: {
     "params.page"() {
@@ -172,7 +188,20 @@ export default {
     },
     clearData() {
       this.data = {};
+      this.originalData = {};
       this.mode = "";
+    },
+    checkData() {
+      if (!this.originalData.name || !this.originalData.image) {
+        this.$message({
+          type: "warning",
+          message: "请填写完整信息"
+        });
+        return false;
+      } else {
+        this.originalData.name = this.originalData.name.trim();
+        return true;
+      }
     },
     handleSearch() {
       this.params.page = 1;
@@ -185,26 +214,83 @@ export default {
     handleEdit(data) {
       this.mode = "edit";
       this.show = true;
-      this.data = data;
+      // Use JSON.parse(JSON.stringify(data)) to deep copy a object
+      this.originalData = JSON.parse(JSON.stringify(data));
+      this.data = JSON.parse(JSON.stringify(data));
     },
     handleDelete(id) {
-      console.log(id);
+      this.$confirm(
+        "删除该手形会删除所有视频中含有该手形的标注，此操作将永久删除, 是否继续?",
+        "警告",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "error"
+        }
+      )
+        .then(() => {
+          deleteSign(id).then(() => {
+            this.$message({
+              type: "success",
+              message: "操作成功"
+            });
+            this.handleSearch();
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消操作"
+          });
+        });
     },
     handleClose() {
       this.show = false;
       this.clearData();
     },
     handleSave() {
+      this.loading = true;
       if (this.mode === "edit") {
-        console.log("UPDATE DATA");
+        let updateData = {};
+        for (let key in this.data) {
+          if (this.originalData[key] !== this.data[key]) {
+            updateData[key] = this.originalData[key];
+          }
+        }
+        updateSign(this.data.id, updateData)
+          .then(() => {
+            this.$message({
+              type: "success",
+              message: "操作成功"
+            });
+            this.handleSearch();
+            this.loading = false;
+          })
+          .catch(() => {
+            this.loading = false;
+          });
       } else if (this.mode === "create") {
-        console.log("CREATE DATA");
+        if (this.checkData()) {
+          createSign(this.originalData)
+            .then(() => {
+              this.$message({
+                type: "success",
+                message: "操作成功"
+              });
+              this.handleSearch();
+              this.loading = false;
+            })
+            .catch(() => {
+              this.loading = false;
+            });
+        } else {
+          this.loading = false;
+          return;
+        }
       } else {
         console.error("NO AVALIABLE OPERATION");
       }
-    },
-    checkDiff() {
-      return true;
+      this.handleClose();
     }
   }
 };

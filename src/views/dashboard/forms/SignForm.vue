@@ -4,10 +4,19 @@
     label-width="100px"
     :model="formData"
   >
-    <el-form-item label="名称">
-      <el-input v-model="formData.name" />
+    <el-form-item
+      label="手形名称"
+      required
+    >
+      <el-input
+        v-model="formData.name"
+        placeholder="请输入手形名称"
+      />
     </el-form-item>
-    <el-form-item label="图片">
+    <el-form-item
+      label="手形图片（SVG）"
+      required
+    >
       <image-uploader
         v-model="formData.image"
         type="svg"
