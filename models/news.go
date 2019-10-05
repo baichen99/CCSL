@@ -9,10 +9,11 @@ import (
 // Carousel model 首页轮播大图
 type Carousel struct {
 	Base
-	Image     string    `gorm:"NOT NULL" json:"image"`
-	Title     string    `gorm:"NOT NULL" json:"title"`
-	CreatorID uuid.UUID `gorm:"DEFAULT:NULL" json:"creatorID"`
-	Status    string    `gorm:"DEFAULT:'published'" json:"status"`
+	Image      string    `gorm:"NOT NULL" json:"image"`
+	Title      string    `gorm:"NOT NULL" json:"title"`
+	CreatorID  uuid.UUID `gorm:"DEFAULT:NULL" json:"creatorID"`
+	State      string    `gorm:"DEFAULT:'published'" json:"state"` // State can be 'draft' or 'published'
+	Importance int       `gorm:"DEFAULT:0" json:"importance"`
 }
 
 // News model
@@ -25,5 +26,5 @@ type News struct {
 	Type      string    `gorm:"NOT NULL" json:"type"`                     // Type can be 'link' or 'document'
 	Text      string    `gorm:"NOT NULL" json:"text"`                     // If is 'link' type, this field is a url, and document content fot 'ducument' type
 	Language  string    `gorm:"NOT NULL;DEFAULT:'zh-CN'" json:"language"` // Language can be 'zh-CN' or 'en-US'
-	Status    string    `gorm:"DEFAULT:'published'" json:"status"`        // Status can be 'draft' or 'published'
+	State     string    `gorm:"DEFAULT:'published'" json:"state"`         // State can be 'draft' or 'published'
 }

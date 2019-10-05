@@ -127,6 +127,7 @@ type GetNewsListParameters struct {
 	Type     string
 	Text     string
 	Language string
+	State    string
 }
 
 // GetMemberListParameters parameters for get members list queris
@@ -140,6 +141,7 @@ type GetMemberListParameters struct {
 type GetCarouselListParameters struct {
 	GetListParameters
 	Title string
+	State string
 }
 
 // GetSignListParameters parameters for get sign list queries

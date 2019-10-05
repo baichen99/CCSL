@@ -147,6 +147,13 @@ aside {
 
 .form-drawer__content {
   padding: 30px 50px;
+  .el-form-item__content {
+    text-align: center;
+    .el-select,
+    .el-input {
+      width: 100%;
+    }
+  }
 }
 
 .form-drawer__footer {

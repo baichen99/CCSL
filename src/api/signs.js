@@ -2,7 +2,7 @@ import request from "@/utils/request";
 
 const baseURL = "/signs";
 
-export function getSigns(params) {
+export function GetSignsList(params) {
   return request({
     url: baseURL,
     method: "get",
@@ -10,7 +10,7 @@ export function getSigns(params) {
   });
 }
 
-export function createSign(data) {
+export function CreateSign(data) {
   return request({
     url: baseURL,
     method: "post",
@@ -18,14 +18,14 @@ export function createSign(data) {
   });
 }
 
-export function getSign(id) {
+export function GetSign(id) {
   return request({
     url: `${baseURL}/${id}`,
     method: "get"
   });
 }
 
-export function updateSign(id, data) {
+export function UpdateSign(id, data) {
   return request({
     url: `${baseURL}/${id}`,
     method: "put",
@@ -33,7 +33,7 @@ export function updateSign(id, data) {
   });
 }
 
-export function deleteSign(id) {
+export function DeleteSign(id) {
   return request({
     url: `${baseURL}/${id}`,
     method: "delete"

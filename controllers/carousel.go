@@ -34,9 +34,11 @@ func (c *CarouselController) GetCarouselsList() {
 		return
 	}
 	title := c.Context.URLParamDefault("title", "")
+	state := c.Context.URLParamDefault("state", "")
 	listParameters := utils.GetCarouselListParameters{
 		GetListParameters: listParams,
 		Title:             title,
+		State:             state,
 	}
 	carousels, count, err := c.CarouselService.GetCarouselList(listParameters)
 	if err != nil {

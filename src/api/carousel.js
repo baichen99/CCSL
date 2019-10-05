@@ -1,6 +1,6 @@
 import request from "@/utils/request";
 
-export function GetCarouselList(params) {
+export function GetCarouselsList(params) {
   return request({
     url: "/carousels",
     method: "get",

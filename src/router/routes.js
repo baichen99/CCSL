@@ -155,7 +155,7 @@ const routes = [
   {
     path: "/lexical-database-setting",
     component: AdminLayout,
-    redirect: "/lexical-database/videos",
+    redirect: "/lexical-database-setting/videos",
     name: "LexicalDatabaseSetting",
     meta: {
       title: "比对语料库管理",

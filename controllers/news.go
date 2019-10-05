@@ -38,6 +38,7 @@ func (c *NewsController) GetNewsList() {
 	newsType := c.Context.URLParamDefault("type", "")
 	text := c.Context.URLParamDefault("text", "")
 	language := c.Context.URLParamDefault("language", "")
+	state := c.Context.URLParamDefault("state", "")
 	listParameters := utils.GetNewsListParameters{
 		GetListParameters: listParams,
 		Column:            column,
@@ -45,6 +46,7 @@ func (c *NewsController) GetNewsList() {
 		Type:              newsType,
 		Text:              text,
 		Language:          language,
+		State:             state,
 	}
 	news, count, err := c.NewsService.GetNewsList(listParameters)
 	if err != nil {

@@ -1,12 +1,7 @@
 <template>
   <div class="app-container">
     <div class="table-toolbar">
-      <el-input />
-      <el-button
-        class="new"
-        type="primary"
-        @click="create"
-      >增加</el-button>
+      USERS
     </div>
 
   </div>

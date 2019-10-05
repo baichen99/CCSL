@@ -22,7 +22,7 @@
   </div>
 </template>
 <script>
-import { GetCarouselList } from "@/api/carousel";
+import { GetCarouselsList } from "@/api/carousel";
 // import { GetNewsList } from "@/api/news";
 import CarouselCard from "@/views/home/CarouselCard.vue";
 import NewsCard from "@/views/home/NewsCard.vue";
@@ -139,10 +139,11 @@ export default {
     ]
   }),
   created() {
-    GetCarouselList({ order: "desc", limit: 5 }).then(res => {
-      const { data } = res;
-      this.carousels = data;
-    });
+    GetCarouselsList({ order: "desc", limit: 5, state: "published" }).then(
+      res => {
+        this.carousels = res.data;
+      }
+    );
     // GetNewsList().then(res => {
     //   const { data } = res;
     //   console.log(data);

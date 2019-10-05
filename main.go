@@ -98,6 +98,8 @@ func initDB(app *iris.Application) *gorm.DB {
 	pg.LogMode(true)
 	pg.AutoMigrate(&models.User{}, &models.LexicalWord{}, &models.LexicalVideo{}, &models.Sign{}, &models.Performer{}, &models.Carousel{}, &models.News{}, &models.Member{}, &models.District{}, &models.City{}, &models.Province{})
 	// Manually Add foreign key for tables
+	pg.Exec("CREATE UNIQUE INDEX users_username_key ON users(username) WHERE deleted_at IS NULL")
+	pg.Exec("CREATE UNIQUE INDEX signs_name_key ON signs(name) WHERE deleted_at IS NULL")
 	pg.Model(&models.District{}).AddForeignKey("city_code", "cities(code)", "RESTRICT", "RESTRICT").AddForeignKey("province_code", "provinces(code)", "RESTRICT", "RESTRICT")
 	pg.Model(&models.City{}).AddForeignKey("province_code", "provinces(code)", "RESTRICT", "RESTRICT")
 	pg.Model(&models.LexicalVideo{}).AddForeignKey("lexical_word_id", "lexical_words(id)", "RESTRICT", "CASCADE")

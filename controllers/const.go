@@ -21,24 +21,27 @@ const (
 // ============
 
 type carouselCreateForm struct {
-	Title  string `json:"title" validate:"required"`
-	Image  string `json:"image" validate:"required"`
-	Status string `json:"status" validate:"omitempty,oneof=draft published"`
+	Title      string `json:"title" validate:"required"`
+	Image      string `json:"image" validate:"required"`
+	State      string `json:"state" validate:"omitempty,oneof=draft published"`
+	Importance int    `json:"importance" validate:"omitempty,max=5,min=0" `
 }
 
 func (f carouselCreateForm) ConvertToModel() (carousel models.Carousel) {
 	carousel = models.Carousel{
-		Title:  f.Title,
-		Image:  f.Image,
-		Status: f.Status,
+		Title:      f.Title,
+		Image:      f.Image,
+		State:      f.State,
+		Importance: f.Importance,
 	}
 	return
 }
 
 type carouselUpdateForm struct {
-	Title  *string `json:"title" validate:"omitempty"`
-	Image  *string `json:"image" validate:"omitempty"`
-	Status *string `json:"status" validate:"omitempty,oneof=draft published"`
+	Title      *string `json:"title" validate:"omitempty"`
+	Image      *string `json:"image" validate:"omitempty"`
+	State      *string `json:"state" validate:"omitempty,oneof=draft published"`
+	Importance *int    `json:"importance" validate:"omitempty" `
 }
 
 // >>> NEWS <<<
@@ -51,7 +54,7 @@ type newsCreateForm struct {
 	Type     string    `json:"type" validate:"required,oneof=link document"`     // Type can be 'link' or 'document'
 	Text     string    `json:"text" validate:"required"`                         // Text
 	Language string    `json:"language"  validate:"omitempty,oneof=zh-CN en-US"` // Can be zh-CN or en-US
-	Status   string    `json:"status" validate:"omitempty,oneof=draft published"`
+	State    string    `json:"state" validate:"omitempty,oneof=draft published"`
 }
 
 func (f newsCreateForm) ConvertToModel() (news models.News) {
@@ -62,7 +65,7 @@ func (f newsCreateForm) ConvertToModel() (news models.News) {
 		Type:     f.Type,
 		Text:     f.Text,
 		Language: f.Language,
-		Status:   f.Status,
+		State:    f.State,
 	}
 	return
 }
@@ -74,7 +77,7 @@ type newsUpdateForm struct {
 	Type     *string    `json:"type"  validate:"omitempty,oneof=link document"`
 	Text     *string    `json:"text"  validate:"omitempty"`
 	Language *string    `json:"language" validate:"omitempty,oneof=zh-CN en-US"`
-	Status   *string    `json:"status" validate:"omitempty,oneof=draft published"`
+	State    *string    `json:"state" validate:"omitempty,oneof=draft published"`
 }
 
 // >> MEMBER <<

@@ -90,6 +90,7 @@
     </div>
 
     <el-pagination
+      v-if="total>params.limit"
       background
       layout="total,prev, pager, next"
       :total="total"
@@ -127,8 +128,8 @@
 </template>
 
 <script>
-import SignForm from "@/views/dashboard/forms/SignForm";
-import { getSigns, deleteSign, createSign, updateSign } from "@/api/signs";
+import SignForm from "@/views/dashboard/form/SignForm";
+import { GetSignsList, DeleteSign, CreateSign, UpdateSign } from "@/api/signs";
 export default {
   name: "AllSigns",
   components: {
@@ -141,7 +142,8 @@ export default {
       originalData: {},
       data: {},
       params: {
-        name: "",
+        title: "",
+        state: "",
         limit: 8,
         page: 1
       },
@@ -176,7 +178,7 @@ export default {
   methods: {
     getList() {
       this.loading = true;
-      getSigns(this.params)
+      GetSignsList(this.params)
         .then(res => {
           this.list = res.data;
           this.total = res.total;
@@ -218,6 +220,10 @@ export default {
       this.originalData = JSON.parse(JSON.stringify(data));
       this.data = JSON.parse(JSON.stringify(data));
     },
+    handleClose() {
+      this.show = false;
+      this.clearData();
+    },
     handleDelete(id) {
       this.$confirm(
         "删除该手形会删除所有视频中含有该手形的标注，此操作将永久删除, 是否继续?",
@@ -229,7 +235,7 @@ export default {
         }
       )
         .then(() => {
-          deleteSign(id).then(() => {
+          DeleteSign(id).then(() => {
             this.$message({
               type: "success",
               message: "操作成功"
@@ -244,10 +250,7 @@ export default {
           });
         });
     },
-    handleClose() {
-      this.show = false;
-      this.clearData();
-    },
+
     handleSave() {
       this.loading = true;
       if (this.mode === "edit") {
@@ -257,7 +260,7 @@ export default {
             updateData[key] = this.originalData[key];
           }
         }
-        updateSign(this.data.id, updateData)
+        UpdateSign(this.data.id, updateData)
           .then(() => {
             this.$message({
               type: "success",
@@ -271,7 +274,7 @@ export default {
           });
       } else if (this.mode === "create") {
         if (this.checkData()) {
-          createSign(this.originalData)
+          CreateSign(this.originalData)
             .then(() => {
               this.$message({
                 type: "success",
@@ -296,8 +299,3 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.el-input {
-  width: 200px;
-}
-</style>
