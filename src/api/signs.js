@@ -9,3 +9,18 @@ export function getSigns(params) {
     params
   });
 }
+
+export function updateSign(id, data) {
+  return request({
+    url: `${baseURL}/${id}`,
+    method: "put",
+    data
+  });
+}
+
+export function deleteSign(id) {
+  return request({
+    url: `${baseURL}/${id}`,
+    method: "delete"
+  });
+}

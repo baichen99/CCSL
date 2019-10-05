@@ -30,7 +30,7 @@ func NewSignService(pg *gorm.DB) SignInterface {
 
 func (s *SignService) GetSignList(parameters utils.GetSignListParameters) (signs []models.Sign, count int, err error) {
 	db := s.PG.Scopes(
-		utils.FilterByColumn("name", parameters.Name),
+		utils.SearchByColumn("name", parameters.Name),
 	)
 	err = db.Model(&signs).Count(&count).Error
 	if err != nil {

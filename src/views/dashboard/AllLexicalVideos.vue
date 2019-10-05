@@ -1,15 +1,14 @@
 <template>
   <div class="app-container">
-    USERS
+    VIDEOS
   </div>
 </template>
 
 <script>
 export default {
-  name: "UserSetting"
+  name: "AllVideos"
 };
 </script>
 
 <style lang="scss" scoped>
 </style>
-

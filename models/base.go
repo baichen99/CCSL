@@ -11,7 +11,7 @@ import (
 type Base struct {
 	ID        uuid.UUID  `gorm:"TYPE:uuid;PRIMARY_KEY" json:"id"`
 	CreatedAt time.Time  `json:"createdAt"`
-	UpdatedAt time.Time  `json:"-"`
+	UpdatedAt time.Time  `json:"updatedAt"`
 	DeletedAt *time.Time `json:"-"`
 }
 

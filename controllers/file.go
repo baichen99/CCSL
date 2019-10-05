@@ -4,6 +4,7 @@ import (
 	"ccsl/configs"
 	"ccsl/middlewares"
 	"ccsl/utils"
+	"errors"
 	"io"
 	"os"
 	"path"
@@ -32,6 +33,13 @@ func (c *FileController) BeforeActivation(app mvc.BeforeActivation) {
 // UploadFile saves file and returns file name
 func (c *FileController) UploadFile() {
 	defer c.Context.Next()
+	dir := c.Context.URLParamDefault("dir", "")
+	fileDirName := configs.Conf.File.Dir + dir
+	fileDir, err := os.Stat(fileDirName)
+	if err != nil || !fileDir.IsDir() {
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "UploadFile::DirNotExsist", errors.New("DirNotExsist"))
+		return
+	}
 	file, info, err := c.Context.FormFile("file")
 	if err != nil {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "UploadFile::ReadFile", err)
@@ -41,7 +49,7 @@ func (c *FileController) UploadFile() {
 	fileSuffix := path.Ext(info.Filename)
 	filePrefix := uuid.NewV4()
 	fileName := filePrefix.String() + strconv.FormatInt(time.Now().Unix(), 10) + fileSuffix
-	filePath := configs.Conf.File.Dir + fileName
+	filePath := fileDirName + "/" + fileName
 	out, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "UploadFile::SaveFile", err)
@@ -51,7 +59,7 @@ func (c *FileController) UploadFile() {
 	io.Copy(out, file)
 	c.Context.JSON(iris.Map{
 		message: success,
-		data:    fileName,
+		data:    dir + "/" + fileName,
 	})
 }
 

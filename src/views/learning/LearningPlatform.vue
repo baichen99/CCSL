@@ -19,7 +19,7 @@
         :videos="videos"
         :limit="params.limit"
         :page="params.page"
-        :total="params.total"
+        :total="total"
         :sm="24"
         :md="12"
         :lg="12"
@@ -53,26 +53,28 @@ export default {
   data() {
     return {
       videos: [],
+      total: 0,
       params: {
         word: "",
         gender: "男",
         region: "100000",
+        chinese: "",
         page: 1,
-        limit: 4,
-        total: 0
+        limit: 4
       }
     };
   },
   methods: {
     clearParams() {
       this.params.word = "";
+      this.params.chinese = "";
     },
     getData() {
       let params = this.params;
       getLexicalVideos(params).then(res => {
         this.videos = res.data;
-        this.page = res.page;
-        this.limit = res.limit;
+        this.params.page = res.page;
+        this.params.limit = res.limit;
         this.total = res.total;
         if (this.total === 0) {
           this.$message("没有找到相关的数据哦～");

@@ -17,7 +17,7 @@
         >
           <img
             style="width:100%"
-            :src="'https://ccsl.shu.edu.cn/public/signs/'+item.image"
+            :src="'https://ccsl.shu.edu.cn/public/'+item.image"
             :alt="item.name"
             @click="onSignSelected(item.id)"
           >

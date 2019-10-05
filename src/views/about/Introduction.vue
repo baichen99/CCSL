@@ -1,6 +1,6 @@
 <template>
   <div class="introduction">
-    <h1 class="title">中心简介</h1>
+    <h1 class="title">中心介绍</h1>
     <el-card>
       <div>
         <p>

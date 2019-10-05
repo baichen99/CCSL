@@ -6,7 +6,7 @@
     <video-player
       class="vjs-big-play-centered"
       :options="{
-        sources: [{ type: 'video/mp4', src: 'https://ccsl.shu.edu.cn/public/videos/' + video.videoPath }]
+        sources: [{ type: 'video/mp4', src: 'https://ccsl.shu.edu.cn/public/' + video.videoPath }]
       }"
       @contextmenu.native.prevent=""
     />

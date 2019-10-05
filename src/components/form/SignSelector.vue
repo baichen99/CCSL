@@ -12,7 +12,7 @@
     >
       <span>{{ item.name }}</span>
       <img
-        :src="'https://ccsl.shu.edu.cn/public/signs/'+item.image"
+        :src="'https://ccsl.shu.edu.cn/public/'+item.image"
         :alt="item.name"
       >
     </el-option>

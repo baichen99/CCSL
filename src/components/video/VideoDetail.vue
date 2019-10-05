@@ -3,7 +3,7 @@
     <div class="video">
       <video-player
         :options="{
-          sources: [{ type: 'video/mp4', src: 'https://ccsl.shu.edu.cn/public/videos/'+video.videoPath }]
+          sources: [{ type: 'video/mp4', src: 'https://ccsl.shu.edu.cn/public/'+video.videoPath }]
         }"
         width="100%"
         class="vjs-big-play-centered"
@@ -51,7 +51,7 @@
             >
               <img
                 style="width:100px"
-                :src="'https://ccsl.shu.edu.cn/public/signs/'+item.image"
+                :src="'https://ccsl.shu.edu.cn/public/'+item.image"
                 :alt="item.name"
               >
             </el-tooltip>
@@ -78,7 +78,7 @@
             >
               <img
                 style="width:100px"
-                :src="'https://ccsl.shu.edu.cn/public/signs/'+item.image"
+                :src="'https://ccsl.shu.edu.cn/public/'+item.image"
                 :alt="item.name"
               >
             </el-tooltip>
@@ -104,7 +104,7 @@ export default {
 
 <style lang="scss" scoped>
 .video {
-  margin: 5px;
+  margin: 10px 40px;
   border-radius: 5px;
   overflow: hidden;
 }

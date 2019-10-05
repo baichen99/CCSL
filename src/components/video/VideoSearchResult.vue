@@ -24,7 +24,7 @@
         layout="total, prev, pager, next"
         :current-page.sync="pageNumber"
         :total="total"
-        :page-size="limit"
+        :page-size.sync="limit"
       />
       <el-dialog
         :visible.sync="showDetail"

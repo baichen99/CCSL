@@ -118,7 +118,7 @@ import {
 } from "@/api/carousel";
 import ImageUploader from "@/components/form/ImageUploader";
 export default {
-  name: "CarouselsSetting",
+  name: "AllCarousels",
   components: {
     ImageUploader
   },
@@ -186,6 +186,10 @@ export default {
       });
     },
     confirmDelete(row) {
+      // this.$message({
+      //   message: "删除成功",
+      //   type: "success"
+      // });
       const id = row.id;
       DeleteCarousel(id).then(() => {
         this.$message({
@@ -201,10 +205,6 @@ export default {
 
 <style lang="scss" scoped>
 .app-container {
-  .new {
-    margin: 10px 0;
-  }
-
   .el-table {
     .edit-input {
       padding-right: 100px;

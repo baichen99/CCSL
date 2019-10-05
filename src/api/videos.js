@@ -5,5 +5,6 @@ export function getLexicalVideos(params) {
     url: "/lexical/videos",
     method: "get",
     params
+    //loading:true
   });
 }

@@ -2,28 +2,28 @@
   <el-upload
     class="upload-container"
     drag
-    accept="image/*"
+    :accept="acceptType"
     :limit="1"
     :headers="{
       Authorization: `Bearer ${$store.getters.token}`
     }"
-    action="/api/files"
+    :action="'/api/files?dir='+dir"
     :on-success="onUploadSuccess"
     :on-remove="clearFile"
   >
-    <i class="el-icon-upload" />
     <div
       v-if="imageUrl === ''"
       class="el-upload__text"
     >
-      将文件拖到此处，或<em>点击上传</em><br>只能上传jpg/png文件，且大小不超过5Mb<br>建议图片尺寸为16:9，否则会拉伸变形
+      <i class="el-icon-upload" />
+      将文件拖到此处，或<em>点击上传</em><br>大小不超过5Mb
     </div>
-    <div v-else>
-      <img
-        :src="'/public/files/'+imageUrl"
-        alt="image"
-      >
-    </div>
+
+    <img
+      v-else
+      :src="'https://ccsl.shu.edu.cn/public/'+imageUrl"
+      alt="image"
+    >
   </el-upload>
 </template>
 
@@ -38,6 +38,17 @@ export default {
     url: {
       type: String,
       default: () => ""
+    },
+    dir: {
+      type: String,
+      required: true
+    },
+    type: {
+      type: String,
+      default: "all",
+      validator: function(value) {
+        return ["all", "svg"].indexOf(value) !== -1;
+      }
     }
   },
   computed: {
@@ -47,6 +58,13 @@ export default {
       },
       set(val) {
         this.$emit("update", val);
+      }
+    },
+    acceptType() {
+      if (this.type === "svg") {
+        return "image/svg+xml";
+      } else {
+        return "image/*";
       }
     }
   },
@@ -66,4 +84,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+img {
+  max-height: 100%;
+  max-width: 100%;
+  padding: 5px;
+}
 </style>

@@ -1,15 +1,21 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
     <title><%= webpackConfig.name %></title>
   </head>
-  <body>
+  <body class="loading-area">
     <noscript>
-      <strong> <%= webpackConfig.name %> 需要使用JavaScript，请开启浏览器的JavaScript功能。</strong>
+      <strong>
+        <%= webpackConfig.name %>
+        需要使用JavaScript，请开启浏览器的JavaScript功能。</strong
+      >
     </noscript>
     <div id="app"></div>
   </body>

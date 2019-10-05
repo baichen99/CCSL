@@ -18,6 +18,11 @@ import AdminLayout from "@/layout/AdminLayout.vue"; // Admin Layout
   }
  */
 
+const superUser = "super";
+const adminUser = "admin";
+const learner = "learner";
+const user = "user";
+
 const routes = [
   {
     path: "/",
@@ -40,7 +45,7 @@ const routes = [
         name: "LexicalDatabase",
         component: () => import("@/views/database/LexicalDatabase.vue"),
         meta: {
-          roles: ["super", "admin", "user"],
+          roles: [superUser, adminUser, user],
           title: "国家通用手语比对语料库",
           auth: true
         }
@@ -66,7 +71,7 @@ const routes = [
         name: "LearningPlatform",
         component: () => import("@/views/learning/LearningPlatform"),
         meta: {
-          roles: ["super", "admin", "learner"],
+          roles: [superUser, adminUser, learner],
           title: "国家通用手语学习平台",
           auth: true
         }
@@ -91,7 +96,24 @@ const routes = [
           title: "控制中心",
           icon: "dashboard",
           auth: true,
-          roles: ["super", "admin"]
+          roles: [superUser, adminUser]
+        }
+      }
+    ]
+  },
+  {
+    path: "/users-setting",
+    component: AdminLayout,
+    children: [
+      {
+        path: "/users-setting",
+        name: "Users",
+        component: () => import("@/views/dashboard/AllUsers"),
+        meta: {
+          title: "用户管理",
+          icon: "user",
+          auth: true,
+          roles: [superUser]
         }
       }
     ]
@@ -99,50 +121,67 @@ const routes = [
   {
     path: "/website",
     component: AdminLayout,
-    redirect: "/website/carousel",
+    redirect: "/website/carousels-setting",
     name: "Website",
     meta: {
-      title: "网站设置",
+      title: "网站管理",
       icon: "website"
     },
     children: [
       {
-        path: "carousel",
-        name: "Carousel",
-        component: () => import("@/views/dashboard/CarouselsSetting"),
+        path: "carousels-setting",
+        name: "Carousels",
+        component: () => import("@/views/dashboard/AllCarousels"),
         meta: {
-          title: "轮播图片设置",
+          title: "轮播图片管理",
           icon: "pictures",
           auth: true,
-          roles: ["super", "admin"]
+          roles: [superUser, adminUser]
         }
       },
       {
-        path: "news",
+        path: "news-setting",
         name: "News",
-        component: () => import("@/views/dashboard/NewsSetting"),
+        component: () => import("@/views/dashboard/AllNews"),
         meta: {
-          title: "网站新闻设置",
+          title: "网站新闻管理",
           icon: "news",
           auth: true,
-          roles: ["super", "admin"]
+          roles: [superUser, adminUser]
         }
       }
     ]
   },
   {
-    path: "/users",
+    path: "/lexical-database-setting",
     component: AdminLayout,
+    redirect: "/lexical-database/videos",
+    name: "LexicalDatabaseSetting",
+    meta: {
+      title: "比对语料库管理",
+      icon: "contrast"
+    },
     children: [
       {
-        path: "/users",
-        name: "Users",
-        component: () => import("@/views/dashboard/UserSetting"),
+        path: "videos",
+        name: "LexicalVideos",
+        component: () => import("@/views/dashboard/AllLexicalVideos"),
         meta: {
-          title: "用户设置",
-          icon: "peoples",
+          title: "视频管理",
+          icon: "video",
           auth: true,
-          roles: ["super"]
+          roles: [superUser, adminUser]
+        }
+      },
+      {
+        path: "signs",
+        name: "Signs",
+        component: () => import("@/views/dashboard/AllSigns"),
+        meta: {
+          title: "手形管理",
+          icon: "sign",
+          auth: true,
+          roles: [superUser, adminUser]
         }
       }
     ]

@@ -17,9 +17,8 @@ function showFullScreenLoading() {
   if (needLoadingRequestCount === 0) {
     loading = Loading.service({
       lock: true,
-      text: "努力加载中...",
-      background: "rgba(0,0,0,0.5)",
-      target: document.querySelector(".loading-area")
+      fullscreen: true,
+      text: "努力加载中..."
     });
   }
   needLoadingRequestCount++;

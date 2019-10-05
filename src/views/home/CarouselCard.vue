@@ -9,7 +9,7 @@
       :key="item.id"
     >
       <img
-        :src="'https://ccsl.shu.edu.cn/public/files/'+item.image"
+        :src="'https://ccsl.shu.edu.cn/public/'+item.image"
         :alt="item.id"
         width="100%"
         height="100%"
