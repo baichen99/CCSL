@@ -2,7 +2,7 @@ App:
     Name: CCSL
     Domain: "localhost:8888"
     CORS:
-        - ccsl.shu.edu.cn
+        - https://ccsl.shu.edu.cn
     AllowCookie: true
 
 Log:
