@@ -1,6 +1,6 @@
 import request from "@/utils/request";
 
-export function getLexicalWords(params) {
+export function GetLexicalWordsList(params) {
   return request({
     url: "/lexical/words",
     method: "get",

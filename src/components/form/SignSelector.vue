@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { getSigns } from "@/api/signs";
+import { GetSignsList } from "@/api/signs";
 export default {
   name: "SignSelector",
   model: {
@@ -58,7 +58,7 @@ export default {
     }
   },
   created() {
-    getSigns({ limit: 0 }).then(res => {
+    GetSignsList({ limit: 0 }).then(res => {
       this.signs = res.data;
     });
   }

@@ -29,7 +29,20 @@
         <span class="tag-label">构词方式</span>
         <span class="tag-value">{{ video.constructType || "暂无数据" }}</span>
         <span class="tag-label">构词词根</span>
-        <span class="tag-value">{{ video.constructWords || "暂无数据" }}</span>
+        <span
+          v-if="video.constructWords"
+          class="tag-value"
+        >
+          <el-tag
+            v-for="(item,index) in video.constructWords"
+            :key="index"
+            class="tag-words"
+          >{{ item }}</el-tag>
+        </span>
+        <span
+          v-else
+          class="tag-value"
+        >暂无数据</span>
       </div>
       <div
         v-if="video.leftSigns.length !== 0"
@@ -126,6 +139,9 @@ export default {
       padding: 10px;
     }
     width: 25%;
+  }
+  .tag-words {
+    margin: 0 10px;
   }
 }
 </style>

@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { getLexicalWords } from "@/api/words";
+import { GetLexicalWordsList } from "@/api/words";
 export default {
   name: "WordSearch",
   props: {
@@ -46,7 +46,7 @@ export default {
     };
   },
   created() {
-    getLexicalWords({ limit: 0 }).then(res => {
+    GetLexicalWordsList({ limit: 0 }).then(res => {
       let wordsDict = {};
       const wordsArray = res.data;
       wordsArray.map(item => {

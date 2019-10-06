@@ -33,7 +33,7 @@ import VideoSearchResult from "@/components/video/VideoSearchResult.vue";
 import WordSearch from "@/components/form/WordSearch.vue";
 import SignSearch from "@/components/form/SignSearch.vue";
 
-import { getLexicalVideos } from "@/api/videos";
+import { GetLexicalVideosList } from "@/api/videos";
 
 export default {
   name: "LexicalDatabase",
@@ -81,7 +81,7 @@ export default {
       this.params.constructWords = "";
     },
     getData() {
-      getLexicalVideos(this.params).then(res => {
+      GetLexicalVideosList(this.params).then(res => {
         this.videos = res.data;
         this.params.page = res.page;
         this.params.limit = res.limit;

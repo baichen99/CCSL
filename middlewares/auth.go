@@ -41,7 +41,7 @@ func SignJWTToken(userID uuid.UUID, role string) (string, error) {
 		"nbf":  time.Now().Unix(),                                                              // Not Before
 		"jti":  tokenID,                                                                        // JWT Token ID
 		"exp":  time.Now().Add(time.Hour * time.Duration(configs.Conf.JWT.ExpireHours)).Unix(), // Expiration Time
-		"user": userID.String(),                                                                // Username
+		"user": userID.String(),                                                                // UserID
 		"role": role,                                                                           // Role of User: Admin/User/etc...
 	})
 	key, _ := jwt.ParseECPrivateKeyFromPEM([]byte(configs.Conf.JWT.PrivateKey))

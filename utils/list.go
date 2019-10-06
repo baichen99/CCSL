@@ -2,6 +2,7 @@ package utils
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/jinzhu/gorm"
 	"github.com/kataras/iris"
@@ -14,7 +15,7 @@ func SearchByColumn(columnName string, searchString string) func(db *gorm.DB) *g
 			// add % to prefix and suffix to match search
 			// SQL search: SELECT * FROM column_name WHERE query LIKE value
 			value := "%" + searchString + "%"
-			query := columnName + " LIKE ? "
+			query := fmt.Sprintf("%s LIKE ?", columnName)
 			return db.Where(query, value)
 		}
 		return db
@@ -24,7 +25,7 @@ func SearchByColumn(columnName string, searchString string) func(db *gorm.DB) *g
 // FilterByColumn generate function used to create a where clause for string type columns
 func FilterByColumn(columnName string, value string) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
-		// SQL select: SELECT * FROM column_name WHERE query = value
+		// SQL select: SELECT * FROM table WHERE column_name = value
 		if value != "" {
 			query := columnName + " = ?"
 			return db.Where(query, value)
@@ -36,10 +37,36 @@ func FilterByColumn(columnName string, value string) func(db *gorm.DB) *gorm.DB 
 
 // FilterInSubQuery generate function used to select in array
 func FilterInSubQuery(columnName string, subQuery string) func(db *gorm.DB) *gorm.DB {
+	// SELECT * FROM table WHERE columnName IN(subQuery)
 	return func(db *gorm.DB) *gorm.DB {
 		if subQuery != "" {
-			query := columnName + " IN (" + subQuery + ")"
+			query := fmt.Sprintf("%s IN(%s)", columnName, subQuery)
 			return db.Where(query)
+		}
+		return db
+	}
+}
+
+// SearchInList generare function to search value from array
+func SearchInList(listName string, value string) func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		// SQL select in array: SELCET * FROM column_name WHERE array_to_string(listName, ',') LIKE value
+		if value != "" {
+			value := "%" + value + "%"
+			query := fmt.Sprintf("array_to_string(%s,',') LIKE ?", listName)
+			return db.Where(query, value)
+		}
+		return db
+	}
+}
+
+// FilterInList generare function to filter value from array
+func FilterInList(columnName string, value string) func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		// SQL select in array: SELCET * FROM column_name WHERE value = ANY(query)
+		if value != "" {
+			query := fmt.Sprintf("? = ANY(%s)", columnName)
+			return db.Where(query, value)
 		}
 		return db
 	}
@@ -50,7 +77,7 @@ func FilterByArray(columnName string, value string, escape string) func(db *gorm
 	return func(db *gorm.DB) *gorm.DB {
 		// SQL select in array: SELCET * FROM column_name WHERE value = ANY(string_to_array(query,','))
 		if value != "" {
-			query := "? = ANY(string_to_array(" + columnName + ", '" + escape + "'))"
+			query := fmt.Sprintf("? = ANY(string_to_array(%s),'%s'))", columnName, escape)
 			return db.Where(query, value)
 		}
 		return db

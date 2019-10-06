@@ -41,7 +41,7 @@
 import VideoSearchInput from "@/components/video/VideoSearchInput.vue";
 import VideoSearchResult from "@/components/video/VideoSearchResult.vue";
 import WordSearch from "@/components/form/WordSearch.vue";
-import { getLexicalVideos } from "@/api/videos";
+import { GetLexicalVideosList } from "@/api/videos";
 
 export default {
   name: "LearningPlatform",
@@ -71,7 +71,7 @@ export default {
     },
     getData() {
       let params = this.params;
-      getLexicalVideos(params).then(res => {
+      GetLexicalVideosList(params).then(res => {
         this.videos = res.data;
         this.params.page = res.page;
         this.params.limit = res.limit;
