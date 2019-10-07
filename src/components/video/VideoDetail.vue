@@ -118,7 +118,7 @@ export default {
 <style lang="scss" scoped>
 .video {
   margin: 10px 40px;
-  border-radius: 5px;
+  border-radius: 10px;
   overflow: hidden;
 }
 

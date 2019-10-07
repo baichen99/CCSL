@@ -163,6 +163,17 @@ const routes = [
     },
     children: [
       {
+        path: "words",
+        name: "LexicalWords",
+        component: () => import("@/views/dashboard/AllLexicalWords"),
+        meta: {
+          title: "词表管理",
+          icon: "words",
+          auth: true,
+          roles: [superUser, adminUser]
+        }
+      },
+      {
         path: "videos",
         name: "LexicalVideos",
         component: () => import("@/views/dashboard/AllLexicalVideos"),

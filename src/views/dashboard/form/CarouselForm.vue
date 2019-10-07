@@ -5,6 +5,17 @@
     :model="formData"
   >
     <el-form-item
+      label="重要性"
+      required
+    >
+      <el-rate v-model="formData.importance" />
+      <el-button
+        size="mini"
+        @click="formData.importance=0"
+      >重置</el-button>
+    </el-form-item>
+
+    <el-form-item
       label="图片标题"
       required
     >
@@ -30,44 +41,19 @@
       <news-state-selector v-model="formData.state" />
     </el-form-item>
 
-    <el-form-item
-      label="重要性"
-      required
-    >
-      <el-rate v-model="formData.importance" />
-      <el-button size="mini" @click="formData.importance=0">重置</el-button>
-    </el-form-item>
   </el-form>
 </template>
 
 <script>
 import ImageUploader from "@/components/form/ImageUploader";
 import NewsStateSelector from "@/components/form/NewsStateSelector";
+import formMixin from "./formMixin";
 export default {
   name: "CarouselForm",
   components: {
     ImageUploader,
     NewsStateSelector
   },
-  model: {
-    prop: "data",
-    event: "update"
-  },
-  props: {
-    data: {
-      type: Object,
-      default: () => ({})
-    }
-  },
-  computed: {
-    formData: {
-      get() {
-        return this.data;
-      },
-      set(val) {
-        this.$emit("update", val);
-      }
-    }
-  }
+  mixins: [formMixin]
 };
 </script>

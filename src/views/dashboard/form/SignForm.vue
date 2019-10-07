@@ -29,30 +29,12 @@
 
 <script>
 import ImageUploader from "@/components/form/ImageUploader";
+import formMixin from "./formMixin";
 export default {
   name: "SignForm",
   components: {
     ImageUploader
   },
-  model: {
-    prop: "data",
-    event: "update"
-  },
-  props: {
-    data: {
-      type: Object,
-      default: () => ({})
-    }
-  },
-  computed: {
-    formData: {
-      get() {
-        return this.data;
-      },
-      set(val) {
-        this.$emit("update", val);
-      }
-    }
-  }
+  mixins: [formMixin]
 };
 </script>

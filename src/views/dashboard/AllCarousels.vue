@@ -170,6 +170,7 @@
 <script>
 import CarouselForm from "@/views/dashboard/form/CarouselForm";
 import NewsStateSelector from "@/components/form/NewsStateSelector";
+import listMixin from "./listMixin";
 import {
   GetCarouselsList,
   CreateCarousel,
@@ -183,49 +184,19 @@ export default {
     CarouselForm,
     NewsStateSelector
   },
+  mixins: [listMixin],
   data() {
     return {
-      show: false,
-      mode: "",
-      originalData: {},
-      data: {},
       params: {
-        limit: 8,
-        page: 1,
         order: "desc",
         title: "",
         state: ""
-      },
-      total: 0,
-      loading: false,
-      list: []
-    };
-  },
-  computed: {
-    checkDiff() {
-      if (this.mode === "create") {
-        return true;
-      } else {
-        let diffFound = false;
-        for (let key in this.data) {
-          if (this.originalData[key] !== this.data[key]) {
-            diffFound = true;
-          }
-        }
-        return diffFound;
       }
-    }
-  },
-  watch: {
-    "params.page"() {
-      this.getList();
-    }
-  },
-  created() {
-    this.getList();
+    };
   },
   methods: {
     getList() {
+      this.loading = true;
       GetCarouselsList(this.params)
         .then(res => {
           this.list = res.data;
@@ -236,13 +207,8 @@ export default {
           this.loading = false;
         });
     },
-    clearData() {
-      this.data = {};
-      this.originalData = {};
-      this.mode = "";
-    },
     checkData() {
-      if (!this.originalData.title) {
+      if (!this.originalData.title || !this.originalData.image) {
         this.$message({
           type: "warning",
           message: "请填写完整信息"
@@ -253,31 +219,16 @@ export default {
         return true;
       }
     },
-    handleSearch() {
-      this.params.page = 1;
-      this.getList();
-    },
-    handleCreate() {
-      this.mode = "create";
-      this.show = true;
-    },
-    handleEdit(data) {
-      this.mode = "edit";
-      this.show = true;
-      // Use JSON.parse(JSON.stringify(data)) to deep copy a object
-      this.originalData = JSON.parse(JSON.stringify(data));
-      this.data = JSON.parse(JSON.stringify(data));
-    },
-    handleClose() {
-      this.show = false;
-      this.clearData();
-    },
     handleDelete(id) {
-      this.$confirm("此操作将永久删除, 是否继续?", "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "error"
-      })
+      this.$confirm(
+        "此操作将永久删除, 如果想暂时不显示请选择撤回, 是否继续?",
+        "警告",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "error"
+        }
+      )
         .then(() => {
           DeleteCarousel(id).then(() => {
             this.$message({
@@ -297,12 +248,7 @@ export default {
     handleSave() {
       this.loading = true;
       if (this.mode === "edit") {
-        let updateData = {};
-        for (let key in this.data) {
-          if (this.originalData[key] !== this.data[key]) {
-            updateData[key] = this.originalData[key];
-          }
-        }
+        const updateData = this.makeUpdatedData();
         this.handleUpdate(this.data.id, updateData);
       } else if (this.mode === "create") {
         if (this.checkData()) {

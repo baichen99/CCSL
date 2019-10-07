@@ -48,36 +48,39 @@ type carouselUpdateForm struct {
 // ============
 
 type newsCreateForm struct {
-	Column   string    `json:"column" validate:"required"`
-	Date     time.Time `json:"date" validate:"required"`
-	Title    string    `json:"title" validate:"required"`
-	Type     string    `json:"type" validate:"required,oneof=link document"`     // Type can be 'link' or 'document'
-	Text     string    `json:"text" validate:"required"`                         // Text
-	Language string    `json:"language"  validate:"omitempty,oneof=zh-CN en-US"` // Can be zh-CN or en-US
-	State    string    `json:"state" validate:"omitempty,oneof=draft published"`
+	Column     string    `json:"column" validate:"required"`
+	Date       time.Time `json:"date" validate:"required"`
+	Title      string    `json:"title" validate:"required"`
+	Type       string    `json:"type" validate:"required,oneof=link document"`     // Type can be 'link' or 'document'
+	Text       string    `json:"text" validate:"required"`                         // Text
+	Language   string    `json:"language"  validate:"omitempty,oneof=zh-CN en-US"` // Can be zh-CN or en-US
+	Importance int       `json:"importance" validate:"omitempty,max=5,min=0" `
+	State      string    `json:"state" validate:"omitempty,oneof=draft published"`
 }
 
 func (f newsCreateForm) ConvertToModel() (news models.News) {
 	news = models.News{
-		Column:   f.Column,
-		Date:     f.Date,
-		Title:    f.Title,
-		Type:     f.Type,
-		Text:     f.Text,
-		Language: f.Language,
-		State:    f.State,
+		Column:     f.Column,
+		Date:       f.Date,
+		Title:      f.Title,
+		Type:       f.Type,
+		Text:       f.Text,
+		Language:   f.Language,
+		Importance: f.Importance,
+		State:      f.State,
 	}
 	return
 }
 
 type newsUpdateForm struct {
-	Column   *string    `json:"column"  validate:"omitempty"`
-	Date     *time.Time `json:"date"  validate:"omitempty"`
-	Title    *string    `json:"title"  validate:"omitempty"`
-	Type     *string    `json:"type"  validate:"omitempty,oneof=link document"`
-	Text     *string    `json:"text"  validate:"omitempty"`
-	Language *string    `json:"language" validate:"omitempty,oneof=zh-CN en-US"`
-	State    *string    `json:"state" validate:"omitempty,oneof=draft published"`
+	Column     *string    `json:"column"  validate:"omitempty"`
+	Date       *time.Time `json:"date"  validate:"omitempty"` // RFC3339 - example: 2000-12-30T00:00:00Z
+	Title      *string    `json:"title"  validate:"omitempty"`
+	Type       *string    `json:"type"  validate:"omitempty,oneof=link document"`
+	Text       *string    `json:"text"  validate:"omitempty"`
+	Language   *string    `json:"language" validate:"omitempty,oneof=zh-CN en-US"`
+	Importance *int       `json:"importance" validate:"omitempty" `
+	State      *string    `json:"state" validate:"omitempty,oneof=draft published"`
 }
 
 // >> MEMBER <<

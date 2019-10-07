@@ -1,14 +1,11 @@
 <template>
   <div class="app-container">
-    VIDEOS
+    WORDS
   </div>
 </template>
 
 <script>
 export default {
-  name: "AllLexicalVideos"
+  name: "AllLexicalWords"
 };
 </script>
-
-<style lang="scss" scoped>
-</style>

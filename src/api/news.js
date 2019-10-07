@@ -1,15 +1,17 @@
 import request from "@/utils/request";
 
+const baseURL = "/news";
+
 export function GetNewsList() {
   return request({
-    url: "/news",
+    url: baseURL,
     method: "get"
   });
 }
 
 export function CreateNews(data) {
   return request({
-    url: "/news",
+    url: baseURL,
     method: "post",
     data
   });
@@ -17,7 +19,7 @@ export function CreateNews(data) {
 
 export function UpdateNews(id, data) {
   return request({
-    url: `/news/${id}`,
+    url: `${baseURL}/${id}`,
     method: "put",
     data
   });
@@ -25,7 +27,7 @@ export function UpdateNews(id, data) {
 
 export function DeleteNews(id) {
   return request({
-    url: `/news/${id}`,
+    url: `${baseURL}/${id}`,
     method: "delete"
   });
 }

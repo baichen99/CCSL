@@ -129,51 +129,22 @@
 
 <script>
 import SignForm from "@/views/dashboard/form/SignForm";
+import listMixin from "./listMixin";
 import { GetSignsList, DeleteSign, CreateSign, UpdateSign } from "@/api/signs";
+
 export default {
   name: "AllSigns",
   components: {
     SignForm
   },
+  mixins: [listMixin],
   data() {
     return {
-      show: false,
-      mode: "",
-      originalData: {},
-      data: {},
       params: {
         title: "",
-        state: "",
-        limit: 8,
-        page: 1
-      },
-      total: 0,
-      loading: false,
-      list: []
-    };
-  },
-  computed: {
-    checkDiff() {
-      if (this.mode === "create") {
-        return true;
-      } else {
-        let diffFound = false;
-        for (let key in this.data) {
-          if (this.originalData[key] !== this.data[key]) {
-            diffFound = true;
-          }
-        }
-        return diffFound;
+        state: ""
       }
-    }
-  },
-  watch: {
-    "params.page"() {
-      this.getList();
-    }
-  },
-  created() {
-    this.getList();
+    };
   },
   methods: {
     getList() {
@@ -188,11 +159,6 @@ export default {
           this.loading = false;
         });
     },
-    clearData() {
-      this.data = {};
-      this.originalData = {};
-      this.mode = "";
-    },
     checkData() {
       if (!this.originalData.name || !this.originalData.image) {
         this.$message({
@@ -204,25 +170,6 @@ export default {
         this.originalData.name = this.originalData.name.trim();
         return true;
       }
-    },
-    handleSearch() {
-      this.params.page = 1;
-      this.getList();
-    },
-    handleCreate() {
-      this.mode = "create";
-      this.show = true;
-    },
-    handleEdit(data) {
-      this.mode = "edit";
-      this.show = true;
-      // Use JSON.parse(JSON.stringify(data)) to deep copy a object
-      this.originalData = JSON.parse(JSON.stringify(data));
-      this.data = JSON.parse(JSON.stringify(data));
-    },
-    handleClose() {
-      this.show = false;
-      this.clearData();
     },
     handleDelete(id) {
       this.$confirm(
@@ -250,16 +197,10 @@ export default {
           });
         });
     },
-
     handleSave() {
       this.loading = true;
       if (this.mode === "edit") {
-        let updateData = {};
-        for (let key in this.data) {
-          if (this.originalData[key] !== this.data[key]) {
-            updateData[key] = this.originalData[key];
-          }
-        }
+        const updateData = this.makeUpdatedData();
         UpdateSign(this.data.id, updateData)
           .then(() => {
             this.$message({

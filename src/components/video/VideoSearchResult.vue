@@ -28,6 +28,7 @@
       />
       <el-dialog
         :visible.sync="showDetail"
+        :show-close="false"
         top="40px"
       >
         <video-detail :video="videoDetail" />
