@@ -1,20 +1,8 @@
 <template>
-  <el-select
-    v-model="sign"
-    clearable
-    :placeholder="tip"
-  >
-    <el-option
-      v-for="item in signs"
-      :key="item.id"
-      :label="item.name"
-      :value="item.id"
-    >
+  <el-select v-model="sign" clearable :placeholder="tip">
+    <el-option v-for="item in signs" :key="item.id" :label="item.name" :value="item.id">
       <span>{{ item.name }}</span>
-      <img
-        :src="'https://ccsl.shu.edu.cn/public/'+item.image"
-        :alt="item.name"
-      >
+      <img :src="'https://ccsl.shu.edu.cn/public/'+item.image" :alt="item.name" />
     </el-option>
   </el-select>
 </template>

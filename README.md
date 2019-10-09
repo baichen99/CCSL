@@ -43,14 +43,14 @@ $ make deploy-frontend
 ```
 
 - 部署后端
-替换${version_number}为版本号数字
+
 ```bash
-$ make deploy-backend # 输入Api版本号
+$ make deploy-backend # 输入version_number
 # ssh到服务器
 $ load
-$ export CCSL_VERSION=${version_number}
 $ cd api
-$ docker-compose down
+$ export CCSL_VERSION=${version_number}
+# 替换${version_number}为版本号数字
 $ docker-compose up -d
 ```
 ## 备注

@@ -10,20 +10,18 @@
     :action="'/api/files?dir='+dir"
     :on-success="onUploadSuccess"
     :on-remove="clearFile"
+    :style="{height}"
   >
-    <div
-      v-if="imageUrl === ''"
-      class="el-upload__text"
-    >
+    <div v-if="imageUrl === ''" class="el-upload__text">
       <i class="el-icon-upload" />
-      将文件拖到此处，或<em>点击上传</em><br>大小不超过5Mb
+      <div>
+        将文件拖到此处，或
+        <em>点击上传</em>
+        <br />大小不超过5Mb
+      </div>
     </div>
 
-    <img
-      v-else
-      :src="'https://ccsl.shu.edu.cn/public/'+imageUrl"
-      alt="image"
-    >
+    <img v-else :src="'https://ccsl.shu.edu.cn/public/'+imageUrl" alt="image" />
   </el-upload>
 </template>
 
@@ -49,6 +47,10 @@ export default {
       validator: function(value) {
         return ["all", "svg"].indexOf(value) !== -1;
       }
+    },
+    height: {
+      type: String,
+      default: "500px"
     }
   },
   computed: {

@@ -2,10 +2,7 @@
   <header>
     <div>
       <div>
-        <svg-icon
-          icon-class="logo"
-          class="logo"
-        />
+        <svg-icon icon-class="logo" class="logo" />
         <div class="title">
           <span>中国手语及聋人研究中心</span>
           <span class="en">Center for CSL and Deaf Studies</span>
@@ -26,9 +23,7 @@
             :key="item.url"
             :index="item.url"
             style="text-align:center"
-          >
-            {{ item.title }}
-          </el-menu-item>
+          >{{ item.title }}</el-menu-item>
         </el-submenu>
         <el-submenu index="/database">
           <template slot="title">数据库</template>
@@ -37,9 +32,7 @@
             :key="item.url"
             :index="item.url"
             style="text-align:center;"
-          >
-            {{ item.title }}
-          </el-menu-item>
+          >{{ item.title }}</el-menu-item>
         </el-submenu>
         <el-submenu index="/about">
           <template slot="title">中心概况</template>
@@ -48,11 +41,8 @@
             :key="item.url"
             :index="item.url"
             style="text-align:center;"
-          >
-            {{ item.title }}
-          </el-menu-item>
+          >{{ item.title }}</el-menu-item>
         </el-submenu>
-
       </el-menu>
     </div>
   </header>
@@ -65,22 +55,22 @@ export default {
   data: () => ({
     defaultActive: "/",
     researches: [
-      { url: "/projects", title: "科研项目" },
-      { url: "/papers", title: "论文发表" },
-      { url: "/literature", title: "专著出版" }
+      { url: "/academic/projects", title: "科研项目" },
+      { url: "/academic/papers", title: "论文发表" },
+      { url: "/academic/literature", title: "专著出版" }
     ],
     databases: [
-      { url: "/lexical-database", title: "国家通用手语比对语料库" },
-      { url: "/verb-corpus", title: "上海手语动词语料库" },
-      { url: "/proper-nouns-corpus", title: "专有名词语料库" },
-      { url: "/text-corpus", title: "手语语篇数据库" },
-      { url: "/literature-database", title: "手语研究文献数据库" },
-      { url: "/term-database", title: "手语研究术语库" }
+      { url: "/database/lexical-database", title: "国家通用手语比对语料库" },
+      { url: "/database/verb-corpus", title: "上海手语动词语料库" },
+      { url: "/database/proper-nouns-corpus", title: "专有名词语料库" },
+      { url: "/database/text-corpus", title: "手语语篇数据库" },
+      { url: "/database/literature-database", title: "手语研究文献数据库" },
+      { url: "/database/term-database", title: "手语研究术语库" }
     ],
     about: [
-      { url: "/introduction", title: "中心介绍" },
-      { url: "/team", title: "研究团队" },
-      { url: "/contact", title: "联系我们" }
+      { url: "/about/introduction", title: "中心介绍" },
+      { url: "/about/team", title: "研究团队" },
+      { url: "/about/contact", title: "联系我们" }
     ]
   }),
   computed: {

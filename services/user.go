@@ -32,8 +32,9 @@ func NewUserService(pg *gorm.DB) UserInterface {
 func (s *UserService) GetUsersList(parameters utils.GetUserListParameters) (users []models.User, count int, err error) {
 	// Adding custom scopes to the query based on get list parameters.
 	db := s.PG.Scopes(
-		utils.FilterByColumn("user_type", parameters.UserType),
-		utils.SearchByColumn("username", parameters.SearchName),
+		utils.FilterByColumn("users.user_type", parameters.UserType),
+		utils.SearchByColumn("users.username", parameters.Username),
+		utils.SearchByColumn("users.name", parameters.Name),
 	)
 
 	// Fetching the total number of rows based on the conditions provided.

@@ -107,8 +107,9 @@ type GetListParameters struct {
 // GetUserListParameters parameters for get users list queries
 type GetUserListParameters struct {
 	GetListParameters
-	UserType   string
-	SearchName string
+	UserType string
+	Username string
+	Name     string
 }
 
 // GetWordListParameters parameters for get word list queries

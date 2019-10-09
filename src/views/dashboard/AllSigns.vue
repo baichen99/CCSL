@@ -4,86 +4,44 @@
       <el-input
         v-model="params.name"
         prefix-icon="el-icon-search"
-        placeholder="请输入名称以查找"
+        placeholder="请输入名称"
         clearable
         @clear="handleSearch"
       />
-      <el-button
-        type="primary"
-        plain
-        @click="handleSearch"
-      >查找</el-button>
-      <el-button
-        type="primary"
-        plain
-        @click="handleCreate"
-      >增加</el-button>
+      <el-button type="primary" plain @click="handleSearch">查找</el-button>
+      <el-button type="primary" plain @click="handleNew">增加</el-button>
     </div>
 
     <div class="table-content">
-      <el-table
-        v-loading="loading"
-        :data="list"
-        stripe
-        border
-      >
-        <el-table-column
-          label="创建时间"
-          align="center"
-        >
+      <el-table v-loading="loading" :data="list" stripe border>
+        <el-table-column label="创建时间" align="center">
           <template slot-scope="{row}">
             <span>{{ $d(new Date(row.createdAt), 'long') }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column
-          label="上次更新"
-          align="center"
-        >
+        <el-table-column label="上次更新" align="center">
           <template slot-scope="{row}">
             <span>{{ $d(new Date(row.updatedAt), 'long') }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column
-          label="手形名称"
-          align="center"
-        >
+        <el-table-column label="手形名称" align="center">
           <template slot-scope="{row}">
             <el-tag>{{ row.name }}</el-tag>
           </template>
         </el-table-column>
 
-        <el-table-column
-          label="手形图片"
-          align="center"
-        >
+        <el-table-column label="手形图片" align="center">
           <template slot-scope="{row}">
-            <img
-              :src="'https://ccsl.shu.edu.cn/public/'+row.image"
-              alt="sign"
-              style="height:50px"
-            >
+            <img :src="'https://ccsl.shu.edu.cn/public/'+row.image" alt="sign" style="height:50px" />
           </template>
         </el-table-column>
 
-        <el-table-column
-          label="操作"
-          align="center"
-        >
+        <el-table-column label="操作" align="center">
           <template slot-scope="{row}">
-            <el-button
-              type="primary"
-              size="mini"
-              plain
-              @click="handleEdit(row)"
-            >编辑</el-button>
-            <el-button
-              type="danger"
-              size="mini"
-              plain
-              @click="handleDelete(row.id)"
-            >删除</el-button>
+            <el-button type="primary" size="mini" plain @click="handleEdit(row)">编辑</el-button>
+            <el-button type="danger" size="mini" plain @click="handleDelete(row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -100,7 +58,7 @@
 
     <el-drawer
       ref="drawer"
-      size="40%"
+      size="60%"
       :before-close="handleClose"
       :show-close="false"
       :destroy-on-close="true"
@@ -108,10 +66,7 @@
       direction="rtl"
     >
       <div class="form-drawer__content">
-        <sign-form
-          :data="originalData"
-          :mode="mode"
-        />
+        <sign-form ref="form" :data="data" :mode="mode" />
         <div class="form-drawer__footer">
           <el-button @click="handleClose">取 消</el-button>
           <el-button
@@ -123,7 +78,6 @@
         </div>
       </div>
     </el-drawer>
-
   </div>
 </template>
 
@@ -159,19 +113,26 @@ export default {
           this.loading = false;
         });
     },
-    checkData() {
-      if (!this.originalData.name || !this.originalData.image) {
-        this.$message({
-          type: "warning",
-          message: "请填写完整信息"
+    handleCreate(data) {
+      CreateSign(data)
+        .then(() => {
+          this.handleModify();
+        })
+        .catch(() => {
+          this.loading = false;
         });
-        return false;
-      } else {
-        this.originalData.name = this.originalData.name.trim();
-        return true;
-      }
+    },
+    handleUpdate(id, updateData) {
+      UpdateSign(id, updateData)
+        .then(() => {
+          this.handleModify();
+        })
+        .catch(() => {
+          this.loading = false;
+        });
     },
     handleDelete(id) {
+      this.loading = true;
       this.$confirm(
         "删除该手形会删除所有视频中含有该手形的标注，此操作将永久删除, 是否继续?",
         "警告",
@@ -183,58 +144,12 @@ export default {
       )
         .then(() => {
           DeleteSign(id).then(() => {
-            this.$message({
-              type: "success",
-              message: "操作成功"
-            });
-            this.handleSearch();
+            this.handleModify();
           });
         })
         .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消操作"
-          });
+          this.showCancel();
         });
-    },
-    handleSave() {
-      this.loading = true;
-      if (this.mode === "edit") {
-        const updateData = this.makeUpdatedData();
-        UpdateSign(this.data.id, updateData)
-          .then(() => {
-            this.$message({
-              type: "success",
-              message: "操作成功"
-            });
-            this.handleSearch();
-            this.loading = false;
-          })
-          .catch(() => {
-            this.loading = false;
-          });
-      } else if (this.mode === "create") {
-        if (this.checkData()) {
-          CreateSign(this.originalData)
-            .then(() => {
-              this.$message({
-                type: "success",
-                message: "操作成功"
-              });
-              this.handleSearch();
-              this.loading = false;
-            })
-            .catch(() => {
-              this.loading = false;
-            });
-        } else {
-          this.loading = false;
-          return;
-        }
-      } else {
-        console.error("NO AVALIABLE OPERATION");
-      }
-      this.handleClose();
     }
   }
 };

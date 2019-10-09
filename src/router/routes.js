@@ -32,18 +32,23 @@ const routes = [
       {
         path: "/",
         name: "Home",
-        component: () => import("@/views/home/Home.vue")
+        component: () => import("@/views/home/Home")
       },
       {
-        path: "/team",
-        component: () => import("@/views/about/Team"),
-        name: "Team",
-        meta: { title: "研究团队" }
+        path: "/news-detail/:id",
+        name: "NewsDetail",
+        component: () => import("@/views/home/NewsDetail"),
+        meta: { title: "新闻详情" }
       },
       {
-        path: "/lexical-database",
+        path: "/news-list/:column",
+        name: "NewsList",
+        component: () => import("@/views/home/NewsList")
+      },
+      {
+        path: "/database/lexical-database",
         name: "LexicalDatabase",
-        component: () => import("@/views/database/LexicalDatabase.vue"),
+        component: () => import("@/views/database/LexicalDatabase"),
         meta: {
           roles: [superUser, adminUser, user],
           title: "国家通用手语比对语料库",
@@ -51,17 +56,23 @@ const routes = [
         }
       },
       {
-        path: "/introduction",
+        path: "/about/introduction",
         name: "Introduction",
-        component: () => import("@/views/about/Introduction.vue"),
+        component: () => import("@/views/about/Introduction"),
         meta: {
           title: "中心简介"
         }
       },
       {
-        path: "/contact",
+        path: "/about/team",
+        component: () => import("@/views/about/Team"),
+        name: "Team",
+        meta: { title: "研究团队" }
+      },
+      {
+        path: "/about/contact",
         name: "Contact",
-        component: () => import("@/views/about/Contact.vue"),
+        component: () => import("@/views/about/Contact"),
         meta: {
           title: "联系我们"
         }
@@ -153,9 +164,9 @@ const routes = [
     ]
   },
   {
-    path: "/lexical-database-setting",
+    path: "/lexical-database",
     component: AdminLayout,
-    redirect: "/lexical-database-setting/videos",
+    redirect: "/lexical-database/videos",
     name: "LexicalDatabaseSetting",
     meta: {
       title: "比对语料库管理",

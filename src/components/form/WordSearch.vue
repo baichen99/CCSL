@@ -1,24 +1,11 @@
 <template>
-  <el-card
-    class="sidebar"
-    shadow="hover"
-  >
+  <el-card class="sidebar" shadow="hover">
     <h3 class="title">音序检索</h3>
     <div class="initial">
       <el-collapse accordion>
-        <el-collapse-item
-          v-for="(value, key) in words"
-          :key="key"
-          :title="key"
-        >
-          <div
-            v-for="word in value"
-            :key="word.id"
-          >
-            <el-link
-              type="primary"
-              @click="onWordSelected(word.id)"
-            >{{ word.chinese }}</el-link>
+        <el-collapse-item v-for="(value, key) in words" :key="key" :title="key">
+          <div v-for="word in value" :key="word.id">
+            <el-link type="primary" @click="onWordSelected(word.id)">{{ word.chinese }}</el-link>
           </div>
         </el-collapse-item>
       </el-collapse>

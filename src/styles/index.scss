@@ -129,15 +129,15 @@ aside {
 .app-container {
   padding: 20px;
   .table-toolbar {
-    margin: 10px 0;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
     .el-button,
     .el-input {
-      width: 200px;
-      margin: 0 10px;
+      width: 150px;
+      margin: 10px;
     }
   }
   .table-content {
@@ -149,23 +149,30 @@ aside {
   }
 }
 
-.form-drawer__content {
-  padding: 30px 50px;
-  .el-form-item__content {
+.el-drawer {
+  overflow: scroll;
+  .form-drawer__content {
+    padding: 10px 50px;
+    .el-form-item__content {
+      text-align: center;
+      .el-select,
+      .el-input {
+        width: 100%;
+      }
+    }
+  }
+
+  .form-drawer__footer {
     text-align: center;
-    .el-select,
-    .el-input {
-      width: 100%;
+    .el-button {
+      width: 200px;
+      margin: 10px;
     }
   }
 }
 
-.form-drawer__footer {
-  text-align: center;
-  .el-button {
-    width: 200px;
-    margin: 10px;
-  }
+.mce-tinymce{
+  border-radius: 5px;
 }
 
 .components-container {

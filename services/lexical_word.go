@@ -32,10 +32,10 @@ func NewLexicalWordService(pg *gorm.DB) LexicalWordInterface {
 func (s *LexicalWordService) GetWordsList(parameters utils.GetWordListParameters) (words []models.LexicalWord, count int, err error) {
 	// Adding custom scopes to the query based on get list parameters.
 	db := s.PG.Scopes(
-		utils.FilterByColumn("pos", parameters.Pos),
-		utils.FilterByColumn("initial", parameters.Initial),
-		utils.SearchByColumn("chinese", parameters.Chinese),
-		utils.SearchByColumn("english", parameters.English),
+		utils.FilterByColumn("lexical_words.pos", parameters.Pos),
+		utils.FilterByColumn("lexical_words.initial", parameters.Initial),
+		utils.SearchByColumn("lexical_words.chinese", parameters.Chinese),
+		utils.SearchByColumn("lexical_words.english", parameters.English),
 	)
 
 	// Fetching the total number of rows based on the conditions provided.

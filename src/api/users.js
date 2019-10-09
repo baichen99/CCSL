@@ -17,6 +17,14 @@ export function RefreshToken() {
   });
 }
 
+export function GetUsersList(params) {
+  return request({
+    url: baseURL,
+    method: "get",
+    params
+  });
+}
+
 export function GetUser(userID) {
   return request({
     url: `${baseURL}/${userID}`,
@@ -24,10 +32,25 @@ export function GetUser(userID) {
   });
 }
 
-export function GetUsersList(params) {
+export function CreateUser(data) {
   return request({
     url: baseURL,
-    method: "get",
-    params
+    method: "post",
+    data
+  });
+}
+
+export function UpdateUser(id, data) {
+  return request({
+    url: `${baseURL}/${id}`,
+    method: "put",
+    data
+  });
+}
+
+export function DeleteUser(id) {
+  return request({
+    url: `${baseURL}/${id}`,
+    method: "delete"
   });
 }

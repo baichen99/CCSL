@@ -27,8 +27,8 @@ func NewMemberService(pg *gorm.DB) MemberInterface {
 
 func (s *MemberService) GetMemberList(parameters utils.GetMemberListParameters) (members []models.Member, count int, err error) {
 	db := s.PG.Scopes(
-		utils.SearchByColumn("name_zh", parameters.NameZh),
-		utils.SearchByColumn("name_en", parameters.NameEn),
+		utils.SearchByColumn("members.name_zh", parameters.NameZh),
+		utils.SearchByColumn("members.name_en", parameters.NameEn),
 	)
 	err = db.Find(&members).Count(&count).Error
 

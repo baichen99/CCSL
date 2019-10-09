@@ -1,16 +1,6 @@
 <template>
-  <el-select
-    v-model="data"
-    placeholder="请选择新闻类型"
-    clearable
-    @clear="$emit('clear')"
-  >
-    <el-option
-      v-for="item in options"
-      :key="item.value"
-      :label="item.name"
-      :value="item.value"
-    />
+  <el-select v-model="data" placeholder="请选择新闻类型" clearable @clear="$emit('clear')">
+    <el-option v-for="item in options" :key="item.value" :label="item.name" :value="item.value" />
   </el-select>
 </template>
 

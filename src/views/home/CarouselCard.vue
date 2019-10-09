@@ -1,35 +1,34 @@
 <template>
-  <el-carousel
-    class="carousel-card"
-    height="100%"
-    trigger="click"
-  >
-    <el-carousel-item
-      v-for="item in carousels"
-      :key="item.id"
-    >
+  <el-carousel class="carousel-card" height="100%" trigger="click">
+    <el-carousel-item v-for="item in carousels" :key="item.id">
       <img
         :src="'https://ccsl.shu.edu.cn/public/'+item.image"
         :alt="item.id"
         width="100%"
         height="100%"
-      >
-      <div class="carousel-title">{{ item.title }}
-      </div>
+      />
+      <div class="carousel-title">{{ item.title }}</div>
     </el-carousel-item>
   </el-carousel>
 </template>
 
 <script>
+import { GetCarouselsList } from "@/api/carousel";
 export default {
   name: "CarouselCard",
-  props: {
-    carousels: {
-      type: Array,
-      default: () => []
-    }
+  data: () => ({
+    carousels: []
+  }),
+  created() {
+    this.getData();
   },
-  data: () => ({})
+  methods: {
+    getData() {
+      GetCarouselsList({ order: "desc", state: "published" }).then(res => {
+        this.carousels = res.data;
+      });
+    }
+  }
 };
 </script>
 
@@ -37,8 +36,8 @@ export default {
 
 <style lang="scss" scoped>
 .carousel-card {
-  width: 900px;
-  height: 506px;
+  width: 1000px;
+  height: 562px;
   border-radius: 5px;
   margin: 1rem;
 

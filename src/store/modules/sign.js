@@ -17,7 +17,13 @@ const state = {
     "形容词/副词",
     "形容词",
     "疑问代词"
-  ]
+  ],
+  newsTypes: {
+    news: { icon: "news", name: "新闻动态" },
+    activity: { icon: "activity", name: "学术活动" },
+    notice: { icon: "notice", name: "通知公告" },
+    research: { icon: "research", name: "科研动态" }
+  }
 };
 
 const mutations = {};

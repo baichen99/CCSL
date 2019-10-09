@@ -27,12 +27,12 @@ func NewNewsService(pg *gorm.DB) NewsInterface {
 
 func (s *NewsService) GetNewsList(parameters utils.GetNewsListParameters) (news []models.News, count int, err error) {
 	db := s.PG.Scopes(
-		utils.FilterByColumn("language", parameters.Language),
-		utils.FilterByColumn("type", parameters.Type),
-		utils.FilterByColumn("column", parameters.Column),
-		utils.SearchByColumn("title", parameters.Title),
-		utils.SearchByColumn("text", parameters.Text),
-		utils.FilterByColumn("state", parameters.State),
+		utils.FilterByColumn("news.language", parameters.Language),
+		utils.FilterByColumn("news.type", parameters.Type),
+		utils.FilterByColumn("news.column", parameters.Column),
+		utils.SearchByColumn("news.title", parameters.Title),
+		utils.SearchByColumn("news.text", parameters.Text),
+		utils.FilterByColumn("news.state", parameters.State),
 	)
 	err = db.Model(&news).Count(&count).Error
 	orderQuery := parameters.OrderBy + " " + parameters.Order
@@ -40,15 +40,15 @@ func (s *NewsService) GetNewsList(parameters utils.GetNewsListParameters) (news 
 		return
 	}
 	if parameters.Limit != 0 {
-		err = db.Order(orderQuery).Limit(parameters.Limit).Offset(parameters.Limit * (parameters.Page - 1)).Find(&news).Error
+		err = db.Preload("Creator").Order("importance desc").Order(orderQuery).Limit(parameters.Limit).Offset(parameters.Limit * (parameters.Page - 1)).Find(&news).Error
 	} else {
-		err = db.Order(orderQuery).Find(&news).Error
+		err = db.Preload("Creator").Order("importance desc").Order(orderQuery).Find(&news).Error
 	}
 	return
 }
 
 func (s *NewsService) GetNews(newsID string) (news models.News, err error) {
-	err = s.PG.Where("id = ?", newsID).Take(&news).Error
+	err = s.PG.Preload("Creator").Where("id = ?", newsID).Take(&news).Error
 	return
 }
 

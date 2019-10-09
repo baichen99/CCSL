@@ -29,9 +29,9 @@ func (s *PerformerService) GetPerformersList(parameters utils.GetPerformerListPa
 
 	// Adding custom scopes to the query based on get list parameters.
 	db := s.PG.Scopes(
-		utils.FilterByColumn("gender", parameters.Gender),
-		utils.SearchByColumn("region", parameters.Region),
-		utils.SearchByColumn("name", parameters.Name),
+		utils.FilterByColumn("performers.gender", parameters.Gender),
+		utils.SearchByColumn("performers.region", parameters.Region),
+		utils.SearchByColumn("performers.name", parameters.Name),
 	)
 
 	// Fetching the total number of rows based on the conditions provided.

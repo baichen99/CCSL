@@ -36,12 +36,14 @@ func (c *UserController) GetUsersList() {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "order only accepts 'asc' or 'desc'", err)
 		return
 	}
-	userType := c.Context.URLParamDefault("type", "")
-	searchName := c.Context.URLParamDefault("search", "")
+	userType := c.Context.URLParamDefault("userType", "")
+	name := c.Context.URLParamDefault("name", "")
+	username := c.Context.URLParamDefault("username", "")
 	listParameters := utils.GetUserListParameters{
 		GetListParameters: listParams,
 		UserType:          userType,
-		SearchName:        searchName,
+		Username:          username,
+		Name:              name,
 	}
 	users, count, err := c.UserService.GetUsersList(listParameters)
 	if err != nil {

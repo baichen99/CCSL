@@ -2,44 +2,67 @@
   <div class="news-card">
     <el-card shadow="hover">
       <div slot="header">
-        <span :class="['iconfont','icon-'+(icon+1)] " />
-        <span class="list-title">{{ list.title }}</span>
-        <el-link
-          class="list-more"
-          type="primary"
-        >
-          更多
-        </el-link>
+        <svg-icon :icon-class="icon" />
+        <span class="news-header">{{ title }}</span>
+        <el-link class="news-more" type="primary" @click="showList(column)">更多</el-link>
       </div>
-      <div
-        v-for="item in list.content"
-        :key="item.title"
-        class="list-content"
-      >
+      <div v-for="item in news" :key="item.id" class="news-content">
         <i class="dot">&bull;</i>
-        <el-link class="list-desc">
-          {{ item.title }}
-        </el-link>
-        <div class="list-time">{{ item.time }}</div>
+        <el-link class="news-title" @click="showDetail(item)">{{ item.title }}</el-link>
+        <div class="news-date">{{ $d(new Date(item.date),'short') }}</div>
       </div>
     </el-card>
   </div>
 </template>
 
 <script>
+import { GetNewsList } from "@/api/news";
 export default {
   name: "NewsCard",
   props: {
-    list: {
-      type: Object,
-      default: () => ({
-        title: "",
-        content: []
-      })
-    },
     icon: {
-      type: Number,
-      default: 0
+      type: String,
+      required: true
+    },
+    column: {
+      type: String,
+      required: true
+    },
+    title: {
+      type: String,
+      required: true
+    }
+  },
+  data() {
+    return {
+      news: []
+    };
+  },
+  created() {
+    this.getList();
+  },
+  methods: {
+    getList() {
+      const params = {
+        column: this.column,
+        language: "zh-CN",
+        order: "desc",
+        state: "published",
+        limit: 5
+      };
+      GetNewsList(params).then(res => {
+        this.news = res.data;
+      });
+    },
+    showDetail(item) {
+      if (item.type === "link") {
+        window.open(item.text);
+      } else if (item.type === "document") {
+        this.$router.push({ path: `/news-detail/${item.id}` });
+      }
+    },
+    showList(column) {
+      this.$router.push({ path: `/news-list/${column}` });
     }
   }
 };
@@ -51,34 +74,35 @@ export default {
 @import "@/styles/element-variables.scss";
 .news-card {
   .el-card {
-    margin: 1rem 0;
-    width: 430px;
-    .list-title {
+    margin: 10px;
+    min-width: 500px;
+    .news-header {
       font-weight: bolder;
       color: $--color-primary;
     }
-    .list-more {
+    .news-more {
       float: right;
       padding: 3px 0;
     }
-    .iconfont {
-      color: $--color-primary;
-      padding-right: 1.2rem;
+    .svg-icon {
+      fill: $--color-primary;
+      margin-right: 1.2rem;
+      font-size: 1.2rem;
     }
 
-    .list-content {
+    .news-content {
       padding: 0.3rem;
     }
     .dot {
       color: #2363c3;
       padding: 0.2rem;
     }
-    .list-desc {
+    .news-title {
       display: inline-block;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      max-width: 260px;
+      max-width: 310px;
       font-size: 1rem;
       // font-weight: normal;
 
@@ -86,8 +110,7 @@ export default {
       //   width: 50vw;
       // }
     }
-
-    .list-time {
+    .news-date {
       float: right;
       color: #a0a0a0;
       height: 100%;

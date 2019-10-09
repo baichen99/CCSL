@@ -1,26 +1,15 @@
 <template>
-  <el-card
-    class="sign-search"
-    shadow="hover"
-  >
+  <el-card class="sign-search" shadow="hover">
     <h3 class="title">手形检索</h3>
     <div class="sign">
-      <div
-        v-for="item in signs"
-        :key="item.id"
-        class="sign-box"
-      >
-        <el-tooltip
-          effect="dark"
-          :content="item.name"
-          placement="top"
-        >
+      <div v-for="item in signs" :key="item.id" class="sign-box">
+        <el-tooltip effect="dark" :content="item.name" placement="top">
           <img
             style="width:100%"
             :src="'https://ccsl.shu.edu.cn/public/'+item.image"
             :alt="item.name"
             @click="onSignSelected(item.id)"
-          >
+          />
         </el-tooltip>
       </div>
     </div>

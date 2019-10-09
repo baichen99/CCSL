@@ -36,15 +36,15 @@ func (s *CarouselService) GetCarouselList(parameters utils.GetCarouselListParame
 		return
 	}
 	if parameters.Limit != 0 {
-		err = db.Order("importance desc").Order(orderQuery).Limit(parameters.Limit).Offset(parameters.Limit * (parameters.Page - 1)).Find(&carousels).Error
+		err = db.Preload("Creator").Order("importance desc").Order(orderQuery).Limit(parameters.Limit).Offset(parameters.Limit * (parameters.Page - 1)).Find(&carousels).Error
 	} else {
-		err = db.Order("importance desc").Order(orderQuery).Find(&carousels).Error
+		err = db.Preload("Creator").Order("importance desc").Order(orderQuery).Find(&carousels).Error
 	}
 	return
 }
 
 func (s *CarouselService) GetCarousel(carouselID string) (carousel models.Carousel, err error) {
-	err = s.PG.Where("id = ?", carouselID).Take(&carousel).Error
+	err = s.PG.Preload("Creator").Where("id = ?", carouselID).Take(&carousel).Model(&carousel).Related(&carousel.Creator).Find(&carousel.Creator).Error
 	return
 }
 

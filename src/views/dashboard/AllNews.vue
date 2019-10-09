@@ -1,114 +1,55 @@
 <template>
   <div class="app-container flex-column">
-
     <div class="table-toolbar">
       <el-input
         v-model="params.title"
         prefix-icon="el-icon-search"
-        placeholder="请输入标题以查找"
+        placeholder="请输入标题"
         clearable
         @clear="handleSearch"
       />
-      <language-selector
-        v-model="params.language"
-        @clear="handleSearch"
-      />
-      <news-state-selector
-        v-model="params.state"
-        @clear="handleSearch"
-      />
-      <news-type-selector
-        v-model="params.type"
-        @clear="handleSearch"
-      />
-      <news-column-selector
-        v-model="params.column"
-        @clear="handleSearch"
-      />
-      <el-button
-        type="primary"
-        plain
-        @click="handleSearch"
-      >查找</el-button>
-      <el-button
-        type="primary"
-        plain
-        @click="handleCreate"
-      >增加</el-button>
+      <language-selector v-model="params.language" @clear="handleSearch" />
+      <news-state-selector v-model="params.state" @clear="handleSearch" />
+      <news-type-selector v-model="params.type" @clear="handleSearch" />
+      <news-column-selector v-model="params.column" @clear="handleSearch" />
+      <el-button type="primary" plain @click="handleSearch">查找</el-button>
+      <el-button type="primary" plain @click="handleNew">增加</el-button>
     </div>
 
     <div class="table-content">
-      <el-table
-        v-loading="loading"
-        :data="list"
-        stripe
-        border
-      >
-        <el-table-column
-          label="创建时间"
-          align="center"
-          width="180px"
-        >
+      <el-table v-loading="loading" :data="list" stripe border>
+        <el-table-column label="日期" align="center" width="150px">
           <template slot-scope="{row}">
-            <span>{{ $d(new Date(row.createdAt), 'long') }}</span>
+            <span>{{ $d(new Date(row.date), 'short') }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column
-          label="上次更新"
-          align="center"
-          width="180px"
-        >
+        <el-table-column label="发布人" align="center" width="100px">
           <template slot-scope="{row}">
-            <span>{{ $d(new Date(row.updatedAt), 'long') }}</span>
+            <span>{{ row.creator.name }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column
-          label="重要性"
-          align="center"
-          width="150px"
-        >
+        <el-table-column label="重要性" align="center" width="150px">
           <template slot-scope="{row}">
-            <el-rate
-              v-model="row.importance"
-              disabled
-            />
+            <el-rate v-model="row.importance" disabled />
           </template>
         </el-table-column>
 
-        <el-table-column
-          label="状态"
-          align="center"
-          width="100px"
-        >
+        <el-table-column label="状态" align="center" width="100px">
           <template slot-scope="{row}">
-            <el-tag
-              v-if="row.state==='published'"
-              type="success"
-            >发布</el-tag>
-            <el-tag
-              v-if="row.state==='draft'"
-              type="info"
-            >草稿</el-tag>
+            <el-tag v-if="row.state==='published'" type="success">发布</el-tag>
+            <el-tag v-if="row.state==='draft'" type="warning">草稿</el-tag>
           </template>
         </el-table-column>
 
-        <el-table-column
-          label="新闻标题"
-          align="center"
-        >
+        <el-table-column label="新闻标题" align="center" min-width="300px">
           <template slot-scope="{row}">
             <span>{{ row.title }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column
-          label="操作"
-          align="center"
-          width="250px"
-          fixed="right"
-        >
+        <el-table-column label="操作" align="center" width="250px" fixed="right">
           <template slot-scope="{row}">
             <el-button
               v-if="row.state==='draft'"
@@ -119,23 +60,13 @@
             >发布</el-button>
             <el-button
               v-if="row.state==='published'"
-              type="info"
+              type="warning"
               size="mini"
               plain
               @click="handleDraft(row.id)"
             >撤回</el-button>
-            <el-button
-              type="primary"
-              size="mini"
-              plain
-              @click="handleEdit(row)"
-            >编辑</el-button>
-            <el-button
-              type="danger"
-              size="mini"
-              plain
-              @click="handleDelete(row.id)"
-            >删除</el-button>
+            <el-button type="primary" size="mini" plain @click="handleEdit(row)">编辑</el-button>
+            <el-button type="danger" size="mini" plain @click="handleDelete(row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -160,10 +91,7 @@
       direction="rtl"
     >
       <div class="form-drawer__content">
-        <news-form
-          :data="originalData"
-          :mode="mode"
-        />
+        <news-form ref="form" :data="data" :mode="mode" />
         <div class="form-drawer__footer">
           <el-button @click="handleClose">取 消</el-button>
           <el-button
@@ -175,7 +103,6 @@
         </div>
       </div>
     </el-drawer>
-
   </div>
 </template>
 
@@ -201,6 +128,7 @@ export default {
   data() {
     return {
       params: {
+        order: "desc",
         title: "",
         type: "",
         column: "",
@@ -222,25 +150,26 @@ export default {
           this.loading = false;
         });
     },
-    checkData() {
-      if (
-        !this.originalData.title ||
-        !this.originalData.type ||
-        !this.originalData.state ||
-        !this.originalData.column ||
-        !this.originalData.language
-      ) {
-        this.$message({
-          type: "warning",
-          message: "请填写完整信息"
+    handleCreate(data) {
+      CreateNews(data)
+        .then(() => {
+          this.handleModify();
+        })
+        .catch(() => {
+          this.loading = false;
         });
-        return false;
-      } else {
-        this.originalData.title = this.originalData.title.trim();
-        return true;
-      }
+    },
+    handleUpdate(id, updateData) {
+      UpdateNews(id, updateData)
+        .then(() => {
+          this.handleModify();
+        })
+        .catch(() => {
+          this.loading = false;
+        });
     },
     handleDelete(id) {
+      this.loading = true;
       this.$confirm(
         "此操作将永久删除, 如果想暂时不显示请选择撤回, 是否继续?",
         "警告",
@@ -252,47 +181,12 @@ export default {
       )
         .then(() => {
           DeleteNews(id).then(() => {
-            this.$message({
-              type: "success",
-              message: "操作成功"
-            });
-            this.handleSearch();
+            this.handleModify();
           });
         })
         .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消操作"
-          });
+          this.showCancel();
         });
-    },
-    handleSave() {
-      this.loading = true;
-      if (this.mode === "edit") {
-        const updateData = this.makeUpdatedData();
-        this.handleUpdate(this.data.id, updateData);
-      } else if (this.mode === "create") {
-        if (this.checkData()) {
-          CreateNews(this.originalData)
-            .then(() => {
-              this.$message({
-                type: "success",
-                message: "操作成功"
-              });
-              this.handleSearch();
-              this.loading = false;
-            })
-            .catch(() => {
-              this.loading = false;
-            });
-        } else {
-          this.loading = false;
-          return;
-        }
-      } else {
-        console.error("NO AVALIABLE OPERATION");
-      }
-      this.handleClose();
     },
     handlePublish(id) {
       const updateData = { state: "published" };
@@ -301,20 +195,6 @@ export default {
     handleDraft(id) {
       const updateData = { state: "draft" };
       this.handleUpdate(id, updateData);
-    },
-    handleUpdate(id, updateData) {
-      UpdateNews(id, updateData)
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "操作成功"
-          });
-          this.handleSearch();
-          this.loading = false;
-        })
-        .catch(() => {
-          this.loading = false;
-        });
     }
   }
 };
