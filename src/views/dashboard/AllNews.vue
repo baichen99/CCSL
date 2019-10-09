@@ -43,6 +43,12 @@
           </template>
         </el-table-column>
 
+        <el-table-column label="新闻栏目" align="center" width="120px">
+          <template slot-scope="{row}">
+            <span>{{ newsTypes[row.column].name }}</span>
+          </template>
+        </el-table-column>
+
         <el-table-column label="新闻标题" align="center" min-width="300px">
           <template slot-scope="{row}">
             <span>{{ row.title }}</span>
@@ -107,6 +113,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import NewsForm from "@/views/dashboard/form/NewsForm";
 import NewsStateSelector from "@/components/form/NewsStateSelector";
 import NewsTypeSelector from "@/components/form/NewsTypeSelector";
@@ -137,6 +144,7 @@ export default {
       }
     };
   },
+  computed: { ...mapGetters(["newsTypes"]) },
   methods: {
     getList() {
       this.loading = true;

@@ -28,7 +28,7 @@ func (c *NewsController) BeforeActivation(app mvc.BeforeActivation) {
 // GetNewsList returns news list
 func (c *NewsController) GetNewsList() {
 	defer c.Context.Next()
-	listParams, err := utils.GetListParamsFromContext(c.Context, "created_at")
+	listParams, err := utils.GetListParamsFromContext(c.Context, "news.date")
 	if err != nil {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "order only accepts 'asc' or 'desc'", err)
 		return

@@ -31,7 +31,7 @@ func (c *UserController) BeforeActivation(app mvc.BeforeActivation) {
 // GetUsersList GET /users
 func (c *UserController) GetUsersList() {
 	defer c.Context.Next()
-	listParams, err := utils.GetListParamsFromContext(c.Context, "username")
+	listParams, err := utils.GetListParamsFromContext(c.Context, "users.username")
 	if err != nil {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "order only accepts 'asc' or 'desc'", err)
 		return

@@ -25,7 +25,7 @@ func (c *MemberController) BeforeActivation(app mvc.BeforeActivation) {
 
 func (c *MemberController) GetMemberList() {
 	defer c.Context.Next()
-	listParams, err := utils.GetListParamsFromContext(c.Context, "created_at")
+	listParams, err := utils.GetListParamsFromContext(c.Context, "members.created_at")
 	if err != nil {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "order only accepts 'asc' or 'desc'", err)
 	}

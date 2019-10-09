@@ -27,7 +27,7 @@ func (c *PerformerController) BeforeActivation(app mvc.BeforeActivation) {
 // GetPerformersList GET /performers
 func (c *PerformerController) GetPerformersList() {
 	defer c.Context.Next()
-	listParams, err := utils.GetListParamsFromContext(c.Context, "region")
+	listParams, err := utils.GetListParamsFromContext(c.Context, "performers.region")
 	if err != nil {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "order only accepts 'asc' or 'desc'", err)
 		return

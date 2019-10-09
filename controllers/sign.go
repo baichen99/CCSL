@@ -27,7 +27,7 @@ func (c *SignController) BeforeActivation(app mvc.BeforeActivation) {
 // GetSignsList GET /signs
 func (c *SignController) GetSignsList() {
 	defer c.Context.Next()
-	listParams, err := utils.GetListParamsFromContext(c.Context, "name")
+	listParams, err := utils.GetListParamsFromContext(c.Context, "signs.name")
 	if err != nil {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "order only accepts 'asc' or 'desc'", err)
 		return

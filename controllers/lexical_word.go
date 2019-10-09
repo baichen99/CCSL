@@ -27,7 +27,7 @@ func (c *WordController) BeforeActivation(app mvc.BeforeActivation) {
 // GetWordsList GET /lexical/words
 func (c *WordController) GetWordsList() {
 	defer c.Context.Next()
-	listParams, err := utils.GetListParamsFromContext(c.Context, "initial")
+	listParams, err := utils.GetListParamsFromContext(c.Context, "lexical_words.initial")
 	if err != nil {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "order only accepts 'asc' or 'desc'", err)
 		return
