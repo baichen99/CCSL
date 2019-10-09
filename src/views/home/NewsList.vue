@@ -6,7 +6,7 @@
     </div>
 
     <div class="list-content">
-      <div v-for="item in list" :key="item.id">
+      <div v-for="item in list" :key="item.id" class="news-item">
         <i class="dot">&bull;</i>
         <el-link class="news-title" @click="showDetail(item)">{{ item.title }}</el-link>
         <span class="news-date">{{ $d(new Date(item.date),'short') }}</span>
@@ -83,23 +83,27 @@ export default {
     }
   }
   .list-content {
-    .dot {
-      color: $--color-primary;
+    .news-item {
+      line-height: 1.2rem;
       padding: 0.2rem;
-    }
-    .el-link {
-      display: inline-block;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      max-width: 500px;
-      font-size: 1.1rem;
-    }
+      .dot {
+        color: $--color-primary;
+        padding: 0.2rem;
+      }
+      .el-link {
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 650px;
+        font-size: 1.1rem;
+      }
 
-    .news-date {
-      float: right;
-      color: #a0a0a0;
-      padding-top: 0.2rem;
+      .news-date {
+        float: right;
+        color: #a0a0a0;
+        padding-top: 0.2rem;
+      }
     }
   }
   .el-pagination {
