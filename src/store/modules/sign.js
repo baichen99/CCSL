@@ -18,11 +18,17 @@ const state = {
     "形容词",
     "疑问代词"
   ],
-  newsTypes: {
-    news: { icon: "news", name: "新闻动态" },
-    activity: { icon: "activity", name: "学术活动" },
-    notice: { icon: "notice", name: "通知公告" },
-    research: { icon: "research", name: "科研动态" }
+  newsColumns: {
+    news: { icon: "news", name: "新闻动态", value: "news" },
+    activity: { icon: "activity", name: "学术活动", value: "activity" },
+    notice: { icon: "notice", name: "通知公告", value: "notice" },
+    research: { icon: "research", name: "科研动态", value: "research" }
+  },
+  userTypes: {
+    super: { name: "超级管理员", color: "danger" },
+    admin: { name: "普通管理员", color: "warning" },
+    learner: { name: "学习平台用户", color: "info" },
+    user: { name: "语料库用户", color: "" }
   }
 };
 

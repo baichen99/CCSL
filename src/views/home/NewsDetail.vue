@@ -4,7 +4,7 @@
       <div class="news-header">
         <h2 class="news-title">{{ data.title }}</h2>
         <el-divider>
-          <svg-icon :icon-class="data.column" />
+          <svg-icon v-if="data.column" :icon-class="data.column" />
         </el-divider>
         <span v-if="data.date">发布日期： {{ $d(new Date(data.date),"short") }}</span>
         <span>发布人：{{ data.creator.name }}</span>
@@ -39,7 +39,6 @@ export default {
       const newsID = this.$route.params.id;
       GetNews(newsID).then(res => {
         this.data = res.data;
-        console.log(this.data);
       });
     }
   }
@@ -55,6 +54,7 @@ export default {
     text-align: center;
     .news-title {
       color: $--color-primary;
+      margin: 20px 100px;
     }
     svg {
       font-size: 25px;

@@ -23,10 +23,12 @@ func (c *RootController) Get() {
 		panic(err)
 	}
 	versionFile := workPath + "/configs/.version"
+	ipAddress := c.Context.GetHeader("X-Forwarded-For")
 	ver, _ := ioutil.ReadFile(versionFile)
 	c.Context.JSON(iris.Map{
 		message:  hello,
 		language: lang,
 		version:  strings.Replace(string(ver), "\n", "", -1),
+		"ip":     ipAddress,
 	})
 }

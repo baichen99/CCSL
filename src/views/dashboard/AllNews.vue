@@ -45,7 +45,7 @@
 
         <el-table-column label="新闻栏目" align="center" width="120px">
           <template slot-scope="{row}">
-            <span>{{ newsTypes[row.column].name }}</span>
+            <span>{{ newsColumns[row.column].name }}</span>
           </template>
         </el-table-column>
 
@@ -144,7 +144,7 @@ export default {
       }
     };
   },
-  computed: { ...mapGetters(["newsTypes"]) },
+  computed: { ...mapGetters(["newsColumns"]) },
   methods: {
     getList() {
       this.loading = true;

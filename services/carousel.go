@@ -27,8 +27,8 @@ func NewCarouselService(pg *gorm.DB) CarouselInterface {
 
 func (s *CarouselService) GetCarouselList(parameters utils.GetCarouselListParameters) (carousels []models.Carousel, count int, err error) {
 	db := s.PG.Scopes(
-		utils.SearchByColumn("title", parameters.Title),
-		utils.FilterByColumn("state", parameters.State),
+		utils.SearchByColumn("carousels.title", parameters.Title),
+		utils.FilterByColumn("carousels.state", parameters.State),
 	)
 	err = db.Model(&carousels).Count(&count).Error
 	orderQuery := parameters.OrderBy + " " + parameters.Order

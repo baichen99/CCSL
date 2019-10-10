@@ -1,7 +1,7 @@
 <template>
   <header>
     <div>
-      <div>
+      <div class="header-logo" @click="$router.push('/')">
         <svg-icon icon-class="logo" class="logo" />
         <div class="title">
           <span>中国手语及聋人研究中心</span>
@@ -82,6 +82,11 @@ export default {
       }
     }
   },
+  watch: {
+    "$route.path"() {
+      this.setActiveMenu();
+    }
+  },
   created() {
     this.setActiveMenu();
   },
@@ -104,6 +109,10 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    .header-logo {
+      cursor: pointer;
+    }
 
     // img {
     //   @media only screen and (max-device-width: 480px) {

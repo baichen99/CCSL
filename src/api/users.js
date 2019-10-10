@@ -17,18 +17,18 @@ export function RefreshToken() {
   });
 }
 
+export function GetUser(id) {
+  return request({
+    url: `${baseURL}/${id}`,
+    method: "get"
+  });
+}
+
 export function GetUsersList(params) {
   return request({
     url: baseURL,
     method: "get",
     params
-  });
-}
-
-export function GetUser(userID) {
-  return request({
-    url: `${baseURL}/${userID}`,
-    method: "get"
   });
 }
 

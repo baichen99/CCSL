@@ -77,7 +77,7 @@ func FilterByArray(columnName string, value string, escape string) func(db *gorm
 	return func(db *gorm.DB) *gorm.DB {
 		// SQL select in array: SELCET * FROM column_name WHERE value = ANY(string_to_array(query,','))
 		if value != "" {
-			query := fmt.Sprintf("? = ANY(string_to_array(%s),'%s'))", columnName, escape)
+			query := fmt.Sprintf("? = ANY(string_to_array(%s,'%s'))", columnName, escape)
 			return db.Where(query, value)
 		}
 		return db

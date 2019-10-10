@@ -12,7 +12,7 @@ const state = {
   token: getToken(),
   name: "",
   username: "",
-  avatar: "https://axiom-public.axiomacademy.cn/static/default.png",
+  avatar: "https://ccsl.shu.edu.cn/public/assets/default.png",
   id: "",
   roles: []
 };

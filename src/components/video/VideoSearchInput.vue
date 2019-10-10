@@ -14,14 +14,8 @@
         placeholder="请选择"
         style="width:110px"
       >
-        <el-option
-          label="中文"
-          value="chinese"
-        />
-        <el-option
-          label="English"
-          value="english"
-        />
+        <el-option label="中文" value="chinese" />
+        <el-option label="English" value="english" />
       </el-select>
       <i
         v-if="!advancedSearch && showAdvance"
@@ -47,63 +41,14 @@
     </el-input>
 
     <el-collapse-transition>
-      <el-card
-        v-if="advancedSearch && showAdvance"
-        shadow="never"
-        class="advance"
-      >
+      <el-card v-if="advancedSearch && showAdvance" shadow="never" class="advance">
         <div class="search-options">
-          <el-select
-            v-model="searchParams.gender"
-            clearable
-            placeholder="请选择性别"
-          >
-            <el-option
-              label="男"
-              value="男"
-            />
-            <el-option
-              label="女"
-              value="女"
-            />
-          </el-select>
-
-          <sign-selector
-            v-model="searchParams.leftSign"
-            orientation="left"
-          />
-          <sign-selector
-            v-model="searchParams.rightSign"
-            orientation="right"
-          />
-
-          <el-select
-            v-model="searchParams.pos"
-            clearable
-            placeholder="请选择词性"
-          >
-            <el-option
-              v-for="(item,index) in $store.getters.wordTypes"
-              :key="index"
-              :label="item"
-              :value="item"
-            />
-          </el-select>
+          <gender-selector v-model="searchParams.gender" />
+          <sign-selector v-model="searchParams.leftSign" orientation="left" />
+          <sign-selector v-model="searchParams.rightSign" orientation="right" />
+          <word-pos-selector v-model="searchParams.pos" />
           <city-selector v-model="searchParams.region" />
-          <el-select
-            v-model="searchParams.constructType"
-            clearable
-            placeholder="请选择构词方式"
-          >
-            <el-option
-              label="单纯词"
-              value="单纯词"
-            />
-            <el-option
-              label="复合词"
-              value="复合词"
-            />
-          </el-select>
+          <word-construct-selector v-model="searchParams.constructType" />
           <el-input
             v-model="searchParams.constructWords"
             clearable
@@ -119,11 +64,18 @@
 <script>
 import SignSelector from "@/components/form/SignSelector.vue";
 import CitySelector from "@/components/form/CitySelector.vue";
+import GenderSelector from "@/components/form/GenderSelector.vue";
+import WordPosSelector from "@/components/form/WordPosSelector.vue";
+import WordConstructSelector from "@/components/form/WordConstructSelector.vue";
+
 export default {
   name: "VideoSearchInput",
   components: {
     CitySelector,
-    SignSelector
+    SignSelector,
+    GenderSelector,
+    WordPosSelector,
+    WordConstructSelector
   },
   model: {
     prop: "params",

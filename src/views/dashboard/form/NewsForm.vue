@@ -21,12 +21,12 @@
       <date-picker v-model="formData.date" />
     </el-form-item>
 
-    <el-form-item label="新闻类型" prop="type" required>
-      <news-type-selector v-model="formData.type" />
-    </el-form-item>
-
     <el-form-item label="新闻栏目" prop="column" required>
       <news-column-selector v-model="formData.column" />
+    </el-form-item>
+
+    <el-form-item label="新闻类型" prop="type" required>
+      <news-type-selector v-model="formData.type" />
     </el-form-item>
 
     <el-form-item v-if="formData.type==='document'" label="新闻内容" required>

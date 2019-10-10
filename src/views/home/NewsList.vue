@@ -85,7 +85,7 @@ export default {
   .list-content {
     .news-item {
       line-height: 1.2rem;
-      padding: 0.2rem;
+      padding: 0.5rem;
       .dot {
         color: $--color-primary;
         padding: 0.2rem;

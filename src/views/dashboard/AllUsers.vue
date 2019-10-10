@@ -95,6 +95,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import UserForm from "@/views/dashboard/form/UserForm";
 import UserTypeSelector from "@/components/form/UserTypeSelector";
 import listMixin from "./listMixin";
@@ -112,15 +113,10 @@ export default {
         username: "",
         name: "",
         userType: ""
-      },
-      userTypes: {
-        super: { name: "超级管理员", color: "danger" },
-        admin: { name: "普通管理员", color: "warning" },
-        learner: { name: "学习平台用户", color: "info" },
-        user: { name: "语料库用户", color: "" }
       }
     };
   },
+  computed: { ...mapGetters(["userTypes"]) },
   methods: {
     getList() {
       this.loading = true;

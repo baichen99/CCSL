@@ -1,13 +1,17 @@
 <template>
-  <el-select v-model="data" placeholder="请选择新闻栏目" clearable @clear="$emit('clear')">
-    <el-option v-for="(item,key) in newsColumns" :key="key" :label="item.name" :value="item.value" />
+  <el-select v-model="data" placeholder="请选择词性" clearable @clear="$emit('clear')">
+    <el-option
+      v-for="(item,index) in $store.getters.wordTypes"
+      :key="index"
+      :label="item"
+      :value="item"
+    />
   </el-select>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 export default {
-  name: "NewsColumnSelector",
+  name: "WordPosSelector",
   model: {
     prop: "value",
     event: "update"
@@ -19,7 +23,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["newsColumns"]),
     data: {
       get() {
         return this.value;

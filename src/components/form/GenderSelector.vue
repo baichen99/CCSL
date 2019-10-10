@@ -1,13 +1,12 @@
 <template>
-  <el-select v-model="data" placeholder="请选择新闻栏目" clearable @clear="$emit('clear')">
-    <el-option v-for="(item,key) in newsColumns" :key="key" :label="item.name" :value="item.value" />
+  <el-select v-model="data" placeholder="请选择性别" clearable @clear="$emit('clear')">
+    <el-option v-for="(item,index) in options" :key="index" :label="item" :value="item" />
   </el-select>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 export default {
-  name: "NewsColumnSelector",
+  name: "GenderSelector",
   model: {
     prop: "value",
     event: "update"
@@ -18,8 +17,12 @@ export default {
       default: () => ""
     }
   },
+  data() {
+    return {
+      options: ["男", "女"]
+    };
+  },
   computed: {
-    ...mapGetters(["newsColumns"]),
     data: {
       get() {
         return this.value;
