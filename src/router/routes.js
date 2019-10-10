@@ -119,12 +119,29 @@ const routes = [
       {
         path: "/users-setting",
         name: "Users",
-        component: () => import("@/views/dashboard/AllUsers"),
+        component: () => import("@/views/dashboard/Users"),
         meta: {
           title: "用户管理",
           icon: "user",
           auth: true,
           roles: [superUser]
+        }
+      }
+    ]
+  },
+  {
+    path: "/performers-setting",
+    component: AdminLayout,
+    children: [
+      {
+        path: "/performers-setting",
+        name: "Performers",
+        component: () => import("@/views/dashboard/Performers"),
+        meta: {
+          title: "被试管理",
+          icon: "peoples",
+          auth: true,
+          roles: [superUser, adminUser]
         }
       }
     ]
@@ -142,7 +159,7 @@ const routes = [
       {
         path: "carousels-setting",
         name: "Carousels",
-        component: () => import("@/views/dashboard/AllCarousels"),
+        component: () => import("@/views/dashboard/Carousels"),
         meta: {
           title: "轮播图片管理",
           icon: "pictures",
@@ -153,7 +170,7 @@ const routes = [
       {
         path: "news-setting",
         name: "News",
-        component: () => import("@/views/dashboard/AllNews"),
+        component: () => import("@/views/dashboard/News"),
         meta: {
           title: "网站新闻管理",
           icon: "news",
@@ -176,7 +193,7 @@ const routes = [
       {
         path: "words",
         name: "LexicalWords",
-        component: () => import("@/views/dashboard/AllLexicalWords"),
+        component: () => import("@/views/dashboard/LexicalWords"),
         meta: {
           title: "词表管理",
           icon: "words",
@@ -187,7 +204,7 @@ const routes = [
       {
         path: "videos",
         name: "LexicalVideos",
-        component: () => import("@/views/dashboard/AllLexicalVideos"),
+        component: () => import("@/views/dashboard/LexicalVideos"),
         meta: {
           title: "视频管理",
           icon: "video",
@@ -198,7 +215,7 @@ const routes = [
       {
         path: "signs",
         name: "Signs",
-        component: () => import("@/views/dashboard/AllSigns"),
+        component: () => import("@/views/dashboard/Signs"),
         meta: {
           title: "手形管理",
           icon: "sign",

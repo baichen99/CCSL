@@ -2,43 +2,52 @@
   <div class="app-container">
     <div class="table-toolbar">
       <el-input
-        v-model="params.name"
+        v-model="params.chinese"
         prefix-icon="el-icon-search"
-        placeholder="请输入名称"
+        placeholder="请输入中文"
         clearable
         @clear="handleSearch"
       />
+      <el-input
+        v-model="params.english"
+        prefix-icon="el-icon-search"
+        placeholder="请输入英文"
+        clearable
+        @clear="handleSearch"
+      />
+      <word-pos-selector v-model="params.pos" @clear="handleSearch" />
+      <word-initial-selector v-model="params.initial" @clear="handleSearch" />
       <el-button type="primary" plain @click="handleSearch">查找</el-button>
       <el-button type="primary" plain @click="handleNew">增加</el-button>
     </div>
 
     <div class="table-content">
       <el-table v-loading="loading" :data="list" stripe border>
-        <el-table-column label="创建时间" align="center">
+        <el-table-column label="音序" align="center" width="150px">
           <template slot-scope="{row}">
-            <span>{{ $d(new Date(row.createdAt), 'long') }}</span>
+            <span>{{ row.initial }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="上次更新" align="center">
+        <el-table-column label="词性" align="center" min-width="100px">
           <template slot-scope="{row}">
-            <span>{{ $d(new Date(row.updatedAt), 'long') }}</span>
+            <span>{{ row.pos }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="手形名称" align="center">
+        <el-table-column label="汉语转写" align="center" min-width="200px">
           <template slot-scope="{row}">
-            <el-tag>{{ row.name }}</el-tag>
+            <span>{{ row.chinese }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="手形图片" align="center">
+        <el-table-column label="英语转写" align="center" min-width="200px">
           <template slot-scope="{row}">
-            <img :src="'https://ccsl.shu.edu.cn/public/'+row.image" alt="sign" style="height:50px" />
+            <span>{{ row.english }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="操作" align="center">
+        <el-table-column label="操作" align="center" width="200px" fixed="right">
           <template slot-scope="{row}">
             <el-button type="primary" size="mini" plain @click="handleEdit(row)">编辑</el-button>
             <el-button type="danger" size="mini" plain @click="handleDelete(row.id)">删除</el-button>
@@ -58,7 +67,7 @@
 
     <el-drawer
       ref="drawer"
-      size="60%"
+      size="30%"
       :before-close="handleClose"
       :show-close="false"
       :destroy-on-close="true"
@@ -66,7 +75,7 @@
       direction="rtl"
     >
       <div class="form-drawer__content">
-        <sign-form ref="form" :data="data" :mode="mode" />
+        <lexical-word-form ref="form" :data="data" :mode="mode" />
         <div class="form-drawer__footer">
           <el-button @click="handleClose">取 消</el-button>
           <el-button
@@ -82,28 +91,40 @@
 </template>
 
 <script>
-import SignForm from "@/views/dashboard/form/SignForm";
+import LexicalWordForm from "@/views/dashboard/form/LexicalWordForm";
+import WordPosSelector from "@/components/form/WordPosSelector";
+import WordInitialSelector from "@/components/form/WordInitialSelector";
 import listMixin from "./listMixin";
-import { GetSignsList, DeleteSign, CreateSign, UpdateSign } from "@/api/signs";
+import {
+  GetLexicalWordsList,
+  CreateLexicalWord,
+  UpdateLexicalWord,
+  DeleteLexicalWord
+} from "@/api/words";
 
 export default {
-  name: "AllSigns",
+  name: "LexicalWords",
   components: {
-    SignForm
+    WordPosSelector,
+    WordInitialSelector,
+    LexicalWordForm
   },
   mixins: [listMixin],
   data() {
     return {
       params: {
-        title: "",
-        state: ""
+        limit: 10,
+        initial: "",
+        chinese: "",
+        english: "",
+        pos: ""
       }
     };
   },
   methods: {
     getList() {
       this.loading = true;
-      GetSignsList(this.params)
+      GetLexicalWordsList(this.params)
         .then(res => {
           this.list = res.data;
           this.total = res.total;
@@ -114,7 +135,7 @@ export default {
         });
     },
     handleCreate(data) {
-      CreateSign(data)
+      CreateLexicalWord(data)
         .then(() => {
           this.handleModify();
         })
@@ -123,7 +144,7 @@ export default {
         });
     },
     handleUpdate(id, updateData) {
-      UpdateSign(id, updateData)
+      UpdateLexicalWord(id, updateData)
         .then(() => {
           this.handleModify();
         })
@@ -134,7 +155,7 @@ export default {
     handleDelete(id) {
       this.loading = true;
       this.$confirm(
-        "删除该手形会删除所有视频中含有该手形的标注，此操作将永久删除, 是否继续?",
+        "此操作将永久删除所有视频中该词语的标注信息，是否继续?",
         "警告",
         {
           confirmButtonText: "确定",
@@ -143,7 +164,7 @@ export default {
         }
       )
         .then(() => {
-          DeleteSign(id).then(() => {
+          DeleteLexicalWord(id).then(() => {
             this.handleModify();
           });
         })
@@ -154,4 +175,3 @@ export default {
   }
 };
 </script>
-

@@ -139,6 +139,12 @@ aside {
       width: 150px;
       margin: 10px;
     }
+    .el-cascader {
+      margin: 10px;
+      .el-input {
+        width: 100%;
+      }
+    }
   }
   .table-content {
     margin: 20px 40px;
@@ -171,7 +177,7 @@ aside {
   }
 }
 
-.mce-tinymce{
+.mce-tinymce {
   border-radius: 5px;
 }
 

@@ -3,6 +3,8 @@ package controllers
 import (
 	"ccsl/models"
 	"time"
+
+	uuid "github.com/satori/go.uuid"
 )
 
 const (
@@ -41,7 +43,7 @@ type carouselUpdateForm struct {
 	Title      *string `json:"title" validate:"omitempty"`
 	Image      *string `json:"image" validate:"omitempty"`
 	State      *string `json:"state" validate:"omitempty,oneof=draft published"`
-	Importance *int    `json:"importance" validate:"omitempty" `
+	Importance *int    `json:"importance" validate:"omitempty,max=5,min=0" `
 }
 
 // >>> NEWS <<<
@@ -79,7 +81,7 @@ type newsUpdateForm struct {
 	Type       *string    `json:"type"  validate:"omitempty,oneof=link document"`
 	Text       *string    `json:"text"  validate:"omitempty"`
 	Language   *string    `json:"language" validate:"omitempty,oneof=zh-CN en-US"`
-	Importance *int       `json:"importance" validate:"omitempty" `
+	Importance *int       `json:"importance" validate:"omitempty,max=5,min=0" `
 	State      *string    `json:"state" validate:"omitempty,oneof=draft published"`
 }
 
@@ -163,7 +165,7 @@ type userLoginForm struct {
 
 type performerCreateForm struct {
 	Name     string `json:"name" validate:"required"`
-	RegionID int    `json:"region" validate:"required"`
+	RegionID int    `json:"regionID" validate:"required"`
 	Gender   string `json:"gender" validate:"required"`
 }
 
@@ -178,7 +180,7 @@ func (f performerCreateForm) ConvertToModel() (performer models.Performer) {
 
 type performerUpdateForm struct {
 	Name     *string `json:"name" validate:"omitempty"`
-	RegionID *int    `json:"region" validate:"omitempty"`
+	RegionID *int    `json:"regionID" validate:"omitempty"`
 	Gender   *string `json:"gender" validate:"omitempty"`
 }
 
@@ -234,28 +236,34 @@ type lexicalWordUpdateForm struct {
 // ============
 
 type lexicalVideoCreateForm struct {
+	PerformerID    string   `json:"performerID"  validate:"required,uuid4" `
+	LexicalWordID  string   `json:"lexicalWordID" validate:"required,uuid4"`
+	VideoPath      string   `json:"videoPath" validate:"required"`      // 视频文件路径
 	ConstructType  string   `json:"constructType" validate:"required"`  // 构词方式
 	ConstructWords []string `json:"constructWords" validate:"required"` // 构词词语
-	VideoPath      string   `json:"videoPath" validate:"required"`      // 视频文件路径
-	// LeftSign       string `json:"leftSign" validate:"required"`       // 左手手势
-	// RightSign      string `json:"rightSign" validate:"required"`      // 右手手势
+	LeftSigns      []string `json:"leftSigns" validate:"omitempty"`     // 左手手势
+	RightSigns     []string `json:"rightSigns" validate:"omitempty"`    // 右手手势
 }
 
 func (f lexicalVideoCreateForm) ConvertToModel() (video models.LexicalVideo) {
+	performerID, _ := uuid.FromString(f.PerformerID)
+	lexicalWordID, _ := uuid.FromString(f.LexicalWordID)
 	video = models.LexicalVideo{
+		PerformerID:    performerID,
+		LexicalWordID:  lexicalWordID,
+		VideoPath:      f.VideoPath,
 		ConstructType:  f.ConstructType,
 		ConstructWords: f.ConstructWords,
-		VideoPath:      f.VideoPath,
-		//LeftSign:       f.LeftSign,
-		//RightSign:      f.RightSign,
 	}
 	return
 }
 
 type lexicalVideoUpdateForm struct {
+	PerformerID    *string   `json:"performerID" validate:"omitempty,uuid4"`
+	LexicalWordID  *string   `json:"lexicalWordID" validate:"omitempty,uuid4"`
+	VideoPath      *string   `json:"videoPath" validate:"omitempty"`      // 视频文件路径
 	ConstructType  *string   `json:"constructType" validate:"omitempty"`  // 构词方式
 	ConstructWords *[]string `json:"constructWords" validate:"omitempty"` // 构词词语
-	VideoPath      *string   `json:"videoPath" validate:"omitempty"`      // 视频文件路径
-	// LeftSign       *string `json:"leftSign" validate:"omitempty"`       // 左手手势
-	// RightSign      *string `json:"rightSign" validate:"omitempty"`      // 右手手势
+	LeftSigns      *[]string `json:"leftSign" validate:"omitempty"`       // 左手手势
+	RightSigns     *[]string `json:"rightSign" validate:"omitempty"`      // 右手手势
 }

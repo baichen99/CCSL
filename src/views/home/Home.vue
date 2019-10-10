@@ -3,7 +3,7 @@
     <carousel-card />
     <div class="news-container">
       <news-card
-        v-for="(value, key) in newsTypes"
+        v-for="(value, key) in newsColumns"
         :key="key"
         :icon="value.icon"
         :column="value.icon"
@@ -22,7 +22,7 @@ export default {
     CarouselCard,
     NewsCard
   },
-  computed: { ...mapGetters(["newsTypes"]) }
+  computed: { ...mapGetters(["newsColumns"]) }
 };
 </script>
 

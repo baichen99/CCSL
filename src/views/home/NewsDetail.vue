@@ -16,7 +16,6 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import { GetNews } from "@/api/news";
 export default {
   name: "NewsDetail",
@@ -30,7 +29,6 @@ export default {
       }
     };
   },
-  computed: { ...mapGetters(["newsTypes"]) },
   created() {
     this.getData();
   },

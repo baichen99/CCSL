@@ -5,10 +5,7 @@
     <div class="search">
       <h3>国家通用手语比对语料库</h3>
 
-      <video-search-input
-        v-model="params"
-        @search-clicked="searchByButton"
-      />
+      <video-search-input v-model="params" @search-clicked="searchByButton" />
 
       <video-search-result
         :videos="videos"
@@ -20,7 +17,6 @@
         :lg="12"
         @change-page="changePage"
       />
-
     </div>
 
     <word-search @word-selected="searchByWord" />
@@ -54,7 +50,7 @@ export default {
         chinese: "",
         english: "",
         gender: "",
-        region: undefined,
+        regionID: undefined,
         leftSign: "", // 左手手形
         rightSign: "", // 右手手形
         sign: "", // 任意手形
@@ -69,7 +65,7 @@ export default {
     clearParams() {
       this.params.word = "";
       this.params.gender = "";
-      this.params.region = "";
+      this.params.regionID = undefined;
       this.params.leftSign = "";
       this.params.rightSign = "";
       this.params.sign = "";

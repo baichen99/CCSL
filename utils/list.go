@@ -124,9 +124,9 @@ type GetWordListParameters struct {
 // GetPerformerListParameters parameters for get performers list queries
 type GetPerformerListParameters struct {
 	GetListParameters
-	Name   string
-	Region string
-	Gender string
+	Name     string
+	RegionID string
+	Gender   string
 }
 
 // GetVideoListParameters parameters for get videos list queries

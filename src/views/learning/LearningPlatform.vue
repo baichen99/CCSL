@@ -1,19 +1,11 @@
 <template>
   <div class="learning-platform">
-    <word-search
-      start="A"
-      end="L"
-      @word-selected="searchByWord"
-    />
+    <word-search start="A" end="L" @word-selected="searchByWord" />
 
     <div class="search">
       <h3>国家通用手语学习平台</h3>
 
-      <video-search-input
-        v-model="params"
-        :show-advance="false"
-        @search-clicked="searchByButton"
-      />
+      <video-search-input v-model="params" :show-advance="false" @search-clicked="searchByButton" />
 
       <video-search-result
         :videos="videos"
@@ -26,14 +18,9 @@
         :show-region="false"
         @change-page="changePage"
       />
-
     </div>
 
-    <word-search
-      start="M"
-      end="Z"
-      @word-selected="searchByWord"
-    />
+    <word-search start="M" end="Z" @word-selected="searchByWord" />
   </div>
 </template>
 
@@ -57,7 +44,7 @@ export default {
       params: {
         word: "",
         gender: "男",
-        region: "100000",
+        regionID: 100000,
         chinese: "",
         page: 1,
         limit: 4

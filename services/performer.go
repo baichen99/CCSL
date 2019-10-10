@@ -30,7 +30,7 @@ func (s *PerformerService) GetPerformersList(parameters utils.GetPerformerListPa
 	// Adding custom scopes to the query based on get list parameters.
 	db := s.PG.Scopes(
 		utils.FilterByColumn("performers.gender", parameters.Gender),
-		utils.SearchByColumn("performers.region", parameters.Region),
+		utils.FilterByColumn("performers.region_id", parameters.RegionID),
 		utils.SearchByColumn("performers.name", parameters.Name),
 	)
 
@@ -43,9 +43,9 @@ func (s *PerformerService) GetPerformersList(parameters utils.GetPerformerListPa
 	// Fetching the items to be returned by the query.
 	orderQuery := parameters.OrderBy + " " + parameters.Order
 	if parameters.Limit != 0 {
-		err = db.Order(orderQuery).Limit(parameters.Limit).Offset(parameters.Limit * (parameters.Page - 1)).Find(&performers).Error
+		err = db.Preload("Region").Order(orderQuery).Limit(parameters.Limit).Offset(parameters.Limit * (parameters.Page - 1)).Find(&performers).Error
 	} else {
-		err = db.Order(orderQuery).Find(&performers).Error
+		err = db.Preload("Region").Order(orderQuery).Find(&performers).Error
 	}
 	return
 }
@@ -56,7 +56,7 @@ func (s *PerformerService) CreatePerformer(performer models.Performer) (err erro
 }
 
 func (s *PerformerService) GetPerformer(performerID string) (performer models.Performer, err error) {
-	err = s.PG.Where("id = ?", performerID).Take(&performer).Error
+	err = s.PG.Preload("Region").Where("id = ?", performerID).Take(&performer).Error
 	return
 }
 

@@ -1,8 +1,8 @@
 <template>
   <el-card class="news-list">
     <div slot="header" class="list-header">
-      <svg-icon :icon-class="newsTypes[params.column].icon" />
-      <h2>{{ newsTypes[params.column].name }}</h2>
+      <svg-icon :icon-class="newsColumns[params.column].icon" />
+      <h2>{{ newsColumns[params.column].name }}</h2>
     </div>
 
     <div class="list-content">
@@ -40,7 +40,7 @@ export default {
       total: 0
     };
   },
-  computed: { ...mapGetters(["newsTypes"]) },
+  computed: { ...mapGetters(["newsColumns"]) },
   watch: {
     "params.page"() {
       this.getList();
@@ -56,7 +56,6 @@ export default {
       GetNewsList(this.params).then(res => {
         this.list = res.data;
         this.total = res.total;
-        console.log(this.list);
       });
     },
     showDetail(item) {

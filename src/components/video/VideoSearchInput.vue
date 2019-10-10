@@ -47,7 +47,7 @@
           <sign-selector v-model="searchParams.leftSign" orientation="left" />
           <sign-selector v-model="searchParams.rightSign" orientation="right" />
           <word-pos-selector v-model="searchParams.pos" />
-          <city-selector v-model="searchParams.region" />
+          <city-selector v-model="searchParams.regionID" />
           <word-construct-selector v-model="searchParams.constructType" />
           <el-input
             v-model="searchParams.constructWords"
@@ -141,6 +141,9 @@ export default {
     .el-cascader,
     .el-select {
       margin: 5px 5px;
+    }
+    .el-cascader {
+      min-width: 250px;
     }
   }
 }

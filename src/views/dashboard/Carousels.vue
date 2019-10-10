@@ -2,23 +2,17 @@
   <div class="app-container flex-column">
     <div class="table-toolbar">
       <el-input
-        v-model="params.username"
+        v-model="params.title"
         prefix-icon="el-icon-search"
-        placeholder="请输入账号"
+        placeholder="请输入标题"
         clearable
         @clear="handleSearch"
       />
-      <el-input
-        v-model="params.name"
-        prefix-icon="el-icon-search"
-        placeholder="请输入姓名"
-        clearable
-        @clear="handleSearch"
-      />
-      <user-type-selector v-model="params.userType" @clear="handleSearch" />
+      <news-state-selector v-model="params.state" @clear="handleSearch" />
       <el-button type="primary" plain @click="handleSearch">查找</el-button>
       <el-button type="primary" plain @click="handleNew">增加</el-button>
     </div>
+
     <div class="table-content">
       <el-table v-loading="loading" :data="list" stripe border>
         <el-table-column label="创建时间" align="center" width="180px">
@@ -27,32 +21,47 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="上次更新" align="center" width="180px">
+        <el-table-column label="发布人" align="center" width="100px">
           <template slot-scope="{row}">
-            <span>{{ $d(new Date(row.updatedAt), 'long') }}</span>
+            <span>{{ row.creator.name }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="用户角色" align="center" width="150px">
+        <el-table-column label="重要性" align="center" width="150px">
           <template slot-scope="{row}">
-            <el-tag :type="userTypes[row.userType].color">{{ userTypes[row.userType].name }}</el-tag>
+            <el-rate v-model="row.importance" disabled />
           </template>
         </el-table-column>
 
-        <el-table-column label="用户账号" align="center" min-width="200px">
+        <el-table-column label="状态" align="center" width="100px">
           <template slot-scope="{row}">
-            <span>{{ row.username }}</span>
+            <el-tag v-if="row.state==='published'" type="success">发布</el-tag>
+            <el-tag v-if="row.state==='draft'" type="warning">草稿</el-tag>
           </template>
         </el-table-column>
 
-        <el-table-column label="用户姓名" align="center" min-width="200px">
+        <el-table-column label="图片标题" align="center" min-width="300px">
           <template slot-scope="{row}">
-            <span>{{ row.name }}</span>
+            <span>{{ row.title }}</span>
           </template>
         </el-table-column>
 
         <el-table-column label="操作" align="center" width="250px" fixed="right">
           <template slot-scope="{row}">
+            <el-button
+              v-if="row.state==='draft'"
+              type="success"
+              size="mini"
+              plain
+              @click="handlePublish(row.id)"
+            >发布</el-button>
+            <el-button
+              v-if="row.state==='published'"
+              type="warning"
+              size="mini"
+              plain
+              @click="handleDraft(row.id)"
+            >撤回</el-button>
             <el-button type="primary" size="mini" plain @click="handleEdit(row)">编辑</el-button>
             <el-button type="danger" size="mini" plain @click="handleDelete(row.id)">删除</el-button>
           </template>
@@ -79,7 +88,7 @@
       direction="rtl"
     >
       <div class="form-drawer__content">
-        <user-form ref="form" :data="data" :mode="mode" />
+        <carousel-form ref="form" :data="data" :mode="mode" />
         <div class="form-drawer__footer">
           <el-button @click="handleClose">取 消</el-button>
           <el-button
@@ -95,32 +104,36 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import UserForm from "@/views/dashboard/form/UserForm";
-import UserTypeSelector from "@/components/form/UserTypeSelector";
+import CarouselForm from "@/views/dashboard/form/CarouselForm";
+import NewsStateSelector from "@/components/form/NewsStateSelector";
 import listMixin from "./listMixin";
-import { GetUsersList, CreateUser, UpdateUser, DeleteUser } from "@/api/users";
+import {
+  GetCarouselsList,
+  CreateCarousel,
+  DeleteCarousel,
+  UpdateCarousel
+} from "@/api/carousel";
+
 export default {
-  name: "AllUsers",
+  name: "Carousels",
   components: {
-    UserForm,
-    UserTypeSelector
+    CarouselForm,
+    NewsStateSelector
   },
   mixins: [listMixin],
   data() {
     return {
       params: {
-        username: "",
-        name: "",
-        userType: ""
+        order: "desc",
+        title: "",
+        state: ""
       }
     };
   },
-  computed: { ...mapGetters(["userTypes"]) },
   methods: {
     getList() {
       this.loading = true;
-      GetUsersList(this.params)
+      GetCarouselsList(this.params)
         .then(res => {
           this.list = res.data;
           this.total = res.total;
@@ -131,7 +144,7 @@ export default {
         });
     },
     handleCreate(data) {
-      CreateUser(data)
+      CreateCarousel(data)
         .then(() => {
           this.handleModify();
         })
@@ -140,7 +153,7 @@ export default {
         });
     },
     handleUpdate(id, updateData) {
-      UpdateUser(id, updateData)
+      UpdateCarousel(id, updateData)
         .then(() => {
           this.handleModify();
         })
@@ -150,19 +163,31 @@ export default {
     },
     handleDelete(id) {
       this.loading = true;
-      this.$confirm("此操作将永久删除, 是否继续?", "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "error"
-      })
+      this.$confirm(
+        "此操作将永久删除, 如果想暂时不显示请选择撤回, 是否继续?",
+        "警告",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "error"
+        }
+      )
         .then(() => {
-          DeleteUser(id).then(() => {
+          DeleteCarousel(id).then(() => {
             this.handleModify();
           });
         })
         .catch(() => {
           this.showCancel();
         });
+    },
+    handlePublish(id) {
+      const updateData = { state: "published" };
+      this.handleUpdate(id, updateData);
+    },
+    handleDraft(id) {
+      const updateData = { state: "draft" };
+      this.handleUpdate(id, updateData);
     }
   }
 };

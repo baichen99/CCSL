@@ -35,7 +35,7 @@ func (s *LexicalWordService) GetWordsList(parameters utils.GetWordListParameters
 		utils.FilterByColumn("lexical_words.pos", parameters.Pos),
 		utils.FilterByColumn("lexical_words.initial", parameters.Initial),
 		utils.SearchByColumn("lexical_words.chinese", parameters.Chinese),
-		utils.SearchByColumn("lexical_words.english", parameters.English),
+		utils.FilterByArray("lexical_words.english", parameters.English, " "),
 	)
 
 	// Fetching the total number of rows based on the conditions provided.

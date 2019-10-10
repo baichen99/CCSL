@@ -27,18 +27,18 @@ func (c *PerformerController) BeforeActivation(app mvc.BeforeActivation) {
 // GetPerformersList GET /performers
 func (c *PerformerController) GetPerformersList() {
 	defer c.Context.Next()
-	listParams, err := utils.GetListParamsFromContext(c.Context, "performers.region")
+	listParams, err := utils.GetListParamsFromContext(c.Context, "performers.region_id")
 	if err != nil {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "order only accepts 'asc' or 'desc'", err)
 		return
 	}
 	name := c.Context.URLParamDefault("name", "")
-	region := c.Context.URLParamDefault("region", "")
+	regionID := c.Context.URLParamDefault("regionID", "")
 	gender := c.Context.URLParamDefault("gender", "")
 	listParameters := utils.GetPerformerListParameters{
 		GetListParameters: listParams,
 		Name:              name,
-		Region:            region,
+		RegionID:          regionID,
 		Gender:            gender,
 	}
 	performers, count, err := c.PerformerService.GetPerformersList(listParameters)

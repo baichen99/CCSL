@@ -1,12 +1,12 @@
 <template>
   <el-cascader
     v-model="value"
-    style="width:400px"
     :options="cities"
     placeholder="请选择地区"
     :props="{ expandTrigger: 'hover' }"
     clearable
     @change="changeRegion"
+    @clear="$emit('clear')"
   />
 </template>
 
@@ -21,7 +21,7 @@ export default {
   props: {
     city: {
       type: Number,
-      default: 0
+      default: undefined
     }
   },
   data() {

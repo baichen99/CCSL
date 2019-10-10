@@ -11,9 +11,9 @@ import (
 // LexicalVideoInterface struct
 type LexicalVideoInterface interface {
 	GetVideosList(parameters utils.GetVideoListParameters) (videos []models.LexicalVideo, count int, err error)
-	CreateVideo(video models.LexicalVideo) (err error)
+	CreateVideo(video models.LexicalVideo, leftSignsIds []string, rightSignsIds []string) (err error)
 	GetVideo(videoID string) (video models.LexicalVideo, err error)
-	UpdateVideo(videoID string, updatedData map[string]interface{}) (err error)
+	UpdateVideo(videoID string, updatedData map[string]interface{}, leftSignsIds []string, rightSignsIds []string) (err error)
 	DeleteVideo(videoID string) (err error)
 }
 
@@ -82,8 +82,8 @@ func (s *LexicalVideoService) GetVideosList(parameters utils.GetVideoListParamet
 }
 
 // CreateVideo creates a new video
-func (s *LexicalVideoService) CreateVideo(video models.LexicalVideo) (err error) {
-	err = s.PG.Create(&video).Error
+func (s *LexicalVideoService) CreateVideo(video models.LexicalVideo, leftSignsIds []string, rightSignsIds []string) (err error) {
+	err = s.PG.Set("gorm:association_autocreate", false).Create(&video).Error
 	return
 }
 
@@ -94,9 +94,9 @@ func (s *LexicalVideoService) GetVideo(videoID string) (video models.LexicalVide
 }
 
 // UpdateVideo returns video with given id
-func (s *LexicalVideoService) UpdateVideo(videoID string, updatedData map[string]interface{}) (err error) {
+func (s *LexicalVideoService) UpdateVideo(videoID string, updatedData map[string]interface{}, leftSignsIds []string, rightSignsIds []string) (err error) {
 	var video models.LexicalVideo
-	err = s.PG.Model(&video).Where("id = ?", videoID).Updates(updatedData).Error
+	err = s.PG.Set("gorm:association_autoupdate", false).Model(&video).Where("id = ?", videoID).Updates(updatedData).Error
 	return
 }
 

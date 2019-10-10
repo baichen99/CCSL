@@ -10,10 +10,10 @@ import (
 // LexicalVideo mdoel for Lexical Database
 type LexicalVideo struct {
 	Base
-	LexicalWord    LexicalWord    `gorm:"FOREIGNKEY:LexicalWordID" json:"word"`
-	LexicalWordID  uuid.UUID      `gorm:"NOT NULL;INDEX:lexical_word_id" json:"-"`
+	LexicalWord    LexicalWord    `gorm:"FOREIGNKEY:LexicalWordID" json:"lexicalWord"`
+	LexicalWordID  uuid.UUID      `gorm:"NOT NULL;INDEX:lexical_word_id" json:"lexicalWordID"`
 	Performer      Performer      `gorm:"FOREIGNKEY:PerformerID" json:"performer"`
-	PerformerID    uuid.UUID      `gorm:"NOT NULL;INDEX:performer_id" json:"-"`                   // 表演者
+	PerformerID    uuid.UUID      `gorm:"NOT NULL;INDEX:performer_id" json:"performerID"`         // 表演者
 	ConstructType  string         `gorm:"DEFAULT:NULL" json:"constructType"`                      // 构词方式
 	ConstructWords pq.StringArray `gorm:"TYPE:varchar(100)[];DEFAULT:NULL" json:"constructWords"` // 构词词语
 	VideoPath      string         `gorm:"DEFAULT:NULL" json:"videoPath"`                          // 视频文件路径

@@ -1,5 +1,5 @@
 <template>
-  <el-select v-model="sign" clearable :placeholder="tip">
+  <el-select v-model="sign" clearable :placeholder="tip" @clear="$emit('clear')">
     <el-option v-for="item in signs" :key="item.id" :label="item.name" :value="item.id">
       <span>{{ item.name }}</span>
       <img :src="'https://ccsl.shu.edu.cn/public/'+item.image" :alt="item.name" />
