@@ -1,5 +1,5 @@
 const state = {
-  wordTypes: [
+  wordPosTypes: [
     "名词",
     "动词/名词",
     "助动词",
@@ -18,6 +18,7 @@ const state = {
     "形容词",
     "疑问代词"
   ],
+  constructTypes: ["单纯词", "复合词"],
   newsColumns: {
     news: { icon: "news", name: "新闻动态", value: "news" },
     activity: { icon: "activity", name: "学术活动", value: "activity" },
@@ -29,6 +30,10 @@ const state = {
     admin: { name: "普通管理员", color: "warning" },
     learner: { name: "学习平台用户", color: "info" },
     user: { name: "语料库用户", color: "" }
+  },
+  genderTypes: {
+    M: { name: "男", value: "M" },
+    F: { name: "女", value: "F" }
   }
 };
 

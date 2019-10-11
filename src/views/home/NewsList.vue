@@ -35,7 +35,10 @@ export default {
       params: {
         limit: 10,
         page: 1,
-        column: ""
+        column: "",
+        language: "zh-CN",
+        order: "desc",
+        state: "published"
       },
       total: 0
     };

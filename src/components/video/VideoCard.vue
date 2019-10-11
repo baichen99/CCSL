@@ -19,7 +19,7 @@
           v-if="showRegion"
           class="tag-value"
         >{{ video.performer.region.name }}</span>
-        <span class="tag-value">{{ video.word.chinese.split("（")[0] }}</span>
+        <span class="tag-value">{{ video.lexicalWord.chinese.split("（")[0] }}</span>
       </div>
     </div>
   </el-card>

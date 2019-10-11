@@ -16,14 +16,14 @@
         <span class="tag-label">地区</span>
         <span class="tag-value">{{ video.performer.region.name }}</span>
         <span class="tag-label">汉语转写</span>
-        <span class="tag-value">{{ video.word.chinese }}</span>
+        <span class="tag-value">{{ video.lexicalWord.chinese }}</span>
 
       </div>
       <div class="tags">
         <span class="tag-label">词性</span>
-        <span class="tag-value">{{ video.word.pos }}</span>
+        <span class="tag-value">{{ video.lexicalWord.pos }}</span>
         <span class="tag-label">英语转写</span>
-        <span class="tag-value">{{ video.word.english }}</span>
+        <span class="tag-value">{{ video.lexicalWord.english }}</span>
       </div>
       <div class="tags">
         <span class="tag-label">构词方式</span>

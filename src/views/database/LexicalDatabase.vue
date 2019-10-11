@@ -46,14 +46,14 @@ export default {
       params: {
         page: 1,
         limit: 4,
-        word: "",
+        wordID: "",
         chinese: "",
         english: "",
         gender: "",
         regionID: undefined,
-        leftSign: "", // 左手手形
-        rightSign: "", // 右手手形
-        sign: "", // 任意手形
+        leftSignID: "", // 左手手形
+        rightSignID: "", // 右手手形
+        signID: "", // 任意手形
         pos: "", // 词性
         initial: "",
         constructType: "",
@@ -66,9 +66,9 @@ export default {
       this.params.word = "";
       this.params.gender = "";
       this.params.regionID = undefined;
-      this.params.leftSign = "";
-      this.params.rightSign = "";
-      this.params.sign = "";
+      this.params.leftSignID = "";
+      this.params.rightSignID = "";
+      this.params.signID = "";
       this.params.pos = "";
       this.params.chinese = "";
       this.params.english = "";
@@ -92,20 +92,20 @@ export default {
       this.getData();
     },
     searchByButton() {
-      this.params.word = "";
-      this.params.sign = "";
+      this.params.wordID = "";
+      this.params.signID = "";
       this.params.page = 1;
       this.getData();
     },
-    searchByWord(word) {
+    searchByWord(wordID) {
       this.clearParams();
-      this.params.word = word;
+      this.params.wordID = wordID;
       this.params.page = 1;
       this.getData();
     },
-    searchBySign(sign) {
+    searchBySign(signID) {
       this.clearParams();
-      this.params.sign = sign;
+      this.params.signID = signID;
       this.params.page = 1;
       this.getData();
     }

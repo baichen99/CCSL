@@ -36,7 +36,7 @@
 
         <el-table-column label="被试性别" align="center">
           <template slot-scope="{row}">
-            <span>{{ row.gender }}</span>
+            <span>{{ genderTypes[row.gender].name }}</span>
           </template>
         </el-table-column>
 
@@ -90,6 +90,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import PerformerForm from "@/views/dashboard/form/PerformerForm";
 import GenderSelector from "@/components/form/GenderSelector";
 import CitySelector from "@/components/form/CitySelector";
@@ -117,6 +118,9 @@ export default {
         gender: ""
       }
     };
+  },
+  computed: {
+    ...mapGetters(["genderTypes"])
   },
   methods: {
     getList() {

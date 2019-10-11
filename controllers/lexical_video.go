@@ -32,19 +32,19 @@ func (c *VideoController) GetVideosList() {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "order only accepts 'asc' or 'desc'", err)
 		return
 	}
-	wordID := c.Context.URLParamDefault("word", "")
+	wordID := c.Context.URLParamDefault("wordID", "")
 	initial := c.Context.URLParamDefault("initial", "")
 	chinese := c.Context.URLParamDefault("chinese", "")
 	english := c.Context.URLParamDefault("english", "")
 	pos := c.Context.URLParamDefault("pos", "")
 	regionID := c.Context.URLParamDefault("regionID", "")
 	gender := c.Context.URLParamDefault("gender", "")
-	leftSign := c.Context.URLParamDefault("leftSign", "")
-	rightSign := c.Context.URLParamDefault("rightSign", "")
-	sign := c.Context.URLParamDefault("sign", "")
+	leftSignID := c.Context.URLParamDefault("leftSignID", "")
+	rightSignID := c.Context.URLParamDefault("rightSignID", "")
+	signID := c.Context.URLParamDefault("signID", "")
 	constructWords := c.Context.URLParamDefault("constructWords", "")
 	constructType := c.Context.URLParamDefault("constructType", "")
-	performerID := c.Context.URLParamDefault("performer", "")
+	performerID := c.Context.URLParamDefault("performerID", "")
 	listParameters := utils.GetVideoListParameters{
 		GetListParameters: listParams,
 		WordID:            wordID,
@@ -54,9 +54,9 @@ func (c *VideoController) GetVideosList() {
 		Pos:               pos,
 		RegionID:          regionID,
 		Gender:            gender,
-		LeftSignID:        leftSign,
-		RightSignID:       rightSign,
-		SignID:            sign,
+		LeftSignID:        leftSignID,
+		RightSignID:       rightSignID,
+		SignID:            signID,
 		ConstructType:     constructType,
 		ConstructWords:    constructWords,
 		PerformerID:       performerID,

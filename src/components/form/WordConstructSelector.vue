@@ -1,10 +1,11 @@
 <template>
   <el-select v-model="data" placeholder="请选择构词方式" clearable @clear="$emit('clear')">
-    <el-option v-for="(item,index) in options" :key="index" :label="item" :value="item" />
+    <el-option v-for="(item,index) in constructTypes" :key="index" :label="item" :value="item" />
   </el-select>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "WordConstructSelector",
   model: {
@@ -17,12 +18,8 @@ export default {
       default: () => ""
     }
   },
-  data() {
-    return {
-      options: ["单纯词", "复合词"]
-    };
-  },
   computed: {
+    ...mapGetters(["constructTypes"]),
     data: {
       get() {
         return this.value;

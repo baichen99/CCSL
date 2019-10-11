@@ -42,8 +42,8 @@ export default {
       videos: [],
       total: 0,
       params: {
-        word: "",
-        gender: "男",
+        wordID: "",
+        gender: "M",
         regionID: 100000,
         chinese: "",
         page: 1,
@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     clearParams() {
-      this.params.word = "";
+      this.params.wordID = "";
       this.params.chinese = "";
     },
     getData() {
@@ -73,13 +73,13 @@ export default {
       this.getData();
     },
     searchByButton() {
-      this.params.word = "";
+      this.params.wordID = "";
       this.params.page = 1;
       this.getData();
     },
-    searchByWord(word) {
+    searchByWord(wordID) {
       this.clearParams();
-      this.params.word = word;
+      this.params.wordID = wordID;
       this.params.page = 1;
       this.getData();
     }

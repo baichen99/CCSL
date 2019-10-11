@@ -44,8 +44,8 @@
       <el-card v-if="advancedSearch && showAdvance" shadow="never" class="advance">
         <div class="search-options">
           <gender-selector v-model="searchParams.gender" />
-          <sign-selector v-model="searchParams.leftSign" orientation="left" />
-          <sign-selector v-model="searchParams.rightSign" orientation="right" />
+          <sign-selector v-model="searchParams.leftSignID" orientation="left" />
+          <sign-selector v-model="searchParams.rightSignID" orientation="right" />
           <word-pos-selector v-model="searchParams.pos" />
           <city-selector v-model="searchParams.regionID" />
           <word-construct-selector v-model="searchParams.constructType" />

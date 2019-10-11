@@ -1,10 +1,11 @@
 <template>
   <el-select v-model="data" placeholder="请选择性别" clearable @clear="$emit('clear')">
-    <el-option v-for="(item,index) in options" :key="index" :label="item" :value="item" />
+    <el-option v-for="(item, key) in genderTypes" :key="key" :label="item.name" :value="item.value" />
   </el-select>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "GenderSelector",
   model: {
@@ -17,12 +18,8 @@ export default {
       default: () => ""
     }
   },
-  data() {
-    return {
-      options: ["男", "女"]
-    };
-  },
   computed: {
+    ...mapGetters(["genderTypes"]),
     data: {
       get() {
         return this.value;
