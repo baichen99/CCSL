@@ -191,7 +191,12 @@ func (c *UserController) UserLogin() {
 	if utils.IsShuUser(form.Username) {
 		utils.LogInfo(c.Context, "SHU OAuth Login")
 		// Is SHU user, auth by shu oauth
-		if result, _ := utils.ShuLogin(form.Username, form.Password); !result {
+		result, err := utils.ShuLogin(form.Username, form.Password)
+		if err != nil {
+			utils.SetResponseError(c.Context, iris.StatusUnauthorized, "Password incorrect", err)
+			return
+		}
+		if !result {
 			utils.SetResponseError(c.Context, iris.StatusUnauthorized, "Password incorrect", errors.New("AuthFailed"))
 			return
 		}

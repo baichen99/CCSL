@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"errors"
 	"io/ioutil"
 	"net/http"
 	"net/http/cookiejar"
@@ -45,6 +46,10 @@ func ShuLogin(username string, password string) (result bool, err error) {
 	// <input type="hidden" name="__VIEWSTATE" value="dDwtMTIwMjUxOTIxNDs7PsH7y+VEVR/6VfZ5PNSi21UwSxxy" />
 	// Get __VIEWSTATE from html
 	reg := regexp.MustCompile(`<input type="hidden" name="__VIEWSTATE" value="(.*?)" />`)
+	if len(reg.FindStringSubmatch(string(body))) != 2 {
+		err = errors.New("OauthUnavailable")
+		return
+	}
 	viewState := reg.FindStringSubmatch(string(body))[1]
 	data := url.Values{
 		"txtUserName":     {username},
