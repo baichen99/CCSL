@@ -6,7 +6,7 @@
     remote
     clearable
     reserve-keyword
-    placeholder="请输入关键词"
+    placeholder="请输入手形名称"
     :remote-method="filterRemote"
     :loading="loading"
     @clear="filterRemote"

@@ -16,7 +16,7 @@
       @keyup.enter.native="handleInputConfirm"
       @blur="handleInputConfirm"
     />
-    <el-button v-else class="button-new-tag" size="small" type="primary" @click="showInput">+ 增加</el-button>
+    <el-button v-else class="button-new-tag" plain size="small" type="primary" @click="showInput">+ 增加</el-button>
   </div>
 </template>
 <script>
@@ -66,6 +66,7 @@ export default {
         } else {
           this.data = [inputValue];
         }
+        this.$emit("update", this.data);
       }
       this.inputVisible = false;
       this.inputValue = "";

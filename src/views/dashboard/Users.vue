@@ -15,7 +15,7 @@
         clearable
         @clear="handleSearch"
       />
-      <user-type-selector v-model="params.userType" @clear="handleSearch" />
+      <user-type-selector v-model="params.userType" @update="handleSearch" />
       <el-button type="primary" plain @click="handleSearch">查找</el-button>
       <el-button type="primary" plain @click="handleNew">增加</el-button>
     </div>

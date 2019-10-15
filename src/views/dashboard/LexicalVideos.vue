@@ -8,7 +8,8 @@
         clearable
         @clear="handleSearch"
       />
-      <city-selector v-model="params.regionID" @clear="handleSearch" />
+      <city-selector v-model="params.regionID" @update="handleSearch" />
+      <word-construct-selector v-model="params.constructType" @update="handleSearch" />
       <el-button type="primary" plain @click="handleSearch">查找</el-button>
       <el-button type="primary" plain @click="handleNew">增加</el-button>
     </div>
@@ -116,6 +117,7 @@
 import { mapGetters } from "vuex";
 import LexicalVideoForm from "@/views/dashboard/form/LexicalVideoForm";
 import CitySelector from "@/components/form/CitySelector.vue";
+import WordConstructSelector from "@/components/form/WordConstructSelector";
 import listMixin from "./listMixin";
 import {
   GetLexicalVideosList,
@@ -125,7 +127,11 @@ import {
 } from "@/api/videos";
 export default {
   name: "LexicalVideos",
-  components: { LexicalVideoForm, CitySelector },
+  components: {
+    LexicalVideoForm,
+    CitySelector,
+    WordConstructSelector
+  },
   mixins: [listMixin],
   data() {
     return {
@@ -133,12 +139,8 @@ export default {
       params: {
         chinese: "",
         regionID: undefined,
-        lexicalWordID: "",
-        videoPath: "",
+        // lexicalWordID: "",
         constructType: "",
-        constructWords: [],
-        leftSigns: [],
-        rightSigns: [],
         orderBy: "performers.gender"
       }
     };

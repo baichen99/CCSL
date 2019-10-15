@@ -64,6 +64,8 @@ func (s *SignService) UpdateSign(signID string, updatedData map[string]interface
 
 func (s *SignService) DeleteSign(signID string) (err error) {
 	var sign models.Sign
-	err = s.PG.Model(&sign).Where("id = ?", signID).Delete(&sign).Error
+	err = s.PG.Where("id = ?", signID).Find(&sign).Delete(&sign).Error
+	s.PG.Model(&sign).Association("LexicalVideoLeft").Clear()
+	s.PG.Model(&sign).Association("LexicalVideoRight").Clear()
 	return
 }

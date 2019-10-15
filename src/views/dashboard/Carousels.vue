@@ -8,7 +8,7 @@
         clearable
         @clear="handleSearch"
       />
-      <news-state-selector v-model="params.state" @clear="handleSearch" />
+      <news-state-selector v-model="params.state" @update="handleSearch" />
       <el-button type="primary" plain @click="handleSearch">查找</el-button>
       <el-button type="primary" plain @click="handleNew">增加</el-button>
     </div>

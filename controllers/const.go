@@ -238,11 +238,11 @@ type lexicalWordUpdateForm struct {
 type lexicalVideoCreateForm struct {
 	PerformerID    string   `json:"performerID"  validate:"required,uuid4" `
 	LexicalWordID  string   `json:"lexicalWordID" validate:"required,uuid4"`
-	VideoPath      string   `json:"videoPath" validate:"required"`      // 视频文件路径
-	ConstructType  string   `json:"constructType" validate:"required"`  // 构词方式
-	ConstructWords []string `json:"constructWords" validate:"required"` // 构词词语
-	LeftSignsID    []string `json:"leftSignsID" validate:"omitempty"`   // 左手手势
-	RightSignsID   []string `json:"rightSignsID" validate:"omitempty"`  // 右手手势
+	VideoPath      string   `json:"videoPath" validate:""`                        // 视频文件路径
+	ConstructType  string   `json:"constructType" validate:"required"`            // 构词方式
+	ConstructWords []string `json:"constructWords" validate:"omitempty"`          // 构词词语
+	LeftSignsID    []string `json:"leftSignsID" validate:"omitempty,dive,uuid4"`  // 左手手势
+	RightSignsID   []string `json:"rightSignsID" validate:"omitempty,dive,uuid4"` // 右手手势
 }
 
 func (f lexicalVideoCreateForm) ConvertToModel() (video models.LexicalVideo) {
@@ -261,9 +261,9 @@ func (f lexicalVideoCreateForm) ConvertToModel() (video models.LexicalVideo) {
 type lexicalVideoUpdateForm struct {
 	PerformerID    *string   `json:"performerID" validate:"omitempty,uuid4"`
 	LexicalWordID  *string   `json:"lexicalWordID" validate:"omitempty,uuid4"`
-	VideoPath      *string   `json:"videoPath" validate:"omitempty"`      // 视频文件路径
-	ConstructType  *string   `json:"constructType" validate:"omitempty"`  // 构词方式
-	ConstructWords *[]string `json:"constructWords" validate:"omitempty"` // 构词词语
-	LeftSignsID    *[]string `json:"leftSignsID" validate:"omitempty"`    // 左手手势
-	RightSignsID   *[]string `json:"rightSignsID" validate:"omitempty"`   // 右手手势
+	VideoPath      *string   `json:"videoPath" validate:"omitempty"`               // 视频文件路径
+	ConstructType  *string   `json:"constructType" validate:"omitempty"`           // 构词方式
+	ConstructWords *[]string `json:"constructWords" validate:"omitempty"`          // 构词词语
+	LeftSignsID    *[]string `json:"leftSignsID" validate:"omitempty,dive,uuid4"`  // 左手手势
+	RightSignsID   *[]string `json:"rightSignsID" validate:"omitempty,dive,uuid4"` // 右手手势
 }

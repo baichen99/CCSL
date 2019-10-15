@@ -6,7 +6,6 @@
     :props="{ expandTrigger: 'hover' }"
     clearable
     @change="changeRegion"
-    @clear="$emit('clear')"
   />
 </template>
 

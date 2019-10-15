@@ -8,10 +8,10 @@
         clearable
         @clear="handleSearch"
       />
-      <language-selector v-model="params.language" @clear="handleSearch" />
-      <news-state-selector v-model="params.state" @clear="handleSearch" />
-      <news-type-selector v-model="params.type" @clear="handleSearch" />
-      <news-column-selector v-model="params.column" @clear="handleSearch" />
+      <language-selector v-model="params.language" @update="handleSearch" />
+      <news-state-selector v-model="params.state" @update="handleSearch" />
+      <news-type-selector v-model="params.type" @update="handleSearch" />
+      <news-column-selector v-model="params.column" @update="handleSearch" />
       <el-button type="primary" plain @click="handleSearch">查找</el-button>
       <el-button type="primary" plain @click="handleNew">增加</el-button>
     </div>

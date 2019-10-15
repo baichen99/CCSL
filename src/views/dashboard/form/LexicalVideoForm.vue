@@ -1,8 +1,9 @@
 <template>
   <el-form ref="form" label-position="left" label-width="150px" :model="formData" :rules="rules">
-    <el-form-item label="视频" prop="videoPath" required>
+    <el-form-item label="视频" prop="videoPath">
       <div class="video-container">
         <video-player
+          v-if="formData.videoPath"
           class="vjs-big-play-centered"
           :options="{ sources: [{ type: 'video/mp4', src: 'https://ccsl.shu.edu.cn/public/' + formData.videoPath }] }"
           @contextmenu.native.prevent
@@ -58,7 +59,7 @@ export default {
       rules: {
         performerID: [{ required: true, message: "请选择被试" }],
         lexicalWordID: [{ required: true, message: "请选择词语" }],
-        videoPath: [{ required: true, message: "请上传视频" }],
+        // videoPath: [{ required: true, message: "请上传视频" }],
         constructType: [{ required: true, message: "请选择构词方式" }]
       }
     };

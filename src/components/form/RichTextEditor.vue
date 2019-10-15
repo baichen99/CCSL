@@ -1,5 +1,10 @@
 <template>
-  <div :class="{fullscreen:fullscreen}" class="tinymce-container" :style="{width:containerWidth}">
+  <div
+    v-loading="loading"
+    :class="{fullscreen:fullscreen}"
+    class="tinymce-container"
+    :style="{width:containerWidth}"
+  >
     <textarea :id="tinymceId" class="tinymce-textarea" />
   </div>
 </template>
@@ -72,6 +77,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       hasChange: false,
       hasInit: false,
       tinymceId: this.id,
@@ -148,11 +154,14 @@ export default {
     },
     init() {
       // dynamic load tinymce from cdn
+      this.loading = true;
       this.dynamicLoadScript(tinymceCDN, err => {
         if (err) {
+          this.loading = false;
           this.$message.error(err.message);
           return;
         }
+        this.loading = false;
         this.initTinymce();
       });
     },

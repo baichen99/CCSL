@@ -4,7 +4,6 @@ import (
 	"ccsl/middlewares"
 	"ccsl/services"
 	"ccsl/utils"
-	"fmt"
 
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/mvc"
@@ -132,13 +131,11 @@ func (c *VideoController) UpdateVideo() {
 
 	updateData := utils.MakeUpdateData(form)
 
-	leftSignsID, _ := updateData["LeftSignsID"].([]string)
-	rightSignID, _ := updateData["RightSignsID "].([]string)
-
-	fmt.Println("LEFT INDICES", leftSignsID, "RIGHT INDICES", rightSignID)
+	delete(updateData, "LeftSignsID")
+	delete(updateData, "RightSignsID")
 
 	// PSQL - Update of the given ID
-	if err := c.VideoService.UpdateVideo(videoID, updateData, leftSignsID, rightSignID); err != nil {
+	if err := c.VideoService.UpdateVideo(videoID, updateData, form.LeftSignsID, form.RightSignsID); err != nil {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "VideoService::UpdateVideo", err)
 		return
 	}

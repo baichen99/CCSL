@@ -15,8 +15,8 @@
         clearable
         @clear="handleSearch"
       />
-      <word-pos-selector v-model="params.pos" @clear="handleSearch" />
-      <word-initial-selector v-model="params.initial" @clear="handleSearch" />
+      <word-pos-selector v-model="params.pos" @update="handleSearch" />
+      <word-initial-selector v-model="params.initial" @update="handleSearch" />
       <el-button type="primary" plain @click="handleSearch">查找</el-button>
       <el-button type="primary" plain @click="handleNew">增加</el-button>
     </div>

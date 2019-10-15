@@ -8,8 +8,8 @@
         clearable
         @clear="handleSearch"
       />
-      <city-selector v-model="params.regionID" @clear="handleSearch" />
-      <gender-selector v-model="params.gender" @clear="handleSearch" />
+      <city-selector v-model="params.regionID" @update="handleSearch" />
+      <gender-selector v-model="params.gender" @update="handleSearch" />
       <el-button type="primary" plain @click="handleSearch">查找</el-button>
       <el-button type="primary" plain @click="handleNew">增加</el-button>
     </div>
