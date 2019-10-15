@@ -14,7 +14,7 @@ Listener:
 
 JWT:
     ExpireHours: 8
-    Debug: true
+    Debug: false
     PrivateKey: |
         -----BEGIN EC PRIVATE KEY-----
         MIHcAgEBBEIA6sUEHwkFkR98BgNlp/jaavxgv0i/zqireTf/OtOwoJ0TDP4CQhaD

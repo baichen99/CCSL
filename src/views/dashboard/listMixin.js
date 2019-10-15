@@ -1,13 +1,14 @@
-import { compareArray } from "@/utils";
+import lodash from "lodash";
 const listMixin = {
   data() {
     return {
+      removeProperties: [],
       show: false,
       mode: "",
       originalData: {},
       data: {},
       params: {
-        limit: 8,
+        limit: 10,
         page: 1
       },
       total: 0,
@@ -21,6 +22,9 @@ const listMixin = {
   watch: {
     "params.page"() {
       this.getList();
+    },
+    "params.limit"() {
+      this.getList();
     }
   },
   computed: {
@@ -30,15 +34,14 @@ const listMixin = {
       } else {
         let diffFound = false;
         for (let key in this.originalData) {
-          if (typeof this.data[key] !== "object") {
-            if (this.data[key] !== this.originalData[key]) {
-              diffFound = true;
+          if (!this.removeProperties.includes(key)) {
+            diffFound = !lodash.isEqual(this.data[key], this.originalData[key]);
+            if (diffFound) {
+              return true;
             }
-          } else if (Array.isArray(this.data[key])) {
-            diffFound = !compareArray(this.data[key], this.originalData[key]);
           }
         }
-        return diffFound;
+        return false;
       }
     }
   },
@@ -93,15 +96,17 @@ const listMixin = {
     handleModify() {
       this.showSuccess();
       this.handleClose();
-      this.handleSearch();
+      this.getList();
     },
     makeUpdatedData() {
       let updateData = {};
       for (let key in this.originalData) {
-        if (this.data[key] !== this.originalData[key]) {
-          updateData[key] = this.data[key];
-          if (typeof updateData[key] == "string") {
-            updateData[key] = updateData[key].trim();
+        if (!this.removeProperties.includes(key)) {
+          if (!lodash.isEqual(this.data[key], this.originalData[key])) {
+            updateData[key] = this.data[key];
+            if (typeof updateData[key] == "string") {
+              updateData[key] = updateData[key].trim();
+            }
           }
         }
       }

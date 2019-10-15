@@ -2,11 +2,12 @@ import request from "@/utils/request";
 
 const baseURL = "/lexical/videos";
 
-export function GetLexicalVideosList(params) {
+export function GetLexicalVideosList(params, loading) {
   return request({
     url: baseURL,
     method: "get",
-    params
+    params,
+    loading
   });
 }
 

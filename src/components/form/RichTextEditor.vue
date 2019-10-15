@@ -23,7 +23,8 @@ const toolbar = [
 const tinymceCDN =
   "https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/tinymce.min.js";
 
-import loadEditor from "./dynamicLoadScript";
+let callbacks = [];
+
 import { UploadFile } from "@/api/files";
 
 export default {
@@ -116,9 +117,38 @@ export default {
     this.destroyTinymce();
   },
   methods: {
+    dynamicLoadScript(src, callback) {
+      const existingScript = document.getElementById(src);
+      const cb = callback || function() {};
+      if (!existingScript) {
+        const script = document.createElement("script");
+        script.src = src; // src url for the third-party library being loaded.
+        script.id = src;
+        document.body.appendChild(script);
+        callbacks.push(cb);
+        script.onload = function() {
+          this.onerror = this.onload = null;
+          for (const cb of callbacks) {
+            cb(null, script);
+          }
+          callbacks = null;
+        };
+        script.onerror = function() {
+          this.onerror = this.onload = null;
+          cb(new Error("Failed to load " + src), script);
+        };
+      }
+      if (existingScript && cb) {
+        if (window.tinymce) {
+          cb(null, existingScript);
+        } else {
+          callbacks.push(cb);
+        }
+      }
+    },
     init() {
       // dynamic load tinymce from cdn
-      loadEditor(tinymceCDN, err => {
+      this.dynamicLoadScript(tinymceCDN, err => {
         if (err) {
           this.$message.error(err.message);
           return;

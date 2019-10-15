@@ -1,13 +1,11 @@
 <template>
   <div>
-    <div class="video">
+    <div class="video-container">
       <video-player
-        :options="{
-          sources: [{ type: 'video/mp4', src: 'https://ccsl.shu.edu.cn/public/'+video.videoPath }]
-        }"
+        :options="{ sources: [{ type: 'video/mp4', src: 'https://ccsl.shu.edu.cn/public/'+video.videoPath }] }"
         width="100%"
         class="vjs-big-play-centered"
-        @contextmenu.native.prevent=""
+        @contextmenu.native.prevent
       />
     </div>
 
@@ -17,7 +15,6 @@
         <span class="tag-value">{{ video.performer.region.name }}</span>
         <span class="tag-label">汉语转写</span>
         <span class="tag-value">{{ video.lexicalWord.chinese }}</span>
-
       </div>
       <div class="tags">
         <span class="tag-label">词性</span>
@@ -29,71 +26,39 @@
         <span class="tag-label">构词方式</span>
         <span class="tag-value">{{ video.constructType || "暂无数据" }}</span>
         <span class="tag-label">构词词根</span>
-        <span
-          v-if="video.constructWords"
-          class="tag-value"
-        >
+        <span v-if="video.constructWords" class="tag-value">
           <el-tag
             v-for="(item,index) in video.constructWords"
             :key="index"
             class="tag-words"
           >{{ item }}</el-tag>
         </span>
-        <span
-          v-else
-          class="tag-value"
-        >暂无数据</span>
+        <span v-else class="tag-value">暂无数据</span>
       </div>
-      <div
-        v-if="video.leftSigns.length !== 0"
-        class="tags"
-      >
+      <div v-if="video.leftSigns.length !== 0" class="tags">
         <span class="tag-label">左手手型</span>
-        <span
-          class="tag-value"
-          style="width:50%"
-        >
-          <span
-            v-for="item in video.leftSigns"
-            :key="item.id"
-          >
-            <el-tooltip
-              effect="dark"
-              :content="item.name"
-              placement="top"
-            >
+        <span class="tag-value" style="width:50%">
+          <span v-for="item in video.leftSigns" :key="item.id">
+            <el-tooltip effect="dark" :content="item.name" placement="top">
               <img
                 style="width:100px"
                 :src="'https://ccsl.shu.edu.cn/public/'+item.image"
                 :alt="item.name"
-              >
+              />
             </el-tooltip>
           </span>
         </span>
       </div>
-      <div
-        v-if="video.rightSigns.length !== 0"
-        class="tags"
-      >
+      <div v-if="video.rightSigns.length !== 0" class="tags">
         <span class="tag-label">右手手型</span>
-        <span
-          class="tag-value"
-          style="width:50%"
-        >
-          <span
-            v-for="item in video.rightSigns"
-            :key="item.id"
-          >
-            <el-tooltip
-              effect="dark"
-              :content="item.name"
-              placement="top"
-            >
+        <span class="tag-value" style="width:50%">
+          <span v-for="item in video.rightSigns" :key="item.id">
+            <el-tooltip effect="dark" :content="item.name" placement="top">
               <img
                 style="width:100px"
                 :src="'https://ccsl.shu.edu.cn/public/'+item.image"
                 :alt="item.name"
-              >
+              />
             </el-tooltip>
           </span>
         </span>
@@ -116,12 +81,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.video {
-  margin: 10px 40px;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
 .tags {
   text-align: center;
   padding: 10px 20px;

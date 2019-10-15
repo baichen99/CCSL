@@ -120,7 +120,7 @@ export default {
       } else {
         this.searchParams.chinese = this.keyword;
       }
-      this.$emit("search-clicked");
+      this.$emit("search");
     },
     toggleAdvance() {
       this.advancedSearch = !this.advancedSearch;

@@ -4,6 +4,7 @@ import (
 	"ccsl/middlewares"
 	"ccsl/services"
 	"ccsl/utils"
+	"fmt"
 
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/mvc"
@@ -66,6 +67,7 @@ func (c *VideoController) GetVideosList() {
 		utils.SetResponseError(c.Context, iris.StatusInternalServerError, "VideoService::GetVideosList", err)
 		return
 	}
+
 	c.Context.JSON(iris.Map{
 		message: success,
 		data:    videos,
@@ -86,8 +88,8 @@ func (c *VideoController) CreateVideo() {
 	}
 	// PSQL - Create video in database.
 	video := form.ConvertToModel()
-	leftSignsIds := form.LeftSigns
-	rightSignsIds := form.RightSigns
+	leftSignsIds := form.LeftSignsID
+	rightSignsIds := form.RightSignsID
 	if err := c.VideoService.CreateVideo(video, leftSignsIds, rightSignsIds); err != nil {
 		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "VideoService::CreateVideo", err)
 		return
@@ -119,7 +121,7 @@ func (c *VideoController) UpdateVideo() {
 	defer c.Context.Next()
 
 	// Getting ID from parameters in the URL
-	// videoID := c.Context.Params().Get("id")
+	videoID := c.Context.Params().Get("id")
 	var form lexicalVideoUpdateForm
 
 	// Read JSON from request and validate request
@@ -130,17 +132,16 @@ func (c *VideoController) UpdateVideo() {
 
 	updateData := utils.MakeUpdateData(form)
 
-	leftSignsIds, _ := updateData["leftSigns"].([]string)
-	rightSignIds, _ := updateData["rightSigns"]
-	delete(updateData, "leftSigns")
-	delete(updateData, "rightSigns")
-	print(updateData, leftSignsIds, rightSignIds)
+	leftSignsID, _ := updateData["LeftSignsID"].([]string)
+	rightSignID, _ := updateData["RightSignsID "].([]string)
+
+	fmt.Println("LEFT INDICES", leftSignsID, "RIGHT INDICES", rightSignID)
 
 	// PSQL - Update of the given ID
-	// if err := c.VideoService.UpdateVideo(videoID, updateData); err != nil {
-	// 	utils.SetResponseError(c.Context, iris.StatusBadRequest, "VideoService::UpdateVideo", err)
-	// 	return
-	// }
+	if err := c.VideoService.UpdateVideo(videoID, updateData, leftSignsID, rightSignID); err != nil {
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "VideoService::UpdateVideo", err)
+		return
+	}
 
 	// Returns with 204 No Content status.
 	c.Context.StatusCode(iris.StatusNoContent)

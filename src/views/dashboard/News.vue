@@ -79,12 +79,12 @@
     </div>
 
     <el-pagination
-      v-if="total>params.limit"
       background
-      layout="total,prev, pager, next"
+      layout="total, sizes, prev, pager, next, jumper"
       :total="total"
       :page-size.sync="params.limit"
       :current-page.sync="params.page"
+      :hide-on-single-page="true"
     />
 
     <el-drawer
@@ -135,7 +135,6 @@ export default {
   data() {
     return {
       params: {
-        limit: 10,
         order: "desc",
         title: "",
         type: "",

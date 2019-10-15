@@ -77,6 +77,7 @@ const actions = {
 
   logout({ commit }) {
     return new Promise(resolve => {
+      console.log("LOGOUT");
       commit("SET_TOKEN", "");
       commit("SET_ID", "");
       commit("SET_ROLES", []);
@@ -86,7 +87,7 @@ const actions = {
     });
   },
 
-  getUserInfo({ commit, state }) {
+  getUserInfo({ dispatch, commit, state }) {
     return new Promise((resolve, reject) => {
       const userID = getUser() || state.id;
       GetUser(userID)
@@ -96,6 +97,7 @@ const actions = {
           resolve(res.data);
         })
         .catch(err => {
+          dispatch("logout");
           reject(err);
         });
     });

@@ -5,7 +5,7 @@
     <div class="search">
       <h3>国家通用手语学习平台</h3>
 
-      <video-search-input v-model="params" :show-advance="false" @search-clicked="searchByButton" />
+      <video-search-input v-model="params" :show-advance="false" @search="searchByButton" />
 
       <video-search-result
         :videos="videos"
@@ -42,10 +42,10 @@ export default {
       videos: [],
       total: 0,
       params: {
+        chinese: "",
         wordID: "",
         gender: "M",
         regionID: 100000,
-        chinese: "",
         page: 1,
         limit: 4
       }

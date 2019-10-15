@@ -11,9 +11,9 @@ import (
 // LexicalVideoInterface struct
 type LexicalVideoInterface interface {
 	GetVideosList(parameters utils.GetVideoListParameters) (videos []models.LexicalVideo, count int, err error)
-	CreateVideo(video models.LexicalVideo, leftSignsIds []string, rightSignsIds []string) (err error)
+	CreateVideo(video models.LexicalVideo, leftSignsID []string, rightSignsID []string) (err error)
 	GetVideo(videoID string) (video models.LexicalVideo, err error)
-	UpdateVideo(videoID string, updatedData map[string]interface{}, leftSignsIds []string, rightSignsIds []string) (err error)
+	UpdateVideo(videoID string, updatedData map[string]interface{}, leftSignsID []string, rightSignsID []string) (err error)
 	DeleteVideo(videoID string) (err error)
 }
 
@@ -68,7 +68,7 @@ func (s *LexicalVideoService) GetVideosList(parameters utils.GetVideoListParamet
 
 	orderQuery := fmt.Sprintf("%s %s", parameters.OrderBy, parameters.Order)
 
-	queryExp := db.Joins("JOIN performers ON performers.id = lexical_videos.performer_id").Joins("JOIN lexical_words ON lexical_words.id = lexical_videos.lexical_word_id").Joins("JOIN districts ON districts.code = performers.region_id").Order("lexical_videos.lexical_word_id asc").Order("performers.region_id asc").Order(orderQuery)
+	queryExp := db.Joins("JOIN performers ON performers.id = lexical_videos.performer_id").Joins("JOIN lexical_words ON lexical_words.id = lexical_videos.lexical_word_id").Joins("JOIN districts ON districts.code = performers.region_id").Order("lexical_words.initial asc").Order("lexical_words.id asc").Order("performers.region_id asc").Order(orderQuery)
 
 	err = queryExp.Find(&videos).Count(&count).Error
 
@@ -78,23 +78,55 @@ func (s *LexicalVideoService) GetVideosList(parameters utils.GetVideoListParamet
 
 	err = queryExp.Set("gorm:auto_preload", true).Limit(parameters.Limit).Offset(parameters.Limit * (parameters.Page - 1)).Find(&videos).Error
 
+	for index, video := range videos {
+		if len(video.LeftSigns) != 0 {
+			for _, sign := range video.LeftSigns {
+				videos[index].LeftSignsID = append(videos[index].LeftSignsID, sign.ID.String())
+			}
+		} else {
+			videos[index].LeftSignsID = []string{}
+		}
+
+		if len(video.RightSigns) != 0 {
+			for _, sign := range video.RightSigns {
+				videos[index].RightSignsID = append(videos[index].RightSignsID, sign.ID.String())
+			}
+		} else {
+			videos[index].RightSignsID = []string{}
+		}
+	}
+
 	return
 }
 
 // CreateVideo creates a new video
-func (s *LexicalVideoService) CreateVideo(video models.LexicalVideo, leftSignsIds []string, rightSignsIds []string) (err error) {
+func (s *LexicalVideoService) CreateVideo(video models.LexicalVideo, leftSignsID []string, rightSignsID []string) (err error) {
 	err = s.PG.Set("gorm:association_autocreate", false).Create(&video).Error
 	return
 }
 
 // GetVideo returns video with given id
 func (s *LexicalVideoService) GetVideo(videoID string) (video models.LexicalVideo, err error) {
-	err = s.PG.Where("id = ?", videoID).Take(&video).Error
+	err = s.PG.Set("gorm:auto_preload", true).Where("id = ?", videoID).Take(&video).Error
+	if len(video.LeftSigns) != 0 {
+		for _, sign := range video.LeftSigns {
+			video.LeftSignsID = append(video.LeftSignsID, sign.ID.String())
+		}
+	} else {
+		video.LeftSignsID = []string{}
+	}
+	if len(video.RightSigns) != 0 {
+		for _, sign := range video.RightSigns {
+			video.RightSignsID = append(video.RightSignsID, sign.ID.String())
+		}
+	} else {
+		video.RightSignsID = []string{}
+	}
 	return
 }
 
 // UpdateVideo returns video with given id
-func (s *LexicalVideoService) UpdateVideo(videoID string, updatedData map[string]interface{}, leftSignsIds []string, rightSignsIds []string) (err error) {
+func (s *LexicalVideoService) UpdateVideo(videoID string, updatedData map[string]interface{}, leftSignsID []string, rightSignsID []string) (err error) {
 	var video models.LexicalVideo
 	err = s.PG.Set("gorm:association_autoupdate", false).Model(&video).Where("id = ?", videoID).Updates(updatedData).Error
 	return

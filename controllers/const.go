@@ -241,8 +241,8 @@ type lexicalVideoCreateForm struct {
 	VideoPath      string   `json:"videoPath" validate:"required"`      // 视频文件路径
 	ConstructType  string   `json:"constructType" validate:"required"`  // 构词方式
 	ConstructWords []string `json:"constructWords" validate:"required"` // 构词词语
-	LeftSigns      []string `json:"leftSigns" validate:"omitempty"`     // 左手手势
-	RightSigns     []string `json:"rightSigns" validate:"omitempty"`    // 右手手势
+	LeftSignsID    []string `json:"leftSignsID" validate:"omitempty"`   // 左手手势
+	RightSignsID   []string `json:"rightSignsID" validate:"omitempty"`  // 右手手势
 }
 
 func (f lexicalVideoCreateForm) ConvertToModel() (video models.LexicalVideo) {
@@ -264,6 +264,6 @@ type lexicalVideoUpdateForm struct {
 	VideoPath      *string   `json:"videoPath" validate:"omitempty"`      // 视频文件路径
 	ConstructType  *string   `json:"constructType" validate:"omitempty"`  // 构词方式
 	ConstructWords *[]string `json:"constructWords" validate:"omitempty"` // 构词词语
-	LeftSigns      *[]string `json:"leftSign" validate:"omitempty"`       // 左手手势
-	RightSigns     *[]string `json:"rightSign" validate:"omitempty"`      // 右手手势
+	LeftSignsID    *[]string `json:"leftSignsID" validate:"omitempty"`    // 左手手势
+	RightSignsID   *[]string `json:"rightSignsID" validate:"omitempty"`   // 右手手势
 }

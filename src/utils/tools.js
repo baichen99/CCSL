@@ -24,8 +24,8 @@ export function setUser(userID) {
   return localStorage.setItem(USER_KEY, userID);
 }
 
-export function removeUser(userID) {
-  return localStorage.removeItem(userID);
+export function removeUser() {
+  return localStorage.removeItem(USER_KEY);
 }
 
 export function getPageTitle(pageTitle) {

@@ -29,12 +29,6 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="词性" align="center" min-width="100px">
-          <template slot-scope="{row}">
-            <span>{{ row.pos }}</span>
-          </template>
-        </el-table-column>
-
         <el-table-column label="汉语转写" align="center" min-width="200px">
           <template slot-scope="{row}">
             <span>{{ row.chinese }}</span>
@@ -44,6 +38,12 @@
         <el-table-column label="英语转写" align="center" min-width="200px">
           <template slot-scope="{row}">
             <span>{{ row.english }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="词性" align="center" min-width="100px">
+          <template slot-scope="{row}">
+            <span>{{ row.pos }}</span>
           </template>
         </el-table-column>
 
@@ -57,12 +57,12 @@
     </div>
 
     <el-pagination
-      v-if="total>params.limit"
       background
-      layout="total,prev, pager, next"
+      layout="total, sizes, prev, pager, next, jumper"
       :total="total"
       :page-size.sync="params.limit"
       :current-page.sync="params.page"
+      :hide-on-single-page="true"
     />
 
     <el-drawer
@@ -95,6 +95,7 @@ import LexicalWordForm from "@/views/dashboard/form/LexicalWordForm";
 import WordPosSelector from "@/components/form/WordPosSelector";
 import WordInitialSelector from "@/components/form/WordInitialSelector";
 import listMixin from "./listMixin";
+
 import {
   GetLexicalWordsList,
   CreateLexicalWord,
@@ -113,11 +114,11 @@ export default {
   data() {
     return {
       params: {
-        limit: 10,
         initial: "",
         chinese: "",
         english: "",
-        pos: ""
+        pos: "",
+        orderBy: "initial, id"
       }
     };
   },

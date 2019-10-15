@@ -5,7 +5,7 @@
     <div class="search">
       <h3>国家通用手语比对语料库</h3>
 
-      <video-search-input v-model="params" @search-clicked="searchByButton" />
+      <video-search-input v-model="params" @search="searchByButton" />
 
       <video-search-result
         :videos="videos"
@@ -57,7 +57,8 @@ export default {
         pos: "", // 词性
         initial: "",
         constructType: "",
-        constructWords: ""
+        constructWords: "",
+        orderBy: "performers.gender"
       }
     };
   },
@@ -77,7 +78,7 @@ export default {
       this.params.constructWords = "";
     },
     getData() {
-      GetLexicalVideosList(this.params).then(res => {
+      GetLexicalVideosList(this.params, true).then(res => {
         this.videos = res.data;
         this.params.page = res.page;
         this.params.limit = res.limit;
