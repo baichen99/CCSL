@@ -8,19 +8,25 @@
       <user-type-selector v-model="formData.userType" />
     </el-form-item>
 
-    <el-form-item label="用户学工号" prop="username" required>
+    <el-form-item label="用户账号" prop="username" required>
       <el-input v-model="formData.username" placeholder="请输入学号或者工号" />
+    </el-form-item>
+
+    <el-form-item label="用户状态" prop="state" required>
+      <user-state-selector v-model="formData.state" />
     </el-form-item>
   </el-form>
 </template>
 
 <script>
 import UserTypeSelector from "@/components/form/UserTypeSelector";
+import UserStateSelector from "@/components/form/UserStateSelector";
 import formMixin from "./formMixin";
 export default {
   name: "UserForm",
   components: {
-    UserTypeSelector
+    UserTypeSelector,
+    UserStateSelector
   },
   mixins: [formMixin],
   data() {

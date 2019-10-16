@@ -1,5 +1,6 @@
 <template>
   <el-upload
+    ref="uploader"
     class="upload-container"
     drag
     :accept="acceptType"
@@ -11,6 +12,7 @@
     :on-success="onUploadSuccess"
     :on-remove="clearFile"
     :style="{height}"
+    :show-file-list="false"
   >
     <div v-if="imageUrl === ''" class="el-upload__text">
       <i class="el-icon-upload" />
@@ -80,6 +82,7 @@ export default {
     },
     clearFile() {
       this.imageUrl = "";
+      this.$refs.clearFiles();
     }
   }
 };
