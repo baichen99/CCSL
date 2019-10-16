@@ -34,7 +34,7 @@ $ make frontend
 
 ## 部署
 
-> 在部署之前确保能够使用ssh连接到服务器，需要开启VPN
+> 在部署之前确保能够使用ccsl@ccsl.shu.edu.cn命令直接ssh连接到服务器，可能需要开启VPN
 
 - 部署前端
 
@@ -45,13 +45,7 @@ $ make deploy-frontend
 - 部署后端
 
 ```bash
-$ make deploy-backend # 输入version_number
-# ssh到服务器
-$ load
-$ cd api
-$ export CCSL_VERSION=${version_number}
-# 替换${version_number}为版本号数字
-$ docker-compose up -d
+$ make deploy-backend # 输入Api版本号，上一个版本号在configs/.version文件中，版本号依次递增即可
 ```
 ## 备注
 
