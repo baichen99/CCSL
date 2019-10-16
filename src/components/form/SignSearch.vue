@@ -3,14 +3,21 @@
     <h3 class="title">手形检索</h3>
     <div class="sign">
       <div v-for="item in signs" :key="item.id" class="sign-box">
-        <el-tooltip effect="dark" :content="item.name" placement="top">
+        <el-popover trigger="hover" placement="top">
+          <div class="sign-name-popover" style>{{ item.name }}</div>
           <img
+            width="200px"
+            :src="'https://ccsl.shu.edu.cn/public/'+item.image"
+            :alt="item.name"
+          />
+          <img
+            slot="reference"
             style="width:100%"
             :src="'https://ccsl.shu.edu.cn/public/'+item.image"
             :alt="item.name"
             @click="onSignSelected(item.id)"
           />
-        </el-tooltip>
+        </el-popover>
       </div>
     </div>
   </el-card>
@@ -37,6 +44,15 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+.sign-name-popover {
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  margin: 5px;
+}
+</style>
 
 <style lang="scss" scoped>
 .sign-search {
