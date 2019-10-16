@@ -26,7 +26,10 @@ frontend:
 	@npm run dev
 
 deploy-backend:
-	@make build && scp docker.tar ccsl@ccsl.shu.edu.cn:/home/ccsl/ && ssh ccsl@ccsl.shu.edu.cn "docker load < /home/ccsl/docker.tar && rm -f /home/ccsl/docker.tar && cd /home/ccsl/api && export CCSL_VERSION=$${CCSL_VERSION} && docker-compose up -d"
+	@make build && scp docker.tar ccsl@ccsl.shu.edu.cn:/home/ccsl/ && ssh ccsl@ccsl.shu.edu.cn "docker load < /home/ccsl/docker.tar && rm -f /home/ccsl/docker.tar"
 
 deploy-frontend:
 	@npm run build && ssh ccsl@ccsl.shu.edu.cn "rm -rf /home/ccsl/web/*" && scp -r dist/* ccsl@ccsl.shu.edu.cn:/home/ccsl/web/
+
+deploy:
+	@make deploy-frontend && make deploy-backend
