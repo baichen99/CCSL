@@ -76,7 +76,11 @@ func (s *LexicalVideoService) GetVideosList(parameters utils.GetVideoListParamet
 		return
 	}
 
-	err = queryExp.Set("gorm:auto_preload", true).Limit(parameters.Limit).Offset(parameters.Limit * (parameters.Page - 1)).Find(&videos).Error
+	if parameters.Limit != 0 {
+		err = queryExp.Set("gorm:auto_preload", true).Limit(parameters.Limit).Offset(parameters.Limit * (parameters.Page - 1)).Find(&videos).Error
+	} else {
+		err = queryExp.Set("gorm:auto_preload", true).Find(&videos).Error
+	}
 
 	for index, video := range videos {
 		videos[index].LeftSignsID = []string{}

@@ -29,7 +29,7 @@ export default {
         name: [{ required: true, message: "请输入用户姓名", trigger: "blur" }],
         userType: [
           { required: true, message: "请选择用户角色", trigger: "blur" },
-          { type: "enum", enum: ["super", "admin", "user"] }
+          { type: "enum", enum: ["super", "admin", "user", "learner"] }
         ],
         username: [
           {

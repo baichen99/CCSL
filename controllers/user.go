@@ -39,11 +39,13 @@ func (c *UserController) GetUsersList() {
 	userType := c.Context.URLParamDefault("userType", "")
 	name := c.Context.URLParamDefault("name", "")
 	username := c.Context.URLParamDefault("username", "")
+	state := c.Context.URLParamDefault("state", "")
 	listParameters := utils.GetUserListParameters{
 		GetListParameters: listParams,
 		UserType:          userType,
 		Username:          username,
 		Name:              name,
+		State:             state,
 	}
 	users, count, err := c.UserService.GetUsersList(listParameters)
 	if err != nil {
@@ -135,8 +137,7 @@ func (c *UserController) UpdateUser() {
 
 	// Only super admin and user
 	tokenUser, tokenRole := middlewares.GetJWTParams(c.Context)
-
-	if tokenRole != "super" || tokenUser != userID {
+	if tokenRole != "super" && tokenUser != userID {
 		utils.SetResponseError(c.Context, iris.StatusForbidden, "Not super user or self", errors.New("RoleError"))
 		return
 	}
@@ -186,6 +187,10 @@ func (c *UserController) UserLogin() {
 	user, err := c.UserService.GetUser("username", form.Username)
 	if err != nil {
 		utils.SetResponseError(c.Context, iris.StatusUnauthorized, "UserService::GetUser", errors.New("AuthFailed"))
+		return
+	}
+	if user.State != "active" {
+		utils.SetResponseError(c.Context, iris.StatusUnauthorized, "Account State Error", errors.New("InactiveAccount"))
 		return
 	}
 	if utils.IsShuUser(form.Username) {

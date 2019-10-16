@@ -7,46 +7,29 @@
       @toggleClick="toggleSideBar"
     />
 
-    <breadcrumb
-      id="breadcrumb-container"
-      class="breadcrumb-container"
-    />
+    <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
 
     <div class="right-menu">
       <template v-if="device!=='mobile'">
         <!-- <error-log class="errLog-container right-menu-item hover-effect" /> -->
 
-        <screenfull
-          id="screenfull"
-          class="right-menu-item hover-effect"
-        />
-
-
+        <screenfull id="screenfull" class="right-menu-item hover-effect" />
       </template>
 
-      <el-dropdown
-        class="avatar-container right-menu-item hover-effect"
-        trigger="click"
-      >
+      <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
-          <img
-            :src="avatar+'?imageView2/1/w/80/h/80'"
-            class="user-avatar"
-          >
+          <img :src="avatar" class="user-avatar" />
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
           <router-link to="/profile">
-            <el-dropdown-item>我的信息</el-dropdown-item>
+            <el-dropdown-item>个人中心</el-dropdown-item>
           </router-link>
           <router-link to="/">
             <el-dropdown-item>返回首页</el-dropdown-item>
           </router-link>
           <el-dropdown-item divided>
-            <span
-              style="display:block;"
-              @click="logout"
-            >退出登录</span>
+            <span style="display:block;" @click="logout">退出登录</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -77,7 +60,6 @@ export default {
     },
     async logout() {
       await this.$store.dispatch("user/logout");
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`);
     }
   }
 };

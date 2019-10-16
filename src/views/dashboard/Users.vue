@@ -15,6 +15,7 @@
         clearable
         @clear="handleSearch"
       />
+      <user-state-selector v-model="params.state" @update="handleSearch" />
       <user-type-selector v-model="params.userType" @update="handleSearch" />
       <el-button type="primary" plain @click="handleSearch">查找</el-button>
       <el-button type="primary" plain @click="handleNew">增加</el-button>
@@ -27,9 +28,15 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="上次更新" align="center" width="180px">
+        <!-- <el-table-column label="上次更新" align="center" width="180px">
           <template slot-scope="{row}">
             <span>{{ $d(new Date(row.updatedAt), 'long') }}</span>
+          </template>
+        </el-table-column> -->
+
+        <el-table-column label="账号状态" align="center" width="100px">
+          <template slot-scope="{row}">
+            <el-tag :type="userState[row.state].color">{{ userState[row.state].name }}</el-tag>
           </template>
         </el-table-column>
 
@@ -53,6 +60,20 @@
 
         <el-table-column label="操作" align="center" width="250px" fixed="right">
           <template slot-scope="{row}">
+            <el-button
+              v-if="row.state==='inactive'"
+              type="success"
+              size="mini"
+              plain
+              @click="handleActive(row.id)"
+            >启用</el-button>
+            <el-button
+              v-if="row.state==='active'"
+              type="warning"
+              size="mini"
+              plain
+              @click="handleInactive(row.id)"
+            >停用</el-button>
             <el-button type="primary" size="mini" plain @click="handleEdit(row)">编辑</el-button>
             <el-button type="danger" size="mini" plain @click="handleDelete(row.id)">删除</el-button>
           </template>
@@ -98,13 +119,15 @@
 import { mapGetters } from "vuex";
 import UserForm from "@/views/dashboard/form/UserForm";
 import UserTypeSelector from "@/components/form/UserTypeSelector";
+import UserStateSelector from "@/components/form/UserStateSelector";
 import listMixin from "./listMixin";
 import { GetUsersList, CreateUser, UpdateUser, DeleteUser } from "@/api/users";
 export default {
   name: "Users",
   components: {
     UserForm,
-    UserTypeSelector
+    UserTypeSelector,
+    UserStateSelector
   },
   mixins: [listMixin],
   data() {
@@ -112,11 +135,12 @@ export default {
       params: {
         username: "",
         name: "",
-        userType: ""
+        userType: "",
+        state: ""
       }
     };
   },
-  computed: { ...mapGetters(["userTypes"]) },
+  computed: { ...mapGetters(["userTypes", "userState"]) },
   methods: {
     getList() {
       this.loading = true;
@@ -163,6 +187,14 @@ export default {
         .catch(() => {
           this.showCancel();
         });
+    },
+    handleActive(id) {
+      const updateData = { state: "active" };
+      this.handleUpdate(id, updateData);
+    },
+    handleInactive(id) {
+      const updateData = { state: "inactive" };
+      this.handleUpdate(id, updateData);
     }
   }
 };

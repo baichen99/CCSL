@@ -1,7 +1,7 @@
 import axios from "axios";
 import store from "@/store";
 import router from "@/router";
-import { Message, Loading } from "element-ui";
+import { Notification, Loading } from "element-ui";
 import { getToken } from "@/utils/tools";
 
 // create an axios instance
@@ -46,10 +46,10 @@ service.interceptors.request.use(
   },
   error => {
     hideFullScreenLoading();
-    Message({
-      message: error,
+    Notification({
+      title: error,
       type: "error",
-      duration: 5 * 1000
+      duration: 3 * 1000
     });
     return Promise.reject(error);
   }
@@ -66,7 +66,8 @@ service.interceptors.response.use(
     hideFullScreenLoading();
     const res = error.response.data;
     const statusCode = error.response.status;
-    Message({
+    Notification({
+      title: res.message,
       message: res.error,
       type: "error",
       duration: 5 * 1000

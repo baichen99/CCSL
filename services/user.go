@@ -33,6 +33,7 @@ func (s *UserService) GetUsersList(parameters utils.GetUserListParameters) (user
 	// Adding custom scopes to the query based on get list parameters.
 	db := s.PG.Scopes(
 		utils.FilterByColumn("users.user_type", parameters.UserType),
+		utils.FilterByColumn("users.state", parameters.State),
 		utils.SearchByColumn("users.username", parameters.Username),
 		utils.SearchByColumn("users.name", parameters.Name),
 	)

@@ -1,13 +1,6 @@
 <template>
   <footer>
-    <svg-icon
-      icon-class="logo"
-      class="logo"
-    />
-    <div
-      style="cursor: pointer;"
-      @click="$router.push('/dashboard')"
-    >管理登录</div>
+    <svg-icon icon-class="logo" class="logo" />
     <div>沪ICP备 09014157号</div>
     <div>中国手语及聋人研究中心</div>
     <div>邮箱：ccsl@oa.shu.edu.cn &nbsp; 邮编：200444</div>

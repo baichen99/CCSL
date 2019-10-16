@@ -22,7 +22,7 @@
             v-for="item in researches"
             :key="item.url"
             :index="item.url"
-            style="text-align:center"
+            class="sub-menu-item"
           >{{ item.title }}</el-menu-item>
         </el-submenu>
         <el-submenu index="/database">
@@ -31,7 +31,7 @@
             v-for="item in databases"
             :key="item.url"
             :index="item.url"
-            style="text-align:center;"
+            class="sub-menu-item"
           >{{ item.title }}</el-menu-item>
         </el-submenu>
         <el-submenu index="/about">
@@ -40,18 +40,25 @@
             v-for="item in about"
             :key="item.url"
             :index="item.url"
-            style="text-align:center;"
+            class="sub-menu-item"
           >{{ item.title }}</el-menu-item>
         </el-submenu>
+        <el-submenu v-if="userToken" index="/profile">
+          <template slot="title">{{ name }}</template>
+          <el-menu-item index="/profile" class="sub-menu-item">个人中心</el-menu-item>
+          <el-menu-item class="sub-menu-item" @click="logout">退出登录</el-menu-item>
+        </el-submenu>
+        <el-menu-item v-else index="/login">登录</el-menu-item>
       </el-menu>
     </div>
   </header>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import { getToken } from "@/utils/tools";
 export default {
   name: "Header",
-
   data: () => ({
     defaultActive: "/",
     researches: [
@@ -74,12 +81,16 @@ export default {
     ]
   }),
   computed: {
+    ...mapGetters(["name"]),
     activeMenu() {
       if (this.$route.matched.length > 1) {
         return this.$route.matched[0].path;
       } else {
         return this.$route.path;
       }
+    },
+    userToken() {
+      return getToken() || this.$store.getters.token;
     }
   },
   watch: {
@@ -93,6 +104,9 @@ export default {
   methods: {
     setActiveMenu() {
       this.defaultActive = this.$route.path;
+    },
+    async logout() {
+      await this.$store.dispatch("user/logout");
     }
   }
 };
@@ -141,5 +155,9 @@ header {
       }
     }
   }
+}
+
+.sub-menu-item {
+  text-align: center;
 }
 </style>

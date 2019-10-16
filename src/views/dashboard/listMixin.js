@@ -113,15 +113,15 @@ const listMixin = {
       return updateData;
     },
     showSuccess() {
-      this.$message({
+      this.$notify({
         type: "success",
-        message: "操作成功"
+        title: "操作成功"
       });
     },
     showCancel() {
-      this.$message({
+      this.$notify({
         type: "info",
-        message: "已取消操作"
+        title: "已取消操作"
       });
       this.loading = false;
     }

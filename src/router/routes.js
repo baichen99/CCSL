@@ -96,18 +96,17 @@ const routes = [
     hidden: true
   },
   {
-    path: "/dashboard",
+    path: "/profile",
     component: AdminLayout,
     children: [
       {
-        path: "/dashboard",
-        name: "Dashboard",
-        component: () => import("@/views/dashboard/Dashboard"),
+        path: "/profile",
+        name: "Profile",
+        component: () => import("@/views/dashboard/Profile"),
         meta: {
-          title: "控制中心",
-          icon: "dashboard",
-          auth: true,
-          roles: [superUser, adminUser]
+          title: "个人中心",
+          icon: "profile",
+          auth: true
         }
       }
     ]
@@ -153,7 +152,8 @@ const routes = [
     name: "Website",
     meta: {
       title: "网站管理",
-      icon: "website"
+      icon: "website",
+      roles: [superUser, adminUser]
     },
     children: [
       {
@@ -163,8 +163,7 @@ const routes = [
         meta: {
           title: "轮播图片管理",
           icon: "pictures",
-          auth: true,
-          roles: [superUser, adminUser]
+          auth: true
         }
       },
       {
@@ -174,8 +173,17 @@ const routes = [
         meta: {
           title: "网站新闻管理",
           icon: "news",
-          auth: true,
-          roles: [superUser, adminUser]
+          auth: true
+        }
+      },
+      {
+        path: "members-setting",
+        name: "Members",
+        component: () => import("@/views/dashboard/Members"),
+        meta: {
+          title: "研究团队管理",
+          icon: "member",
+          auth: true
         }
       }
     ]
@@ -187,7 +195,8 @@ const routes = [
     name: "LexicalDatabaseSetting",
     meta: {
       title: "比对语料库管理",
-      icon: "contrast"
+      icon: "contrast",
+      roles: [superUser, adminUser]
     },
     children: [
       {
@@ -197,8 +206,7 @@ const routes = [
         meta: {
           title: "词表管理",
           icon: "words",
-          auth: true,
-          roles: [superUser, adminUser]
+          auth: true
         }
       },
       {
@@ -208,8 +216,7 @@ const routes = [
         meta: {
           title: "视频管理",
           icon: "video",
-          auth: true,
-          roles: [superUser, adminUser]
+          auth: true
         }
       },
       {
@@ -219,8 +226,7 @@ const routes = [
         meta: {
           title: "手形管理",
           icon: "sign",
-          auth: true,
-          roles: [superUser, adminUser]
+          auth: true
         }
       }
     ]

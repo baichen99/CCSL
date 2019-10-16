@@ -31,6 +31,10 @@ const state = {
     learner: { name: "学习平台用户", color: "info" },
     user: { name: "语料库用户", color: "" }
   },
+  userState: {
+    active: { name: "活跃", color: "success" },
+    inactive: { name: "停用", color: "danger" }
+  },
   genderTypes: {
     M: { name: "男", value: "M" },
     F: { name: "女", value: "F" }

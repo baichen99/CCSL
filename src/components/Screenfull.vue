@@ -1,9 +1,6 @@
 <template>
   <div>
-    <svg-icon
-      :icon-class="isFullscreen?'exit-fullscreen':'fullscreen'"
-      @click="click"
-    />
+    <svg-icon :icon-class="isFullscreen?'exit-fullscreen':'fullscreen'" @click="click" />
   </div>
 </template>
 
@@ -26,8 +23,8 @@ export default {
   methods: {
     click() {
       if (!screenfull.enabled) {
-        this.$message({
-          message: "你的浏览器暂不支持",
+        this.$notify({
+          title: "你的浏览器暂不支持",
           type: "warning"
         });
         return false;

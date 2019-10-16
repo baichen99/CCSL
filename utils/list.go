@@ -110,6 +110,7 @@ type GetUserListParameters struct {
 	UserType string
 	Username string
 	Name     string
+	State    string
 }
 
 // GetWordListParameters parameters for get word list queries

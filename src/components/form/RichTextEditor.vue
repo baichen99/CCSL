@@ -158,7 +158,7 @@ export default {
       this.dynamicLoadScript(tinymceCDN, err => {
         if (err) {
           this.loading = false;
-          this.$message.error(err.message);
+          this.$notify({ title: err, type: "error" });
           return;
         }
         this.loading = false;

@@ -137,6 +137,7 @@ type userCreateForm struct {
 	Username string `json:"username" validate:"required,numeric|email"`
 	Password string `json:"password" validate:"omitempty"`
 	UserType string `json:"userType" validate:"required,oneof=admin user learner"`
+	State    string `json:"state" validate:"required,oneof=active inactive"`
 }
 
 func (f userCreateForm) ConvertToModel() (user models.User) {
@@ -145,19 +146,26 @@ func (f userCreateForm) ConvertToModel() (user models.User) {
 		Username: f.Username,
 		Password: f.Password,
 		UserType: f.UserType,
+		State:    f.State,
 	}
 	return
 }
 
 type userUpdateForm struct {
+	Avatar   *string `json:"avatar" validate:"omitempty"`
 	Name     *string `json:"name" validate:"omitempty"`
 	Username *string `json:"username" validate:"omitempty,numeric|email"`
-	// Password *string `json:"password" validate:"omitempty,min=6"`
+	UserType *string `json:"userType" validate:"omitempty,oneof=admin user learner"`
+	State    *string `json:"state" validate:"omitempty,oneof=active inactive"`
 }
 
 type userLoginForm struct {
 	Username string `json:"username" validate:"required,numeric|email"`
 	Password string `json:"password" validate:"required"`
+}
+
+type resetPasswordForm struct {
+	Email string `json:"email" validate:"required"`
 }
 
 // >>> PERFORMER <<<

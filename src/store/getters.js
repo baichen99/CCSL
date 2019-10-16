@@ -12,6 +12,7 @@ const getters = {
   constructTypes: state => state.sign.constructTypes,
   newsColumns: state => state.sign.newsColumns,
   userTypes: state => state.sign.userTypes,
+  userState: state => state.sign.userState,
   genderTypes: state => state.sign.genderTypes
 };
 

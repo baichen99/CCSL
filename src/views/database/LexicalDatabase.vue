@@ -84,7 +84,11 @@ export default {
         this.params.limit = res.limit;
         this.total = res.total;
         if (this.total === 0) {
-          this.$message("没有找到相关的数据哦～");
+          this.$notify({
+            title: "没有找到相关的数据哦～",
+            type: "warning",
+            duration: 2000
+          });
         }
       });
     },

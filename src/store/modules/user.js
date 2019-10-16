@@ -1,4 +1,5 @@
 import { Login, RefreshToken, GetUser } from "@/api/users";
+import router from "@/router";
 import {
   getToken,
   setToken,
@@ -12,7 +13,7 @@ const state = {
   token: getToken(),
   name: "",
   username: "",
-  avatar: "https://ccsl.shu.edu.cn/public/assets/default.png",
+  avatar: "",
   id: "",
   roles: []
 };
@@ -54,8 +55,8 @@ const actions = {
             setUser(userID);
           }
           GetUser(userID)
-            .then(response => {
-              const { data } = response;
+            .then(res => {
+              const { data } = res;
               if (!data) {
                 reject("身份校验失败，请重新登录");
               }
@@ -63,6 +64,7 @@ const actions = {
               commit("SET_NAME", data.name);
               commit("SET_ROLES", data.userType);
               commit("SET_USERNAME", data.username);
+              commit("SET_AVATAR", data.avatar);
               resolve(data);
             })
             .catch(err => {
@@ -77,12 +79,15 @@ const actions = {
 
   logout({ commit }) {
     return new Promise(resolve => {
-      console.log("LOGOUT");
-      commit("SET_TOKEN", "");
       commit("SET_ID", "");
+      commit("SET_NAME", "");
       commit("SET_ROLES", []);
+      commit("SET_USERNAME", "");
+      commit("SET_AVATAR", "");
+      commit("SET_TOKEN", "");
       removeToken();
       removeUser();
+      router.push("/");
       resolve();
     });
   },
@@ -92,8 +97,12 @@ const actions = {
       const userID = getUser() || state.id;
       GetUser(userID)
         .then(res => {
-          commit("SET_ROLES", res.data.userType);
-          commit("SET_NAME", res.data.name);
+          const { data } = res;
+          commit("SET_ID", data.id);
+          commit("SET_NAME", data.name);
+          commit("SET_ROLES", data.userType);
+          commit("SET_USERNAME", data.username);
+          commit("SET_AVATAR", data.avatar);
           resolve(res.data);
         })
         .catch(err => {
@@ -103,7 +112,7 @@ const actions = {
     });
   },
 
-  refreshToken({ commit }) {
+  refreshToken({ dispatch, commit }) {
     return new Promise((resolve, reject) => {
       if (getToken()) {
         RefreshToken()
@@ -113,6 +122,7 @@ const actions = {
             resolve();
           })
           .catch(err => {
+            dispatch("logout");
             reject(err);
           });
       }
