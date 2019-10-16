@@ -44,7 +44,7 @@
           >{{ item.title }}</el-menu-item>
         </el-submenu>
         <el-submenu v-if="userToken" index="/profile">
-          <template slot="title">{{ name }}</template>
+          <template slot="title"> 我的 </template>
           <el-menu-item index="/profile" class="sub-menu-item">个人中心</el-menu-item>
           <el-menu-item class="sub-menu-item" @click="logout">退出登录</el-menu-item>
         </el-submenu>
@@ -55,7 +55,6 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import { getToken } from "@/utils/tools";
 export default {
   name: "Header",
@@ -81,7 +80,6 @@ export default {
     ]
   }),
   computed: {
-    ...mapGetters(["name"]),
     activeMenu() {
       if (this.$route.matched.length > 1) {
         return this.$route.matched[0].path;

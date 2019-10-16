@@ -79,10 +79,11 @@ export default {
     onUploadSuccess(res) {
       const fileUrl = res.data;
       this.imageUrl = fileUrl;
+      this.$refs.uploader.clearFiles();
     },
     clearFile() {
       this.imageUrl = "";
-      this.$refs.clearFiles();
+      this.$refs.uploader.clearFiles();
     }
   }
 };
