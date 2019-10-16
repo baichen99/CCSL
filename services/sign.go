@@ -38,9 +38,9 @@ func (s *SignService) GetSignList(parameters utils.GetSignListParameters) (signs
 	}
 	orderQuery := parameters.OrderBy + " " + parameters.Order
 	if parameters.Limit != 0 {
-		err = db.Order(orderQuery).Limit(parameters.Limit).Offset(parameters.Limit * (parameters.Page - 1)).Find(&signs).Error
+		err = db.Order(`cast(substring(signs.name, '^\d+') as int) asc`).Order(orderQuery).Limit(parameters.Limit).Offset(parameters.Limit * (parameters.Page - 1)).Find(&signs).Error
 	} else {
-		err = db.Order(orderQuery).Find(&signs).Error
+		err = db.Order(`cast(substring(signs.name, '^\d+') as int) asc`).Order(orderQuery).Find(&signs).Error
 	}
 
 	return

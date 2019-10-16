@@ -41,7 +41,7 @@
           <span v-for="item in video.leftSigns" :key="item.id">
             <el-tooltip effect="dark" :content="item.name" placement="top">
               <img
-                style="width:100px"
+                style="width:150px"
                 :src="'https://ccsl.shu.edu.cn/public/'+item.image"
                 :alt="item.name"
               />
@@ -55,7 +55,7 @@
           <span v-for="item in video.rightSigns" :key="item.id">
             <el-tooltip effect="dark" :content="item.name" placement="top">
               <img
-                style="width:100px"
+                style="width:150px"
                 :src="'https://ccsl.shu.edu.cn/public/'+item.image"
                 :alt="item.name"
               />
