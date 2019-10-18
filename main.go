@@ -65,15 +65,25 @@ func main() {
 		app.Handle(new(controllers.VideoController))
 	})
 	// Corpus for Shanghai Sign Language Verb
-	// TODO
+	mvc.Configure(app.Party("/verbs"), func(app *mvc.Application) {
+		// TODO
+	})
 	// Corpus for Proper Nouns in CSL
-	// TODO
+	mvc.Configure(app.Party("/nouns"), func(app *mvc.Application) {
+		// TODO
+	})
 	// Chinese Sign Language Corpus for Sign Texts
-	// TODO
+	mvc.Configure(app.Party("/texts"), func(app *mvc.Application) {
+		// TODO
+	})
 	// Literature Database for Sign Language Research
-	// TODO
+	mvc.Configure(app.Party("/literature"), func(app *mvc.Application) {
+		// TODO
+	})
 	// Database for Technical Terms in Sign Linguistics
-	// TODO
+	mvc.Configure(app.Party("/terms"), func(app *mvc.Application) {
+		// TODO
+	})
 	go gracefulShutdown(app)
 	host := configs.Conf.Listener.Server + ":" + strconv.Itoa(configs.Conf.Listener.Port)
 	app.Run(iris.Addr(host), iris.WithOptimizations, iris.WithoutStartupLog, iris.WithoutInterruptHandler)
@@ -105,7 +115,7 @@ func initDB(app *iris.Application) *gorm.DB {
 	pg.Exec("CREATE UNIQUE INDEX lexical_words_chinese_key ON lexical_words(chinese) WHERE deleted_at IS NULL")
 	// Manually Add foreign key for tables, because gorm won't create foreign keys, to make sure data is clean we need manually add these keys
 	// Data of cities are from https://github.com/modood/Administrative-divisions-of-China
-	// You cannot neither change or update them so set to RESTRICT
+	// You cannot neither change nor update them, so set to RESTRICT
 	pg.Model(&models.District{}).AddForeignKey("city_code", "cities(code)", "RESTRICT", "RESTRICT").AddForeignKey("province_code", "provinces(code)", "RESTRICT", "RESTRICT")
 	pg.Model(&models.City{}).AddForeignKey("province_code", "provinces(code)", "RESTRICT", "RESTRICT")
 	// For other data models, set delete mode to RESTRICT and update mode to CASCADE

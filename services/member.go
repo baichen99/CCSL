@@ -7,6 +7,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+// MemberInterface struct
 type MemberInterface interface {
 	GetMemberList(parameters utils.GetMemberListParameters) (members []models.Member, count int, err error)
 	GetMember(memberID string) (member models.Member, err error)
@@ -15,16 +16,19 @@ type MemberInterface interface {
 	DeleteMember(memberID string) (err error)
 }
 
+// MemberService implements member interface
 type MemberService struct {
 	PG *gorm.DB
 }
 
+// NewMemberService returns new member serivce
 func NewMemberService(pg *gorm.DB) MemberInterface {
 	return &MemberService{
 		PG: pg,
 	}
 }
 
+// GetMemberList returns members list
 func (s *MemberService) GetMemberList(parameters utils.GetMemberListParameters) (members []models.Member, count int, err error) {
 	db := s.PG.Scopes(
 		utils.SearchByColumn("members.name_zh", parameters.NameZh),
@@ -45,22 +49,26 @@ func (s *MemberService) GetMemberList(parameters utils.GetMemberListParameters) 
 	return
 }
 
+// GetMember returns member with given id
 func (s *MemberService) GetMember(memberID string) (member models.Member, err error) {
 	err = s.PG.Where("id = ?", memberID).Take(&member).Error
 	return
 }
 
+// CreateMember creates a new member
 func (s *MemberService) CreateMember(member models.Member) (err error) {
 	err = s.PG.Create(&member).Error
 	return
 }
 
+// UpdateMember updates member with given id
 func (s *MemberService) UpdateMember(memberID string, updateData map[string]interface{}) (err error) {
 	var member models.Member
 	err = s.PG.Model(&member).Where("id = ?", memberID).Update(updateData).Error
 	return
 }
 
+// DeleteMember soft deletes a member with given id
 func (s *MemberService) DeleteMember(memberID string) (err error) {
 	var member models.Member
 	err = s.PG.Where("id = ?", memberID).Delete(&member).Error

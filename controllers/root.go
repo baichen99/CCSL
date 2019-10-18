@@ -28,6 +28,5 @@ func (c *RootController) Get() {
 		message:  hello,
 		language: lang,
 		version:  strings.Replace(string(ver), "\n", "", -1),
-		"IP":     c.Context.GetHeader("X-Real-IP"),
 	})
 }

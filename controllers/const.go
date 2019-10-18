@@ -173,7 +173,7 @@ type resetPasswordForm struct {
 
 type performerCreateForm struct {
 	Name     string `json:"name" validate:"required"`
-	RegionID int    `json:"regionID" validate:"required"`
+	RegionID int    `json:"regionID" validate:"required,numeric,min=100000"`
 	Gender   string `json:"gender" validate:"required"`
 }
 
@@ -188,7 +188,7 @@ func (f performerCreateForm) ConvertToModel() (performer models.Performer) {
 
 type performerUpdateForm struct {
 	Name     *string `json:"name" validate:"omitempty"`
-	RegionID *int    `json:"regionID" validate:"omitempty"`
+	RegionID *int    `json:"regionID" validate:"omitempty,min=100000"`
 	Gender   *string `json:"gender" validate:"omitempty"`
 }
 
@@ -246,7 +246,7 @@ type lexicalWordUpdateForm struct {
 type lexicalVideoCreateForm struct {
 	PerformerID    string   `json:"performerID"  validate:"required,uuid4" `
 	LexicalWordID  string   `json:"lexicalWordID" validate:"required,uuid4"`
-	VideoPath      string   `json:"videoPath" validate:""`                        // 视频文件路径
+	VideoPath      string   `json:"videoPath" validate:"required"`                // 视频文件路径
 	ConstructType  string   `json:"constructType" validate:"required"`            // 构词方式
 	ConstructWords []string `json:"constructWords" validate:"omitempty"`          // 构词词语
 	LeftSignsID    []string `json:"leftSignsID" validate:"omitempty,dive,uuid4"`  // 左手手势

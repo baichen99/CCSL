@@ -38,6 +38,9 @@ func (s *SignService) GetSignList(parameters utils.GetSignListParameters) (signs
 	}
 	orderQuery := parameters.OrderBy + " " + parameters.Order
 	if parameters.Limit != 0 {
+		// `cast(substring(signs.name, '^\d+') as int) asc` is used to sort signs list by checking its contained number through a string typed value
+		// If we don't do like this, signs order would be 1, 10, 11, ..., 2, 20, ..., ZH
+		// This regular expression can help sort signs as we expected: 1, 2, 3, ..., 11, ..., ZH
 		err = db.Order(`cast(substring(signs.name, '^\d+') as int) asc`).Order(orderQuery).Limit(parameters.Limit).Offset(parameters.Limit * (parameters.Page - 1)).Find(&signs).Error
 	} else {
 		err = db.Order(`cast(substring(signs.name, '^\d+') as int) asc`).Order(orderQuery).Find(&signs).Error
@@ -65,6 +68,7 @@ func (s *SignService) UpdateSign(signID string, updatedData map[string]interface
 func (s *SignService) DeleteSign(signID string) (err error) {
 	var sign models.Sign
 	err = s.PG.Where("id = ?", signID).Find(&sign).Delete(&sign).Error
+	// Delete all the video associations related to this sign
 	s.PG.Model(&sign).Association("LexicalVideoLeft").Clear()
 	s.PG.Model(&sign).Association("LexicalVideoRight").Clear()
 	return

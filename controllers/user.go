@@ -189,10 +189,13 @@ func (c *UserController) UserLogin() {
 		utils.SetResponseError(c.Context, iris.StatusUnauthorized, "UserService::GetUser", errors.New("AuthFailed"))
 		return
 	}
+
+	// Only active user can login
 	if user.State != "active" {
 		utils.SetResponseError(c.Context, iris.StatusUnauthorized, "Account State Error", errors.New("InactiveAccount"))
 		return
 	}
+
 	if utils.IsShuUser(form.Username) {
 		utils.LogInfo(c.Context, "SHU OAuth Login")
 		// Is SHU user, auth by shu oauth
@@ -218,6 +221,8 @@ func (c *UserController) UserLogin() {
 		utils.SetResponseError(c.Context, iris.StatusUnauthorized, "Sign Token Error", errors.New("AuthFailed"))
 		return
 	}
+	ipAddress := c.Context.GetHeader("X-Real-IP")
+	c.UpdateUserLoginHistory(ipAddress)
 	c.Context.JSON(iris.Map{
 		message: success,
 		data:    token,
@@ -238,4 +243,10 @@ func (c *UserController) RefreshToken() {
 		message: success,
 		data:    token,
 	})
+}
+
+// UpdateUserLoginHistory nsters log to login history
+func (c *UserController) UpdateUserLoginHistory(ipAddress string) {
+	defer c.Context.Next()
+	utils.LogInfo(c.Context, "UPDATE LOGIN HISTORY: "+ipAddress)
 }

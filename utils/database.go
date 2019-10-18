@@ -51,34 +51,3 @@ func InitTestUser(pg *gorm.DB) {
 		pg.Create(&user)
 	}
 }
-
-// InitProdUser inits user on production server
-func InitProdUser(pg *gorm.DB) {
-	password, _ := HashPassword("learning!CCSL")
-	users := []models.User{
-		models.User{
-			Username: "learning@ccsl.shu.edu.cn",
-			Password: password,
-			UserType: "user",
-			Name:     "学习平台公用账号",
-		},
-	}
-	for _, user := range users {
-		pg.Create(&user)
-	}
-	superUsers := []models.User{
-		models.User{
-			Username: "16121041",
-			UserType: "super",
-			Name:     "段靖",
-		},
-		models.User{
-			Username: "10008119",
-			UserType: "super",
-			Name:     "倪兰",
-		},
-	}
-	for _, superUser := range superUsers {
-		pg.Create(&superUser)
-	}
-}

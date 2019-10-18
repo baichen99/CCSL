@@ -15,6 +15,7 @@ type MemberController struct {
 	MemberService services.MemberInterface
 }
 
+// BeforeActivation will register routes for controllers
 func (c *MemberController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Handle("GET", "/", "GetMemberList")
 	app.Handle("GET", "/{id: string}", "GetMember")
@@ -23,6 +24,7 @@ func (c *MemberController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Handle("DELETE", "/{id string", "DeleteMember", middlewares.CheckJWTToken, middlewares.CheckAdmin)
 }
 
+// GetMemberList GET /members
 func (c *MemberController) GetMemberList() {
 	defer c.Context.Next()
 	listParams, err := utils.GetListParamsFromContext(c.Context, "members.created_at")

@@ -32,6 +32,7 @@ func ComparePassword(hashedPassword string, password string) bool {
 func ShuLogin(username string, password string) (result bool, err error) {
 	authURL := "http://services.shu.edu.cn/Login.aspx"
 	client := &http.Client{}
+	// use cookie jar to save cookies during the request session
 	jar, err := cookiejar.New(nil)
 	if err != nil {
 		return
@@ -44,13 +45,15 @@ func ShuLogin(username string, password string) (result bool, err error) {
 	defer resp.Body.Close()
 	body, _ := ioutil.ReadAll(resp.Body)
 	// <input type="hidden" name="__VIEWSTATE" value="dDwtMTIwMjUxOTIxNDs7PsH7y+VEVR/6VfZ5PNSi21UwSxxy" />
-	// Get __VIEWSTATE from html
+	// Get the value of __VIEWSTATE from html
 	reg := regexp.MustCompile(`<input type="hidden" name="__VIEWSTATE" value="(.*?)" />`)
+	// if cannot find asp viewstate from html, means school server is down
 	if len(reg.FindStringSubmatch(string(body))) != 2 {
 		err = errors.New("OauthUnavailable")
 		return
 	}
 	viewState := reg.FindStringSubmatch(string(body))[1]
+	// compose form data
 	data := url.Values{
 		"txtUserName":     {username},
 		"txtPassword":     {password},
@@ -63,16 +66,23 @@ func ShuLogin(username string, password string) (result bool, err error) {
 	if err != nil {
 		return
 	}
-	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8")
-	req.Header.Set("Accept-Language", "zh-CN,zh;q=0.9")
-	req.Header.Set("Cache-Control", "max-age=0")
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	req.Header.Set("Host", "services.shu.edu.cn")
-	req.Header.Set("Origin", "http://services.shu.edu.cn")
-	req.Header.Set("Proxy-Connection", "keep-alive")
-	req.Header.Set("Referer", "http://services.shu.edu.cn/Login.aspx")
-	req.Header.Set("Upgrade-Insecure-Requests", "1")
-	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.81 Safari/537.36")
+	// mock chrome browser headers
+	headers := map[string]string{
+		"Accept":                    "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+		"Accept-Language":           "zh-CN,zh;q=0.9",
+		"Cache-Control":             "max-age=0",
+		"Content-Type":              "application/x-www-form-urlencoded",
+		"Host":                      "services.shu.edu.cn",
+		"Origin":                    "http://services.shu.edu.cn",
+		"Proxy-Connection":          "keep-alive",
+		"Referer":                   "http://services.shu.edu.cn/Login.aspx",
+		"Upgrade-Insecure-Requests": "1",
+		"User-Agent":                "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.81 Safari/537.36",
+	}
+	for key, value := range headers {
+		req.Header.Add(key, value)
+	}
+	// send auth request
 	resp, err = client.Do(req)
 	if err != nil {
 		return
@@ -82,6 +92,7 @@ func ShuLogin(username string, password string) (result bool, err error) {
 	if err != nil {
 		return
 	}
+	// if response contains string "修改密码", then password is correct
 	result = (strings.Contains(string(body), "修改密码"))
 	return
 }

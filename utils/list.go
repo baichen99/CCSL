@@ -91,7 +91,7 @@ func GetListParamsFromContext(c iris.Context, defaultOrderName string) (listParm
 	listParmas.Order = c.URLParamDefault("order", "asc")
 	listParmas.OrderBy = c.URLParamDefault("orderBy", defaultOrderName)
 	if !(listParmas.Order == "asc" || listParmas.Order == "desc") {
-		err = errors.New("PramsError")
+		err = errors.New("ParamsError")
 	}
 	return
 }

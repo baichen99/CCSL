@@ -1,5 +1,6 @@
 package models
 
+// Member mdoel for team members
 type Member struct {
 	Base
 	Profile       string `gorm:"NOT NULL" json:"profile"`       // 照片文件路径

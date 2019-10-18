@@ -33,6 +33,7 @@ func (c *FileController) BeforeActivation(app mvc.BeforeActivation) {
 // UploadFile saves file and returns file name
 func (c *FileController) UploadFile() {
 	defer c.Context.Next()
+	// dir is the subdirectory under public files directory
 	dir := c.Context.URLParamDefault("dir", "")
 	fileDirName := configs.Conf.File.Dir + dir
 	fileDir, err := os.Stat(fileDirName)
@@ -40,6 +41,7 @@ func (c *FileController) UploadFile() {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "UploadFile::DirNotExsist", errors.New("DirNotExsist"))
 		return
 	}
+	// Read file from request form
 	file, info, err := c.Context.FormFile("file")
 	if err != nil {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "UploadFile::ReadFile", err)
@@ -48,8 +50,11 @@ func (c *FileController) UploadFile() {
 	defer file.Close()
 	fileSuffix := path.Ext(info.Filename)
 	filePrefix := uuid.NewV4()
+	// Rename file, avoid file name conflict
+	// fileName = UUID + current timestamp + filename extension
 	fileName := filePrefix.String() + strconv.FormatInt(time.Now().Unix(), 10) + fileSuffix
 	filePath := fileDirName + "/" + fileName
+	// write file to directory
 	out, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "UploadFile::SaveFile", err)
