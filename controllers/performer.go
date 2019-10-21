@@ -17,11 +17,13 @@ type PerformerController struct {
 
 // BeforeActivation will register routes for controllers
 func (c *PerformerController) BeforeActivation(app mvc.BeforeActivation) {
-	app.Handle("GET", "/", "GetPerformersList", middlewares.CheckJWTToken)
-	app.Handle("POST", "/", "CreatePerformer", middlewares.CheckJWTToken, middlewares.CheckAdmin)
-	app.Handle("GET", "/{id: string}", "GetPerformer", middlewares.CheckJWTToken)
-	app.Handle("PUT", "/{id: string}", "UpdatePerformer", middlewares.CheckJWTToken, middlewares.CheckAdmin)
-	app.Handle("DELETE", "/{id: string}", "DeletePerformer", middlewares.CheckJWTToken, middlewares.CheckAdmin)
+	app.Router().Use(middlewares.CheckJWTToken)
+	app.Handle("GET", "/", "GetPerformersList")
+	app.Handle("GET", "/{id: string}", "GetPerformer")
+	app.Router().Use(middlewares.CheckAdmin)
+	app.Handle("POST", "/", "CreatePerformer")
+	app.Handle("PUT", "/{id: string}", "UpdatePerformer")
+	app.Handle("DELETE", "/{id: string}", "DeletePerformer")
 }
 
 // GetPerformersList GET /performers

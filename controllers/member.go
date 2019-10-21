@@ -19,9 +19,10 @@ type MemberController struct {
 func (c *MemberController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Handle("GET", "/", "GetMemberList")
 	app.Handle("GET", "/{id: string}", "GetMember")
-	app.Handle("POST", "/", "CreateMember", middlewares.CheckJWTToken, middlewares.CheckAdmin)
-	app.Handle("PUT", "/{id: string}", "UpdateMember", middlewares.CheckJWTToken, middlewares.CheckAdmin)
-	app.Handle("DELETE", "/{id string", "DeleteMember", middlewares.CheckJWTToken, middlewares.CheckAdmin)
+	app.Router().Use(middlewares.CheckJWTToken, middlewares.CheckAdmin)
+	app.Handle("POST", "/", "CreateMember")
+	app.Handle("PUT", "/{id: string}", "UpdateMember")
+	app.Handle("DELETE", "/{id string", "DeleteMember")
 }
 
 // GetMemberList GET /members

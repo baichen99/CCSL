@@ -17,11 +17,13 @@ type SignController struct {
 
 // BeforeActivation register routes
 func (c *SignController) BeforeActivation(app mvc.BeforeActivation) {
-	app.Handle("GET", "/", "GetSignsList", middlewares.CheckJWTToken)
-	app.Handle("POST", "/", "CreateSign", middlewares.CheckJWTToken, middlewares.CheckAdmin)
-	app.Handle("GET", "/{id: string}", "GetSign", middlewares.CheckJWTToken)
-	app.Handle("PUT", "/{id: string}", "UpdateSign", middlewares.CheckJWTToken, middlewares.CheckAdmin)
-	app.Handle("DELETE", "/{id: string}", "DeleteSign", middlewares.CheckJWTToken, middlewares.CheckAdmin)
+	app.Router().Use(middlewares.CheckJWTToken)
+	app.Handle("GET", "/", "GetSignsList")
+	app.Handle("GET", "/{id: string}", "GetSign")
+	app.Router().Use(middlewares.CheckAdmin)
+	app.Handle("POST", "/", "CreateSign")
+	app.Handle("PUT", "/{id: string}", "UpdateSign")
+	app.Handle("DELETE", "/{id: string}", "DeleteSign")
 }
 
 // GetSignsList GET /signs

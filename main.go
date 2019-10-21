@@ -94,7 +94,7 @@ func initApp() *iris.Application {
 	app.OnAnyErrorCode(middlewares.ErrorHandler)
 	app.Use(recover.New())
 	app.Use(logger.New())
-	app.Use(middlewares.NewI18nMidddleware(middlewares.I18nConf))
+	app.Use(middlewares.I18nConf)
 	app.Use(middlewares.BeforeHandleRequest)
 	app.Done(middlewares.AfterHandleRequest)
 	app.Configure(iris.WithConfiguration(iris.YAML(configs.AppConf)))

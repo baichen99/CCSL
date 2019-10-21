@@ -14,7 +14,8 @@ type SystemController struct {
 
 // BeforeActivation register routes
 func (c *SystemController) BeforeActivation(app mvc.BeforeActivation) {
-	app.Handle("GET", "/login", "GetLoginHistoryList", middlewares.CheckJWTToken, middlewares.CheckSuper)
+	app.Router().Use(middlewares.CheckJWTToken, middlewares.CheckSuper)
+	app.Handle("GET", "/login", "GetLoginHistoryList")
 }
 
 // GetLoginHistoryList GET /system/login

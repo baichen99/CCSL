@@ -20,9 +20,10 @@ type NewsController struct {
 func (c *NewsController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Handle("GET", "/", "GetNewsList")
 	app.Handle("GET", "/{id: string}", "GetNews")
-	app.Handle("POST", "/", "CreateNews", middlewares.CheckJWTToken, middlewares.CheckAdmin)
-	app.Handle("PUT", "/{id: string}", "UpdateNews", middlewares.CheckJWTToken, middlewares.CheckAdmin)
-	app.Handle("DELETE", "/{id: string}", "DeleteNews", middlewares.CheckJWTToken, middlewares.CheckAdmin)
+	app.Router().Use(middlewares.CheckJWTToken, middlewares.CheckAdmin)
+	app.Handle("POST", "/", "CreateNews")
+	app.Handle("PUT", "/{id: string}", "UpdateNews")
+	app.Handle("DELETE", "/{id: string}", "DeleteNews")
 }
 
 // GetNewsList returns news list
