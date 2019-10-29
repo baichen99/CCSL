@@ -1,10 +1,11 @@
 import request from "@/utils/request";
 
-export function GetCarouselsList(params) {
+export function GetCarouselsList(params, loading) {
   return request({
     url: "/carousels",
     method: "get",
-    params
+    params,
+    loading
   });
 }
 

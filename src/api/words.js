@@ -2,11 +2,12 @@ import request from "@/utils/request";
 
 const baseURL = "/lexical/words";
 
-export function GetLexicalWordsList(params) {
+export function GetLexicalWordsList(params, loading) {
   return request({
     url: baseURL,
     method: "get",
-    params
+    params,
+    loading
   });
 }
 

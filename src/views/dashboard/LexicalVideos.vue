@@ -6,12 +6,31 @@
         prefix-icon="el-icon-search"
         placeholder="请输入中文"
         clearable
-        @clear="handleSearch"
+        @keyup.enter="handleSearch"
+        @change="handleSearch"
       />
       <city-selector v-model="params.regionID" @update="handleSearch" />
+      <gender-selector v-model="params.gender" @update="handleSearch" />
+      <sign-selector v-model="params.signID" @update="handleSearch" />
+      <sign-selector v-model="params.leftSignID" orientation="left" @update="handleSearch" />
+      <sign-selector v-model="params.rightSignID" orientation="right" @update="handleSearch" />
       <word-construct-selector v-model="params.constructType" @update="handleSearch" />
-      <el-button type="primary" plain @click="handleSearch">查找</el-button>
-      <el-button type="primary" plain @click="handleNew">增加</el-button>
+      <el-input
+        v-model="params.constructWords"
+        prefix-icon="el-icon-search"
+        placeholder="复合词构词"
+        clearable
+        @keyup.enter="handleSearch"
+        @change="handleSearch"
+      />
+      <el-button type="primary" plain @click="handleNew">
+        增加
+        <i class="el-icon-plus el-icon--right" />
+      </el-button>
+      <el-button type="primary" plain @click="handleExport">
+        导出
+        <i class="el-icon-download el-icon--right" />
+      </el-button>
     </div>
 
     <div class="table-content">
@@ -117,7 +136,9 @@
 import { mapGetters } from "vuex";
 import LexicalVideoForm from "@/views/dashboard/form/LexicalVideoForm";
 import CitySelector from "@/components/form/CitySelector.vue";
+import GenderSelector from "@/components/form/GenderSelector";
 import WordConstructSelector from "@/components/form/WordConstructSelector";
+import SignSelector from "@/components/form/SignSelector.vue";
 import listMixin from "./listMixin";
 import {
   GetLexicalVideosList,
@@ -130,6 +151,8 @@ export default {
   components: {
     LexicalVideoForm,
     CitySelector,
+    GenderSelector,
+    SignSelector,
     WordConstructSelector
   },
   mixins: [listMixin],
@@ -139,8 +162,12 @@ export default {
       params: {
         chinese: "",
         regionID: undefined,
-        // lexicalWordID: "",
+        gender: "",
+        signID: "",
+        leftSignID: "",
+        rightSignID: "",
         constructType: "",
+        constructWords: "",
         orderBy: "performers.gender"
       }
     };
@@ -198,6 +225,62 @@ export default {
         .catch(() => {
           this.showCancel();
         });
+    },
+    handleExport() {
+      if (!this.checkParam()) {
+        return;
+      }
+      const params = JSON.parse(JSON.stringify(this.params));
+      params.limit = 0;
+      GetLexicalVideosList(params, true).then(res => {
+        const sheetData = res.data.map(item => {
+          const leftSigns = [];
+          const rightSigns = [];
+          item.leftSigns.map(sign => {
+            leftSigns.push(sign.name);
+          });
+          item.rightSigns.map(sign => {
+            rightSigns.push(sign.name);
+          });
+          return {
+            创建时间: new Date(item.createdAt),
+            上次更新: new Date(item.updatedAt),
+            汉语拼音音序: item.lexicalWord.initial,
+            中文转写: item.lexicalWord.chinese,
+            英文转写: item.lexicalWord.english,
+            词性: item.lexicalWord.pos,
+            构词类型: item.constructType,
+            构词词语: item.constructWords.join(","),
+            左手手形: leftSigns.join(","),
+            右手手形: rightSigns.join(","),
+            被试姓名: item.performer.name,
+            被试性别: this.genderTypes[item.performer.gender].name,
+            被试地区: item.performer.region.name,
+            视频文件: "https://ccsl.shu.edu.cn/public/" + item.videoPath
+          };
+        });
+        this.handleDownloadSheet(sheetData, "video");
+      });
+    },
+    checkParam() {
+      if (
+        !this.params.chinese &&
+        !this.params.regionID &&
+        !this.params.gender &&
+        !this.params.signID &&
+        !this.params.leftSignID &&
+        !this.params.rightSignID &&
+        !this.params.constructType &&
+        !this.params.constructWords
+      ) {
+        this.$notify({
+          title: "导出失败",
+          message: "请至少选择一样查询条件",
+          type: "warning"
+        });
+        return false;
+      }
+      return true;
     }
   }
 };

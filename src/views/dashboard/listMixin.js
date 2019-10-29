@@ -1,4 +1,5 @@
 import lodash from "lodash";
+import xlsx from "xlsx";
 const listMixin = {
   data() {
     return {
@@ -97,6 +98,12 @@ const listMixin = {
       this.showSuccess();
       this.handleClose();
       this.getList();
+    },
+    handleDownloadSheet(sheetData, filename) {
+      const workbook = xlsx.utils.book_new();
+      const worksheet = xlsx.utils.json_to_sheet(sheetData);
+      xlsx.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+      xlsx.writeFile(workbook, filename + ".xlsx");
     },
     makeUpdatedData() {
       let updateData = {};

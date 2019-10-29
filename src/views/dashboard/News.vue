@@ -6,14 +6,17 @@
         prefix-icon="el-icon-search"
         placeholder="请输入标题"
         clearable
-        @clear="handleSearch"
+        @keyup.enter="handleSearch"
+        @change="handleSearch"
       />
       <language-selector v-model="params.language" @update="handleSearch" />
       <news-state-selector v-model="params.state" @update="handleSearch" />
       <news-type-selector v-model="params.type" @update="handleSearch" />
       <news-column-selector v-model="params.column" @update="handleSearch" />
-      <el-button type="primary" plain @click="handleSearch">查找</el-button>
-      <el-button type="primary" plain @click="handleNew">增加</el-button>
+      <el-button type="primary" plain @click="handleNew">
+        增加
+        <i class="el-icon-plus el-icon--right" />
+      </el-button>
     </div>
 
     <div class="table-content">

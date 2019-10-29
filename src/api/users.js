@@ -24,11 +24,12 @@ export function GetUser(id) {
   });
 }
 
-export function GetUsersList(params) {
+export function GetUsersList(params, loading) {
   return request({
     url: baseURL,
     method: "get",
-    params
+    params,
+    loading
   });
 }
 

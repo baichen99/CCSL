@@ -6,19 +6,27 @@
         prefix-icon="el-icon-search"
         placeholder="请输入账号"
         clearable
-        @clear="handleSearch"
+        @keyup.enter="handleSearch"
+        @change="handleSearch"
       />
       <el-input
         v-model="params.name"
         prefix-icon="el-icon-search"
         placeholder="请输入姓名"
         clearable
-        @clear="handleSearch"
+        @keyup.enter="handleSearch"
+        @change="handleSearch"
       />
       <user-state-selector v-model="params.state" @update="handleSearch" />
       <user-type-selector v-model="params.userType" @update="handleSearch" />
-      <el-button type="primary" plain @click="handleSearch">查找</el-button>
-      <el-button type="primary" plain @click="handleNew">增加</el-button>
+      <el-button type="primary" plain @click="handleNew">
+        增加
+        <i class="el-icon-plus el-icon--right" />
+      </el-button>
+      <el-button type="primary" plain @click="handleExport">
+        导出
+        <i class="el-icon-download el-icon--right" />
+      </el-button>
     </div>
     <div class="table-content">
       <el-table v-loading="loading" :data="list" stripe border>
@@ -27,12 +35,6 @@
             <span>{{ $d(new Date(row.createdAt), 'long') }}</span>
           </template>
         </el-table-column>
-
-        <!-- <el-table-column label="上次更新" align="center" width="180px">
-          <template slot-scope="{row}">
-            <span>{{ $d(new Date(row.updatedAt), 'long') }}</span>
-          </template>
-        </el-table-column> -->
 
         <el-table-column label="账号状态" align="center" width="100px">
           <template slot-scope="{row}">
@@ -187,6 +189,23 @@ export default {
         .catch(() => {
           this.showCancel();
         });
+    },
+    handleExport() {
+      const params = JSON.parse(JSON.stringify(this.params));
+      params.limit = 0;
+      GetUsersList(params, true).then(res => {
+        const sheetData = res.data.map(item => {
+          return {
+            创建时间: new Date(item.createdAt),
+            上次更新: new Date(item.updatedAt),
+            姓名: item.name,
+            账号: item.username,
+            状态: this.userState[item.state].name,
+            用户类型: this.userTypes[item.userType].name
+          };
+        });
+        this.handleDownloadSheet(sheetData, "user");
+      });
     },
     handleActive(id) {
       const updateData = { state: "active" };

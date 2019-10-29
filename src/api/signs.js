@@ -2,11 +2,12 @@ import request from "@/utils/request";
 
 const baseURL = "/signs";
 
-export function GetSignsList(params) {
+export function GetSignsList(params, loading) {
   return request({
     url: baseURL,
     method: "get",
-    params
+    params,
+    loading
   });
 }
 

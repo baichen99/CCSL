@@ -2,11 +2,12 @@ import request from "@/utils/request";
 
 const baseURL = "/performers";
 
-export function GetPerformersList(params) {
+export function GetPerformersList(params, loading) {
   return request({
     url: baseURL,
     method: "get",
-    params
+    params,
+    loading
   });
 }
 

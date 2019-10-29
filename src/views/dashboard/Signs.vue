@@ -6,10 +6,17 @@
         prefix-icon="el-icon-search"
         placeholder="请输入名称"
         clearable
-        @clear="handleSearch"
+        @keyup.enter="handleSearch"
+        @change="handleSearch"
       />
-      <el-button type="primary" plain @click="handleSearch">查找</el-button>
-      <el-button type="primary" plain @click="handleNew">增加</el-button>
+      <el-button type="primary" plain @click="handleNew">
+        增加
+        <i class="el-icon-plus el-icon--right" />
+      </el-button>
+      <el-button type="primary" plain @click="handleExport">
+        导出
+        <i class="el-icon-download el-icon--right" />
+      </el-button>
     </div>
 
     <div class="table-content">
@@ -150,6 +157,21 @@ export default {
         .catch(() => {
           this.showCancel();
         });
+    },
+    handleExport() {
+      const params = JSON.parse(JSON.stringify(this.params));
+      params.limit = 0;
+      GetSignsList(params, true).then(res => {
+        const sheetData = res.data.map(item => {
+          return {
+            创建时间: new Date(item.createdAt),
+            上次更新: new Date(item.updatedAt),
+            手形名称: item.name,
+            手形图片: "https://ccsl.shu.edu.cn/public/" + item.image
+          };
+        });
+        this.handleDownloadSheet(sheetData, "sign");
+      });
     }
   }
 };

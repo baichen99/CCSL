@@ -6,19 +6,26 @@
         prefix-icon="el-icon-search"
         placeholder="请输入中文"
         clearable
-        @clear="handleSearch"
+        @keyup.enter="handleSearch"
+        @change="handleSearch"
       />
       <el-input
         v-model="params.english"
         prefix-icon="el-icon-search"
         placeholder="请输入英文"
         clearable
-        @clear="handleSearch"
+        @change="handleSearch"
       />
       <word-pos-selector v-model="params.pos" @update="handleSearch" />
       <word-initial-selector v-model="params.initial" @update="handleSearch" />
-      <el-button type="primary" plain @click="handleSearch">查找</el-button>
-      <el-button type="primary" plain @click="handleNew">增加</el-button>
+      <el-button type="primary" plain @click="handleNew">
+        增加
+        <i class="el-icon-plus el-icon--right" />
+      </el-button>
+      <el-button type="primary" plain @click="handleExport">
+        导出
+        <i class="el-icon-download el-icon--right" />
+      </el-button>
     </div>
 
     <div class="table-content">
@@ -172,6 +179,23 @@ export default {
         .catch(() => {
           this.showCancel();
         });
+    },
+    handleExport() {
+      const params = JSON.parse(JSON.stringify(this.params));
+      params.limit = 0;
+      GetLexicalWordsList(params, true).then(res => {
+        const sheetData = res.data.map(item => {
+          return {
+            创建时间: new Date(item.createdAt),
+            上次更新: new Date(item.updatedAt),
+            汉语拼音音序: item.initial,
+            中文转写: item.chinese,
+            英文转写: item.english,
+            词性: item.pos
+          };
+        });
+        this.handleDownloadSheet(sheetData, "word");
+      });
     }
   }
 };

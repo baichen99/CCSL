@@ -2,11 +2,12 @@ import request from "@/utils/request";
 
 const baseURL = "/news";
 
-export function GetNewsList(params) {
+export function GetNewsList(params, loading) {
   return request({
     url: baseURL,
     method: "get",
-    params
+    params,
+    loading
   });
 }
 
