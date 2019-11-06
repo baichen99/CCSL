@@ -2,7 +2,7 @@ FROM alpine
 LABEL maintainer="Adrian Duan<adrianduan@icloud.com>"
 
 RUN apk update \
-    && apk --no-cache add tzdata ca-certificates \
+    && apk --no-cache add tzdata ca-certificates postgresql-client\
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \ 
     && echo "Asia/Shanghai" > /etc/timezone
 

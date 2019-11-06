@@ -30,6 +30,9 @@ func main() {
 	mvc.Configure(app.Party("/files"), func(app *mvc.Application) {
 		app.Handle(new(controllers.FileController))
 	})
+	mvc.Configure(app.Party("/systems"), func(app *mvc.Application) {
+		app.Handle(new(controllers.SystemController))
+	})
 	mvc.Configure(app.Party("/carousels"), func(app *mvc.Application) {
 		app.Register(services.NewCarouselService(pg))
 		app.Handle(new(controllers.CarouselController))

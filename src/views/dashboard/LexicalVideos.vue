@@ -41,6 +41,18 @@
           </template>
         </el-table-column>
 
+        <el-table-column label="被试地区" align="center" width="150px">
+          <template slot-scope="{row}">
+            <span>{{ row.performer.region.name }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="被试性别" align="center" width="100px">
+          <template slot-scope="{row}">
+            <span>{{ genderTypes[row.performer.gender].name }}</span>
+          </template>
+        </el-table-column>
+
         <el-table-column label="中文转写" align="center" min-width="150px">
           <template slot-scope="{row}">
             <span>{{ row.lexicalWord.chinese }}</span>
@@ -74,18 +86,6 @@
         <el-table-column label="被试姓名" align="center" width="150px">
           <template slot-scope="{row}">
             <span>{{ row.performer.name }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column label="被试地区" align="center" width="150px">
-          <template slot-scope="{row}">
-            <span>{{ row.performer.region.name }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column label="被试性别" align="center" width="100px">
-          <template slot-scope="{row}">
-            <span>{{ genderTypes[row.performer.gender].name }}</span>
           </template>
         </el-table-column>
 

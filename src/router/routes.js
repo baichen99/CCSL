@@ -157,6 +157,17 @@ const routes = [
     },
     children: [
       {
+        path: "systems-setting",
+        name: "Systems",
+        component: () => import("@/views/dashboard/Systems"),
+        meta: {
+          title: "网站维护",
+          icon: "maintain",
+          auth: true,
+          roles: [superUser]
+        }
+      },
+      {
         path: "carousels-setting",
         name: "Carousels",
         component: () => import("@/views/dashboard/Carousels"),
