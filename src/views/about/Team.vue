@@ -1,37 +1,13 @@
 <template>
   <div>
-    <div
-      v-show="!ifDetail"
-      class="team"
-    >
-      <h1 class="title">研究团队</h1>
+    <div v-show="!ifDetail" class="team flex-column">
+      <h2 class="title">研究团队</h2>
       <div class="list-container">
-        <el-table
-          class="table"
-          :data="EMPList"
-          stripe
-        >
-          <el-table-column
-            prop="cls"
-            label="类别"
-            align="center"
-            width="200"
-          />
-          <el-table-column
-            prop="name"
-            label="姓名"
-            align="center"
-            width="150"
-          />
-          <el-table-column
-            prop="unit"
-            label="单位及学位"
-            align="center"
-          />
-          <el-table-column
-            label="详细信息"
-            align="center"
-          >
+        <el-table class="table" :data="EMPList" stripe>
+          <el-table-column prop="cls" label="类别" align="center" width="200" />
+          <el-table-column prop="name" label="姓名" align="center" width="150" />
+          <el-table-column prop="unit" label="单位及学位" align="center" />
+          <el-table-column label="详细信息" align="center">
             <template slot-scope="scope">
               <el-button
                 type="text"
@@ -41,28 +17,13 @@
               >查看</el-button>
             </template>
           </el-table-column>
-
         </el-table>
       </div>
       <div class="list-container">
-        <el-table
-          :data="noUnitEMPList"
-          stripe
-        >
-          <el-table-column
-            prop="cls"
-            label="类别"
-            align="center"
-          />
-          <el-table-column
-            prop="name"
-            label="姓名"
-            align="center"
-          />
-          <el-table-column
-            label="详细信息"
-            align="center"
-          >
+        <el-table :data="noUnitEMPList" stripe>
+          <el-table-column prop="cls" label="类别" align="center" />
+          <el-table-column prop="name" label="姓名" align="center" />
+          <el-table-column label="详细信息" align="center">
             <template slot-scope="scope">
               <el-button
                 type="text"
@@ -75,43 +36,22 @@
         </el-table>
       </div>
     </div>
-    <div
-      v-show="ifDetail"
-      class="team"
-    >
-      <h1 class="title">
-        详细介绍
-      </h1>
+    <div v-show="ifDetail" class="team">
+      <h2 class="title">详细介绍</h2>
       <div class="list-container">
         <el-card>
-          <div
-            slot="header"
-            class="clearfix"
-          >
-            <el-button
-              type="text"
-              style="float: left; padding: 3px 0"
-              @click="backToTeam"
-            >
-              返回
-            </el-button>
-            <span style="float: right">
-              成员详细信息
-            </span>
+          <div slot="header" class="clearfix">
+            <el-button type="text" style="float: left; padding: 3px 0" @click="backToTeam">返回</el-button>
+            <span style="float: right">成员详细信息</span>
           </div>
           <div>
             <el-row :gutter="20">
               <el-col :span="6">
-                <img
-                  :src="imgSrc"
-                  alt=""
-                  width="160"
-                  height="200"
-                >
+                <img :src="imgSrc" alt width="160" height="200" />
               </el-col>
               <el-col :span="18">
                 <h1>{{ emp.name }} {{ emp.title }}</h1>
-                <br>
+                <br />
                 <p>{{ emp.detail }}</p>
               </el-col>
             </el-row>
@@ -124,7 +64,6 @@
 
 
 <script>
-// import { constants } from 'crypto';
 export default {
   name: "Team",
   data: () => ({
@@ -297,14 +236,16 @@ export default {
 
 
 <style lang="scss" scoped>
+@import "@/styles/element-variables.scss";
 .team {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
+
   .title {
-    margin: 1rem;
+    color: $--color-primary;
+    text-align: center;
+    margin: 20px;
   }
+
   .list-container {
     width: 900px;
     margin: 1rem auto;
@@ -313,6 +254,7 @@ export default {
     }
   }
 }
+
 .clearfix:before,
 .clearfix:after {
   display: table;

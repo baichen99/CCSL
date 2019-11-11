@@ -18,7 +18,10 @@ const state = {
     "形容词",
     "疑问代词"
   ],
-  constructTypes: ["单纯词", "复合词"],
+  constructTypes: {
+    combined: { name: "合成词" },
+    single: { name: "单纯词" }
+  },
   newsColumns: {
     news: { icon: "news", name: "新闻动态", value: "news" },
     activity: { icon: "activity", name: "学术活动", value: "activity" },

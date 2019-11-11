@@ -32,7 +32,10 @@ const routes = [
       {
         path: "/",
         name: "Home",
-        component: () => import("@/views/home/Home")
+        component: () => import("@/views/home/Home"),
+        meta: {
+          activeMenu: "/"
+        }
       },
       {
         path: "/news-detail/:id",
@@ -59,23 +62,19 @@ const routes = [
         path: "/about/introduction",
         name: "Introduction",
         component: () => import("@/views/about/Introduction"),
-        meta: {
-          title: "中心简介"
-        }
+        meta: { title: "中心简介", activeMenu: "/about/introduction" }
       },
       {
         path: "/about/team",
         component: () => import("@/views/about/Team"),
         name: "Team",
-        meta: { title: "研究团队" }
+        meta: { title: "研究团队", activeMenu: "/about/team" }
       },
       {
         path: "/about/contact",
         name: "Contact",
         component: () => import("@/views/about/Contact"),
-        meta: {
-          title: "联系我们"
-        }
+        meta: { title: "联系我们", activeMenu: "/about/contact" }
       },
       {
         path: "/learning-platform",
@@ -84,7 +83,8 @@ const routes = [
         meta: {
           roles: [superUser, adminUser, learner],
           title: "国家通用手语学习平台",
-          auth: true
+          auth: true,
+          activeMenu: "/learning-platform"
         }
       }
     ]

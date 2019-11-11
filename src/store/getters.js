@@ -10,10 +10,10 @@ const getters = {
   roles: state => state.user.roles,
   wordPosTypes: state => state.sign.wordPosTypes,
   constructTypes: state => state.sign.constructTypes,
-  newsColumns: state => state.sign.newsColumns,
   userTypes: state => state.sign.userTypes,
   userState: state => state.sign.userState,
-  genderTypes: state => state.sign.genderTypes
+  genderTypes: state => state.sign.genderTypes,
+  newsColumns: state => state.sign.newsColumns
 };
 
 export default getters;

@@ -87,7 +87,7 @@ const actions = {
       commit("SET_TOKEN", "");
       removeToken();
       removeUser();
-      router.push("/");
+      router.push("/login");
       resolve();
     });
   },

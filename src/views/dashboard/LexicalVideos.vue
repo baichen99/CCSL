@@ -61,16 +61,17 @@
 
         <el-table-column label="构词" align="center" width="150px">
           <template slot-scope="{row}">
-            <span>{{ row.constructType }}</span>
+            <span v-if="row.constructType">{{ constructTypes[row.constructType].name }}</span>
+            <span v-else>暂无数据</span>
           </template>
         </el-table-column>
 
         <el-table-column label="复合词构词词语" align="center" min-width="150px">
           <template slot-scope="{row}">
-            <div v-if="row.constructType==='单纯词'">
+            <div v-if="row.constructType==='single'">
               <el-tag type="danger">不可用</el-tag>
             </div>
-            <div v-else-if="row.constructWords">
+            <div v-else-if="row.constructWords.length > 0">
               <el-tag
                 v-for="value in row.constructWords"
                 :key="value"
@@ -117,7 +118,7 @@
       direction="rtl"
     >
       <div class="form-drawer__content">
-        <lexical-video-form ref="form" :data="data" :mode="mode" />
+        <lexical-video-form ref="form" :data="data" />
         <div class="form-drawer__footer">
           <el-button @click="handleClose">取 消</el-button>
           <el-button
@@ -173,7 +174,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["genderTypes"])
+    ...mapGetters(["genderTypes", "constructTypes"])
   },
   methods: {
     getList() {

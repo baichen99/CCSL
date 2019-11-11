@@ -9,13 +9,13 @@
         </div>
       </div>
       <el-menu
-        :default-active="defaultActive"
+        :default-active="activeMenu"
         mode="horizontal"
-        :router="true"
+        router
         active-text-color="#2363C3"
       >
         <el-menu-item index="/">首页</el-menu-item>
-        <el-menu-item index="/learning-platform">学习平台</el-menu-item>
+        <el-menu-item v-permission="['admin','super','learner']" index="/learning-platform">学习平台</el-menu-item>
         <el-submenu index="/research">
           <template slot="title">研究成果</template>
           <el-menu-item
@@ -25,7 +25,7 @@
             class="sub-menu-item"
           >{{ item.title }}</el-menu-item>
         </el-submenu>
-        <el-submenu index="/database">
+        <el-submenu v-permission="['admin','super','user']" index="/database">
           <template slot="title">数据库</template>
           <el-menu-item
             v-for="item in databases"
@@ -44,7 +44,7 @@
           >{{ item.title }}</el-menu-item>
         </el-submenu>
         <el-submenu v-if="userToken" index="/profile">
-          <template slot="title"> 我的 </template>
+          <template slot="title">我的</template>
           <el-menu-item index="/profile" class="sub-menu-item">个人中心</el-menu-item>
           <el-menu-item class="sub-menu-item" @click="logout">退出登录</el-menu-item>
         </el-submenu>
@@ -81,28 +81,18 @@ export default {
   }),
   computed: {
     activeMenu() {
-      if (this.$route.matched.length > 1) {
-        return this.$route.matched[0].path;
-      } else {
-        return this.$route.path;
+      const route = this.$route;
+      const { meta, path } = route;
+      if (meta.activeMenu) {
+        return meta.activeMenu;
       }
+      return path;
     },
     userToken() {
       return getToken() || this.$store.getters.token;
     }
   },
-  watch: {
-    "$route.path"() {
-      this.setActiveMenu();
-    }
-  },
-  created() {
-    this.setActiveMenu();
-  },
   methods: {
-    setActiveMenu() {
-      this.defaultActive = this.$route.path;
-    },
     async logout() {
       await this.$store.dispatch("user/logout");
     }

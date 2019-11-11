@@ -1,28 +1,20 @@
 <template>
-  <div class="contact">
-    <h1 class="title">联系我们</h1>
-    <el-row
-      :gutter="20"
-      class="container"
-    >
+  <div class="contact flex-column">
+    <h2 class="title">联系我们</h2>
+    <el-row :gutter="20" class="container">
       <el-col :span="12">
         <el-card shadow="hover">
-          <el-table
-            :data="tableData"
-          >
-            <el-table-column
-              prop="key"
-              width="60"
-            />
+          <el-table :data="tableData">
+            <el-table-column prop="key" width="60" />
             <el-table-column prop="value" />
-            <br>
+            <br />
           </el-table>
         </el-card>
       </el-col>
       <el-col :span="12">
         <el-card shadow="hover">
           <h3>微信公众号</h3>
-          <img src="@/assets/wechat.png">
+          <img src="@/assets/wechat.png" />
         </el-card>
       </el-col>
     </el-row>
@@ -46,14 +38,12 @@ export default {
 
 
 <style lang="scss" scoped>
+@import "@/styles/element-variables.scss";
 .contact {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
-  border-radius: 5px;
   .title {
-    margin: 1rem;
+    color: $--color-primary;
+    margin: 20px;
   }
 
   .container {
@@ -64,6 +54,7 @@ export default {
     height: 350px;
     text-align: center;
   }
+  
   .el-table {
     margin-bottom: 2rem;
   }

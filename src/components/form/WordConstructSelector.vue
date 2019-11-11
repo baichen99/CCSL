@@ -1,6 +1,6 @@
 <template>
   <el-select v-model="data" placeholder="请选择构词方式" clearable @clear="$emit('clear')">
-    <el-option v-for="(item,index) in constructTypes" :key="index" :label="item" :value="item" />
+    <el-option v-for="(item,key) in constructTypes" :key="key" :label="item.name" :value="key" />
   </el-select>
 </template>
 

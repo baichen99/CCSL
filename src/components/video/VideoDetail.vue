@@ -24,16 +24,21 @@
       </div>
       <div class="tags">
         <span class="tag-label">构词方式</span>
-        <span class="tag-value">{{ video.constructType || "暂无数据" }}</span>
+        <span class="tag-value">{{ constructTypes[video.constructType].name || "暂无数据" }}</span>
         <span class="tag-label">构词词根</span>
-        <span v-if="video.constructWords" class="tag-value">
+        <span v-if="video.constructWords.length > 0" class="tag-value">
           <el-tag
             v-for="(item,index) in video.constructWords"
             :key="index"
             class="tag-words"
           >{{ item }}</el-tag>
         </span>
-        <span v-else class="tag-value">暂无数据</span>
+        <span v-else-if="video.constructType==='single'" class="tag-value">
+          <el-tag type="danger">不可用</el-tag>
+        </span>
+        <span v-else class="tag-value">
+          <el-tag type="info">暂无数据</el-tag>
+        </span>
       </div>
       <div v-if="video.leftSigns.length !== 0" class="tags">
         <span class="tag-label">左手手型</span>
@@ -68,6 +73,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "VideoDetail",
   props: {
@@ -76,6 +82,9 @@ export default {
       required: true,
       default: () => ({})
     }
+  },
+  computed: {
+    ...mapGetters(["constructTypes"])
   }
 };
 </script>
@@ -83,7 +92,7 @@ export default {
 <style lang="scss" scoped>
 .tags {
   text-align: center;
-  padding: 10px 20px;
+  padding: 5px;
   display: flex;
   align-items: center;
   justify-content: space-evenly;
@@ -94,7 +103,7 @@ export default {
   }
   .tag-value {
     img {
-      height: 120px;
+      height: 100px;
       padding: 10px;
     }
     width: 25%;
