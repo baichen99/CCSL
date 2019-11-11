@@ -1,5 +1,7 @@
 import Vue from "vue";
 import VueI18n from "vue-i18n";
+import zh from "@/locale/zh-CN";
+import en from "@/locale/en-US";
 
 const dateTimeFormats = {
   "en-US": {
@@ -46,9 +48,15 @@ switch (browserLanguage) {
     break;
 }
 
+const messages = {
+  "zh-CN": zh,
+  "en-US": en
+};
+
 Vue.use(VueI18n);
 
 const i18n = new VueI18n({
+  messages,
   locale,
   dateTimeFormats
 });

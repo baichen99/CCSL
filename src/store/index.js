@@ -1,6 +1,11 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import VuexPersistence from "vuex-persist";
 import getters from "./getters";
+
+const vuexLocal = new VuexPersistence({
+  storage: window.localStorage
+});
 
 Vue.use(Vuex);
 
@@ -15,7 +20,8 @@ const modules = modulesFiles.keys().reduce((modules, modulePath) => {
 
 const store = new Vuex.Store({
   modules,
-  getters
+  getters,
+  plugins: [vuexLocal.plugin]
 });
 
 export default store;

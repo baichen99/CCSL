@@ -8,47 +8,38 @@
           <span class="en">Center for CSL and Deaf Studies</span>
         </div>
       </div>
-      <el-menu
-        :default-active="activeMenu"
-        mode="horizontal"
-        router
-        active-text-color="#2363C3"
-      >
-        <el-menu-item index="/">首页</el-menu-item>
-        <el-menu-item v-permission="['admin','super','learner']" index="/learning-platform">学习平台</el-menu-item>
+      <el-menu :default-active="activeMenu" mode="horizontal" router active-text-color="#2363C3">
+        <el-menu-item index="/">{{ $t("HomeMenu") }}</el-menu-item>
+        <el-menu-item v-permission="['admin','super','learner']" index="/learning-platform">{{ $t("LearnMenu") }}</el-menu-item>
         <el-submenu index="/research">
-          <template slot="title">研究成果</template>
+          <template slot="title">{{ $t("ResearchMenu") }}</template>
           <el-menu-item
             v-for="item in researches"
             :key="item.url"
             :index="item.url"
-            class="sub-menu-item"
           >{{ item.title }}</el-menu-item>
         </el-submenu>
         <el-submenu v-permission="['admin','super','user']" index="/database">
-          <template slot="title">数据库</template>
-          <el-menu-item
-            v-for="item in databases"
-            :key="item.url"
-            :index="item.url"
-            class="sub-menu-item"
-          >{{ item.title }}</el-menu-item>
+          <template slot="title">{{ $t("DatabaseMenu") }}</template>
+          <el-menu-item v-for="item in databases" :key="item.url" :index="item.url">{{ item.title }}</el-menu-item>
         </el-submenu>
         <el-submenu index="/about">
-          <template slot="title">中心概况</template>
-          <el-menu-item
-            v-for="item in about"
-            :key="item.url"
-            :index="item.url"
-            class="sub-menu-item"
-          >{{ item.title }}</el-menu-item>
+          <template slot="title">{{ $t("AboutMenu") }}</template>
+          <el-menu-item v-for="item in about" :key="item.url" :index="item.url">{{ item.title }}</el-menu-item>
         </el-submenu>
-        <el-submenu v-if="userToken" index="/profile">
-          <template slot="title">我的</template>
-          <el-menu-item index="/profile" class="sub-menu-item">个人中心</el-menu-item>
-          <el-menu-item class="sub-menu-item" @click="logout">退出登录</el-menu-item>
+        <el-submenu v-if="login" index="/profile">
+          <template slot="title">{{ $t("MyMenu") }}</template>
+          <el-menu-item index="/profile">{{ $t("ProfileMenu") }}</el-menu-item>
+          <el-menu-item @click="logout">{{ $t("Logout") }}</el-menu-item>
         </el-submenu>
-        <el-menu-item v-else index="/login">登录</el-menu-item>
+        <el-menu-item v-else index="/login">{{ $t("Login") }}</el-menu-item>
+        <el-submenu index="/language">
+          <template slot="title">{{ languages[$i18n.locale].name }}</template>
+          <el-menu-item v-for="(value, key) in languages" :key="key" @click="changeLanguage(key)">
+            <svg-icon class="language-flag" :icon-class="key" />
+            <span>{{ value.name }}</span>
+          </el-menu-item>
+        </el-submenu>
       </el-menu>
     </div>
   </header>
@@ -77,7 +68,11 @@ export default {
       { url: "/about/introduction", title: "中心介绍" },
       { url: "/about/team", title: "研究团队" },
       { url: "/about/contact", title: "联系我们" }
-    ]
+    ],
+    languages: {
+      "zh-CN": { name: "简体中文" },
+      "en-US": { name: "English" }
+    }
   }),
   computed: {
     activeMenu() {
@@ -88,17 +83,31 @@ export default {
       }
       return path;
     },
-    userToken() {
+    login() {
       return getToken() || this.$store.getters.token;
     }
   },
   methods: {
+    changeLanguage(lang) {
+      this.$root.$i18n.locale = lang;
+    },
     async logout() {
       await this.$store.dispatch("user/logout");
     }
   }
 };
 </script>
+
+<style lang="scss">
+.el-menu--popup {
+  text-align: center;
+}
+.language-flag {
+  font-size: 30px;
+  float: left;
+  padding-top: 5px;
+}
+</style>
 
 <style lang="scss" scoped>
 @import "@/styles/element-variables.scss";
@@ -143,9 +152,5 @@ header {
       }
     }
   }
-}
-
-.sub-menu-item {
-  text-align: center;
 }
 </style>

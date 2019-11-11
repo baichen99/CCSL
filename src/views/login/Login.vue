@@ -9,7 +9,7 @@
       label-position="left"
     >
       <div class="title-container">
-        <h3 class="title">登录</h3>
+        <h3 class="title">{{ $t("Login") }}</h3>
       </div>
       <el-form-item prop="username">
         <span class="svg-container">
@@ -40,33 +40,36 @@
           auto-complete="on"
           @keyup.enter.native="handleLogin"
         />
-        <span
-          class="show-pwd"
-          @click="showPwd"
-        >
+        <span class="show-pwd" @click="showPwd">
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
-      <el-checkbox
-        v-model="remember"
-        class="rem-pwd"
-      >记住登录状态</el-checkbox>
+      <el-checkbox v-model="remember" class="rem-pwd">{{ $t("remember") }}</el-checkbox>
       <el-button
         :loading="loading"
         type="primary"
         style="width:100%;margin-bottom:30px;"
         @click.native.prevent="handleLogin"
-      >
-        登录
-      </el-button>
+      >{{ $t("Login") }}</el-button>
       <div class="tips">
-
-        <div>如果您是校内用户，请使用一卡通账号和统一身份认证密码登录</div>
-        <div>如果您是校外用户，请使用邮箱和密码登录</div>
+        <div>{{ $t("tips") }}</div>
       </div>
     </el-form>
   </div>
 </template>
+
+<i18n>
+{
+  "zh-CN": {
+    "remember": "记住登录状态",
+    "tips": "如果您是校内用户，请使用一卡通账号和统一身份认证密码登录，如果您是校外用户，请使用邮箱和密码登录"
+  },
+  "en-US": {
+    "remember": "Remember me",
+    "tips": "If you are staff or student of Shanghai University, please login with your SHU account. If not, please login with your email and password."
+  }
+}
+</i18n>
 
 <script>
 import { validUsername } from "@/utils/validate";

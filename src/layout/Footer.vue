@@ -1,13 +1,30 @@
 <template>
   <footer>
     <svg-icon icon-class="logo" class="logo" />
-    <div>沪ICP备 09014157号</div>
-    <div>中国手语及聋人研究中心</div>
-    <div>邮箱：<a href="mailto:ccsl@oa.shu.edu.cn">ccsl@oa.shu.edu.cn</a> &nbsp; 邮编：200444</div>
-    <div>Copyright &copy; 2018-2019 Shanghai University</div>
-    <div>地址：上海市宝山区南陈路333号上海大学东区文学院105室</div>
+    <div>{{ $t("icpLicense") }}</div>
+    <div>{{ $t("CCSL") }}</div>
+    <div>{{ $t("copyright") }} &copy; 2018-2019 {{ $t("SHU") }}</div>
+    <div>
+      {{ $t("Email") }}:
+      <a href="mailto:ccsl@oa.shu.edu.cn">ccsl@oa.shu.edu.cn</a>
+      &nbsp; {{ $t("Postcode") }}: 200444
+    </div>
+    <div>{{ $t("Address") }}: {{ $t("AddressCCSL") }}</div>
   </footer>
 </template>
+
+<i18n>
+{
+  "zh-CN": {
+    "icpLicense": "沪ICP备 09014157号",
+    "copyright": "版权所有"
+  },
+  "en-US": {
+    "icpLicense": "ICP License: SH ICP 09014157",
+    "copyright": "Copyright"
+  }
+}
+</i18n>
 
 
 <style lang="scss" scoped>

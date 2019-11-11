@@ -41,12 +41,13 @@ const routes = [
         path: "/news-detail/:id",
         name: "NewsDetail",
         component: () => import("@/views/home/NewsDetail"),
-        meta: { title: "新闻详情" }
+        meta: { title: "新闻详情", activeMenu: "/" }
       },
       {
         path: "/news-list/:column",
         name: "NewsList",
-        component: () => import("@/views/home/NewsList")
+        component: () => import("@/views/home/NewsList"),
+        meta: { activeMenu: "/" }
       },
       {
         path: "/database/lexical-database",

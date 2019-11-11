@@ -794,6 +794,14 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^12.0.9"
 
+"@kazupon/vue-i18n-loader@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.npm.taobao.org/@kazupon/vue-i18n-loader/download/@kazupon/vue-i18n-loader-0.4.1.tgz#71730a821ff15754eb004629d673b47f8d80fdd1"
+  integrity sha1-cXMKgh/xV1TrAEYp1nO0f42A/dE=
+  dependencies:
+    js-yaml "^3.13.1"
+    json5 "^2.1.0"
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.npm.taobao.org/@mrmlnc/readdir-enhanced/download/@mrmlnc/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"
@@ -6442,6 +6450,11 @@ lodash.memoize@^4.1.2:
   resolved "https://registry.npm.taobao.org/lodash.memoize/download/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
   integrity sha1-vMbEmkKihA7Zl/Mj6tpezRguC/4=
 
+lodash.merge@^4.6.2:
+  version "4.6.2"
+  resolved "https://registry.npm.taobao.org/lodash.merge/download/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
+  integrity sha1-VYqlO0O2YeGSWgr9+japoQhf5Xo=
+
 lodash.padend@4.6.1:
   version "4.6.1"
   resolved "https://registry.npm.taobao.org/lodash.padend/download/lodash.padend-4.6.1.tgz#53ccba047d06e158d311f45da625f4e49e6f166e"
@@ -10500,9 +10513,9 @@ vue-hot-reload-api@^2.3.0:
   integrity sha1-J1b0bLMlgFTF9HI96K5+hzAqHM8=
 
 vue-i18n@^8.14.1:
-  version "8.14.1"
-  resolved "https://registry.npm.taobao.org/vue-i18n/download/vue-i18n-8.14.1.tgz#0ca0a2742c14e0144481655157fffcc7cc313e50"
-  integrity sha1-DKCidCwU4BREgWVRV//8x8wxPlA=
+  version "8.15.0"
+  resolved "https://registry.npm.taobao.org/vue-i18n/download/vue-i18n-8.15.0.tgz#9b11ef8e7a124f67cdf788c8c90a81f3606240ed"
+  integrity sha1-mxHvjnoST2fN94jIyQqB82BiQO0=
 
 vue-jest@^3.0.4:
   version "3.0.4"
@@ -10572,6 +10585,14 @@ vue@2.6.10:
   version "2.6.10"
   resolved "https://registry.npm.taobao.org/vue/download/vue-2.6.10.tgz#a72b1a42a4d82a721ea438d1b6bf55e66195c637"
   integrity sha1-pysaQqTYKnIepDjRtr9V5mGVxjc=
+
+vuex-persist@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.npm.taobao.org/vuex-persist/download/vuex-persist-2.1.1.tgz#2d525f3d2e62fc51b610d3c4af54688a760d7115"
+  integrity sha1-LVJfPS5i/FG2ENPEr1RoinYNcRU=
+  dependencies:
+    flatted "^2.0.0"
+    lodash.merge "^4.6.2"
 
 vuex@3.1.0:
   version "3.1.0"
