@@ -11,7 +11,7 @@
 
 <script>
 const plugins = [
-  "lists advlist anchor autolink autosave code codesample directionality fullscreen hr image imagetools insertdatetime link media nonbreaking noneditable pagebreak paste preview print save searchreplace spellchecker tabfocus table template textpattern visualblocks visualchars wordcount"
+  "lists advlist anchor autolink code codesample directionality fullscreen hr image imagetools insertdatetime link media nonbreaking noneditable pagebreak paste preview print save searchreplace spellchecker tabfocus table template textpattern visualblocks visualchars wordcount"
 ];
 
 const toolbar = [
