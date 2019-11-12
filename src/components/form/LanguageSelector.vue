@@ -1,12 +1,23 @@
 <template>
-  <el-select v-model="data" placeholder="请选择语言" clearable @clear="$emit('clear')">
+  <el-select v-model="data" :placeholder="$t('tip')" clearable @clear="$emit('clear')">
     <el-option v-for="item in options" :key="item.value" :label="item.name" :value="item.value" />
   </el-select>
 </template>
 
+<i18n>
+{
+  "zh-CN": {
+    "tip": "请选择语言"
+  },
+  "en-US": {
+    "tip": "Select language"
+  }
+}
+</i18n>
+
 <script>
 export default {
-  name: "Languageelector",
+  name: "LanguageSelector",
   model: {
     prop: "value",
     event: "update"

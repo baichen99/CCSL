@@ -44,7 +44,6 @@
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
-      <el-checkbox v-model="remember" class="rem-pwd">{{ $t("remember") }}</el-checkbox>
       <el-button
         :loading="loading"
         type="primary"
@@ -61,11 +60,9 @@
 <i18n>
 {
   "zh-CN": {
-    "remember": "记住登录状态",
     "tips": "如果您是校内用户，请使用一卡通账号和统一身份认证密码登录，如果您是校外用户，请使用邮箱和密码登录"
   },
   "en-US": {
-    "remember": "Remember me",
     "tips": "If you are staff or student of Shanghai University, please login with your SHU account. If not, please login with your email and password."
   }
 }
@@ -92,7 +89,6 @@ export default {
       }
     };
     return {
-      remember: false,
       loginForm: {
         username: "",
         password: ""
@@ -135,15 +131,15 @@ export default {
           this.$store
             .dispatch("user/login", {
               username: this.loginForm.username,
-              password: this.loginForm.password,
-              remember: this.remember
+              password: this.loginForm.password
             })
             .then(() => {
               const redirect = this.$route.query.redirect;
               this.$router.push({ path: redirect || "/" });
               this.loading = false;
             })
-            .catch(() => {
+            .catch(err => {
+              console.error(err);
               this.loading = false;
             });
         } else {

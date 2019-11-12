@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-show="!ifDetail" class="team flex-column">
-      <h2 class="title">研究团队</h2>
+      <h2 class="title">{{ $t("TeamMenu") }}</h2>
       <div class="list-container">
         <el-table class="table" :data="EMPList" stripe>
           <el-table-column prop="cls" label="类别" align="center" width="200" />

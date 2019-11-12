@@ -1,6 +1,6 @@
 <template>
   <div class="contact flex-column">
-    <h2 class="title">联系我们</h2>
+    <h2 class="title">{{ $t("ContactMenu") }}</h2>
     <el-row :gutter="20" class="container">
       <el-col :span="12">
         <el-card shadow="hover">
@@ -13,13 +13,24 @@
       </el-col>
       <el-col :span="12">
         <el-card shadow="hover">
-          <h3>微信公众号</h3>
+          <h3>{{ $t("wechat") }}</h3>
           <img src="@/assets/wechat.png" />
         </el-card>
       </el-col>
     </el-row>
   </div>
 </template>
+
+<i18n>
+{
+  "zh-CN": {
+    "wechat": "微信公众号"
+  },
+  "en-US": {
+    "wechat": "WeChat Official Accounts"
+  }
+}
+</i18n>
 
 <script>
 export default {

@@ -4,7 +4,7 @@
     filterable
     clearable
     remote
-    placeholder="请输入中文转写"
+    :placeholder="$t('tip')"
     :remote-method="filterRemote"
     :loading="loading"
     @clear="filterRemote"
@@ -17,6 +17,17 @@
     >{{ item.initial }} - {{ item.chinese }}</el-option>
   </el-select>
 </template>
+
+<i18n>
+{
+  "zh-CN": {
+    "tip": "请输入中文转写"
+  },
+  "en-US": {
+    "tip": "Input Chinese"
+  }
+}
+</i18n>
 
 <script>
 import { GetLexicalWordsList } from "@/api/words";

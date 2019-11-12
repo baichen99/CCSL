@@ -6,7 +6,6 @@ import router from "@/router";
 import i18n from "@/locale";
 import settings from "./settings";
 import VueVideoPlayer from "vue-video-player";
-import locale from "element-ui/lib/locale/lang/zh-CN"; // lang i18n
 import "@/directives";
 import "video.js/dist/video-js.css";
 import "normalize.css/normalize.css"; // CSS resets
@@ -16,7 +15,7 @@ import "@/icons"; // icon
 
 Vue.use(ElementUI, {
   zIndex: 3000,
-  locale
+  i18n: (key, value) => i18n.t(key, value)
 });
 
 Vue.use(VueVideoPlayer, settings.videojsOptions);

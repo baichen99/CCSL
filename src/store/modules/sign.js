@@ -19,14 +19,8 @@ const state = {
     "疑问代词"
   ],
   constructTypes: {
-    combined: { name: "合成词" },
-    single: { name: "单纯词" }
-  },
-  newsColumns: {
-    news: { icon: "news", name: "新闻动态", value: "news" },
-    activity: { icon: "activity", name: "学术活动", value: "activity" },
-    notice: { icon: "notice", name: "通知公告", value: "notice" },
-    research: { icon: "research", name: "科研动态", value: "research" }
+    compound: { name: "CompoundWord" },
+    single: { name: "SimpleWord" }
   },
   userTypes: {
     super: { name: "超级管理员", color: "danger" },
@@ -39,8 +33,14 @@ const state = {
     inactive: { name: "停用", color: "danger" }
   },
   genderTypes: {
-    M: { name: "男", value: "M" },
-    F: { name: "女", value: "F" }
+    M: { name: "Male", value: "M" },
+    F: { name: "Female", value: "F" }
+  },
+  newsColumns: {
+    news: { icon: "news", name: "NewsColumn", value: "news" },
+    activity: { icon: "activity", name: "ActivityColumn", value: "activity" },
+    notice: { icon: "notice", name: "NoticeColumn", value: "notice" },
+    research: { icon: "research", name: "ResearchColumn", value: "research" }
   }
 };
 

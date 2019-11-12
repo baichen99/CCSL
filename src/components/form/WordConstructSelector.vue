@@ -1,8 +1,19 @@
 <template>
-  <el-select v-model="data" placeholder="请选择构词方式" clearable @clear="$emit('clear')">
-    <el-option v-for="(item,key) in constructTypes" :key="key" :label="item.name" :value="key" />
+  <el-select v-model="data" :placeholder="$t('tip')" clearable @clear="$emit('clear')">
+    <el-option v-for="(item,key) in constructTypes" :key="key" :label="$t(item.name)" :value="key" />
   </el-select>
 </template>
+
+<i18n>
+{
+  "zh-CN": {
+    "tip": "请选择构词方式"
+  },
+  "en-US": {
+    "tip": "Select word formation"
+  }
+}
+</i18n>
 
 <script>
 import { mapGetters } from "vuex";

@@ -1,6 +1,6 @@
 <template>
   <el-card class="sign-search" shadow="hover">
-    <h3 class="title">手形检索</h3>
+    <h3 class="title">{{ $t("title") }}</h3>
     <div class="sign">
       <div v-for="item in signs" :key="item.id" class="sign-box">
         <el-popover trigger="hover" placement="top">
@@ -22,6 +22,17 @@
     </div>
   </el-card>
 </template>
+
+<i18n>
+{
+  "zh-CN": {
+    "title": "手形检索"
+  },
+  "en-US": {
+    "title": "Search by Sign"
+  }
+}
+</i18n>
 
 <script>
 import { GetSignsList } from "@/api/signs";

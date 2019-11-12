@@ -11,21 +11,21 @@
 
     <div class="tags-container">
       <div class="tags">
-        <span class="tag-label">地区</span>
+        <span class="tag-label">{{ $t("Region") }}</span>
         <span class="tag-value">{{ video.performer.region.name }}</span>
-        <span class="tag-label">汉语转写</span>
+        <span class="tag-label">{{ $t("Chinese") }}</span>
         <span class="tag-value">{{ video.lexicalWord.chinese }}</span>
       </div>
       <div class="tags">
-        <span class="tag-label">词性</span>
+        <span class="tag-label">{{ $t("PoS") }}</span>
         <span class="tag-value">{{ video.lexicalWord.pos }}</span>
-        <span class="tag-label">英语转写</span>
+        <span class="tag-label">{{ $t("English") }}</span>
         <span class="tag-value">{{ video.lexicalWord.english }}</span>
       </div>
       <div class="tags">
-        <span class="tag-label">构词方式</span>
-        <span class="tag-value">{{ constructTypes[video.constructType].name || "暂无数据" }}</span>
-        <span class="tag-label">构词词根</span>
+        <span class="tag-label">{{ $t("WordFormation") }}</span>
+        <span class="tag-value">{{ $t(constructTypes[video.constructType].name) || $t("NoData") }}</span>
+        <span class="tag-label">{{ $t("CompoundLexemes") }}</span>
         <span v-if="video.constructWords.length > 0" class="tag-value">
           <el-tag
             v-for="(item,index) in video.constructWords"
@@ -34,14 +34,14 @@
           >{{ item }}</el-tag>
         </span>
         <span v-else-if="video.constructType==='single'" class="tag-value">
-          <el-tag type="danger">不可用</el-tag>
+          <el-tag type="danger">{{ $t("Unavailable") }}</el-tag>
         </span>
         <span v-else class="tag-value">
-          <el-tag type="info">暂无数据</el-tag>
+          <el-tag type="info">{{ $t("NoData") }}</el-tag>
         </span>
       </div>
       <div v-if="video.leftSigns.length !== 0" class="tags">
-        <span class="tag-label">左手手型</span>
+        <span class="tag-label">{{ $t("LeftSign") }}</span>
         <span class="tag-value" style="width:50%">
           <span v-for="item in video.leftSigns" :key="item.id">
             <el-tooltip effect="dark" :content="item.name" placement="top">
@@ -55,7 +55,7 @@
         </span>
       </div>
       <div v-if="video.rightSigns.length !== 0" class="tags">
-        <span class="tag-label">右手手型</span>
+        <span class="tag-label">{{ $t("RightSign") }}</span>
         <span class="tag-value" style="width:50%">
           <span v-for="item in video.rightSigns" :key="item.id">
             <el-tooltip effect="dark" :content="item.name" placement="top">

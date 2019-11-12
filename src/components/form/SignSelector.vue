@@ -7,6 +7,21 @@
   </el-select>
 </template>
 
+<i18n>
+{
+  "zh-CN": {
+    "left": "请选择左手手形",
+    "right": "请选择右手手形",
+    "sign": "请选择手形"
+  },
+  "en-US": {
+    "left": "Select left hand sign",
+    "right": "Select right hand sign",
+    "sign": "Select sign"
+  }
+}
+</i18n>
+
 <script>
 import { GetSignsList } from "@/api/signs";
 export default {
@@ -40,9 +55,9 @@ export default {
       }
     },
     tip() {
-      if (this.orientation === "left") return "请选择左手手形";
-      else if (this.orientation === "right") return "请选择右手手形";
-      else return "请选择手形";
+      if (this.orientation === "left") return this.$t("left");
+      else if (this.orientation === "right") return this.$t("right");
+      else return this.$t("sign");
     }
   },
   created() {

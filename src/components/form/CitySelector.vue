@@ -2,12 +2,23 @@
   <el-cascader
     v-model="value"
     :options="cities"
-    placeholder="请选择地区"
+    :placeholder="$t('tip')"
     :props="{ expandTrigger: 'hover' }"
     clearable
     @change="changeRegion"
   />
 </template>
+
+<i18n>
+{
+  "zh-CN": {
+    "tip": "请选择地区"
+  },
+  "en-US": {
+    "tip": "Select region"
+  }
+}
+</i18n>
 
 <script>
 import cities from "@/assets/cities";

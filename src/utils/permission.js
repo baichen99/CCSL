@@ -3,8 +3,7 @@ import store from "@/store";
 import { Message } from "element-ui";
 import NProgress from "nprogress"; // progress bar
 import "nprogress/nprogress.css"; // progress bar style
-// import { getToken, getPageTitle, hasPermission } from "@/utils/tools";
-import { getToken, getPageTitle } from "@/utils/tools";
+import { getPageTitle } from "@/utils/tools";
 
 NProgress.configure({ showSpinner: false });
 
@@ -19,7 +18,7 @@ const HOME_PAGE = "Home";
 router.beforeEach(async (to, from, next) => {
   NProgress.start();
   document.title = getPageTitle(to.meta.title);
-  const token = getToken() || store.getters.token;
+  const token = store.getters.token;
   if (to.meta.auth) {
     // 需要登录才能访问
     if (!token && to.name !== LOGIN_PAGE) {
@@ -53,8 +52,7 @@ router.beforeEach(async (to, from, next) => {
         }
       } else {
         try {
-          const data = await store.dispatch("user/getUserInfo");
-          store.commit("user/SET_ROLES", data.userType);
+          await store.dispatch("user/getUserInfo");
           next({ ...to, replace: true });
         } catch (error) {
           await store.dispatch("user/logout");

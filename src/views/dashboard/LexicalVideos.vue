@@ -61,7 +61,7 @@
 
         <el-table-column label="构词" align="center" width="150px">
           <template slot-scope="{row}">
-            <span v-if="row.constructType">{{ constructTypes[row.constructType].name }}</span>
+            <span v-if="row.constructType">{{ $t(constructTypes[row.constructType].name) }}</span>
             <span v-else>暂无数据</span>
           </template>
         </el-table-column>

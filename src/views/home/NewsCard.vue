@@ -3,8 +3,8 @@
     <el-card shadow="hover">
       <div slot="header">
         <svg-icon :icon-class="icon" />
-        <span class="news-header">{{ title }}</span>
-        <el-link class="news-more" type="primary" @click="showList(column)">更多</el-link>
+        <span class="news-header">{{ $t(title) }}</span>
+        <el-link class="news-more" type="primary" @click="showList(column)">{{ $t("more") }}</el-link>
       </div>
       <div v-for="item in news" :key="item.id" class="news-content">
         <i class="dot">&bull;</i>
@@ -14,6 +14,17 @@
     </el-card>
   </div>
 </template>
+
+<i18n>
+{
+  "zh-CN": {
+    "more": "更多"
+  },
+  "en-US": {
+    "more": "More"
+  }
+}
+</i18n>
 
 <script>
 import { GetNewsList } from "@/api/news";

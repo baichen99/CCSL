@@ -2,13 +2,25 @@
   <el-date-picker
     v-model="value"
     type="date"
-    placeholder="选择日期"
-    format="yyyy 年 MM 月 dd 日"
+    :placeholder="$t('tip')"
+    format="yyyy / MM / dd"
     value-format="yyyy-MM-ddTHH:mm:ssZ"
     clearable
     @clear="$emit('clear')"
   />
 </template>
+
+<i18n>
+{
+  "zh-CN": {
+    "tip": "请选择日期"
+  },
+  "en-US": {
+    "tip": "Select date"
+  }
+}
+</i18n>
+
 
 <script>
 // RFC3339 Formated Date - example: 2000-12-30T00:00:00Z

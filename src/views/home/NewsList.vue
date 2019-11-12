@@ -2,7 +2,7 @@
   <el-card class="news-list">
     <div slot="header" class="list-header">
       <svg-icon :icon-class="newsColumns[params.column].icon" />
-      <h2>{{ newsColumns[params.column].name }}</h2>
+      <h2>{{ $t(newsColumns[params.column].name) }}</h2>
     </div>
 
     <div class="list-content">

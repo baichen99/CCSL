@@ -1,16 +1,8 @@
 import { Login, RefreshToken, GetUser } from "@/api/users";
 import router from "@/router";
-import {
-  getToken,
-  setToken,
-  removeToken,
-  setUser,
-  getUser,
-  removeUser
-} from "@/utils/tools";
 
 const state = {
-  token: getToken(),
+  token: "",
   name: "",
   username: "",
   avatar: "",
@@ -32,7 +24,7 @@ const mutations = {
     state.avatar = avatar;
   },
   SET_ROLES: (state, role) => {
-    state.roles = [role];
+    state.roles = role;
   },
   SET_USERNAME: (state, username) => {
     state.username = username;
@@ -41,19 +33,14 @@ const mutations = {
 
 const actions = {
   login({ commit }, user) {
-    const { username, password, remember } = user;
+    const { username, password } = user;
     return new Promise((resolve, reject) => {
       Login({ username: username.trim(), password: password })
         .then(response => {
           const token = response.data;
           commit("SET_TOKEN", token);
-          // If remember password, save JWT token to local storage
           const user = JSON.parse(atob(token.split(".")[1]));
           const userID = user.user;
-          if (remember) {
-            setToken(token);
-            setUser(userID);
-          }
           GetUser(userID)
             .then(res => {
               const { data } = res;
@@ -62,7 +49,7 @@ const actions = {
               }
               commit("SET_ID", data.id);
               commit("SET_NAME", data.name);
-              commit("SET_ROLES", data.userType);
+              commit("SET_ROLES", [data.userType]);
               commit("SET_USERNAME", data.username);
               commit("SET_AVATAR", data.avatar);
               resolve(data);
@@ -85,8 +72,6 @@ const actions = {
       commit("SET_USERNAME", "");
       commit("SET_AVATAR", "");
       commit("SET_TOKEN", "");
-      removeToken();
-      removeUser();
       router.push("/login");
       resolve();
     });
@@ -94,13 +79,13 @@ const actions = {
 
   getUserInfo({ dispatch, commit, state }) {
     return new Promise((resolve, reject) => {
-      const userID = getUser() || state.id;
+      const userID = state.id;
       GetUser(userID)
         .then(res => {
           const { data } = res;
           commit("SET_ID", data.id);
           commit("SET_NAME", data.name);
-          commit("SET_ROLES", data.userType);
+          commit("SET_ROLES", [data.userType]);
           commit("SET_USERNAME", data.username);
           commit("SET_AVATAR", data.avatar);
           resolve(res.data);
@@ -114,11 +99,10 @@ const actions = {
 
   refreshToken({ dispatch, commit }) {
     return new Promise((resolve, reject) => {
-      if (getToken()) {
+      if (state.token) {
         RefreshToken()
           .then(res => {
             commit("SET_TOKEN", res.data);
-            setToken(res.data);
             resolve();
           })
           .catch(err => {

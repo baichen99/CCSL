@@ -6,14 +6,27 @@
         <el-divider>
           <svg-icon v-if="data.column" :icon-class="data.column" />
         </el-divider>
-        <span v-if="data.date">发布日期： {{ $d(new Date(data.date),"short") }}</span>
-        <span>发布人：{{ data.creator.name }}</span>
+        <span v-if="data.date">{{ $t("date") }}： {{ $d(new Date(data.date),"short") }}</span>
+        <span>{{ $t("publisher") }}：{{ data.creator.name }}</span>
         <el-divider />
       </div>
       <div class="news-content" v-html="data.text"></div>
     </el-card>
   </div>
 </template>
+
+<i18n>
+{
+  "zh-CN": {
+    "date": "发布日期",
+    "publisher": "发布人"
+  },
+  "en-US": {
+    "date": "Publish Date",
+    "publisher": "Publisher"
+  }
+}
+</i18n>
 
 <script>
 import { GetNews } from "@/api/news";
@@ -65,8 +78,10 @@ export default {
   .news-content {
     padding: 10px 30px;
     text-indent: 2em;
-    font-size: 18px;
     line-height: 2rem;
+    p {
+      text-indent: 2rem;
+    }
   }
 }
 </style>

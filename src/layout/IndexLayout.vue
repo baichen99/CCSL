@@ -34,6 +34,7 @@ export default {
   main {
     background-color: #e6e6e6;
     flex: 1 0 auto;
+    padding: 20px 0;
   }
 
   footer {

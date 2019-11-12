@@ -16,7 +16,7 @@
       @keyup.enter.native="handleInputConfirm"
       @blur="handleInputConfirm"
     />
-    <el-button v-else class="button-new-tag" plain size="small" type="primary" @click="showInput">+ 增加</el-button>
+    <el-button v-else class="button-new-tag" plain size="small" type="primary" @click="showInput">+ {{ $t("New") }}</el-button>
   </div>
 </template>
 <script>

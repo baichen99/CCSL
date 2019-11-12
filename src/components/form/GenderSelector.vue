@@ -1,8 +1,19 @@
 <template>
-  <el-select v-model="data" placeholder="请选择性别" clearable @clear="$emit('clear')">
-    <el-option v-for="(item, key) in genderTypes" :key="key" :label="item.name" :value="item.value" />
+  <el-select v-model="data" :placeholder="$t('tip')" clearable @clear="$emit('clear')">
+    <el-option v-for="(item, key) in genderTypes" :key="key" :label="$t(item.name)" :value="item.value" />
   </el-select>
 </template>
+
+<i18n>
+{
+  "zh-CN": {
+    "tip": "请选择性别"
+  },
+  "en-US": {
+    "tip": "Select gender"
+  }
+}
+</i18n>
 
 <script>
 import { mapGetters } from "vuex";

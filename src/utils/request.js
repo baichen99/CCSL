@@ -2,7 +2,6 @@ import axios from "axios";
 import store from "@/store";
 import router from "@/router";
 import { Notification, Loading } from "element-ui";
-import { getToken } from "@/utils/tools";
 
 // create an axios instance
 const service = axios.create({
@@ -38,9 +37,13 @@ service.interceptors.request.use(
     if (config.loading === true) {
       showFullScreenLoading();
     }
-    const token = getToken() || store.getters.token;
+    const token = store.getters.token;
+    const locale = store.getters.locale;
     if (token) {
       config.headers["Authorization"] = "Bearer " + token;
+    }
+    if (locale && config.params) {
+      config.params.lang = locale;
     }
     return config;
   },
@@ -64,6 +67,7 @@ service.interceptors.response.use(
   },
   error => {
     hideFullScreenLoading();
+    console.log(error);
     const res = error.response.data;
     const statusCode = error.response.status;
     Notification({

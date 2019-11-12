@@ -1,6 +1,6 @@
 <template>
   <el-card class="sidebar" shadow="hover">
-    <h3 class="title">音序检索</h3>
+    <h3 class="title">{{ $t("title") }}</h3>
     <div class="initial">
       <el-collapse accordion>
         <el-collapse-item v-for="(value, key) in words" :key="key" :title="key">
@@ -12,6 +12,17 @@
     </div>
   </el-card>
 </template>
+
+<i18n>
+{
+  "zh-CN": {
+    "title": "音序检索"
+  },
+  "en-US": {
+    "title": "Search by Initial"
+  }
+}
+</i18n>
 
 <script>
 import { GetLexicalWordsList } from "@/api/words";

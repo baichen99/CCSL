@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueI18n from "vue-i18n";
+import store from "@/store";
 import zh from "@/locale/zh-CN";
 import en from "@/locale/en-US";
 
@@ -35,17 +36,24 @@ const dateTimeFormats = {
   }
 };
 
-const browserLanguage = navigator.language;
-
 let locale;
-switch (browserLanguage) {
-  case "en-US":
-    locale = "en-US";
-    break;
 
-  default:
-    locale = "zh-CN";
-    break;
+const browserLanguage = navigator.language;
+const savedLanguage = store.state.app.locale;
+
+if (savedLanguage) {
+  locale = savedLanguage;
+} else {
+  switch (browserLanguage) {
+    case "en-US":
+      locale = "en-US";
+      break;
+
+    default:
+      locale = "zh-CN";
+      break;
+  }
+  store.dispatch("app/setLocale", locale);
 }
 
 const messages = {
@@ -58,7 +66,8 @@ Vue.use(VueI18n);
 const i18n = new VueI18n({
   messages,
   locale,
-  dateTimeFormats
+  dateTimeFormats,
+  silentTranslationWarn: true
 });
 
 export default i18n;

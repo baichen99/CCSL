@@ -4,7 +4,8 @@ import VuexPersistence from "vuex-persist";
 import getters from "./getters";
 
 const vuexLocal = new VuexPersistence({
-  storage: window.localStorage
+  storage: window.localStorage,
+  modules: ["app", "user"]
 });
 
 Vue.use(Vuex);

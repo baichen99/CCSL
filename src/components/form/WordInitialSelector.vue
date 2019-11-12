@@ -1,8 +1,19 @@
 <template>
-  <el-select v-model="data" placeholder="请选择音序" clearable @clear="$emit('clear')">
+  <el-select v-model="data" :placeholder="$t('tip')" clearable @clear="$emit('clear')">
     <el-option v-for="(item,index) in options" :key="index" :label="item" :value="item" />
   </el-select>
 </template>
+
+<i18n>
+{
+  "zh-CN": {
+    "tip": "请选择音序"
+  },
+  "en-US": {
+    "tip": "Select initial"
+  }
+}
+</i18n>
 
 <script>
 export default {

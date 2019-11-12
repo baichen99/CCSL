@@ -6,7 +6,7 @@
     remote
     clearable
     reserve-keyword
-    placeholder="请输入手形名称"
+    :placeholder="$t('tip')"
     :remote-method="filterRemote"
     :loading="loading"
     @clear="filterRemote"
@@ -17,6 +17,17 @@
     </el-option>
   </el-select>
 </template>
+
+<i18n>
+{
+  "zh-CN": {
+    "tip": "请输入手形名称"
+  },
+  "en-US": {
+    "tip": "Input sign name"
+  }
+}
+</i18n>
 
 <script>
 import { GetSignsList } from "@/api/signs";

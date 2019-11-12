@@ -3,7 +3,7 @@
     <sign-search @sign-selected="searchBySign" />
 
     <div class="search">
-      <h3>国家通用手语比对语料库</h3>
+      <h2>{{ $t("LexicalDatabase") }}</h2>
 
       <video-search-input v-model="params" @search="searchByButton" />
 
@@ -129,7 +129,7 @@ export default {
   .search {
     width: 60%;
     padding: 40px;
-    h3 {
+    h2 {
       text-align: center;
     }
   }
