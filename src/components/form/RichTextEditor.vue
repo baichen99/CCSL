@@ -10,23 +10,17 @@
 </template>
 
 <script>
-/**
- * docs:
- * https://panjiachen.github.io/vue-element-admin-site/feature/component/rich-editor.html#tinymce
- */
-
 const plugins = [
-  "advlist anchor autolink autosave code codesample colorpicker colorpicker contextmenu directionality fullscreen hr image imagetools insertdatetime link lists media nonbreaking noneditable pagebreak paste preview print save searchreplace spellchecker tabfocus table template textcolor textpattern visualblocks visualchars wordcount"
+  "lists advlist anchor autolink autosave code codesample directionality fullscreen hr image imagetools insertdatetime link media nonbreaking noneditable pagebreak paste preview print save searchreplace spellchecker tabfocus table template textpattern visualblocks visualchars wordcount"
 ];
 
 const toolbar = [
-  "searchreplace bold italic underline strikethrough alignleft aligncenter alignright outdent indent  blockquote undo redo removeformat subscript superscript code codesample",
-  "hr bullist numlist link image charmap preview anchor pagebreak insertdatetime media table forecolor backcolor fullscreen"
+  "searchreplace bold italic underline strikethrough alignleft aligncenter alignright outdent indent  blockquote undo redo removeformat subscript superscript code codesample hr bullist numlist link image charmap preview anchor pagebreak insertdatetime media table forecolor backcolor fullscreen"
 ];
 
-// why use this cdn, detail see https://github.com/PanJiaChen/tinymce-all-in-one
-const tinymceCDN =
-  "https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/tinymce.min.js";
+const menubar = "file edit insert view format table";
+
+const tinymceCDN = "https://cdn.jsdelivr.net/npm/tinymce@5.1.1/tinymce.min.js";
 
 let callbacks = [];
 
@@ -53,17 +47,6 @@ export default {
       type: String,
       default: ""
     },
-    toolbar: {
-      type: Array,
-      required: false,
-      default() {
-        return [];
-      }
-    },
-    menubar: {
-      type: String,
-      default: "file edit insert view format table"
-    },
     height: {
       type: [Number, String],
       required: false,
@@ -83,8 +66,8 @@ export default {
       tinymceId: this.id,
       fullscreen: false,
       languageTypeList: {
-        en: "en",
-        zh: "zh_CN"
+        "en-US": "en_US",
+        "zh-CN": "zh_CN"
       },
       callbacks: []
     };
@@ -169,22 +152,22 @@ export default {
       const _this = this;
       window.tinymce.init({
         selector: `#${this.tinymceId}`,
-        language: this.languageTypeList["zh"],
+        language: this.languageTypeList[this.$i18n.locale],
         height: this.height,
         body_class: "panel-body ",
         object_resizing: false,
-        toolbar: this.toolbar.length > 0 ? this.toolbar : toolbar,
-        menubar: this.menubar,
+        toolbar: toolbar,
+        menubar: menubar,
         plugins: plugins,
         end_container_on_empty_block: true,
         powerpaste_word_import: "clean",
         code_dialog_height: 400,
         code_dialog_width: 1000,
-        advlist_bullet_styles: "square",
-        advlist_number_styles: "default",
         imagetools_cors_hosts: ["https://ccsl.shu.edu.cn"],
         default_link_target: "_blank",
         link_title: false,
+        statusbar: false,
+        language_url: "/tinymce/langs/zh_CN.js",
         nonbreaking_force_tab: true, // inserting nonbreaking space &nbsp; need Nonbreaking Space Plugin
         init_instance_callback: editor => {
           if (_this.value) {
@@ -251,12 +234,16 @@ export default {
 };
 </script>
 
-<style scoped>
-.tinymce-container {
-  position: relative;
-  line-height: normal;
+<style lang="scss">
+// .tinymce-container {
+//   position: relative;
+//   line-height: normal;
+// }
+
+.tox-tinymce {
+  border-radius: 3px !important;
 }
-.tinymce-container >>> .mce-fullscreen {
+/* .tinymce-container >>> .mce-fullscreen {
   z-index: 10000;
 }
 .tinymce-textarea {
@@ -270,5 +257,5 @@ export default {
 }
 .editor-upload-btn {
   display: inline-block;
-}
+} */
 </style>

@@ -5,6 +5,7 @@ const listMixin = {
     return {
       removeProperties: [],
       show: false,
+      mode: "",
       originalData: {},
       data: {},
       params: {

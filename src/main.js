@@ -15,7 +15,7 @@ import "@/styles/index.scss"; // element css
 import "@/icons"; // icon
 
 Vue.use(ElementUI, {
-  zIndex: 3000,
+  zIndex: 1000,
   i18n: (key, value) => i18n.t(key, value)
 });
 

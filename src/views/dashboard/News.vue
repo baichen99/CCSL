@@ -100,7 +100,7 @@
       direction="rtl"
     >
       <div class="form-drawer__content">
-        <news-form ref="form" :data="data" />
+        <news-form ref="form" :data="data" :mode="mode" />
         <div class="form-drawer__footer">
           <el-button @click="handleClose">取 消</el-button>
           <el-button
