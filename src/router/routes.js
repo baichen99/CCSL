@@ -162,7 +162,7 @@ const routes = [
         name: "Systems",
         component: () => import("@/views/dashboard/Systems"),
         meta: {
-          title: "网站维护",
+          title: "网站维护管理",
           icon: "maintain",
           auth: true,
           roles: [superUser]

@@ -3,6 +3,7 @@ module.exports = {
   fixedHeader: false,
   sidebarLogo: true,
   tagsView: false,
+  errorLog: "production",
   videojsOptions: {
     options: {
       controls: true,

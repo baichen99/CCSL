@@ -7,6 +7,7 @@ import i18n from "@/locale";
 import settings from "./settings";
 import VueVideoPlayer from "vue-video-player";
 import "@/directives";
+import "@/utils/error";
 import "video.js/dist/video-js.css";
 import "normalize.css/normalize.css"; // CSS resets
 import "@/styles/element-variables.scss";

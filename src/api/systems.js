@@ -9,3 +9,19 @@ export function GetDatabaseDump(loading) {
     loading
   });
 }
+
+export function SaveJsError(error) {
+  return request({
+    url: `${baseURL}/error`,
+    method: "post",
+    data: error
+  });
+}
+
+export function GetJsErrorList(params) {
+  return request({
+    url: `${baseURL}/error`,
+    method: "get",
+    params
+  });
+}

@@ -31,6 +31,7 @@ func main() {
 		app.Handle(new(controllers.FileController))
 	})
 	mvc.Configure(app.Party("/systems"), func(app *mvc.Application) {
+		app.Register(services.NewSystemService(pg))
 		app.Handle(new(controllers.SystemController))
 	})
 	mvc.Configure(app.Party("/carousels"), func(app *mvc.Application) {
@@ -110,7 +111,7 @@ func initDB(app *iris.Application) *gorm.DB {
 	pg.SetLogger(configs.GetPostgresLogger())
 	pg.LogMode(true)
 	// AutoMigrate will create missing tables and missing index keys
-	pg.AutoMigrate(&models.User{}, &models.LexicalWord{}, &models.LexicalVideo{}, &models.Sign{}, &models.Performer{}, &models.Carousel{}, &models.News{}, &models.Member{}, &models.District{}, &models.City{}, &models.Province{})
+	pg.AutoMigrate(&models.User{}, &models.LexicalWord{}, &models.LexicalVideo{}, &models.Sign{}, &models.Performer{}, &models.Carousel{}, &models.News{}, &models.Member{}, &models.District{}, &models.City{}, &models.Province{}, &models.JsError{})
 	// Don't use UNIQUE to declare gorm models because you can't create a alreay deleted object with the same value
 	// Manually Add UNIQUE key for table columns
 	pg.Exec("CREATE UNIQUE INDEX users_username_key ON users(username) WHERE deleted_at IS NULL")

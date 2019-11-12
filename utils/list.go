@@ -178,3 +178,8 @@ type GetSignListParameters struct {
 	GetListParameters
 	Name string
 }
+
+// GetJsErrorListParameters parameters for get js error list queries
+type GetJsErrorListParameters struct {
+	GetListParameters
+}

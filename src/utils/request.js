@@ -67,7 +67,6 @@ service.interceptors.response.use(
   },
   error => {
     hideFullScreenLoading();
-    console.log(error);
     const res = error.response.data;
     const statusCode = error.response.status;
     Notification({
