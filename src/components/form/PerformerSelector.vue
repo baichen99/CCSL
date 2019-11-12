@@ -14,7 +14,7 @@
       :key="item.id"
       :value="item.id"
       :label="item.name"
-    >{{ item.name }} - {{ genderTypes[item.gender].name }} - {{ item.region.name }}</el-option>
+    >{{ item.name }} - {{ $t(genderTypes[item.gender].name) }} - {{ item.region.name }}</el-option>
   </el-select>
 </template>
 

@@ -7,7 +7,7 @@
     <div>
       {{ $t("Email") }}:
       <a href="mailto:ccsl@oa.shu.edu.cn">ccsl@oa.shu.edu.cn</a>
-      &nbsp; {{ $t("Postcode") }}: 200444
+      &nbsp; {{ $t("Postcode") }}: 200443
     </div>
     <div>{{ $t("Address") }}: {{ $t("AddressCCSL") }}</div>
   </footer>

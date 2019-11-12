@@ -4,7 +4,7 @@
       <el-input
         v-model="params.chinese"
         prefix-icon="el-icon-search"
-        placeholder="请输入中文"
+        :placeholder="$t('chineseTip')"
         clearable
         @keyup.enter="handleSearch"
         @change="handleSearch"
@@ -15,14 +15,7 @@
       <sign-selector v-model="params.leftSignID" orientation="left" @update="handleSearch" />
       <sign-selector v-model="params.rightSignID" orientation="right" @update="handleSearch" />
       <word-construct-selector v-model="params.constructType" @update="handleSearch" />
-      <el-input
-        v-model="params.constructWords"
-        prefix-icon="el-icon-search"
-        placeholder="复合词构词"
-        clearable
-        @keyup.enter="handleSearch"
-        @change="handleSearch"
-      />
+      <lexemes-input v-model="params.constructWords" @update="handleSearch" @enter="handleSearch" />
       <el-button type="primary" plain @click="handleNew">
         增加
         <i class="el-icon-plus el-icon--right" />
@@ -35,41 +28,41 @@
 
     <div class="table-content">
       <el-table v-loading="loading" :data="list" stripe border>
-        <el-table-column label="音序" align="center" width="150px">
+        <el-table-column :label="$t('Initial')" align="center" width="150px">
           <template slot-scope="{row}">
             <span>{{ row.lexicalWord.initial }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="被试地区" align="center" width="150px">
+        <el-table-column :label="$t('Region')" align="center" width="150px">
           <template slot-scope="{row}">
             <span>{{ row.performer.region.name }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="被试性别" align="center" width="100px">
+        <el-table-column :label="$t('Gender')" align="center" width="100px">
           <template slot-scope="{row}">
-            <span>{{ genderTypes[row.performer.gender].name }}</span>
+            <span>{{ $t(genderTypes[row.performer.gender].name) }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="中文转写" align="center" min-width="150px">
+        <el-table-column :label="$t('Chinese')" align="center" min-width="150px">
           <template slot-scope="{row}">
             <span>{{ row.lexicalWord.chinese }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="构词" align="center" width="150px">
+        <el-table-column :label="$t('WordFormation')" align="center" width="150px">
           <template slot-scope="{row}">
             <span v-if="row.constructType">{{ $t(constructTypes[row.constructType].name) }}</span>
-            <span v-else>暂无数据</span>
+            <span v-else>{{ $t("NoData") }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="复合词构词词语" align="center" min-width="150px">
+        <el-table-column :label="$t('CompoundLexemes')" align="center" min-width="150px">
           <template slot-scope="{row}">
             <div v-if="row.constructType==='single'">
-              <el-tag type="danger">不可用</el-tag>
+              <el-tag type="danger">{{ $t("Unavailable") }}</el-tag>
             </div>
             <div v-else-if="row.constructWords.length > 0">
               <el-tag
@@ -79,18 +72,18 @@
               >{{ value }}</el-tag>
             </div>
             <div v-else>
-              <el-tag type="info">暂无数据</el-tag>
+              <el-tag type="info">{{ $t("NoData") }}</el-tag>
             </div>
           </template>
         </el-table-column>
 
-        <el-table-column label="被试姓名" align="center" width="150px">
+        <el-table-column :label="$t('Name')" align="center" width="150px">
           <template slot-scope="{row}">
             <span>{{ row.performer.name }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="操作" align="center" width="200px" fixed="right">
+        <el-table-column :label="$t('Action')" align="center" width="200px" fixed="right">
           <template slot-scope="{row}">
             <el-button type="primary" size="mini" plain @click="handleEdit(row)">编辑</el-button>
             <el-button type="danger" size="mini" plain @click="handleDelete(row.id)">删除</el-button>
@@ -133,6 +126,17 @@
   </div>
 </template>
 
+<i18n>
+{
+  "zh-CN": {
+    "chineseTip": "请输入中文"
+  },
+  "en-US": {
+    "chineseTip": "Input Chinese"
+  }
+}
+</i18n>
+
 <script>
 import { mapGetters } from "vuex";
 import LexicalVideoForm from "@/views/dashboard/form/LexicalVideoForm";
@@ -140,6 +144,7 @@ import CitySelector from "@/components/form/CitySelector.vue";
 import GenderSelector from "@/components/form/GenderSelector";
 import WordConstructSelector from "@/components/form/WordConstructSelector";
 import SignSelector from "@/components/form/SignSelector.vue";
+import LexemesInput from "@/components/form/LexemesInput.vue";
 import listMixin from "./listMixin";
 import {
   GetLexicalVideosList,
@@ -154,7 +159,8 @@ export default {
     CitySelector,
     GenderSelector,
     SignSelector,
-    WordConstructSelector
+    WordConstructSelector,
+    LexemesInput
   },
   mixins: [listMixin],
   data() {

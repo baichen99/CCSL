@@ -5,7 +5,7 @@
       <el-col :span="12">
         <el-card shadow="hover">
           <el-table :data="tableData">
-            <el-table-column prop="key" width="60" />
+            <el-table-column prop="key" width="90" />
             <el-table-column prop="value" />
             <br />
           </el-table>
@@ -35,15 +35,20 @@
 <script>
 export default {
   name: "Contact",
-  data: () => ({
-    tableData: [
-      { key: "网址", value: "ccsl.shu.edu.cn" },
-      { key: "地址", value: "上海市宝山区南陈路333号上海大学东区文学院105室" },
-      { key: "邮编", value: "200443" },
-      { key: "邮箱", value: "ccsl@oa.shu.edu.cn" },
-      { key: "电话", value: "021-66133312" }
-    ]
-  })
+  computed: {
+    tableData() {
+      return [
+        { key: this.$t("Website"), value: "ccsl.shu.edu.cn" },
+        {
+          key: this.$t("Address"),
+          value: this.$t("AddressCCSL")
+        },
+        { key: this.$t("Postcode"), value: "200443" },
+        { key: this.$t("Email"), value: "ccsl@oa.shu.edu.cn" },
+        { key: this.$t("Tel"), value: "021-66133312" }
+      ];
+    }
+  }
 };
 </script>
 
@@ -56,16 +61,12 @@ export default {
     color: $--color-primary;
     margin: 20px;
   }
-
-  .container {
-    margin: 1rem auto;
-  }
   .el-card {
-    width: 450px;
-    height: 350px;
+    width: 500px;
+    height: 380px;
     text-align: center;
   }
-  
+
   .el-table {
     margin-bottom: 2rem;
   }

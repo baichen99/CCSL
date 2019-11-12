@@ -3,7 +3,7 @@
     <word-search start="A" end="L" @word-selected="searchByWord" />
 
     <div class="search">
-      <h3>国家通用手语学习平台</h3>
+      <h2>{{ $t("learningPlatform") }}</h2>
 
       <video-search-input v-model="params" :show-advance="false" @search="searchByButton" />
 
@@ -23,6 +23,17 @@
     <word-search start="M" end="Z" @word-selected="searchByWord" />
   </div>
 </template>
+
+<i18n>
+{
+  "zh-CN": {
+    "learningPlatform": "国家通用手语学习平台"
+  },
+  "en-US": {
+    "learningPlatform": "Chinese National Sign Language Learning Platform"
+  }
+}
+</i18n>
 
 <script>
 import VideoSearchInput from "@/components/video/VideoSearchInput.vue";
@@ -102,7 +113,7 @@ export default {
   .search {
     width: 60%;
     padding: 40px;
-    h3 {
+    h2 {
       text-align: center;
     }
 

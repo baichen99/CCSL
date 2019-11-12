@@ -1,6 +1,6 @@
 <template>
   <el-select v-model="data" :placeholder="$t('tip')" clearable @clear="$emit('clear')">
-    <el-option v-for="item in options" :key="item.value" :label="item.name" :value="item.value" />
+    <el-option v-for="item in options" :key="item.value" :label="$t(item.name)" :value="item.value" />
   </el-select>
 </template>
 
@@ -31,8 +31,8 @@ export default {
   data() {
     return {
       options: [
-        { name: "中文", value: "zh-CN" },
-        { name: "英文", value: "en-US" }
+        { name: "Chinese", value: "zh-CN" },
+        { name: "English", value: "en-US" }
       ]
     };
   },

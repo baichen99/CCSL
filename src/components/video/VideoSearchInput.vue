@@ -1,21 +1,9 @@
 <template>
   <div>
-    <el-input
-      v-model="keyword"
-      class="options"
-      clearable
-      placeholder="请输入内容"
-      @keyup.enter.native="search"
-    >
-      <el-select
-        v-if="showAdvance"
-        slot="prepend"
-        v-model="keywordType"
-        placeholder="请选择"
-        style="width:110px"
-      >
-        <el-option label="中文" value="chinese" />
-        <el-option label="English" value="english" />
+    <el-input v-model="keyword" class="options" clearable @keyup.enter.native="search">
+      <el-select v-if="showAdvance" slot="prepend" v-model="keywordType" style="width:110px">
+        <el-option label="中文" value="zh-CN" />
+        <el-option label="English" value="en-US" />
       </el-select>
       <i
         v-if="!advancedSearch && showAdvance"
@@ -49,17 +37,24 @@
           <word-pos-selector v-model="searchParams.pos" />
           <city-selector v-model="searchParams.regionID" />
           <word-construct-selector v-model="searchParams.constructType" />
-          <el-input
-            v-model="searchParams.constructWords"
-            clearable
-            style="width:200px"
-            placeholder="请输入复合词构成词语"
-          />
+          <lexemes-input v-model="searchParams.constructWords" style="width:200px" />
         </div>
       </el-card>
     </el-collapse-transition>
   </div>
 </template>
+
+<i18n>
+{
+  "zh-CN": {
+    "lexemesTip": "请输入复合词构成词语"
+  },
+  "en-US": {
+    "lexemesTip": "Input lexemes(Chinese)"
+  }
+}
+</i18n>
+
 
 <script>
 import SignSelector from "@/components/form/SignSelector.vue";
@@ -67,6 +62,7 @@ import CitySelector from "@/components/form/CitySelector.vue";
 import GenderSelector from "@/components/form/GenderSelector.vue";
 import WordPosSelector from "@/components/form/WordPosSelector.vue";
 import WordConstructSelector from "@/components/form/WordConstructSelector.vue";
+import LexemesInput from "@/components/form/LexemesInput.vue";
 
 export default {
   name: "VideoSearchInput",
@@ -75,7 +71,8 @@ export default {
     SignSelector,
     GenderSelector,
     WordPosSelector,
-    WordConstructSelector
+    WordConstructSelector,
+    LexemesInput
   },
   model: {
     prop: "params",
@@ -95,7 +92,7 @@ export default {
     return {
       advancedSearch: false,
       keyword: "",
-      keywordType: "chinese"
+      keywordType: "zh-CN"
     };
   },
   computed: {
@@ -108,6 +105,9 @@ export default {
       }
     }
   },
+  created() {
+    this.keywordType = this.$i18n.locale;
+  },
   methods: {
     search() {
       // Reset side panel search parameters
@@ -115,7 +115,7 @@ export default {
       this.searchParams.sign = "";
       this.searchParams.chinese = "";
       this.searchParams.english = "";
-      if (this.keywordType === "english") {
+      if (this.keywordType === "en-US") {
         this.searchParams.english = this.keyword;
       } else {
         this.searchParams.chinese = this.keyword;

@@ -1,25 +1,20 @@
 <template>
-  <el-card
-    shadow="hover"
-    :body-style="{ padding: '0px' }"
-  >
+  <el-card shadow="hover" :body-style="{ padding: '0px' }">
     <video-player
       class="vjs-big-play-centered"
       :options="{
         sources: [{ type: 'video/mp4', src: 'https://ccsl.shu.edu.cn/public/' + video.videoPath }]
       }"
-      @contextmenu.native.prevent=""
+      @contextmenu.native.prevent
     />
-    <div
-      class="tags-container"
-      @click="onVideoClick(video)"
-    >
+    <div class="tags-container" @click="onVideoClick(video)">
       <div class="tags">
+        <span v-if="showRegion" class="tag-value">{{ video.performer.region.name }}</span>
         <span
-          v-if="showRegion"
+          v-if="$i18n.locale==='zh-CN'"
           class="tag-value"
-        >{{ video.performer.region.name }}</span>
-        <span class="tag-value">{{ video.lexicalWord.chinese.split("（")[0] }}</span>
+        >{{ video.lexicalWord.chinese.split("（")[0] }}</span>
+        <span v-else-if="$i18n.locale==='en-US'" class="tag-value">{{ video.lexicalWord.english }}</span>
       </div>
     </div>
   </el-card>
