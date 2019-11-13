@@ -32,7 +32,7 @@
           <el-tag type="info">{{ $t("NoData") }}</el-tag>
         </span>
         <span class="tag-label">{{ $t("CompoundLexemes") }}</span>
-        <span v-if="video.constructType==='single'" class="tag-value">
+        <span v-if="video.constructType==='simple'" class="tag-value">
           <el-tag type="danger">{{ $t("Unavailable") }}</el-tag>
         </span>
         <span v-else-if="video.constructWords.length > 0" class="tag-value">

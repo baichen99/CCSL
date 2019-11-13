@@ -61,7 +61,7 @@
 
         <el-table-column :label="$t('CompoundLexemes')" align="center" min-width="150px">
           <template slot-scope="{row}">
-            <div v-if="row.constructType==='single'">
+            <div v-if="row.constructType==='simple'">
               <el-tag type="danger">{{ $t("Unavailable") }}</el-tag>
             </div>
             <div v-else-if="row.constructWords.length > 0">

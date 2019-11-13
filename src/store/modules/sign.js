@@ -20,7 +20,7 @@ const state = {
   ],
   constructTypes: {
     compound: { name: "CompoundWord" },
-    single: { name: "SimpleWord" }
+    simple: { name: "SimpleWord" }
   },
   userTypes: {
     super: { name: "超级管理员", color: "danger" },
