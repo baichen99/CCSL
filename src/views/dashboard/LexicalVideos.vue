@@ -48,7 +48,7 @@
 
         <el-table-column :label="$t('Chinese')" align="center" min-width="150px">
           <template slot-scope="{row}">
-            <span>{{ row.lexicalWord.chinese }}</span>
+            <span v-html="$options.filters.addNumberSup(row.lexicalWord.chinese) " />
           </template>
         </el-table-column>
 
@@ -256,14 +256,18 @@ export default {
             中文转写: item.lexicalWord.chinese,
             英文转写: item.lexicalWord.english,
             词性: item.lexicalWord.pos,
-            构词类型: this.$t(item.constructType),
+            构词类型: item.constructType
+              ? this.$t(this.constructTypes[item.constructType].name)
+              : null,
             构词词语: item.constructWords.join(","),
             左手手形: leftSigns.join(","),
             右手手形: rightSigns.join(","),
             被试姓名: item.performer.name,
             被试性别: this.$t(this.genderTypes[item.performer.gender].name),
             被试地区: item.performer.region.name,
-            视频文件: "https://ccsl.shu.edu.cn/public/" + item.videoPath
+            视频文件: item.videoPath
+              ? "https://ccsl.shu.edu.cn/public/" + item.videoPath
+              : null
           };
         });
         this.handleDownloadSheet(sheetData, "video");
