@@ -21,8 +21,8 @@ type Carousel struct {
 // News model
 type News struct {
 	Base
-	Column      string         `gorm:"NOT NULL" json:"column"`                   // Column：'新闻动态'-> news ,'研究成果' -> research,'学术活动->activity','通知公告'->notice
-	Date        time.Time      `gorm:"NOT NULL" json:"date"`                     // Publish date
+	Column      string         `gorm:"DEFAULT:NULL" json:"column"`               // Column：'新闻动态'-> news ,'研究成果' -> research,'学术活动->activity','通知公告'->notice
+	Date        time.Time      `gorm:"DEFAULT:NULL" json:"date"`                 // Publish date
 	Creator     User           `json:"creator"`                                  // Creator
 	CreatorID   uuid.UUID      `gorm:"DEFAULT:NULL" json:"creatorID"`            // News creator
 	Title       string         `gorm:"DEFAULT:NULL" json:"title"`                // News title
