@@ -25,9 +25,9 @@ type News struct {
 	Date        time.Time      `gorm:"NOT NULL" json:"date"`                     // Publish date
 	Creator     User           `json:"creator"`                                  // Creator
 	CreatorID   uuid.UUID      `gorm:"DEFAULT:NULL" json:"creatorID"`            // News creator
-	Title       string         `gorm:"NOT NULL" json:"title"`                    // News title
-	Type        string         `gorm:"NOT NULL" json:"type"`                     // Type can be 'link' or 'document'
-	Text        string         `gorm:"NOT NULL" json:"text"`                     // If is 'link' type, this field is a url, and document content fot 'ducument' type
+	Title       string         `gorm:"DEFAULT:NULL" json:"title"`                // News title
+	Type        string         `gorm:"DEFAULT:NULL" json:"type"`                 // Type can be 'link' or 'document'
+	Text        string         `gorm:"DEFAULT:NULL" json:"text"`                 // If is 'link' type, this field is a url, and document content fot 'ducument' type
 	Language    string         `gorm:"NOT NULL;DEFAULT:'zh-CN'" json:"language"` // Language can be 'zh-CN' or 'en-US'
 	Importance  int            `gorm:"DEFAULT:0" json:"importance"`
 	State       string         `gorm:"DEFAULT:'published'" json:"state"` // State can be 'draft' or 'published'
