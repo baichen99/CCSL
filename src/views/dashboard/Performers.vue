@@ -189,7 +189,7 @@ export default {
             创建时间: new Date(item.createdAt),
             上次更新: new Date(item.updatedAt),
             姓名: item.name,
-            性别: this.genderTypes[item.gender].name,
+            性别: this.$t(this.genderTypes[item.gender].name),
             所在地区: item.region.name,
             地区代码: item.regionID
           };
