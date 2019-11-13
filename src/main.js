@@ -20,6 +20,12 @@ Vue.use(ElementUI, {
 });
 
 Vue.use(VueVideoPlayer, settings.videojsOptions);
+
+Vue.filter("addNumberSup", word => {
+  const reg = new RegExp(/[\d]+/g);
+  return word.replace(reg, "<sup>$&</sup>");
+});
+
 Vue.config.productionTip = false;
 
 new Vue({

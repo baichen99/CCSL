@@ -38,7 +38,7 @@
 
         <el-table-column label="汉语转写" align="center" min-width="200px">
           <template slot-scope="{row}">
-            <span>{{ row.chinese }}</span>
+            <span v-html="$options.filters.addNumberSup(row.chinese) " />
           </template>
         </el-table-column>
 

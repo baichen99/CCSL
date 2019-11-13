@@ -13,7 +13,8 @@
         <span
           v-if="$i18n.locale==='zh-CN'"
           class="tag-value"
-        >{{ video.lexicalWord.chinese.split("（")[0] }}</span>
+          v-html="$options.filters.addNumberSup(video.lexicalWord.chinese.split('（')[0])"
+        />
         <span v-else-if="$i18n.locale==='en-US'" class="tag-value">{{ video.lexicalWord.english }}</span>
       </div>
     </div>

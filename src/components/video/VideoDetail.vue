@@ -14,7 +14,7 @@
         <span class="tag-label">{{ $t("Region") }}</span>
         <span class="tag-value">{{ video.performer.region.name }}</span>
         <span class="tag-label">{{ $t("Chinese") }}</span>
-        <span class="tag-value">{{ video.lexicalWord.chinese }}</span>
+        <span class="tag-value" v-html="$options.filters.addNumberSup(video.lexicalWord.chinese) "></span>
       </div>
       <div class="tags">
         <span class="tag-label">{{ $t("PoS") }}</span>

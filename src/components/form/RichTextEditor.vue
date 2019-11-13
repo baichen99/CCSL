@@ -219,8 +219,8 @@ export default {
       if (this.fullscreen) {
         tinymce.execCommand("mceFullScreen");
       }
-
       if (tinymce) {
+        tinymce.setContent("");
         tinymce.destroy();
       }
     },

@@ -23,6 +23,16 @@ html {
   box-sizing: border-box;
 }
 
+sup {
+  color: #fff;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: bold;
+  background-color: transparentize($theme, 0.2);
+  padding: 0 3px;
+  margin: 0 3px;
+  border-radius: 3px;
+}
+
 #app {
   height: 100%;
 }
