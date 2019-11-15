@@ -112,26 +112,29 @@ func initDB(app *iris.Application) *gorm.DB {
 	pg.LogMode(true)
 	// AutoMigrate will create missing tables and missing index keys
 	pg.AutoMigrate(&models.User{}, &models.LexicalWord{}, &models.LexicalVideo{}, &models.Sign{}, &models.Performer{}, &models.Carousel{}, &models.News{}, &models.Member{}, &models.District{}, &models.City{}, &models.Province{}, &models.JsError{})
-	// Don't use UNIQUE to declare gorm models because you can't create a alreay deleted object with the same value
-	// Manually Add UNIQUE key for table columns
-	pg.Exec("CREATE UNIQUE INDEX users_username_key ON users(username) WHERE deleted_at IS NULL")
-	pg.Exec("CREATE UNIQUE INDEX signs_name_key ON signs(name) WHERE deleted_at IS NULL")
-	pg.Exec("CREATE UNIQUE INDEX lexical_words_chinese_key ON lexical_words(chinese) WHERE deleted_at IS NULL")
+
+	// Don't use UNIQUE to declare gorm models because you can't create a alreay deleted object with the same value, manually Add UNIQUE key for table columns, comment these lines when keys are added
+
+	// pg.Exec("CREATE UNIQUE INDEX users_username_key ON users(username) WHERE deleted_at IS NULL")
+	// pg.Exec("CREATE UNIQUE INDEX signs_name_key ON signs(name) WHERE deleted_at IS NULL")
+	// pg.Exec("CREATE UNIQUE INDEX lexical_words_chinese_key ON lexical_words(chinese) WHERE deleted_at IS NULL")
+
 	// Manually Add foreign key for tables, because gorm won't create foreign keys, to make sure data is clean we need manually add these keys
 	// Data of cities are from https://github.com/modood/Administrative-divisions-of-China
 	// You cannot neither change nor update them, so set to RESTRICT
 	pg.Model(&models.District{}).AddForeignKey("city_code", "cities(code)", "RESTRICT", "RESTRICT").AddForeignKey("province_code", "provinces(code)", "RESTRICT", "RESTRICT")
 	pg.Model(&models.City{}).AddForeignKey("province_code", "provinces(code)", "RESTRICT", "RESTRICT")
+
 	// For other data models, set delete mode to RESTRICT and update mode to CASCADE
 	pg.Model(&models.LexicalVideo{}).AddForeignKey("lexical_word_id", "lexical_words(id)", "RESTRICT", "CASCADE")
 	pg.Model(&models.LexicalVideo{}).AddForeignKey("performer_id", "performers(id)", "RESTRICT", "CASCADE")
 	pg.Model(&models.News{}).AddForeignKey("creator_id", "users(id)", "RESTRICT", "CASCADE")
 	pg.Model(&models.Carousel{}).AddForeignKey("creator_id", "users(id)", "RESTRICT", "CASCADE")
 	pg.Model(&models.Performer{}).AddForeignKey("region", "districts(code)", "RESTRICT", "CASCADE")
+
 	// These tables are many to many connections table, also need to add foreign keys manually
 	pg.Table("lexical_left_sign").AddForeignKey("lexical_video_id", "lexical_videos(id)", "RESTRICT", "CASCADE").AddForeignKey("sign_id", "signs(id)", "RESTRICT", "CASCADE")
 	pg.Table("lexical_right_sign").AddForeignKey("lexical_video_id", "lexical_videos(id)", "RESTRICT", "CASCADE").AddForeignKey("sign_id", "signs(id)", "RESTRICT", "CASCADE")
-	// utils.InitTestUser(pg)
 	return pg
 }
 

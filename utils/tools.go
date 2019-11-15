@@ -1,10 +1,16 @@
 package utils
 
 import (
+	"ccsl/models"
+	"encoding/json"
+	"io/ioutil"
+	"log"
+	"os"
 	"reflect"
 	"regexp"
 	"runtime"
 
+	"github.com/jinzhu/gorm"
 	"github.com/kataras/iris"
 )
 
@@ -45,4 +51,79 @@ func MakeUpdateData(dataStruct interface{}) map[string]interface{} {
 func IsShuUser(username string) bool {
 	r, _ := regexp.Compile("^[0-9]{8}$")
 	return r.MatchString(username)
+}
+
+// GenRegionJSONFile generate cities.json file for frontend
+func GenRegionJSONFile(pg *gorm.DB) {
+	type JSONDistrict struct {
+		LabelZh string `json:"label"`
+		Value   int    `json:"value"`
+	}
+
+	type JSONCity struct {
+		LabelZh  string         `json:"label"`
+		Value    int            `json:"value"`
+		Children []JSONDistrict `json:"children"`
+	}
+
+	type JSONProvince struct {
+		LabelZh  string     `json:"label"`
+		Value    int        `json:"value"`
+		Children []JSONCity `json:"children"`
+	}
+	var jProvinces []JSONProvince
+	var provinces []models.Province
+	err := pg.Find(&provinces).Error
+	if err != nil {
+		log.Fatalf("Failed to query : %v", err)
+	}
+	for _, p := range provinces {
+		var cities []models.City
+		var jCities []JSONCity
+		err := pg.Where("province_code = ?", p.Code).Find(&cities).Error
+		if err != nil {
+			log.Fatalf("Failed to query : %v", err)
+		}
+		for _, c := range cities {
+			var districts []models.District
+			var jDistricts []JSONDistrict
+			err := pg.Where("city_code = ?", c.Code).Find(&districts).Error
+			if err != nil {
+				log.Fatalf("Failed to query : %v", err)
+			}
+			for _, d := range districts {
+				if err != nil {
+					log.Fatalf("Failed to translate : %v", err)
+				}
+				jDistricts = append(jDistricts, JSONDistrict{
+					LabelZh: d.Name,
+					Value:   d.Code,
+				})
+			}
+			if err != nil {
+				log.Fatalf("Failed to translate : %v", err)
+			}
+			jCities = append(jCities, JSONCity{
+				LabelZh:  c.Name,
+				Value:    c.Code,
+				Children: jDistricts,
+			})
+		}
+		if err != nil {
+			log.Fatalf("Failed to translate : %v", err)
+		}
+		jProvinces = append(jProvinces, JSONProvince{
+			LabelZh:  p.Name,
+			Value:    p.Code,
+			Children: jCities,
+		})
+	}
+	b, err := json.Marshal(jProvinces)
+	if err != nil {
+		log.Fatalf("Failed to marshal json: %v", err)
+	}
+	err = ioutil.WriteFile("cities.json", b, os.ModeAppend)
+	if err != nil {
+		panic(err)
+	}
 }
