@@ -2,7 +2,12 @@
   <div>
     <div class="video-container">
       <video-player
-        :options="{ sources: [{ type: 'video/mp4', src: 'https://ccsl.shu.edu.cn/public/'+video.videoPath }] }"
+        :options="{ 
+          sources: [{ 
+            type: 'video/mp4',
+            src: settings.publicURL + video.videoPath 
+          }] 
+        }"
         width="100%"
         class="vjs-big-play-centered"
         @contextmenu.native.prevent
@@ -53,7 +58,7 @@
             <el-tooltip effect="dark" :content="item.name" placement="top">
               <img
                 style="width:150px"
-                :src="'https://ccsl.shu.edu.cn/public/'+item.image"
+                :src="settings.publicURL + item.image"
                 :alt="item.name"
               />
             </el-tooltip>
@@ -67,7 +72,7 @@
             <el-tooltip effect="dark" :content="item.name" placement="top">
               <img
                 style="width:150px"
-                :src="'https://ccsl.shu.edu.cn/public/'+item.image"
+                :src="settings.publicURL + item.image"
                 :alt="item.name"
               />
             </el-tooltip>
@@ -90,7 +95,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["constructTypes"])
+    ...mapGetters(["constructTypes", "settings"])
   }
 };
 </script>

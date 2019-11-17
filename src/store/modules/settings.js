@@ -1,13 +1,14 @@
 import variables from "@/styles/variables.scss";
 import defaultSettings from "@/settings";
 
-const { showSettings, fixedHeader, sidebarLogo } = defaultSettings;
+const { showSettings, fixedHeader, sidebarLogo, publicURL } = defaultSettings;
 
 const state = {
   theme: variables.theme,
   showSettings: showSettings,
   fixedHeader: fixedHeader,
-  sidebarLogo: sidebarLogo
+  sidebarLogo: sidebarLogo,
+  publicURL: publicURL
 };
 
 const mutations = {

@@ -8,7 +8,9 @@
       </div>
       <div v-for="item in news" :key="item.id" class="news-content">
         <i class="dot">&bull;</i>
-        <el-link class="news-title" @click="showDetail(item)">{{ item.title }}</el-link>
+        <el-tooltip effect="light" placement="top" :content="item.title">
+          <el-link class="news-title" @click="showDetail(item)">{{ item.title }}</el-link>
+        </el-tooltip>
         <div class="news-date">{{ $d(new Date(item.date),'short') }}</div>
       </div>
     </el-card>
@@ -113,7 +115,7 @@ export default {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      max-width: 310px;
+      max-width: 300px;
       font-size: 1rem;
       // font-weight: normal;
 

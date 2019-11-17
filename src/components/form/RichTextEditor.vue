@@ -190,7 +190,7 @@ export default {
           formData.append("file", blobInfo.blob());
           UploadFile(formData, "news")
             .then(res => {
-              const url = "https://ccsl.shu.edu.cn/public/" + res.data;
+              const url = _this.$store.getters.settings.publicURL + res.data;
               success(url);
               progress(100);
             })
@@ -206,7 +206,7 @@ export default {
             const formData = new FormData();
             formData.append("file", file);
             UploadFile(formData, "news").then(res => {
-              const url = "https://ccsl.shu.edu.cn/public/" + res.data;
+              const url = _this.$store.getters.settings.publicURL + res.data;
               callback(url);
             });
           };

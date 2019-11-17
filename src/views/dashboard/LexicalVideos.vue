@@ -266,7 +266,7 @@ export default {
             被试性别: this.$t(this.genderTypes[item.performer.gender].name),
             被试地区: item.performer.region.name,
             视频文件: item.videoPath
-              ? "https://ccsl.shu.edu.cn/public/" + item.videoPath
+              ? this.$store.state.settings.publicURL + item.videoPath
               : null
           };
         });

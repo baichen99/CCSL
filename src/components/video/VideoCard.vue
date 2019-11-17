@@ -3,7 +3,10 @@
     <video-player
       class="vjs-big-play-centered"
       :options="{
-        sources: [{ type: 'video/mp4', src: 'https://ccsl.shu.edu.cn/public/' + video.videoPath }]
+        sources: [{ 
+          type: 'video/mp4',
+          src: settings.publicURL + video.videoPath 
+        }]
       }"
       @contextmenu.native.prevent
     />
@@ -22,6 +25,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "VideoCard",
   props: {
@@ -34,6 +38,9 @@ export default {
       type: Boolean,
       default: true
     }
+  },
+  computed: {
+    ...mapGetters(["settings"])
   },
   methods: {
     onVideoClick(video) {

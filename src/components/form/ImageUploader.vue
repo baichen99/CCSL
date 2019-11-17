@@ -23,8 +23,7 @@
         {{ $t("size") }}
       </div>
     </div>
-
-    <img v-else :src="'https://ccsl.shu.edu.cn/public/'+imageUrl" alt="image" />
+    <img v-else :src="settings.publicURL + imageUrl" alt="image" />
   </el-upload>
 </template>
 
@@ -44,6 +43,7 @@
 </i18n>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "ImageUploader",
   model: {
@@ -72,6 +72,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(["settings"]),
     imageUrl: {
       get() {
         return this.url;

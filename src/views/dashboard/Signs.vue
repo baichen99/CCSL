@@ -41,7 +41,7 @@
 
         <el-table-column label="手形图片" align="center">
           <template slot-scope="{row}">
-            <img :src="'https://ccsl.shu.edu.cn/public/'+row.image" alt="sign" style="height:50px" />
+            <img :src="settings.publicURL + row.image" alt="sign" style="height:50px" />
           </template>
         </el-table-column>
 
@@ -89,6 +89,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import SignForm from "@/views/dashboard/form/SignForm";
 import listMixin from "./listMixin";
 import { GetSignsList, DeleteSign, CreateSign, UpdateSign } from "@/api/signs";
@@ -106,6 +107,9 @@ export default {
         state: ""
       }
     };
+  },
+  computed: {
+    ...mapGetters(["settings"])
   },
   methods: {
     getList() {
@@ -167,9 +171,7 @@ export default {
             创建时间: new Date(item.createdAt),
             上次更新: new Date(item.updatedAt),
             手形名称: item.name,
-            手形图片: item.image
-              ? "https://ccsl.shu.edu.cn/public/" + item.image
-              : ""
+            手形图片: item.image ? this.settings.publicURL + item.image : ""
           };
         });
         this.handleDownloadSheet(sheetData, "sign");

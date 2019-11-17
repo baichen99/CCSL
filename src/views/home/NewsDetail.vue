@@ -12,6 +12,15 @@
       </div>
       <div class="news-content" v-html="data.text"></div>
     </el-card>
+    <el-button
+      v-show="scroll > 200"
+      type="primary"
+      icon="el-icon-caret-top"
+      class="back-to-top"
+      circle
+      plain
+      @click="backToTop"
+    />
   </div>
 </template>
 
@@ -39,11 +48,13 @@ export default {
         date: "",
         creator: {},
         text: ""
-      }
+      },
+      scroll: 0
     };
   },
-  created() {
+  mounted() {
     this.getData();
+    window.addEventListener("scroll", this.getScroll);
   },
   methods: {
     getData() {
@@ -51,6 +62,26 @@ export default {
       GetNews(newsID).then(res => {
         this.data = res.data;
       });
+    },
+    getScroll() {
+      this.scroll =
+        window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop;
+    },
+    backToTop() {
+      const scrollToptimer = setInterval(() => {
+        let top = document.body.scrollTop || document.documentElement.scrollTop;
+        let speed = top / 5;
+        if (document.body.scrollTop != 0) {
+          document.body.scrollTop -= speed;
+        } else {
+          document.documentElement.scrollTop -= speed;
+        }
+        if (top == 0) {
+          clearInterval(scrollToptimer);
+        }
+      }, 30);
     }
   }
 };
@@ -79,9 +110,11 @@ export default {
     padding: 10px 30px;
     text-indent: 2em;
     line-height: 2rem;
-    p {
-      text-indent: 2rem;
-    }
+  }
+  .back-to-top {
+    position: fixed;
+    right: 40px;
+    bottom: 40px;
   }
 }
 </style>

@@ -13,7 +13,7 @@
   >
     <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
       <span>{{ item.name }}</span>
-      <img :src="'https://ccsl.shu.edu.cn/public/'+item.image" :alt="item.name" />
+      <img :src="settings.publicURL + item.image" :alt="item.name" />
     </el-option>
   </el-select>
 </template>
@@ -30,6 +30,7 @@
 </i18n>
 
 <script>
+import { mapGetters } from "vuex";
 import { GetSignsList } from "@/api/signs";
 export default {
   name: "MultiSignSelector",
@@ -50,6 +51,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["settings"]),
     data: {
       get() {
         return this.value;

@@ -5,15 +5,11 @@
       <div v-for="item in signs" :key="item.id" class="sign-box">
         <el-popover trigger="hover" placement="top">
           <div class="sign-name-popover" style>{{ item.name }}</div>
-          <img
-            width="200px"
-            :src="'https://ccsl.shu.edu.cn/public/'+item.image"
-            :alt="item.name"
-          />
+          <img width="200px" :src="settings.publicURL + item.image" :alt="item.name" />
           <img
             slot="reference"
             style="width:100%"
-            :src="'https://ccsl.shu.edu.cn/public/'+item.image"
+            :src="settings.publicURL + item.image"
             :alt="item.name"
             @click="onSignSelected(item.id)"
           />
@@ -35,6 +31,7 @@
 </i18n>
 
 <script>
+import { mapGetters } from "vuex";
 import { GetSignsList } from "@/api/signs";
 export default {
   name: "SignSearch",
@@ -42,6 +39,9 @@ export default {
     return {
       signs: []
     };
+  },
+  computed: {
+    ...mapGetters(["settings"])
   },
   created() {
     GetSignsList({ limit: 0 }).then(res => {

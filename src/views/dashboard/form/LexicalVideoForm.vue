@@ -5,7 +5,12 @@
         <video-player
           v-if="formData.videoPath"
           class="vjs-big-play-centered"
-          :options="{ sources: [{ type: 'video/mp4', src: 'https://ccsl.shu.edu.cn/public/' + formData.videoPath }] }"
+          :options="{ 
+            sources: [{ 
+              type: 'video/mp4', 
+              src: settings.publicURL + formData.videoPath 
+            }]
+          }"
           @contextmenu.native.prevent
         />
       </div>
@@ -38,6 +43,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import WordConstructSelector from "@/components/form/WordConstructSelector";
 import ConstructWordsPicker from "@/components/form/ConstructWordsPicker";
 import PerformerSelector from "@/components/form/PerformerSelector.vue";
@@ -63,6 +69,9 @@ export default {
         constructType: [{ required: true, message: "请选择构词方式" }]
       }
     };
+  },
+  computed: {
+    ...mapGetters(["settings"])
   }
 };
 </script>
