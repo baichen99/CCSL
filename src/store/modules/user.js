@@ -97,7 +97,7 @@ const actions = {
     });
   },
 
-  refreshToken({ dispatch, commit }) {
+  refreshToken({ dispatch, commit, state }) {
     return new Promise((resolve, reject) => {
       if (state.token) {
         RefreshToken()
@@ -109,8 +109,9 @@ const actions = {
             dispatch("logout");
             reject(err);
           });
+      } else {
+        resolve();
       }
-      resolve();
     });
   }
 };
