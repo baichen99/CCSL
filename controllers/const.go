@@ -23,7 +23,8 @@ const (
 // ============
 
 type carouselCreateForm struct {
-	Title      string `json:"title" validate:"required"`
+	TitleZh    string `json:"titleZh" validate:"required"`
+	TitleEn    string `json:"titleEn" validate:"required"`
 	Image      string `json:"image" validate:"required"`
 	State      string `json:"state" validate:"omitempty,oneof=draft published"`
 	Importance int    `json:"importance" validate:"omitempty,max=5,min=0" `
@@ -31,7 +32,8 @@ type carouselCreateForm struct {
 
 func (f carouselCreateForm) ConvertToModel() (carousel models.Carousel) {
 	carousel = models.Carousel{
-		Title:      f.Title,
+		TitleZh:    f.TitleZh,
+		TitleEn:    f.TitleEn,
 		Image:      f.Image,
 		State:      f.State,
 		Importance: f.Importance,
@@ -40,7 +42,8 @@ func (f carouselCreateForm) ConvertToModel() (carousel models.Carousel) {
 }
 
 type carouselUpdateForm struct {
-	Title      *string `json:"title" validate:"omitempty"`
+	TitleZh    *string `json:"titleZh" validate:"omitempty"`
+	TitleEn    *string `json:"titleEn" validate:"omitempty"`
 	Image      *string `json:"image" validate:"omitempty"`
 	State      *string `json:"state" validate:"omitempty,oneof=draft published"`
 	Importance *int    `json:"importance" validate:"omitempty,max=5,min=0" `

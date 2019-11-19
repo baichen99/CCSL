@@ -10,8 +10,9 @@ import (
 // Carousel model 首页轮播大图
 type Carousel struct {
 	Base
-	Image      string    `gorm:"NOT NULL" json:"image"`
-	Title      string    `gorm:"NOT NULL" json:"title"`
+	Image      string    `gorm:"DEFAULT:NULL" json:"image"`
+	TitleZh    string    `gorm:"DEFAULT:NULL" json:"titleZh"`
+	TitleEn    string    `gorm:"DEFAULT:NULL" json:"titleEn"`
 	Creator    User      `json:"creator"`
 	CreatorID  uuid.UUID `gorm:"DEFAULT:NULL" json:"creatorID"`
 	State      string    `gorm:"DEFAULT:'published'" json:"state"` // State can be 'draft' or 'published'

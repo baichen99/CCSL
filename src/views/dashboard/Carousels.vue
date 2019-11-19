@@ -2,9 +2,9 @@
   <div class="app-container flex-column">
     <div class="table-toolbar">
       <el-input
-        v-model="params.title"
+        v-model="params.titleZh"
         prefix-icon="el-icon-search"
-        placeholder="请输入标题"
+        placeholder="请输入中文标题"
         clearable
         @keyup.enter="handleSearch"
         @change="handleSearch"
@@ -43,9 +43,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="图片标题" align="center" min-width="300px">
+        <el-table-column label="中文图片标题" align="center" min-width="300px">
           <template slot-scope="{row}">
-            <span>{{ row.title }}</span>
+            <span>{{ row.titleZh }}</span>
           </template>
         </el-table-column>
 
@@ -128,7 +128,7 @@ export default {
     return {
       params: {
         order: "desc",
-        title: "",
+        titleZh: "",
         state: ""
       }
     };

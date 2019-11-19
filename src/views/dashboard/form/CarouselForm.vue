@@ -5,9 +5,14 @@
       <el-button size="mini" @click="formData.importance=0">重置</el-button>
     </el-form-item>
 
-    <el-form-item label="图片标题" prop="title" required>
-      <el-input v-model="formData.title" placeholder="请输入图片标题" />
+    <el-form-item label="中文图片标题" prop="titleZh" required>
+      <el-input v-model="formData.titleZh" placeholder="请输入中文图片标题" />
     </el-form-item>
+
+    <el-form-item label="英文图片标题" prop="titleZh" required>
+      <el-input v-model="formData.titleEn" placeholder="请输入英文图片标题" />
+    </el-form-item>
+
     <el-form-item label="滚动图片（尺寸16:9）" prop="image" required>
       <image-uploader v-model="formData.image" dir="news" />
     </el-form-item>
@@ -32,7 +37,8 @@ export default {
   data() {
     return {
       rules: {
-        title: [{ required: true, message: "请输入标题", trigger: "blur" }],
+        titleZh: [{ required: true, message: "请输入中文标题", trigger: "blur" }],
+        titleEn: [{ required: true, message: "请输入英文标题", trigger: "blur" }],
         image: [{ required: true, message: "请上传图片", trigger: "blur" }],
         state: [{ required: true, message: "请选择状态", trigger: "blur" }]
       }

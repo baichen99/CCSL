@@ -169,8 +169,9 @@ type GetMemberListParameters struct {
 // GetCarouselListParameters parameters for get carousel list queris
 type GetCarouselListParameters struct {
 	GetListParameters
-	Title string
-	State string
+	TitleZh string
+	TitleEn string
+	State   string
 }
 
 // GetSignListParameters parameters for get sign list queries

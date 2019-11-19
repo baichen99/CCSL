@@ -68,26 +68,26 @@ func main() {
 		app.Register(services.NewLexicalVideoService(pg))
 		app.Handle(new(controllers.VideoController))
 	})
-	// Corpus for Shanghai Sign Language Verb
-	mvc.Configure(app.Party("/verbs"), func(app *mvc.Application) {
-		// TODO
-	})
-	// Corpus for Proper Nouns in CSL
-	mvc.Configure(app.Party("/nouns"), func(app *mvc.Application) {
-		// TODO
-	})
-	// Chinese Sign Language Corpus for Sign Texts
-	mvc.Configure(app.Party("/texts"), func(app *mvc.Application) {
-		// TODO
-	})
-	// Literature Database for Sign Language Research
-	mvc.Configure(app.Party("/literature"), func(app *mvc.Application) {
-		// TODO
-	})
-	// Database for Technical Terms in Sign Linguistics
-	mvc.Configure(app.Party("/terms"), func(app *mvc.Application) {
-		// TODO
-	})
+	// // Corpus for Shanghai Sign Language Verb
+	// mvc.Configure(app.Party("/verbs"), func(app *mvc.Application) {
+	// 	// TODO
+	// })
+	// // Corpus for Proper Nouns in CSL
+	// mvc.Configure(app.Party("/nouns"), func(app *mvc.Application) {
+	// 	// TODO
+	// })
+	// // Chinese Sign Language Corpus for Sign Texts
+	// mvc.Configure(app.Party("/texts"), func(app *mvc.Application) {
+	// 	// TODO
+	// })
+	// // Literature Database for Sign Language Research
+	// mvc.Configure(app.Party("/literature"), func(app *mvc.Application) {
+	// 	// TODO
+	// })
+	// // Database for Technical Terms in Sign Linguistics
+	// mvc.Configure(app.Party("/terms"), func(app *mvc.Application) {
+	// 	// TODO
+	// })
 	go gracefulShutdown(app)
 	host := configs.Conf.Listener.Server + ":" + strconv.Itoa(configs.Conf.Listener.Port)
 	app.Run(iris.Addr(host), iris.WithOptimizations, iris.WithoutStartupLog, iris.WithoutInterruptHandler)

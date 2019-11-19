@@ -33,11 +33,13 @@ func (c *CarouselController) GetCarouselsList() {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "order only accepts 'asc' or 'desc'", err)
 		return
 	}
-	title := c.Context.URLParamDefault("title", "")
+	titleZh := c.Context.URLParamDefault("titleZh", "")
+	titleEn := c.Context.URLParamDefault("titleEn", "")
 	state := c.Context.URLParamDefault("state", "")
 	listParameters := utils.GetCarouselListParameters{
 		GetListParameters: listParams,
-		Title:             title,
+		TitleZh:           titleZh,
+		TitleEn:           titleEn,
 		State:             state,
 	}
 	carousels, count, err := c.CarouselService.GetCarouselList(listParameters)

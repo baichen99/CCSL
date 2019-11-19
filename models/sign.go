@@ -3,8 +3,6 @@ package models
 // Sign model 手形
 type Sign struct {
 	Base
-	Name              string         `gorm:"NOT NULL;INDEX:name" json:"name"` // 手形名称
-	Image             string         `gorm:"NOT NULL" json:"image"`           // 手形图片路径
-	LexicalVideoLeft  []LexicalVideo `gorm:"MANY2MANY:lexical_left_sign" json:"-"`
-	LexicalVideoRight []LexicalVideo `gorm:"MANY2MANY:lexical_right_sign" json:"-"`
+	Name  string `gorm:"DEFAULT:NULL;INDEX:name" json:"name"` // 手形名称
+	Image string `gorm:"DEFAULT:NULL" json:"image"`           // 手形图片路径
 }
