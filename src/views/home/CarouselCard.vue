@@ -2,7 +2,10 @@
   <el-carousel class="carousel-card" height="100%" trigger="click">
     <el-carousel-item v-for="item in carousels" :key="item.id">
       <el-image style="width: 100%; height: 100%" :src="settings.publicURL + item.image" fit="fit" />
-      <div class="carousel-title">{{ item.title }}</div>
+      <div class="carousel-title">
+        <span v-if="$i18n.locale==='en-US'">{{ item.titleEn }}</span>
+        <span v-else>{{ item.titleZh }}</span>
+      </div>
     </el-carousel-item>
   </el-carousel>
 </template>

@@ -81,11 +81,13 @@ func (c *SystemController) GetLoginHistoryList() {
 func (c *SystemController) DumpDatabase() {
 	defer c.Context.Next()
 	const PGDumpCmd = "pg_dump"
-	options := []string{"-Fc"}
-	options = append(options, fmt.Sprintf(`-d%v`, configs.Conf.Postgresql.Database))
-	options = append(options, fmt.Sprintf(`-h%v`, configs.Conf.Postgresql.Server))
-	options = append(options, fmt.Sprintf(`-p%v`, configs.Conf.Postgresql.Port))
-	options = append(options, fmt.Sprintf(`-U%v`, configs.Conf.Postgresql.User))
+	options := []string{
+		"-Fc",
+		fmt.Sprintf(`-d%v`, configs.Conf.Postgresql.Database),
+		fmt.Sprintf(`-h%v`, configs.Conf.Postgresql.Server),
+		fmt.Sprintf(`-p%v`, configs.Conf.Postgresql.Port),
+		fmt.Sprintf(`-U%v`, configs.Conf.Postgresql.User),
+	}
 	out, err := exec.Command(PGDumpCmd, options...).Output()
 	if err != nil {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "SystemController::DumpDB", err)

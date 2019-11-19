@@ -5,11 +5,11 @@
       <el-button size="mini" @click="formData.importance=0">重置</el-button>
     </el-form-item>
 
-    <el-form-item label="中文图片标题" prop="titleZh" required>
+    <el-form-item label="中文标题" prop="titleZh" required>
       <el-input v-model="formData.titleZh" placeholder="请输入中文图片标题" />
     </el-form-item>
 
-    <el-form-item label="英文图片标题" prop="titleZh" required>
+    <el-form-item label="英文标题" prop="titleEn" required>
       <el-input v-model="formData.titleEn" placeholder="请输入英文图片标题" />
     </el-form-item>
 
