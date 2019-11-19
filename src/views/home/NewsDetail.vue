@@ -7,7 +7,7 @@
           <svg-icon v-if="data.column" :icon-class="data.column" />
         </el-divider>
         <span v-if="data.date">{{ $t("date") }}： {{ $d(new Date(data.date),"short") }}</span>
-        <span>{{ $t("publisher") }}：{{ data.creator.name }}</span>
+        <span>{{ $t("Publisher") }}：{{ data.creator.name }}</span>
         <el-divider />
       </div>
       <div class="news-content" v-html="data.text"></div>
@@ -27,12 +27,10 @@
 <i18n>
 {
   "zh-CN": {
-    "date": "发布日期",
-    "publisher": "发布人"
+    "date": "发布日期"
   },
   "en-US": {
-    "date": "Publish Date",
-    "publisher": "Publisher"
+    "date": "Publish Date"
   }
 }
 </i18n>

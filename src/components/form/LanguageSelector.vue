@@ -1,6 +1,6 @@
 <template>
   <el-select v-model="data" :placeholder="$t('tip')" clearable @clear="$emit('clear')">
-    <el-option v-for="item in options" :key="item.value" :label="$t(item.name)" :value="item.value" />
+    <el-option v-for="(item,key) in languageTypes" :key="key" :label="$t(item.name)" :value="key" />
   </el-select>
 </template>
 
@@ -16,6 +16,7 @@
 </i18n>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "LanguageSelector",
   model: {
@@ -28,15 +29,8 @@ export default {
       default: () => ""
     }
   },
-  data() {
-    return {
-      options: [
-        { name: "Chinese", value: "zh-CN" },
-        { name: "English", value: "en-US" }
-      ]
-    };
-  },
   computed: {
+    ...mapGetters(["languageTypes"]),
     data: {
       get() {
         return this.value;

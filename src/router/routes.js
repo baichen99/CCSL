@@ -1,23 +1,6 @@
 import IndexLayout from "@/layout/IndexLayout.vue"; // Normal Layout
 import AdminLayout from "@/layout/AdminLayout.vue"; // Admin Layout
 
-/**
- *
- * hidden: true                   if set true, item will not show in the sidebar(default is false)
- * alwaysShow: true               if set true, will always show the root menu
- *                                if not set alwaysShow, when item has more than one children route,
- *                                it will becomes nested mode, otherwise not show the root menu
- * redirect: noRedirect           if set noRedirect will no redirect in the breadcrumb
- * name:'router-name'             the name is used by <keep-alive> (must set!!!)
- * meta : {
-    roles: ['admin','editor']    control the page roles (you can set multiple roles)
-    title: 'title'               the name show in sidebar and breadcrumb (recommend set)
-    icon: 'svg-name'             the icon show in the sidebar
-    breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
-    activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
-  }
- */
-
 const superUser = "super";
 const adminUser = "admin";
 const learner = "learner";
@@ -34,14 +17,15 @@ const routes = [
         name: "Home",
         component: () => import("@/views/home/Home"),
         meta: {
-          activeMenu: "/"
+          activeMenu: "/",
+          title: "HomeMenu"
         }
       },
       {
         path: "/news-detail/:id",
         name: "NewsDetail",
         component: () => import("@/views/home/NewsDetail"),
-        meta: { title: "新闻详情", activeMenu: "/" }
+        meta: { activeMenu: "/" }
       },
       {
         path: "/news-list/:column",
@@ -55,7 +39,6 @@ const routes = [
         component: () => import("@/views/database/LexicalDatabase"),
         meta: {
           roles: [superUser, adminUser, user],
-          title: "国家通用手语比对语料库",
           auth: true
         }
       },
@@ -63,19 +46,19 @@ const routes = [
         path: "/about/introduction",
         name: "Introduction",
         component: () => import("@/views/about/Introduction"),
-        meta: { title: "中心简介", activeMenu: "/about/introduction" }
+        meta: { activeMenu: "/about/introduction" }
       },
       {
         path: "/about/team",
         component: () => import("@/views/about/Team"),
         name: "Team",
-        meta: { title: "研究团队", activeMenu: "/about/team" }
+        meta: { activeMenu: "/about/team" }
       },
       {
         path: "/about/contact",
         name: "Contact",
         component: () => import("@/views/about/Contact"),
-        meta: { title: "联系我们", activeMenu: "/about/contact" }
+        meta: { activeMenu: "/about/contact" }
       },
       {
         path: "/learning-platform",
@@ -83,7 +66,6 @@ const routes = [
         component: () => import("@/views/learning/LearningPlatform"),
         meta: {
           roles: [superUser, adminUser, learner],
-          title: "国家通用手语学习平台",
           auth: true,
           activeMenu: "/learning-platform"
         }
@@ -105,7 +87,7 @@ const routes = [
         name: "Profile",
         component: () => import("@/views/dashboard/Profile"),
         meta: {
-          title: "个人中心",
+          title: "ProfileCenter",
           icon: "profile",
           auth: true
         }
@@ -113,15 +95,15 @@ const routes = [
     ]
   },
   {
-    path: "/users-setting",
+    path: "/users-management",
     component: AdminLayout,
     children: [
       {
-        path: "/users-setting",
+        path: "/users-management",
         name: "Users",
         component: () => import("@/views/dashboard/Users"),
         meta: {
-          title: "用户管理",
+          title: "UserManagement",
           icon: "user",
           auth: true,
           roles: [superUser]
@@ -129,71 +111,55 @@ const routes = [
       }
     ]
   },
+
   {
-    path: "/performers-setting",
+    path: "/website-management",
     component: AdminLayout,
-    children: [
-      {
-        path: "/performers-setting",
-        name: "Performers",
-        component: () => import("@/views/dashboard/Performers"),
-        meta: {
-          title: "被试管理",
-          icon: "peoples",
-          auth: true,
-          roles: [superUser, adminUser]
-        }
-      }
-    ]
-  },
-  {
-    path: "/website",
-    component: AdminLayout,
-    redirect: "/website/carousels-setting",
+    redirect: "/website-management/systems",
     name: "Website",
     meta: {
-      title: "网站管理",
+      title: "WebsiteManagement",
       icon: "website",
       roles: [superUser, adminUser]
     },
     children: [
       {
-        path: "systems-setting",
+        path: "systems",
         name: "Systems",
         component: () => import("@/views/dashboard/Systems"),
         meta: {
-          title: "网站维护管理",
+          title: "SystemManagement",
           icon: "maintain",
           auth: true,
           roles: [superUser]
         }
       },
       {
-        path: "carousels-setting",
+        path: "carousels",
         name: "Carousels",
         component: () => import("@/views/dashboard/Carousels"),
         meta: {
-          title: "轮播图片管理",
+          title: "CarouselManagement",
           icon: "pictures",
           auth: true
         }
       },
       {
-        path: "news-setting",
+        path: "news",
         name: "News",
         component: () => import("@/views/dashboard/News"),
         meta: {
-          title: "网站新闻管理",
+          title: "NewsManagement",
           icon: "news",
           auth: true
         }
       },
       {
-        path: "members-setting",
+        path: "members",
         name: "Members",
         component: () => import("@/views/dashboard/Members"),
         meta: {
-          title: "研究团队管理",
+          title: "MemberManagement",
           icon: "member",
           auth: true
         }
@@ -201,22 +167,32 @@ const routes = [
     ]
   },
   {
-    path: "/lexical-database",
+    path: "/database-management",
     component: AdminLayout,
-    redirect: "/lexical-database/videos",
+    redirect: "/database-management/performers",
     name: "LexicalDatabaseSetting",
     meta: {
-      title: "比对语料库管理",
+      title: "DatabaseManagement",
       icon: "contrast",
       roles: [superUser, adminUser]
     },
     children: [
       {
+        path: "performers",
+        name: "Performers",
+        component: () => import("@/views/dashboard/Performers"),
+        meta: {
+          title: "PerformerManagement",
+          icon: "peoples",
+          auth: true
+        }
+      },
+      {
         path: "words",
         name: "LexicalWords",
         component: () => import("@/views/dashboard/LexicalWords"),
         meta: {
-          title: "词表管理",
+          title: "LexicalWordManagement",
           icon: "words",
           auth: true
         }
@@ -226,7 +202,7 @@ const routes = [
         name: "LexicalVideos",
         component: () => import("@/views/dashboard/LexicalVideos"),
         meta: {
-          title: "视频管理",
+          title: "LexicalVideoManagement",
           icon: "video",
           auth: true
         }
@@ -236,7 +212,7 @@ const routes = [
         name: "Signs",
         component: () => import("@/views/dashboard/Signs"),
         meta: {
-          title: "手形管理",
+          title: "SignManagement",
           icon: "sign",
           auth: true
         }

@@ -56,6 +56,12 @@ const listMixin = {
       this.params.page = 1;
       this.getList();
     },
+    handleFilter(val) {
+      for (const key in val) {
+        this.params[key] = val[key][0];
+      }
+      this.handleSearch();
+    },
     handleNew() {
       this.show = true;
       this.mode = "create";
@@ -122,13 +128,13 @@ const listMixin = {
     showSuccess() {
       this.$notify({
         type: "success",
-        title: "操作成功"
+        title: this.$t("SuccessfulOperation")
       });
     },
     showCancel() {
       this.$notify({
         type: "info",
-        title: "已取消操作"
+        title: this.$t("CanceledOperation")
       });
       this.loading = false;
     }

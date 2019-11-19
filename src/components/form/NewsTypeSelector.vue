@@ -1,10 +1,22 @@
 <template>
-  <el-select v-model="data" placeholder="请选择新闻类型" clearable @clear="$emit('clear')">
-    <el-option v-for="item in options" :key="item.value" :label="item.name" :value="item.value" />
+  <el-select v-model="data" :placeholder="$t('tip')" clearable @clear="$emit('clear')">
+    <el-option v-for="(item,key) in newsTypes" :key="key" :label="$t(item.name)" :value="key" />
   </el-select>
 </template>
 
+<i18n>
+{
+  "zh-CN": {
+    "tip": "请选择类型"
+  },
+  "en-US": {
+    "tip": "Select type"
+  }
+}
+</i18n>
+
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "NewsTypeSelector",
   model: {
@@ -26,6 +38,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["newsTypes"]),
     data: {
       get() {
         return this.value;

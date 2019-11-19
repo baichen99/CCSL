@@ -1,6 +1,6 @@
 <template>
   <el-select v-model="data" :placeholder="$t('tip')" clearable @clear="$emit('clear')">
-    <el-option v-for="(item,index) in options" :key="index" :label="item" :value="item" />
+    <el-option v-for="(item,index) in wordInitial" :key="index" :label="item" :value="item" />
   </el-select>
 </template>
 
@@ -16,6 +16,7 @@
 </i18n>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "WordPosSelector",
   model: {
@@ -28,37 +29,8 @@ export default {
       default: () => ""
     }
   },
-  data() {
-    return {
-      options: [
-        "A",
-        "B",
-        "C",
-        "D",
-        "E",
-        "F",
-        "G",
-        "H",
-        "I",
-        "J",
-        "K",
-        "L",
-        "M",
-        "N",
-        "O",
-        "P",
-        "Q",
-        "R",
-        "S",
-        "T",
-        "W",
-        "X",
-        "Y",
-        "Z"
-      ]
-    };
-  },
   computed: {
+    ...mapGetters(["wordInitial"]),
     data: {
       get() {
         return this.value;

@@ -10,8 +10,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB,
-    Microsoft YaHei, Arial, sans-serif;
 }
 
 label {
@@ -137,6 +135,15 @@ aside {
 
 .el-dialog {
   border-radius: 5px;
+}
+
+.el-loading-mask {
+  z-index: 900;
+}
+
+.el-table-filter {
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 //main-container全局样式

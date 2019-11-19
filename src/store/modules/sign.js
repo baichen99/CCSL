@@ -18,29 +18,84 @@ const state = {
     "形容词",
     "疑问代词"
   ],
+  wordInitial: [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "W",
+    "X",
+    "Y",
+    "Z"
+  ],
   constructTypes: {
     compound: { name: "CompoundWord" },
     simple: { name: "SimpleWord" }
   },
   userTypes: {
-    super: { name: "超级管理员", color: "danger" },
-    admin: { name: "普通管理员", color: "warning" },
-    learner: { name: "学习平台用户", color: "info" },
-    user: { name: "语料库用户", color: "" }
+    super: { name: "SuperAdmin", color: "danger" },
+    admin: { name: "Admin", color: "warning" },
+    learner: { name: "Learner", color: "info" },
+    user: { name: "User", color: "" }
   },
   userState: {
-    active: { name: "活跃", color: "success" },
-    inactive: { name: "停用", color: "danger" }
+    active: { name: "Active", color: "success" },
+    inactive: { name: "Inactive", color: "danger" }
   },
   genderTypes: {
-    M: { name: "Male", value: "M" },
-    F: { name: "Female", value: "F" }
+    M: { name: "Male" },
+    F: { name: "Female" }
   },
   newsColumns: {
-    news: { icon: "news", name: "NewsColumn", value: "news" },
-    activity: { icon: "activity", name: "ActivityColumn", value: "activity" },
-    notice: { icon: "notice", name: "NoticeColumn", value: "notice" },
-    research: { icon: "research", name: "ResearchColumn", value: "research" }
+    news: { icon: "news", name: "NewsColumn" },
+    activity: { icon: "activity", name: "ActivityColumn" },
+    notice: { icon: "notice", name: "NoticeColumn" },
+    research: { icon: "research", name: "ResearchColumn" }
+  },
+  newsState: {
+    draft: { color: "warning", name: "Draft" },
+    published: { color: "success", name: "Published" }
+  },
+  newsTypes: {
+    link: { name: "Link" },
+    document: { name: "Document" }
+  },
+  memberTypes: {
+    consultant: {
+      name: "SeniorConsultant"
+    },
+    researcher: {
+      name: "Researcher"
+    },
+    assistantResearcher: {
+      name: "AssistantResearcher"
+    },
+    signLanguageTranslator: {
+      name: "SignLanguageTranslator"
+    },
+    deafResearchAssistant: {
+      name: "DeafResearchAssistant"
+    }
+  },
+  languageTypes: {
+    "zh-CN": { name: "Chinese" },
+    "en-US": { name: "English" }
   }
 };
 

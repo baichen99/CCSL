@@ -2,32 +2,32 @@
   <div class="app-container flex-column">
     <div class="table-toolbar">
       <el-button type="primary" plain @click="handleDump">
-        备份数据库
+        {{ $t("backup") }}
         <i class="el-icon-s-cooperation el-icon--right" />
       </el-button>
     </div>
 
     <div class="table-content">
       <el-table v-loading="loading" :data="list" stripe border>
-        <el-table-column label="创建时间" align="center" width="200">
+        <el-table-column :label="$t('CreatedAt')" align="center" width="200">
           <template slot-scope="{row}">
             <span>{{ $d(new Date(row.createdAt), 'long') }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="地址" align="center" width="200">
+        <el-table-column :label="$t('url')" align="center" width="200">
           <template slot-scope="{row}">
             <span>{{ row.url }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="错误信息" align="center" min-width="200">
+        <el-table-column :label="$t('source')" align="center" min-width="200">
           <template slot-scope="{row}">
             <span>{{ row.info }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="堆栈信息" align="center" min-width="200">
+        <el-table-column :label="$t('stack')" align="center" min-width="200">
           <template slot-scope="{row}">
             <el-popover placement="top" width="400" trigger="hover">
               <vue-json-pretty :deep="1" :data="row.err" />
@@ -36,7 +36,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="存储数据" align="center" min-width="200">
+        <el-table-column :label="$t('storage')" align="center" min-width="200">
           <template slot-scope="{row}">
             <el-popover placement="top" width="400" trigger="hover">
               <vue-json-pretty :deep="1" :data="row.store" />
@@ -57,6 +57,27 @@
     />
   </div>
 </template>
+
+
+<i18n>
+{
+  "zh-CN": {
+    "url": "地址",
+    "source": "错误来源",
+    "stack": "堆栈错误信息",
+    "storage": "存储数据",
+    "backup": "备份数据库"
+  },
+  "en-US": {
+    "url": "URL",
+    "source": "Error Source",
+    "stack": "Stack Info",
+    "storage": "Local Storage",
+    "backup": "Backup Database"
+  }
+}
+</i18n>
+
 
 <script>
 import VueJsonPretty from "vue-json-pretty";

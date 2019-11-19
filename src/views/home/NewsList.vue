@@ -36,7 +36,7 @@ export default {
         limit: 10,
         page: 1,
         column: "",
-        language: "zh-CN",
+        language: "",
         order: "desc",
         state: "published"
       },
@@ -47,6 +47,9 @@ export default {
   watch: {
     "params.page"() {
       this.getList();
+    },
+    "$i18n.locale"() {
+      this.getList();
     }
   },
   created() {
@@ -54,6 +57,8 @@ export default {
   },
   methods: {
     getList() {
+      const lang = this.$i18n.locale;
+      this.params.language = lang;
       const column = this.$route.params.column;
       this.params.column = column;
       GetNewsList(this.params).then(res => {

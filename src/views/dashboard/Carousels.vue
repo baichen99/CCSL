@@ -2,54 +2,73 @@
   <div class="app-container flex-column">
     <div class="table-toolbar">
       <el-input
-        v-model="params.titleZh"
+        v-model="titleModel"
         prefix-icon="el-icon-search"
-        placeholder="请输入中文标题"
+        :placeholder="$t('tipTitle')"
         clearable
         @keyup.enter="handleSearch"
         @change="handleSearch"
       />
-      <news-state-selector v-model="params.state" @update="handleSearch" />
       <el-button type="primary" plain @click="handleNew">
-        增加
+        {{ $t("New") }}
         <i class="el-icon-plus el-icon--right" />
       </el-button>
     </div>
 
     <div class="table-content">
-      <el-table v-loading="loading" :data="list" stripe border>
-        <el-table-column label="创建时间" align="center" width="180px">
+      <el-table v-loading="loading" :data="list" stripe border @filter-change="handleFilter">
+        <el-table-column :label="$t('CreatedAt')" align="center" width="180px">
           <template slot-scope="{row}">
             <span>{{ $d(new Date(row.createdAt), 'long') }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="发布人" align="center" width="100px">
+        <el-table-column :label="$t('Publisher')" align="center" width="100px">
           <template slot-scope="{row}">
             <span>{{ row.creator.name }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="重要性" align="center" width="150px">
+        <el-table-column :label="$t('Importance')" align="center" width="150px">
           <template slot-scope="{row}">
             <el-rate v-model="row.importance" disabled />
           </template>
         </el-table-column>
 
-        <el-table-column label="状态" align="center" width="100px">
+        <el-table-column
+          column-key="state"
+          :filters="[
+            { text: $t('Draft'), value: 'draft'}, 
+            { text: $t('Published'), value: 'published'},
+          ]"
+          :filter-multiple="false"
+          :label="$t('State')"
+          align="center"
+          width="100px"
+        >
           <template slot-scope="{row}">
-            <el-tag v-if="row.state==='published'" type="success">发布</el-tag>
-            <el-tag v-if="row.state==='draft'" type="warning">草稿</el-tag>
+            <el-tag :type="newsState[row.state].color">{{ $t(newsState[row.state].name) }}</el-tag>
           </template>
         </el-table-column>
 
-        <el-table-column label="中文图片标题" align="center" min-width="300px">
+        <el-table-column
+          v-if="$i18n.locale==='en-US'"
+          :label="$t('Title')"
+          align="center"
+          min-width="300px"
+        >
+          <template slot-scope="{row}">
+            <span>{{ row.titleEn }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column v-else :label="$t('Title')" align="center" min-width="300px">
           <template slot-scope="{row}">
             <span>{{ row.titleZh }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="操作" align="center" width="250px" fixed="right">
+        <el-table-column :label="$t('Action')" align="center" width="250px" fixed="right">
           <template slot-scope="{row}">
             <el-button
               v-if="row.state==='draft'"
@@ -57,16 +76,21 @@
               size="mini"
               plain
               @click="handlePublish(row.id)"
-            >发布</el-button>
+            >{{ $t("Publish") }}</el-button>
             <el-button
               v-if="row.state==='published'"
               type="warning"
               size="mini"
               plain
               @click="handleDraft(row.id)"
-            >撤回</el-button>
-            <el-button type="primary" size="mini" plain @click="handleEdit(row)">编辑</el-button>
-            <el-button type="danger" size="mini" plain @click="handleDelete(row.id)">删除</el-button>
+            >{{ $t("Recall") }}</el-button>
+            <el-button type="primary" size="mini" plain @click="handleEdit(row)">{{ $t("Edit") }}</el-button>
+            <el-button
+              type="danger"
+              size="mini"
+              plain
+              @click="handleDelete(row.id)"
+            >{{ $t("Delete") }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -75,7 +99,7 @@
     <el-pagination
       v-if="total>params.limit"
       background
-      layout="total,prev, pager, next"
+      layout="total,prev, pager, next, jumper"
       :total="total"
       :page-size.sync="params.limit"
       :current-page.sync="params.page"
@@ -93,22 +117,33 @@
       <div class="form-drawer__content">
         <carousel-form ref="form" :data="data" :mode="mode" />
         <div class="form-drawer__footer">
-          <el-button @click="handleClose">取 消</el-button>
+          <el-button @click="handleClose">{{ $t("Cancel") }}</el-button>
           <el-button
             v-if="checkDiff"
             type="primary"
             :loading="loading"
             @click="handleSave"
-          >{{ loading ? '保存中 ...' : '保 存' }}</el-button>
+          >{{ loading ? $t("Saving") : $t("Save") }}</el-button>
         </div>
       </div>
     </el-drawer>
   </div>
 </template>
 
+<i18n>
+{
+  "zh-CN": {
+    "tipTitle": "请输入标题"
+  },
+  "en-US": {
+    "tipTitle": "Input title"
+  }
+}
+</i18n>
+
 <script>
+import { mapGetters } from "vuex";
 import CarouselForm from "@/views/dashboard/form/CarouselForm";
-import NewsStateSelector from "@/components/form/NewsStateSelector";
 import listMixin from "./listMixin";
 import {
   GetCarouselsList,
@@ -120,8 +155,7 @@ import {
 export default {
   name: "Carousels",
   components: {
-    CarouselForm,
-    NewsStateSelector
+    CarouselForm
   },
   mixins: [listMixin],
   data() {
@@ -129,9 +163,31 @@ export default {
       params: {
         order: "desc",
         titleZh: "",
+        titleEn: "",
         state: ""
       }
     };
+  },
+  computed: {
+    ...mapGetters(["newsState"]),
+    titleModel: {
+      get() {
+        const lang = this.$i18n.locale;
+        if (lang === "en-US") {
+          return this.params.titleEn;
+        } else {
+          return this.params.titleZh;
+        }
+      },
+      set(val) {
+        const lang = this.$i18n.locale;
+        if (lang === "en-US") {
+          this.params.titleEn = val;
+        } else {
+          this.params.titleZh = val;
+        }
+      }
+    }
   },
   methods: {
     getList() {
@@ -168,10 +224,10 @@ export default {
       this.loading = true;
       this.$confirm(
         "此操作将永久删除, 如果想暂时不显示请选择撤回, 是否继续?",
-        "警告",
+        this.$t("Warning"),
         {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
+          confirmButtonText: this.$t("Confirm"),
+          cancelButtonText: this.$t("Cancel"),
           type: "error"
         }
       )

@@ -1,22 +1,35 @@
 <template>
-  <el-form ref="form" label-position="left" label-width="100px" :model="formData" :rules="rules">
-    <el-form-item label="用户姓名" prop="name" required>
-      <el-input v-model="formData.name" placeholder="请输入用户姓名" />
+  <el-form ref="form" label-position="left" label-width="150px" :model="formData" :rules="rules">
+    <el-form-item :label="$t('Name')" prop="name" required>
+      <el-input v-model="formData.name" :placeholder="$t('tipName')" />
     </el-form-item>
 
-    <el-form-item label="用户角色" prop="userType" required>
+    <el-form-item :label="$t('UserRole')" prop="userType" required>
       <user-type-selector v-model="formData.userType" />
     </el-form-item>
 
-    <el-form-item label="用户账号" prop="username" required>
-      <el-input v-model="formData.username" placeholder="请输入学号或者工号" />
+    <el-form-item :label="$t('Account')" prop="username" required>
+      <el-input v-model="formData.username" :placeholder="$t('tipAccount')" />
     </el-form-item>
 
-    <el-form-item label="用户状态" prop="state" required>
+    <el-form-item :label="$t('AccountState')" prop="state" required>
       <user-state-selector v-model="formData.state" />
     </el-form-item>
   </el-form>
 </template>
+
+<i18n>
+{
+  "zh-CN": {
+    "tipAccount": "请输入学号或者工号",
+    "tipName": "请输入姓名"
+  },
+  "en-US": {
+    "tipAccount": "Input account",
+    "tipName": "Input name"
+  }
+}
+</i18n>
 
 <script>
 import UserTypeSelector from "@/components/form/UserTypeSelector";

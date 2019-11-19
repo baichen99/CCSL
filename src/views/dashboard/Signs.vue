@@ -4,51 +4,56 @@
       <el-input
         v-model="params.name"
         prefix-icon="el-icon-search"
-        placeholder="请输入名称"
+        :placeholder="$t('tip')"
         clearable
         @keyup.enter="handleSearch"
         @change="handleSearch"
       />
       <el-button type="primary" plain @click="handleNew">
-        增加
+        {{ $t("New") }}
         <i class="el-icon-plus el-icon--right" />
       </el-button>
       <el-button type="primary" plain @click="handleExport">
-        导出
+        {{ $t("Export") }}
         <i class="el-icon-download el-icon--right" />
       </el-button>
     </div>
 
     <div class="table-content">
       <el-table v-loading="loading" :data="list" stripe border>
-        <el-table-column label="创建时间" align="center">
+        <el-table-column :label="$t('CreatedAt')" align="center" width="200px">
           <template slot-scope="{row}">
             <span>{{ $d(new Date(row.createdAt), 'long') }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="上次更新" align="center">
+        <el-table-column :label="$t('UpdatedAt')" align="center" width="200px">
           <template slot-scope="{row}">
             <span>{{ $d(new Date(row.updatedAt), 'long') }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="手形名称" align="center">
+        <el-table-column :label="$t('SignName')" align="center">
           <template slot-scope="{row}">
             <el-tag>{{ row.name }}</el-tag>
           </template>
         </el-table-column>
 
-        <el-table-column label="手形图片" align="center">
+        <el-table-column :label="$t('SignImage')" align="center">
           <template slot-scope="{row}">
-            <img :src="settings.publicURL + row.image" alt="sign" style="height:50px" />
+            <img :src="settings.publicURL + row.image" alt="sign" style="width:80px" />
           </template>
         </el-table-column>
 
-        <el-table-column label="操作" align="center">
+        <el-table-column :label="$t('Action')" align="center" width="200px" fixed="right">
           <template slot-scope="{row}">
-            <el-button type="primary" size="mini" plain @click="handleEdit(row)">编辑</el-button>
-            <el-button type="danger" size="mini" plain @click="handleDelete(row.id)">删除</el-button>
+            <el-button type="primary" size="mini" plain @click="handleEdit(row)">{{ $t("Edit") }}</el-button>
+            <el-button
+              type="danger"
+              size="mini"
+              plain
+              @click="handleDelete(row.id)"
+            >{{ $t("Delete") }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -75,18 +80,29 @@
       <div class="form-drawer__content">
         <sign-form ref="form" :data="data" :mode="mode" />
         <div class="form-drawer__footer">
-          <el-button @click="handleClose">取 消</el-button>
+          <el-button @click="handleClose">{{ $t("Cancel") }}</el-button>
           <el-button
             v-if="checkDiff"
             type="primary"
             :loading="loading"
             @click="handleSave"
-          >{{ loading ? '保存中 ...' : '保 存' }}</el-button>
+          >{{ loading ? $t("Saving") : $t("Save") }}</el-button>
         </div>
       </div>
     </el-drawer>
   </div>
 </template>
+
+<i18n>
+{
+  "zh-CN": {
+    "tip": "请输入名称"
+  },
+  "en-US": {
+    "tip": "Input name"
+  }
+}
+</i18n>
 
 <script>
 import { mapGetters } from "vuex";
@@ -146,10 +162,10 @@ export default {
       this.loading = true;
       this.$confirm(
         "此操作会删除所有视频中含有该手形的标注，此操作将永久删除, 是否继续?",
-        "警告",
+        this.$t("Warning"),
         {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
+          confirmButtonText: this.$t("Confirm"),
+          cancelButtonText: this.$t("Cancel"),
           type: "error"
         }
       )

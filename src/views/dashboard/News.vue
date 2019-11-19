@@ -4,61 +4,110 @@
       <el-input
         v-model="params.title"
         prefix-icon="el-icon-search"
-        placeholder="请输入标题"
+        :placeholder="$t('tipTitle')"
         clearable
         @keyup.enter="handleSearch"
         @change="handleSearch"
       />
-      <language-selector v-model="params.language" @update="handleSearch" />
-      <news-state-selector v-model="params.state" @update="handleSearch" />
-      <news-type-selector v-model="params.type" @update="handleSearch" />
-      <news-column-selector v-model="params.column" @update="handleSearch" />
       <el-button type="primary" plain @click="handleNew">
-        增加
+        {{ $t("New") }}
         <i class="el-icon-plus el-icon--right" />
       </el-button>
     </div>
 
     <div class="table-content">
-      <el-table v-loading="loading" :data="list" stripe border>
-        <el-table-column label="日期" align="center" width="150px">
+      <el-table v-loading="loading" :data="list" stripe border @filter-change="handleFilter">
+        <el-table-column :label="$t('Date')" align="center" width="130px">
           <template slot-scope="{row}">
             <span>{{ $d(new Date(row.date), 'short') }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="发布人" align="center" width="100px">
+        <el-table-column :label="$t('Publisher')" align="center" width="100px">
           <template slot-scope="{row}">
             <span>{{ row.creator.name }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="重要性" align="center" width="150px">
+        <el-table-column :label="$t('Importance')" align="center" width="150px">
           <template slot-scope="{row}">
             <el-rate v-model="row.importance" disabled />
           </template>
         </el-table-column>
 
-        <el-table-column label="状态" align="center" width="100px">
+        <el-table-column
+          column-key="state"
+          :filters="[
+            { text: $t('Draft'), value: 'draft'}, 
+            { text: $t('Published'), value: 'published'},
+          ]"
+          :filter-multiple="false"
+          :label="$t('State')"
+          align="center"
+          width="100px"
+        >
           <template slot-scope="{row}">
-            <el-tag v-if="row.state==='published'" type="success">发布</el-tag>
-            <el-tag v-if="row.state==='draft'" type="warning">草稿</el-tag>
+            <el-tag :type="newsState[row.state].color">{{ $t(newsState[row.state].name) }}</el-tag>
           </template>
         </el-table-column>
 
-        <el-table-column label="新闻栏目" align="center" width="120px">
+        <el-table-column
+          column-key="column"
+          :filters="[
+            { text: $t('NewsColumn'), value: 'news'}, 
+            { text: $t('ActivityColumn'), value: 'activity'},
+            { text: $t('NoticeColumn'), value: 'notice'},
+            { text: $t('ResearchColumn'), value: 'research'},
+          ]"
+          :filter-multiple="false"
+          :label="$t('Column')"
+          align="center"
+          width="120px"
+        >
           <template slot-scope="{row}">
             <span>{{ $t(newsColumns[row.column].name) }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="新闻标题" align="center" min-width="300px">
+        <el-table-column :label="$t('Title')" align="center" min-width="300px">
           <template slot-scope="{row}">
             <span>{{ row.title }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="操作" align="center" width="250px" fixed="right">
+        <el-table-column
+          column-key="type"
+          :filters="[
+            { text: $t('Link'), value: 'link'}, 
+            { text: $t('Document'), value: 'document'},
+          ]"
+          :filter-multiple="false"
+          :label="$t('Type')"
+          align="center"
+          width="120px"
+        >
+          <template slot-scope="{row}">
+            <span>{{ $t(newsTypes[row.type].name) }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column
+          column-key="language"
+          :filters="[
+            { text: $t('Chinese'), value: 'zh-CN'}, 
+            { text: $t('English'), value: 'en-US'},
+          ]"
+          :filter-multiple="false"
+          :label="$t('Language')"
+          align="center"
+          width="120px"
+        >
+          <template slot-scope="{row}">
+            <span>{{ $t(languageTypes[row.language].name) }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column :label="$t('Action')" align="center" width="250px" fixed="right">
           <template slot-scope="{row}">
             <el-button
               v-if="row.state==='draft'"
@@ -66,16 +115,21 @@
               size="mini"
               plain
               @click="handlePublish(row.id)"
-            >发布</el-button>
+            >{{ $t("Publish") }}</el-button>
             <el-button
               v-if="row.state==='published'"
               type="warning"
               size="mini"
               plain
               @click="handleDraft(row.id)"
-            >撤回</el-button>
-            <el-button type="primary" size="mini" plain @click="handleEdit(row)">编辑</el-button>
-            <el-button type="danger" size="mini" plain @click="handleDelete(row.id)">删除</el-button>
+            >{{ $t("Recall") }}</el-button>
+            <el-button type="primary" size="mini" plain @click="handleEdit(row)">{{ $t("Edit") }}</el-button>
+            <el-button
+              type="danger"
+              size="mini"
+              plain
+              @click="handleDelete(row.id)"
+            >{{ $t("Delete") }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -102,37 +156,40 @@
       <div class="form-drawer__content">
         <news-form ref="form" :data="data" :mode="mode" />
         <div class="form-drawer__footer">
-          <el-button @click="handleClose">取 消</el-button>
+          <el-button @click="handleClose">{{ $t("Cancel") }}</el-button>
           <el-button
             v-if="checkDiff"
             type="primary"
             :loading="loading"
             @click="handleSave"
-          >{{ loading ? '保存中 ...' : '保 存' }}</el-button>
+          >{{ loading ? $t("Saving") : $t("Save") }}</el-button>
         </div>
       </div>
     </el-drawer>
   </div>
 </template>
 
+<i18n>
+{
+  "zh-CN": {
+    "tipTitle": "请输入标题"
+  },
+  "en-US": {
+    "tipTitle": "Input title"
+  }
+}
+</i18n>
+
 <script>
 import { mapGetters } from "vuex";
 import NewsForm from "@/views/dashboard/form/NewsForm";
-import NewsStateSelector from "@/components/form/NewsStateSelector";
-import NewsTypeSelector from "@/components/form/NewsTypeSelector";
-import NewsColumnSelector from "@/components/form/NewsColumnSelector";
-import LanguageSelector from "@/components/form/LanguageSelector";
 import listMixin from "./listMixin";
 import { GetNewsList, CreateNews, UpdateNews, DeleteNews } from "@/api/news";
 
 export default {
   name: "News",
   components: {
-    NewsForm,
-    NewsStateSelector,
-    NewsTypeSelector,
-    NewsColumnSelector,
-    LanguageSelector
+    NewsForm
   },
   mixins: [listMixin],
   data() {
@@ -147,7 +204,9 @@ export default {
       }
     };
   },
-  computed: { ...mapGetters(["newsColumns"]) },
+  computed: {
+    ...mapGetters(["newsColumns", "newsTypes", "newsState", "languageTypes"])
+  },
   methods: {
     getList() {
       this.loading = true;
@@ -185,7 +244,7 @@ export default {
         "此操作将永久删除, 如果想暂时不显示请选择撤回, 是否继续?",
         "警告",
         {
-          confirmButtonText: "确定",
+          confirmButtonText: "确认",
           cancelButtonText: "取消",
           type: "error"
         }

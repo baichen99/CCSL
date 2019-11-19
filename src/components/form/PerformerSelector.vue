@@ -4,7 +4,7 @@
     filterable
     remote
     clearable
-    placeholder="请输入姓名"
+    :placeholder="$t('tip')"
     :remote-method="filterRemote"
     :loading="loading"
     @clear="filterRemote"
@@ -17,6 +17,17 @@
     >{{ item.name }} - {{ $t(genderTypes[item.gender].name) }} - {{ item.region.name }}</el-option>
   </el-select>
 </template>
+
+<i18n>
+{
+  "zh-CN": {
+    "tip": "请输入姓名"
+  },
+  "en-US": {
+    "tip": "Input name"
+  }
+}
+</i18n>
 
 <script>
 import { mapGetters } from "vuex";

@@ -3,64 +3,82 @@
     <div class="table-toolbar">
       <el-input
         v-model="params.username"
-        prefix-icon="el-icon-search"
-        placeholder="请输入账号"
+        :placeholder="$t('tipAccount')"
         clearable
         @keyup.enter="handleSearch"
         @change="handleSearch"
       />
       <el-input
         v-model="params.name"
-        prefix-icon="el-icon-search"
-        placeholder="请输入姓名"
+        :placeholder="$t('tipName')"
         clearable
         @keyup.enter="handleSearch"
         @change="handleSearch"
       />
-      <user-state-selector v-model="params.state" @update="handleSearch" />
-      <user-type-selector v-model="params.userType" @update="handleSearch" />
       <el-button type="primary" plain @click="handleNew">
-        增加
+        {{ $t("New") }}
         <i class="el-icon-plus el-icon--right" />
       </el-button>
       <el-button type="primary" plain @click="handleExport">
-        导出
+        {{ $t("Export") }}
         <i class="el-icon-download el-icon--right" />
       </el-button>
     </div>
     <div class="table-content">
-      <el-table v-loading="loading" :data="list" stripe border>
-        <el-table-column label="创建时间" align="center" width="180px">
+      <el-table v-loading="loading" :data="list" stripe border @filter-change="handleFilter">
+        <el-table-column :label="$t('CreatedAt')" align="center" width="180px">
           <template slot-scope="{row}">
             <span>{{ $d(new Date(row.createdAt), 'long') }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="账号状态" align="center" width="100px">
+        <el-table-column
+          column-key="state"
+          :label="$t('AccountState')"
+          :filters="[
+            { text: $t('Active'), value: 'active'}, 
+            { text: $t('Inactive'), value: 'inactive'},
+          ]"
+          :filter-multiple="false"
+          align="center"
+          width="150px"
+        >
           <template slot-scope="{row}">
-            <el-tag :type="userState[row.state].color">{{ userState[row.state].name }}</el-tag>
+            <el-tag :type="userState[row.state].color">{{ $t(userState[row.state].name) }}</el-tag>
           </template>
         </el-table-column>
 
-        <el-table-column label="用户角色" align="center" width="150px">
+        <el-table-column
+          column-key="userType"
+          :filters="[
+            { text: $t('SuperAdmin'), value: 'super'}, 
+            { text: $t('Admin'), value: 'admin'},
+            { text: $t('Learner'), value: 'learner'},
+            { text: $t('User'), value: 'user'},
+          ]"
+          :filter-multiple="false"
+          :label="$t('UserRole')"
+          align="center"
+          width="150px"
+        >
           <template slot-scope="{row}">
-            <el-tag :type="userTypes[row.userType].color">{{ userTypes[row.userType].name }}</el-tag>
+            <el-tag :type="userTypes[row.userType].color">{{ $t(userTypes[row.userType].name) }}</el-tag>
           </template>
         </el-table-column>
 
-        <el-table-column label="用户账号" align="center" min-width="200px">
+        <el-table-column :label="$t('Account')" align="center" min-width="200px">
           <template slot-scope="{row}">
             <span>{{ row.username }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="用户姓名" align="center" min-width="200px">
+        <el-table-column :label="$t('Name')" align="center" min-width="200px">
           <template slot-scope="{row}">
             <span>{{ row.name }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="操作" align="center" width="250px" fixed="right">
+        <el-table-column :label="$t('Action')" align="center" width="250px" fixed="right">
           <template slot-scope="{row}">
             <el-button
               v-if="row.state==='inactive'"
@@ -68,16 +86,21 @@
               size="mini"
               plain
               @click="handleActive(row.id)"
-            >启用</el-button>
+            >{{ $t("Enable") }}</el-button>
             <el-button
               v-if="row.state==='active'"
               type="warning"
               size="mini"
               plain
               @click="handleInactive(row.id)"
-            >停用</el-button>
-            <el-button type="primary" size="mini" plain @click="handleEdit(row)">编辑</el-button>
-            <el-button type="danger" size="mini" plain @click="handleDelete(row.id)">删除</el-button>
+            >{{ $t("Disable") }}</el-button>
+            <el-button type="primary" size="mini" plain @click="handleEdit(row)">{{ $t("Edit") }}</el-button>
+            <el-button
+              type="danger"
+              size="mini"
+              plain
+              @click="handleDelete(row.id)"
+            >{{ $t("Delete") }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -104,32 +127,41 @@
       <div class="form-drawer__content">
         <user-form ref="form" :data="data" :mode="mode" />
         <div class="form-drawer__footer">
-          <el-button @click="handleClose">取 消</el-button>
+          <el-button @click="handleClose">{{ $t("Cancel") }}</el-button>
           <el-button
             v-if="checkDiff"
             type="primary"
             :loading="loading"
             @click="handleSave"
-          >{{ loading ? '保存中 ...' : '保 存' }}</el-button>
+          >{{ loading ? $t("Saving") : $t("Save") }}</el-button>
         </div>
       </div>
     </el-drawer>
   </div>
 </template>
 
+<i18n>
+{
+  "zh-CN": {
+    "tipAccount": "请输入账号",
+    "tipName": "请输入姓名"
+  },
+  "en-US": {
+    "tipAccount": "Input account",
+    "tipName": "Input name"
+  }
+}
+</i18n>
+
 <script>
 import { mapGetters } from "vuex";
 import UserForm from "@/views/dashboard/form/UserForm";
-import UserTypeSelector from "@/components/form/UserTypeSelector";
-import UserStateSelector from "@/components/form/UserStateSelector";
 import listMixin from "./listMixin";
 import { GetUsersList, CreateUser, UpdateUser, DeleteUser } from "@/api/users";
 export default {
   name: "Users",
   components: {
-    UserForm,
-    UserTypeSelector,
-    UserStateSelector
+    UserForm
   },
   mixins: [listMixin],
   data() {

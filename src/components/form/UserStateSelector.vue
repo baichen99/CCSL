@@ -1,8 +1,19 @@
 <template>
-  <el-select v-model="data" placeholder="请选择用户状态" clearable @clear="$emit('clear')">
-    <el-option v-for="(item, key) in userState" :key="key" :label="item.name" :value="key" />
+  <el-select v-model="data" :placeholder="$t('tip')" clearable @clear="$emit('clear')">
+    <el-option v-for="(item, key) in userState" :key="key" :label="$t(item.name)" :value="key" />
   </el-select>
 </template>
+
+<i18n>
+{
+  "zh-CN": {
+    "tip": "请选择用户状态"
+  },
+  "en-US": {
+    "tip": "Select state"
+  }
+}
+</i18n>
 
 <script>
 import { mapGetters } from "vuex";

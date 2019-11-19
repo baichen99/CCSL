@@ -11,8 +11,6 @@
 
     <div class="right-menu">
       <template v-if="device!=='mobile'">
-        <!-- <error-log class="errLog-container right-menu-item hover-effect" /> -->
-
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
       </template>
 
@@ -23,13 +21,13 @@
         </div>
         <el-dropdown-menu slot="dropdown">
           <router-link to="/profile">
-            <el-dropdown-item>个人中心</el-dropdown-item>
+            <el-dropdown-item>{{ $t("ProfileCenter") }}</el-dropdown-item>
           </router-link>
           <router-link to="/">
-            <el-dropdown-item>返回首页</el-dropdown-item>
+            <el-dropdown-item>{{ $t("backHome") }}</el-dropdown-item>
           </router-link>
           <el-dropdown-item divided>
-            <span style="display:block;" @click="logout">退出登录</span>
+            <span style="display:block;" @click="logout">{{ $t("Logout") }}</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -37,18 +35,27 @@
   </div>
 </template>
 
+<i18n>
+{
+  "zh-CN": {
+    "backHome": "返回首页"
+  },
+  "en-US": {
+    "backHome": "Home Page"
+  }
+}
+</i18n>
+
 <script>
 import { mapGetters } from "vuex";
 import Breadcrumb from "@/components/Breadcrumb.vue";
 import Hamburger from "@/components/Hamburger";
-// import ErrorLog from "@/components/ErrorLog";
 import Screenfull from "@/components/Screenfull";
 
 export default {
   components: {
     Breadcrumb,
     Hamburger,
-    // ErrorLog,
     Screenfull
   },
   computed: {

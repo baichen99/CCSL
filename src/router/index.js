@@ -5,7 +5,6 @@ import store from "@/store";
 import { Message } from "element-ui";
 import NProgress from "nprogress"; // progress bar
 import "nprogress/nprogress.css"; // progress bar style
-import { getPageTitle } from "@/utils/tools";
 
 NProgress.configure({ showSpinner: false });
 
@@ -22,7 +21,6 @@ const HOME_PAGE = "Home";
 
 router.beforeEach(async (to, from, next) => {
   NProgress.start();
-  document.title = getPageTitle(to.meta.title);
   const token = store.getters.token;
   if (to.meta.auth) {
     // 需要登录才能访问

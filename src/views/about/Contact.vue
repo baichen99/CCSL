@@ -5,7 +5,7 @@
       <el-col :span="12">
         <el-card shadow="hover">
           <el-table :data="tableData">
-            <el-table-column prop="key" width="90" />
+            <el-table-column prop="key" width="100" />
             <el-table-column prop="value" />
             <br />
           </el-table>
@@ -57,18 +57,17 @@ export default {
 @import "@/styles/element-variables.scss";
 .contact {
   align-items: center;
+  
   .title {
     color: $--color-primary;
     margin: 20px;
   }
-  .el-card {
-    width: 500px;
-    height: 380px;
-    text-align: center;
-  }
 
-  .el-table {
-    margin-bottom: 2rem;
+  .el-card {
+    width: 450px;
+    height: 380px;
+    margin: 1rem auto;
+    text-align: center;
   }
 }
 </style>

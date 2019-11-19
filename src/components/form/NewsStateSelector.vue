@@ -1,10 +1,24 @@
 <template>
-  <el-select v-model="data" placeholder="请选择状态" clearable @clear="$emit('clear')">
-    <el-option v-for="item in options" :key="item.value" :label="item.name" :value="item.value" />
+  <el-select v-model="data" :placeholder="$t('tip')" clearable @clear="$emit('clear')">
+    <el-option v-for="(item,key) in newsState" :key="key" :label="$t(item.name)" :value="key" />
   </el-select>
 </template>
 
+
+<i18n>
+{
+  "zh-CN": {
+    "tip": "请选择状态"
+  },
+  "en-US": {
+    "tip": "Select state"
+  }
+}
+</i18n>
+
+
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "NewsStateSelector",
   model: {
@@ -17,15 +31,8 @@ export default {
       default: () => ""
     }
   },
-  data() {
-    return {
-      options: [
-        { name: "发布", value: "published" },
-        { name: "草稿", value: "draft" }
-      ]
-    };
-  },
   computed: {
+    ...mapGetters(["newsState"]),
     data: {
       get() {
         return this.value;

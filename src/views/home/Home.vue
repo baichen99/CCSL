@@ -3,11 +3,11 @@
     <carousel-card />
     <div class="news-container">
       <news-card
-        v-for="(value, key) in newsColumns"
+        v-for="(item, key) in newsColumns"
         :key="key"
-        :icon="value.icon"
-        :column="value.icon"
-        :title="value.name"
+        :icon="item.icon"
+        :column="item.icon"
+        :title="item.name"
       />
     </div>
   </div>

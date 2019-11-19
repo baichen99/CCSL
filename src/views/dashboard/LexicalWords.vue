@@ -17,47 +17,58 @@
         @change="handleSearch"
       />
       <word-pos-selector v-model="params.pos" @update="handleSearch" />
-      <word-initial-selector v-model="params.initial" @update="handleSearch" />
       <el-button type="primary" plain @click="handleNew">
-        增加
+        {{ $t("New") }}
         <i class="el-icon-plus el-icon--right" />
       </el-button>
       <el-button type="primary" plain @click="handleExport">
-        导出
+        {{ $t("Export") }}
         <i class="el-icon-download el-icon--right" />
       </el-button>
     </div>
 
     <div class="table-content">
-      <el-table v-loading="loading" :data="list" stripe border>
-        <el-table-column label="音序" align="center" width="150px">
+      <el-table v-loading="loading" :data="list" stripe border @filter-change="handleFilter">
+        <el-table-column
+          column-key="initial"
+          :filters="initialFilters"
+          :filter-multiple="false"
+          :label="$t('Initial')"
+          align="center"
+          width="150px"
+        >
           <template slot-scope="{row}">
             <span>{{ row.initial }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="汉语转写" align="center" min-width="200px">
+        <el-table-column :label="$t('Chinese')" align="center" min-width="200px">
           <template slot-scope="{row}">
             <span v-html="$options.filters.addNumberSup(row.chinese) " />
           </template>
         </el-table-column>
 
-        <el-table-column label="英语转写" align="center" min-width="200px">
+        <el-table-column :label="$t('English')" align="center" min-width="200px">
           <template slot-scope="{row}">
             <span>{{ row.english }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="词性" align="center" min-width="100px">
+        <el-table-column :label="$t('PoS')" align="center" min-width="100px">
           <template slot-scope="{row}">
             <span>{{ row.pos }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="操作" align="center" width="200px" fixed="right">
+        <el-table-column :label="$t('Action')" align="center" width="200px" fixed="right">
           <template slot-scope="{row}">
-            <el-button type="primary" size="mini" plain @click="handleEdit(row)">编辑</el-button>
-            <el-button type="danger" size="mini" plain @click="handleDelete(row.id)">删除</el-button>
+            <el-button type="primary" size="mini" plain @click="handleEdit(row)">{{ $t("Edit") }}</el-button>
+            <el-button
+              type="danger"
+              size="mini"
+              plain
+              @click="handleDelete(row.id)"
+            >{{ $t("Delete") }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -84,13 +95,13 @@
       <div class="form-drawer__content">
         <lexical-word-form ref="form" :data="data" :mode="mode" />
         <div class="form-drawer__footer">
-          <el-button @click="handleClose">取 消</el-button>
+          <el-button @click="handleClose">{{ $t("Cancel") }}</el-button>
           <el-button
             v-if="checkDiff"
             type="primary"
             :loading="loading"
             @click="handleSave"
-          >{{ loading ? '保存中 ...' : '保 存' }}</el-button>
+          >{{ loading ? $t("Saving") : $t("Save") }}</el-button>
         </div>
       </div>
     </el-drawer>
@@ -100,9 +111,8 @@
 <script>
 import LexicalWordForm from "@/views/dashboard/form/LexicalWordForm";
 import WordPosSelector from "@/components/form/WordPosSelector";
-import WordInitialSelector from "@/components/form/WordInitialSelector";
 import listMixin from "./listMixin";
-
+import { mapGetters } from "vuex";
 import {
   GetLexicalWordsList,
   CreateLexicalWord,
@@ -114,7 +124,6 @@ export default {
   name: "LexicalWords",
   components: {
     WordPosSelector,
-    WordInitialSelector,
     LexicalWordForm
   },
   mixins: [listMixin],
@@ -126,8 +135,20 @@ export default {
         english: "",
         pos: "",
         orderBy: "initial, id"
-      }
+      },
+      initialFilters: []
     };
+  },
+  computed: {
+    ...mapGetters(["wordInitial"])
+  },
+  created() {
+    this.wordInitial.map(item => {
+      this.initialFilters.push({
+        text: item,
+        value: item
+      });
+    });
   },
   methods: {
     getList() {

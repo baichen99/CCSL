@@ -51,14 +51,20 @@ export default {
       news: []
     };
   },
+  watch: {
+    "$i18n.locale"() {
+      this.getList();
+    }
+  },
   created() {
     this.getList();
   },
   methods: {
     getList() {
+      const lang = this.$i18n.locale;
       const params = {
         column: this.column,
-        language: "zh-CN",
+        language: lang,
         order: "desc",
         state: "published",
         limit: 5

@@ -9,11 +9,15 @@ const getters = {
   name: state => state.user.name,
   roles: state => state.user.roles,
   wordPosTypes: state => state.sign.wordPosTypes,
+  wordInitial: state => state.sign.wordInitial,
   constructTypes: state => state.sign.constructTypes,
   userTypes: state => state.sign.userTypes,
   userState: state => state.sign.userState,
   genderTypes: state => state.sign.genderTypes,
-  newsColumns: state => state.sign.newsColumns
+  newsColumns: state => state.sign.newsColumns,
+  newsState: state => state.sign.newsState,
+  newsTypes: state => state.sign.newsTypes,
+  languageTypes: state => state.sign.languageTypes
 };
 
 export default getters;

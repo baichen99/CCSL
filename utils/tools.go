@@ -9,6 +9,7 @@ import (
 	"reflect"
 	"regexp"
 	"runtime"
+	"strconv"
 
 	"github.com/jinzhu/gorm"
 	"github.com/kataras/iris"
@@ -57,18 +58,18 @@ func IsShuUser(username string) bool {
 func GenRegionJSONFile(pg *gorm.DB) {
 	type JSONDistrict struct {
 		LabelZh string `json:"label"`
-		Value   int    `json:"value"`
+		Value   string `json:"value"`
 	}
 
 	type JSONCity struct {
 		LabelZh  string         `json:"label"`
-		Value    int            `json:"value"`
+		Value    string         `json:"value"`
 		Children []JSONDistrict `json:"children"`
 	}
 
 	type JSONProvince struct {
 		LabelZh  string     `json:"label"`
-		Value    int        `json:"value"`
+		Value    string     `json:"value"`
 		Children []JSONCity `json:"children"`
 	}
 	var jProvinces []JSONProvince
@@ -97,7 +98,7 @@ func GenRegionJSONFile(pg *gorm.DB) {
 				}
 				jDistricts = append(jDistricts, JSONDistrict{
 					LabelZh: d.Name,
-					Value:   d.Code,
+					Value:   strconv.Itoa(d.Code),
 				})
 			}
 			if err != nil {
@@ -105,7 +106,7 @@ func GenRegionJSONFile(pg *gorm.DB) {
 			}
 			jCities = append(jCities, JSONCity{
 				LabelZh:  c.Name,
-				Value:    c.Code,
+				Value:    strconv.Itoa(c.Code),
 				Children: jDistricts,
 			})
 		}
@@ -114,7 +115,7 @@ func GenRegionJSONFile(pg *gorm.DB) {
 		}
 		jProvinces = append(jProvinces, JSONProvince{
 			LabelZh:  p.Name,
-			Value:    p.Code,
+			Value:    strconv.Itoa(p.Code),
 			Children: jCities,
 		})
 	}

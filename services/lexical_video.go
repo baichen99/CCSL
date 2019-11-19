@@ -59,6 +59,7 @@ func (s *LexicalVideoService) GetVideosList(parameters utils.GetVideoListParamet
 		utils.SearchByColumn("lexical_words.chinese", parameters.Chinese),
 		utils.FilterByArray("lexical_words.english", parameters.English, " "),
 		utils.FilterByColumn("lexical_words.pos", parameters.Pos),
+		utils.FilterByColumn("lexical_words.initial", parameters.Initial),
 		utils.FilterByColumn("performers.region_id", parameters.RegionID),
 		utils.FilterByColumn("performers.gender", parameters.Gender),
 		utils.FilterByColumn("performers.id", parameters.PerformerID),

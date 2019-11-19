@@ -1,6 +1,6 @@
 <template>
   <el-select v-model="data" :placeholder="$t('tip')" clearable @clear="$emit('clear')">
-    <el-option v-for="(item, key) in genderTypes" :key="key" :label="$t(item.name)" :value="item.value" />
+    <el-option v-for="(item, key) in genderTypes" :key="key" :label="$t(item.name)" :value="key" />
   </el-select>
 </template>
 

@@ -3,15 +3,26 @@
     <transition name="sidebarLogoFade">
       <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
         <svg-icon icon-class="logo" class="sidebar-logo" style="margin:0" />
-        <h1 class="sidebar-title">{{ title }}</h1>
+        <h1 class="sidebar-title">{{ $t("adminPanel") }}</h1>
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
         <svg-icon icon-class="logo" class="sidebar-logo" style="margin:0" />
-        <h1 class="sidebar-title">{{ title }}</h1>
+        <h1 class="sidebar-title">{{ $t("adminPanel") }}</h1>
       </router-link>
     </transition>
   </div>
 </template>
+
+<i18n>
+{
+  "zh-CN": {
+    "adminPanel": "后台管理系统"
+  },
+  "en-US": {
+    "adminPanel": "Admin Panel"
+  }
+}
+</i18n>
 
 <script>
 export default {

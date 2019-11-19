@@ -7,12 +7,30 @@
 <script>
 export default {
   name: "App",
+  watch: {
+    "$i18n.locale"() {
+      this.onLanguageChanged();
+    }
+  },
   mounted() {
     this.initData();
   },
   methods: {
     initData() {
       this.$store.dispatch("user/refreshToken");
+      this.onLanguageChanged();
+    },
+    onLanguageChanged() {
+      const lang = this.$i18n.locale;
+      switch (lang) {
+        case "en-US":
+          document.title = "Center for CSL and Deaf Studies";
+          break;
+
+        default:
+          document.title = "中国手语及聋人研究中心";
+          break;
+      }
     }
   }
 };
