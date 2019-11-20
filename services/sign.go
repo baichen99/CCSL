@@ -29,7 +29,7 @@ func NewSignService(pg *gorm.DB) SignInterface {
 }
 
 func (s *SignService) GetSignList(parameters utils.GetSignListParameters) (signs []models.Sign, count int, err error) {
-	db := s.PG.Scopes(
+	db := s.PG.LogMode(false).Scopes(
 		utils.SearchByColumn("signs.name", parameters.Name),
 	)
 	err = db.Model(&signs).Count(&count).Error
@@ -50,26 +50,27 @@ func (s *SignService) GetSignList(parameters utils.GetSignListParameters) (signs
 }
 
 func (s *SignService) CreateSign(sign models.Sign) (err error) {
-	err = s.PG.Create(&sign).Error
+	err = s.PG.LogMode(true).Create(&sign).Error
 	return
 }
 
 func (s *SignService) GetSign(signID string) (sign models.Sign, err error) {
-	err = s.PG.Where("id = ?", signID).Take(&sign).Error
+	err = s.PG.LogMode(false).Where("id = ?", signID).Take(&sign).Error
 	return
 }
 
 func (s *SignService) UpdateSign(signID string, updatedData map[string]interface{}) (err error) {
 	var sign models.Sign
-	err = s.PG.Model(&sign).Where("id = ?", signID).Updates(updatedData).Error
+	err = s.PG.LogMode(true).Model(&sign).Where("id = ?", signID).Updates(updatedData).Error
 	return
 }
 
 func (s *SignService) DeleteSign(signID string) (err error) {
 	var sign models.Sign
-	err = s.PG.Where("id = ?", signID).Find(&sign).Delete(&sign).Error
+	db := s.PG.LogMode(true)
+	err = db.Where("id = ?", signID).Find(&sign).Delete(&sign).Error
 	// Delete all the video associations related to this sign
-	s.PG.Model(&sign).Association("LexicalVideoLeft").Clear()
-	s.PG.Model(&sign).Association("LexicalVideoRight").Clear()
+	db.Model(&sign).Association("LexicalVideoLeft").Clear()
+	db.Model(&sign).Association("LexicalVideoRight").Clear()
 	return
 }

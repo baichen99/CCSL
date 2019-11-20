@@ -31,7 +31,7 @@ func NewLexicalWordService(pg *gorm.DB) LexicalWordInterface {
 // GetWordsList returns words list
 func (s *LexicalWordService) GetWordsList(parameters utils.GetWordListParameters) (words []models.LexicalWord, count int, err error) {
 	// Adding custom scopes to the query based on get list parameters.
-	db := s.PG.Scopes(
+	db := s.PG.LogMode(false).Scopes(
 		utils.FilterByColumn("lexical_words.pos", parameters.Pos),
 		utils.FilterByColumn("lexical_words.initial", parameters.Initial),
 		utils.SearchByColumn("lexical_words.chinese", parameters.Chinese),
@@ -58,26 +58,26 @@ func (s *LexicalWordService) GetWordsList(parameters utils.GetWordListParameters
 
 // CreateWord creates a new word
 func (s *LexicalWordService) CreateWord(word models.LexicalWord) (err error) {
-	err = s.PG.Create(&word).Error
+	err = s.PG.LogMode(true).Create(&word).Error
 	return
 }
 
 // GetWord returns word with given id
 func (s *LexicalWordService) GetWord(wordID string) (word models.LexicalWord, err error) {
-	err = s.PG.Where("id = ?", wordID).Take(&word).Error
+	err = s.PG.LogMode(false).Where("id = ?", wordID).Take(&word).Error
 	return
 }
 
 // UpdateWord updates word with given id
 func (s *LexicalWordService) UpdateWord(wordID string, updatedData map[string]interface{}) (err error) {
 	var word models.LexicalWord
-	err = s.PG.Model(&word).Where("id = ?", wordID).Updates(updatedData).Error
+	err = s.PG.LogMode(true).Model(&word).Where("id = ?", wordID).Updates(updatedData).Error
 	return
 }
 
 // DeleteWord soft deletes a word with given id
 func (s *LexicalWordService) DeleteWord(wordID string) (err error) {
 	var word models.LexicalWord
-	err = s.PG.Where("id = ?", wordID).Delete(&word).Error
+	err = s.PG.LogMode(true).Where("id = ?", wordID).Delete(&word).Error
 	return
 }

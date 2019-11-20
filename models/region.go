@@ -20,3 +20,20 @@ type Province struct {
 	Code int    `gorm:"PRIMARY_KEY" json:"code"`
 	Name string `gorm:"NOT NULL" json:"name"`
 }
+
+type JSONDistrict struct {
+	LabelZh string `json:"label"`
+	Value   int    `json:"value"`
+}
+
+type JSONCity struct {
+	LabelZh  string         `json:"label"`
+	Value    int            `json:"value"`
+	Children []JSONDistrict `json:"children"`
+}
+
+type JSONProvince struct {
+	LabelZh  string     `json:"label"`
+	Value    int        `json:"value"`
+	Children []JSONCity `json:"children"`
+}

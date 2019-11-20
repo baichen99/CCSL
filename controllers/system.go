@@ -22,6 +22,7 @@ type SystemController struct {
 // BeforeActivation register routes
 func (c *SystemController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Handle("POST", "/error", "JsErrorLogger")
+	app.Handle("GET", "/cities", "GetCitiesList")
 	app.Router().Use(middlewares.CheckJWTToken, middlewares.CheckSuper)
 	app.Handle("GET", "/error", "GetJsErrorList")
 	app.Handle("GET", "/login", "GetLoginHistoryList")
@@ -94,4 +95,18 @@ func (c *SystemController) DumpDatabase() {
 		return
 	}
 	c.Context.Binary(out)
+}
+
+// GetCitiesList GET /systems/cities
+func (c *SystemController) GetCitiesList() {
+	defer c.Context.Next()
+	cities, err := c.SystemService.GetCitiesList()
+	if err != nil {
+		utils.SetResponseError(c.Context, iris.StatusInternalServerError, "SystemService::GetCitiesList", err)
+		return
+	}
+	c.Context.JSON(iris.Map{
+		message: success,
+		data:    cities,
+	})
 }

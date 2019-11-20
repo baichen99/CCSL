@@ -3,6 +3,7 @@ package services
 import (
 	"ccsl/models"
 	"ccsl/utils"
+	"errors"
 
 	"github.com/jinzhu/gorm"
 )
@@ -31,7 +32,7 @@ func NewUserService(pg *gorm.DB) UserInterface {
 // GetUsersList returns all users
 func (s *UserService) GetUsersList(parameters utils.GetUserListParameters) (users []models.User, count int, err error) {
 	// Adding custom scopes to the query based on get list parameters.
-	db := s.PG.Scopes(
+	db := s.PG.LogMode(false).Scopes(
 		utils.FilterByColumn("users.user_type", parameters.UserType),
 		utils.FilterByColumn("users.state", parameters.State),
 		utils.SearchByColumn("users.username", parameters.Username),
@@ -61,17 +62,20 @@ func (s *UserService) CreateUser(user models.User) (err error) {
 	if user.Password != "" {
 		user.Password, err = utils.HashPassword(user.Password)
 	}
-	err = s.PG.Create(&user).Error
+	err = s.PG.LogMode(true).Create(&user).Error
 	return
 }
 
 // GetUser gets user by id, username or email
 func (s *UserService) GetUser(key string, value string) (user models.User, err error) {
+	db := s.PG.LogMode(true)
 	switch key {
 	case "id":
-		err = s.PG.Where("id = ?", value).Take(&user).Error
+		err = db.Where("id = ?", value).Take(&user).Error
 	case "username":
-		err = s.PG.Where("username = ?", value).Take(&user).Error
+		err = db.Where("username = ?", value).Take(&user).Error
+	default:
+		err = errors.New("Unsupported key")
 	}
 	return
 }
@@ -79,13 +83,13 @@ func (s *UserService) GetUser(key string, value string) (user models.User, err e
 // UpdateUser updates user model
 func (s *UserService) UpdateUser(userID string, updatedData map[string]interface{}) (err error) {
 	var user models.User
-	err = s.PG.Model(&user).Where("id = ?", userID).Updates(updatedData).Error
+	err = s.PG.LogMode(true).Model(&user).Where("id = ?", userID).Updates(updatedData).Error
 	return
 }
 
 // DeleteUser soft deletes a user model
 func (s *UserService) DeleteUser(userID string) (err error) {
 	var user models.User
-	err = s.PG.Where("id = ?", userID).Delete(&user).Error
+	err = s.PG.LogMode(true).Where("id = ?", userID).Delete(&user).Error
 	return
 }

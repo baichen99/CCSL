@@ -54,7 +54,7 @@ func (s *LexicalVideoService) GetVideosList(parameters utils.GetVideoListParamet
 		signSubQuery = fmt.Sprintf("SELECT lexical_video_id FROM lexical_left_sign WHERE sign_id = '%s' UNION SELECT lexical_video_id FROM lexical_right_sign WHERE sign_id = '%s'", parameters.SignID, parameters.SignID)
 	}
 
-	db := s.PG.Scopes(
+	db := s.PG.LogMode(false).Scopes(
 		utils.FilterByColumn("lexical_words.id", parameters.WordID),
 		utils.SearchByColumn("lexical_words.chinese", parameters.Chinese),
 		utils.FilterByArray("lexical_words.english", parameters.English, " "),
@@ -109,7 +109,7 @@ func (s *LexicalVideoService) CreateVideo(video models.LexicalVideo, leftSignsID
 		rightSigns []models.Sign
 	)
 	// Don't allow to auto create signs here
-	err = s.PG.Set("gorm:association_autocreate", false).Create(&video).Where("id IN (?)", leftSignsID).Find(&leftSigns).Where("id IN (?)", rightSignsID).Find(&rightSigns).Error
+	err = s.PG.LogMode(true).Set("gorm:association_autocreate", false).Create(&video).Where("id IN (?)", leftSignsID).Find(&leftSigns).Where("id IN (?)", rightSignsID).Find(&rightSigns).Error
 	s.PG.Model(&video).Association("LeftSigns").Append(leftSigns)
 	s.PG.Model(&video).Association("RightSigns").Append(rightSigns)
 	return
@@ -117,7 +117,7 @@ func (s *LexicalVideoService) CreateVideo(video models.LexicalVideo, leftSignsID
 
 // GetVideo returns video with given id
 func (s *LexicalVideoService) GetVideo(videoID string) (video models.LexicalVideo, err error) {
-	err = s.PG.Set("gorm:auto_preload", true).Where("id = ?", videoID).Take(&video).Error
+	err = s.PG.LogMode(false).Set("gorm:auto_preload", true).Where("id = ?", videoID).Take(&video).Error
 	video.LeftSignsID = []string{}
 	video.RightSignsID = []string{}
 	// add sign indices to struct
@@ -137,25 +137,27 @@ func (s *LexicalVideoService) UpdateVideo(videoID string, updatedData map[string
 		rightSigns []models.Sign
 		video      models.LexicalVideo
 	)
+
+	db := s.PG.LogMode(true)
 	// Don't allow to update signs here
-	if err = s.PG.Set("gorm:association_autoupdate", false).Where("id = ?", videoID).Find(&video).Updates(updatedData).Error; err != nil {
+	if err = db.Set("gorm:association_autoupdate", false).Where("id = ?", videoID).Find(&video).Updates(updatedData).Error; err != nil {
 		return
 	}
 	// Update left signs associations manually
 	if leftSignsID != nil {
-		if err = s.PG.Where("id IN (?)", *leftSignsID).Find(&leftSigns).Error; err != nil {
+		if err = db.Where("id IN (?)", *leftSignsID).Find(&leftSigns).Error; err != nil {
 			return
 		}
-		if err = s.PG.Model(&video).Association("LeftSigns").Replace(leftSigns).Error; err != nil {
+		if err = db.Model(&video).Association("LeftSigns").Replace(leftSigns).Error; err != nil {
 			return
 		}
 	}
 	// Update right signs associations manually
 	if rightSignsID != nil {
-		if err = s.PG.Where("id IN (?)", *rightSignsID).Find(&rightSigns).Error; err != nil {
+		if err = db.Where("id IN (?)", *rightSignsID).Find(&rightSigns).Error; err != nil {
 			return
 		}
-		if err = s.PG.Model(&video).Association("RightSigns").Replace(rightSigns).Error; err != nil {
+		if err = db.Model(&video).Association("RightSigns").Replace(rightSigns).Error; err != nil {
 			return
 		}
 	}
@@ -165,9 +167,10 @@ func (s *LexicalVideoService) UpdateVideo(videoID string, updatedData map[string
 // DeleteVideo soft deletes a video
 func (s *LexicalVideoService) DeleteVideo(videoID string) (err error) {
 	var video models.LexicalVideo
-	err = s.PG.Where("id = ?", videoID).Find(&video).Delete(&video).Error
+	db := s.PG.LogMode(true)
+	err = db.Where("id = ?", videoID).Find(&video).Delete(&video).Error
 	// Delete related associations
-	s.PG.Model(&video).Association("LeftSigns").Clear()
-	s.PG.Model(&video).Association("RightSigns").Clear()
+	db.Model(&video).Association("LeftSigns").Clear()
+	db.Model(&video).Association("RightSigns").Clear()
 	return
 }
