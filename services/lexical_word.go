@@ -71,7 +71,7 @@ func (s *LexicalWordService) GetWord(wordID string) (word models.LexicalWord, er
 // UpdateWord updates word with given id
 func (s *LexicalWordService) UpdateWord(wordID string, updatedData map[string]interface{}) (err error) {
 	var word models.LexicalWord
-	err = s.PG.LogMode(true).Model(&word).Where("id = ?", wordID).Updates(updatedData).Error
+	err = s.PG.LogMode(true).Where("id = ?", wordID).First(&word).Updates(updatedData).Error
 	return
 }
 

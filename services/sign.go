@@ -61,7 +61,7 @@ func (s *SignService) GetSign(signID string) (sign models.Sign, err error) {
 
 func (s *SignService) UpdateSign(signID string, updatedData map[string]interface{}) (err error) {
 	var sign models.Sign
-	err = s.PG.LogMode(true).Model(&sign).Where("id = ?", signID).Updates(updatedData).Error
+	err = s.PG.LogMode(true).Where("id = ?", signID).First(&sign).Updates(updatedData).Error
 	return
 }
 

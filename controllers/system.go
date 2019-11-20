@@ -23,13 +23,53 @@ type SystemController struct {
 func (c *SystemController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Handle("POST", "/error", "JsErrorLogger")
 	app.Handle("GET", "/cities", "GetCitiesList")
+	app.Handle("GET", "/info/{key: string}", "GetAppInfo")
+	app.Handle("PUT", "/info/{key: string}", "UpdateAppInfo")
 	app.Router().Use(middlewares.CheckJWTToken, middlewares.CheckSuper)
+
 	app.Handle("GET", "/error", "GetJsErrorList")
 	app.Handle("GET", "/login", "GetLoginHistoryList")
 	app.Handle("GET", "/dump", "DumpDatabase")
 }
 
-// JsErrorLogger POST /system/error
+// GetAppInfo GET /systems/info/xxx
+func (c *SystemController) GetAppInfo() {
+	defer c.Context.Next()
+	key := c.Context.Params().Get("key")
+	info, err := c.SystemService.GetAppInfo(key)
+	if err != nil {
+		utils.SetResponseError(c.Context, iris.StatusNotFound, "SystemService::GetAppInfo", err)
+		return
+	}
+	c.Context.JSON(iris.Map{
+		message: success,
+		data:    info.Data,
+	})
+}
+
+// UpdateAppInfo PUT /systems/info/xxx
+func (c *SystemController) UpdateAppInfo() {
+	defer c.Context.Next()
+	key := c.Context.Params().Get("key")
+	var form infoUpdateForm
+	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "SystemController::ParamsError", err)
+		return
+	}
+
+	updateData := utils.MakeUpdateData(form)
+
+	err := c.SystemService.UpdateAppInfo(key, updateData)
+	if err != nil {
+		utils.SetResponseError(c.Context, iris.StatusNotFound, "SystemService::GetAppInfo", err)
+		return
+	}
+
+	// Returns with 204 No Content status.
+	c.Context.StatusCode(iris.StatusNoContent)
+}
+
+// JsErrorLogger POST /systems/error
 func (c *SystemController) JsErrorLogger() {
 	defer c.Context.Next()
 	var jsError models.JsError

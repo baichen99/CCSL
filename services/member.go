@@ -64,7 +64,7 @@ func (s *MemberService) CreateMember(member models.Member) (err error) {
 // UpdateMember updates member with given id
 func (s *MemberService) UpdateMember(memberID string, updateData map[string]interface{}) (err error) {
 	var member models.Member
-	err = s.PG.LogMode(true).Model(&member).Where("id = ?", memberID).Update(updateData).Error
+	err = s.PG.LogMode(true).Where("id = ?", memberID).First(&member).Update(updateData).Error
 	return
 }
 

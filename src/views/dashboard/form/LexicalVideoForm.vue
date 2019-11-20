@@ -2,17 +2,7 @@
   <el-form ref="form" label-position="left" label-width="150px" :model="formData" :rules="rules">
     <el-form-item label="视频" prop="videoPath">
       <div class="video-container">
-        <video-player
-          v-if="formData.videoPath"
-          class="vjs-big-play-centered"
-          :options="{ 
-            sources: [{ 
-              type: 'video/mp4', 
-              src: settings.publicURL + formData.videoPath 
-            }]
-          }"
-          @contextmenu.native.prevent
-        />
+        <video-player :src="formData.videoPath" />
       </div>
     </el-form-item>
 
@@ -28,7 +18,7 @@
       <word-construct-selector v-model="formData.constructType" />
     </el-form-item>
 
-    <el-form-item v-if="formData.constructType==='复合词'" label="复合词构词词语" prop="constructWords">
+    <el-form-item v-if="formData.constructType==='compound'" label="复合词构词词语" prop="constructWords">
       <construct-words-picker v-model="formData.constructWords" />
     </el-form-item>
 
@@ -44,11 +34,12 @@
 
 <script>
 import { mapGetters } from "vuex";
+import VideoPlayer from "@/components/video/VideoPlayer"
 import WordConstructSelector from "@/components/form/WordConstructSelector";
 import ConstructWordsPicker from "@/components/form/ConstructWordsPicker";
-import PerformerSelector from "@/components/form/PerformerSelector.vue";
-import WordSelector from "@/components/form/WordSelector.vue";
-import MultiSignSelector from "@/components/form/MultiSignSelector.vue";
+import PerformerSelector from "@/components/form/PerformerSelector";
+import WordSelector from "@/components/form/WordSelector";
+import MultiSignSelector from "@/components/form/MultiSignSelector";
 import formMixin from "./formMixin";
 export default {
   name: "LexicalVideoForm",
@@ -57,7 +48,8 @@ export default {
     ConstructWordsPicker,
     PerformerSelector,
     WordSelector,
-    MultiSignSelector
+    MultiSignSelector,
+    VideoPlayer
   },
   mixins: [formMixin],
   data() {

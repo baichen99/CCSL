@@ -83,7 +83,7 @@ func (s *UserService) GetUser(key string, value string) (user models.User, err e
 // UpdateUser updates user model
 func (s *UserService) UpdateUser(userID string, updatedData map[string]interface{}) (err error) {
 	var user models.User
-	err = s.PG.LogMode(true).Model(&user).Where("id = ?", userID).Updates(updatedData).Error
+	err = s.PG.LogMode(true).Where("id = ?", userID).First(&user).Updates(updatedData).Error
 	return
 }
 

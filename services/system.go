@@ -11,6 +11,8 @@ type SystemInterface interface {
 	CreateJsError(jsErr models.JsError) (err error)
 	GetJsErrorList(parameters utils.GetJsErrorListParameters) (errors []models.JsError, count int, err error)
 	GetCitiesList() (jProvinces []models.JSONProvince, err error)
+	GetAppInfo(key string) (data models.Info, err error)
+	UpdateAppInfo(key string, updatedData map[string]interface{}) (err error)
 }
 
 type SystemService struct {
@@ -21,6 +23,18 @@ func NewSystemService(pg *gorm.DB) SystemInterface {
 	return &SystemService{
 		PG: pg,
 	}
+}
+
+func (s *SystemService) GetAppInfo(key string) (data models.Info, err error) {
+	db := s.PG.LogMode(false)
+	err = db.Where("key = ?", key).First(&data).Error
+	return
+}
+
+func (s *SystemService) UpdateAppInfo(key string, updatedData map[string]interface{}) (err error) {
+	var info models.Info
+	err = s.PG.LogMode(true).Where("key = ?", key).First(&info).Updates(updatedData).Error
+	return
 }
 
 func (s *SystemService) CreateJsError(jsErr models.JsError) (err error) {

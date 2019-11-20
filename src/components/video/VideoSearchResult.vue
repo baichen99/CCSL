@@ -1,22 +1,9 @@
 <template>
   <transition name="el-zoom-in-top">
-    <el-card
-      v-if="videos.length!==0"
-      shadow="hover"
-    >
+    <el-card v-if="videos.length!==0" shadow="hover">
       <el-row :gutter="20">
-        <el-col
-          v-for="video in videos"
-          :key="video.id"
-          :sm="sm"
-          :md="md"
-          :lg="lg"
-        >
-          <video-card
-            :show-region="showRegion"
-            :video="video"
-            @on-video-click="showDetailModal"
-          />
+        <el-col v-for="video in videos" :key="video.id" :sm="sm" :md="md" :lg="lg">
+          <video-card :show-region="showRegion" :video="video" @on-video-click="showDetailModal" />
         </el-col>
       </el-row>
       <el-pagination
@@ -26,18 +13,11 @@
         :total="total"
         :page-size.sync="limit"
       />
-      <el-dialog
-        :visible.sync="showDetail"
-        :show-close="false"
-        :destroy-on-close="true"
-        :append-to-body="true"
-        top="40px"
-      >
+      <el-dialog :visible.sync="showDetail" :show-close="false" :destroy-on-close="true" top="10px">
         <video-detail :video="videoDetail" />
       </el-dialog>
     </el-card>
   </transition>
-
 </template>
 
 <script>

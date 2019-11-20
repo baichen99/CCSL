@@ -140,7 +140,7 @@ func (s *LexicalVideoService) UpdateVideo(videoID string, updatedData map[string
 
 	db := s.PG.LogMode(true)
 	// Don't allow to update signs here
-	if err = db.Set("gorm:association_autoupdate", false).Where("id = ?", videoID).Find(&video).Updates(updatedData).Error; err != nil {
+	if err = db.Set("gorm:association_autoupdate", false).Where("id = ?", videoID).First(&video).Updates(updatedData).Error; err != nil {
 		return
 	}
 	// Update left signs associations manually

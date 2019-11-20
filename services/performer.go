@@ -62,7 +62,7 @@ func (s *PerformerService) CreatePerformer(performer models.Performer) (err erro
 
 func (s *PerformerService) UpdatePerformer(performerID string, updatedData map[string]interface{}) (err error) {
 	var performer models.Performer
-	err = s.PG.LogMode(true).Model(&performer).Where("id = ?", performerID).Updates(updatedData).Error
+	err = s.PG.LogMode(true).Where("id = ?", performerID).First(&performer).Updates(updatedData).Error
 	return
 }
 

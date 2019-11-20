@@ -1,15 +1,6 @@
 <template>
   <el-card shadow="hover" :body-style="{ padding: '0px' }">
-    <video-player
-      class="vjs-big-play-centered"
-      :options="{
-        sources: [{ 
-          type: 'video/mp4',
-          src: settings.publicURL + video.videoPath 
-        }]
-      }"
-      @contextmenu.native.prevent
-    />
+    <video-player :src="video.videoPath " />
     <div class="tags-container" @click="onVideoClick(video)">
       <div class="tags">
         <span v-if="showRegion" class="tag-value">{{ video.performer.region.name }}</span>
@@ -25,9 +16,13 @@
 </template>
 
 <script>
+import VideoPlayer from "@/components/video/VideoPlayer";
 import { mapGetters } from "vuex";
 export default {
   name: "VideoCard",
+  components: {
+    VideoPlayer
+  },
   props: {
     video: {
       type: Object,

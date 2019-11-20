@@ -59,7 +59,7 @@ func (s *NewsService) CreateNews(news models.News) (err error) {
 
 func (s *NewsService) UpdateNews(newsID string, updatedData map[string]interface{}) (err error) {
 	var news models.News
-	err = s.PG.LogMode(true).Model(&news).Where("id = ?", newsID).Updates(updatedData).Error
+	err = s.PG.LogMode(true).Where("id = ?", newsID).First(&news).Updates(updatedData).Error
 	return
 }
 

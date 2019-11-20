@@ -1,6 +1,8 @@
 package middlewares
 
-import "github.com/kataras/iris"
+import (
+	"github.com/kataras/iris"
+)
 
 const (
 	message string = "message"
@@ -34,32 +36,34 @@ func ErrorHandler(ctx iris.Context) {
 	var msg string
 	switch ctx.GetStatusCode() {
 	case iris.StatusBadRequest: // 400 Error
-		msg = ctx.Translate(BadRequest)
+		msg = BadRequest
 	case iris.StatusUnauthorized: //401 Error
-		msg = ctx.Translate(Unauthorized)
+		msg = Unauthorized
 	case iris.StatusForbidden: // 403 Error
-		msg = ctx.Translate(Forbidden)
+		msg = Forbidden
 	case iris.StatusNotFound: // 404 Error
-		msg = ctx.Translate(NotFound)
+		msg = NotFound
 	case iris.StatusMethodNotAllowed: // 405 Error
-		msg = ctx.Translate(MethodError)
+		msg = MethodError
 	case iris.StatusConflict: // 409 Error
-		msg = ctx.Translate(ConfictError)
+		msg = ConfictError
 	case iris.StatusUnprocessableEntity: // 422 Error
-		msg = ctx.Translate(UnprocessableEntity)
+		msg = UnprocessableEntity
 	case iris.StatusInternalServerError: // 500 Error
-		msg = ctx.Translate(InternalError)
+		msg = InternalError
 	default:
-		msg = ctx.Translate(UnknownError)
+		msg = UnknownError
 	}
+	msg = ctx.Translate(msg)
+	err := ctx.Translate(errMessage)
 	if errMessage != "" {
 		ctx.JSON(iris.Map{
-			message: ctx.Translate(msg),
-			errinfo: ctx.Translate(errMessage),
+			message: msg,
+			errinfo: err,
 		})
 		return
 	}
 	ctx.JSON(iris.Map{
-		message: ctx.Translate(msg),
+		message: NotFound,
 	})
 }

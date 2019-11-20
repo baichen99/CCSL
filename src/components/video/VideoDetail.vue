@@ -1,17 +1,7 @@
 <template>
   <div>
     <div class="video-container">
-      <video-player
-        :options="{ 
-          sources: [{ 
-            type: 'video/mp4',
-            src: settings.publicURL + video.videoPath 
-          }] 
-        }"
-        width="100%"
-        class="vjs-big-play-centered"
-        @contextmenu.native.prevent
-      />
+      <video-player :src="video.videoPath" />
     </div>
 
     <div class="tags-container">
@@ -84,9 +74,13 @@
 </template>
 
 <script>
+import VideoPlayer from "@/components/video/VideoPlayer"
 import { mapGetters } from "vuex";
 export default {
   name: "VideoDetail",
+  components: {
+    VideoPlayer
+  },
   props: {
     video: {
       type: Object,

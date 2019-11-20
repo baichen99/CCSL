@@ -4,6 +4,7 @@ import (
 	"ccsl/models"
 	"time"
 
+	"github.com/jinzhu/gorm/dialects/postgres"
 	uuid "github.com/satori/go.uuid"
 )
 
@@ -18,6 +19,13 @@ const (
 	language string = "language"
 	version  string = "version"
 )
+
+// >>> INFO <<<
+// ============
+
+type infoUpdateForm struct {
+	Data *postgres.Jsonb `json:"data" validate:"required"`
+}
 
 // >>> CAROUSEL <<<
 // ============
