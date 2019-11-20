@@ -66,7 +66,7 @@ func (s *LexicalVideoService) GetVideosList(parameters utils.GetVideoListParamet
 		utils.FilterInSubQuery("lexical_videos.id", leftSignSubQuery),
 		utils.FilterInSubQuery("lexical_videos.id", rightSignSubQuery),
 		utils.FilterInSubQuery("lexical_videos.id", signSubQuery),
-		utils.FilterByColumn("lexical_videos.construct_type", parameters.ConstructType),
+		utils.FilterByColumn("lexical_videos.word_formation", parameters.WordFormation),
 		utils.SearchInList("lexical_videos.construct_words", parameters.ConstructWords),
 	)
 

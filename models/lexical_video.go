@@ -12,7 +12,7 @@ type LexicalVideo struct {
 	LexicalWordID  uuid.UUID      `gorm:"NOT NULL;INDEX:lexical_word_id" json:"lexicalWordID"`
 	Performer      Performer      `gorm:"FOREIGNKEY:PerformerID" json:"performer"`
 	PerformerID    uuid.UUID      `gorm:"NOT NULL;INDEX:performer_id" json:"performerID"`                            // 表演者
-	ConstructType  string         `gorm:"DEFAULT:NULL" json:"constructType"`                                         // 构词方式
+	WordFormation  string         `gorm:"DEFAULT:NULL" json:"wordFormation"`                                         // 构词方式
 	ConstructWords pq.StringArray `gorm:"TYPE:varchar(100)[];DEFAULT:array[]::varchar(100)[]" json:"constructWords"` // 构词词语
 	VideoPath      string         `gorm:"DEFAULT:NULL" json:"videoPath"`
 	LeftSignsID    []string       `gorm:"-" json:"leftSignsID"`

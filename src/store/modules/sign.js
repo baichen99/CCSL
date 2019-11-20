@@ -44,7 +44,7 @@ const state = {
     "Y",
     "Z"
   ],
-  constructTypes: {
+  wordFormations: {
     compound: { name: "CompoundWord" },
     simple: { name: "SimpleWord" }
   },

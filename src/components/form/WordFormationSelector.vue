@@ -1,6 +1,6 @@
 <template>
   <el-select v-model="data" :placeholder="$t('tip')" clearable @clear="$emit('clear')">
-    <el-option v-for="(item,key) in constructTypes" :key="key" :label="$t(item.name)" :value="key" />
+    <el-option v-for="(item,key) in wordFormations" :key="key" :label="$t(item.name)" :value="key" />
   </el-select>
 </template>
 
@@ -18,7 +18,7 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
-  name: "WordConstructSelector",
+  name: "WordFormationSelector",
   model: {
     prop: "value",
     event: "update"
@@ -30,7 +30,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["constructTypes"]),
+    ...mapGetters(["wordFormations"]),
     data: {
       get() {
         return this.value;

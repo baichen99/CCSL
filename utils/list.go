@@ -143,7 +143,7 @@ type GetVideoListParameters struct {
 	LeftSignID     string
 	RightSignID    string
 	SignID         string
-	ConstructType  string
+	WordFormation  string
 	ConstructWords string
 	PerformerID    string
 }

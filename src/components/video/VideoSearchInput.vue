@@ -36,7 +36,7 @@
           <sign-selector v-model="searchParams.rightSignID" orientation="right" />
           <word-pos-selector v-model="searchParams.pos" />
           <city-selector v-model="searchParams.regionID" />
-          <word-construct-selector v-model="searchParams.constructType" />
+          <word-construct-selector v-model="searchParams.wordFormation" />
           <lexemes-input v-model="searchParams.constructWords" style="width:200px" />
         </div>
       </el-card>
@@ -61,7 +61,7 @@ import SignSelector from "@/components/form/SignSelector.vue";
 import CitySelector from "@/components/form/CitySelector.vue";
 import GenderSelector from "@/components/form/GenderSelector.vue";
 import WordPosSelector from "@/components/form/WordPosSelector.vue";
-import WordConstructSelector from "@/components/form/WordConstructSelector.vue";
+import WordFormationSelector from "@/components/form/WordFormationSelector.vue";
 import LexemesInput from "@/components/form/LexemesInput.vue";
 
 export default {
@@ -71,7 +71,7 @@ export default {
     SignSelector,
     GenderSelector,
     WordPosSelector,
-    WordConstructSelector,
+    WordFormationSelector,
     LexemesInput
   },
   model: {

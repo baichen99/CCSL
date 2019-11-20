@@ -56,7 +56,7 @@ export default {
         signID: "", // 任意手形
         pos: "", // 词性
         initial: "",
-        constructType: "",
+        wordFormation: "",
         constructWords: "",
         orderBy: "performers.gender"
       }
@@ -74,7 +74,7 @@ export default {
       this.params.chinese = "";
       this.params.english = "";
       this.params.initial = "";
-      this.params.constructType = "";
+      this.params.wordFormation = "";
       this.params.constructWords = "";
     },
     getData() {

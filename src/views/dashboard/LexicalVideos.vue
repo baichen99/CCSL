@@ -74,7 +74,7 @@
         </el-table-column>
 
         <el-table-column
-          column-key="constructType"
+          column-key="wordFormation"
           :filters="[
             { text: $t('SimpleWord'), value: 'simple'}, 
             { text: $t('CompoundWord'), value: 'compound'},
@@ -85,14 +85,14 @@
           width="150px"
         >
           <template slot-scope="{row}">
-            <span v-if="row.constructType">{{ $t(constructTypes[row.constructType].name) }}</span>
+            <span v-if="row.wordFormation">{{ $t(wordFormations[row.wordFormation].name) }}</span>
             <el-tag v-else type="info">{{ $t("NoData") }}</el-tag>
           </template>
         </el-table-column>
 
         <el-table-column :label="$t('CompoundLexemes')" align="center" min-width="160px">
           <template slot-scope="{row}">
-            <div v-if="row.constructType==='simple'">
+            <div v-if="row.wordFormation==='simple'">
               <el-tag type="danger">{{ $t("Unavailable") }}</el-tag>
             </div>
             <div v-else-if="row.constructWords.length > 0">
@@ -199,7 +199,7 @@ export default {
         signID: "",
         leftSignID: "",
         rightSignID: "",
-        constructType: "",
+        wordFormation: "",
         constructWords: "",
         orderBy: "performers.gender"
       },
@@ -207,7 +207,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["genderTypes", "constructTypes", "wordInitial"])
+    ...mapGetters(["genderTypes", "wordFormations", "wordInitial"])
   },
   created() {
     this.wordInitial.map(item => {
@@ -291,8 +291,8 @@ export default {
             中文转写: item.lexicalWord.chinese,
             英文转写: item.lexicalWord.english,
             词性: item.lexicalWord.pos,
-            构词类型: item.constructType
-              ? this.$t(this.constructTypes[item.constructType].name)
+            构词类型: item.wordFormation
+              ? this.$t(this.wordFormations[item.wordFormation].name)
               : null,
             构词词语: item.constructWords.join(","),
             左手手形: leftSigns.join(","),
@@ -316,7 +316,7 @@ export default {
         !this.params.signID &&
         !this.params.leftSignID &&
         !this.params.rightSignID &&
-        !this.params.constructType &&
+        !this.params.wordFormation &&
         !this.params.constructWords
       ) {
         this.$notify({

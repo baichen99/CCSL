@@ -45,7 +45,7 @@ func (c *VideoController) GetVideosList() {
 	rightSignID := c.Context.URLParamDefault("rightSignID", "")
 	signID := c.Context.URLParamDefault("signID", "")
 	constructWords := c.Context.URLParamDefault("constructWords", "")
-	constructType := c.Context.URLParamDefault("constructType", "")
+	wordFormation := c.Context.URLParamDefault("wordFormation", "")
 	performerID := c.Context.URLParamDefault("performerID", "")
 	listParameters := utils.GetVideoListParameters{
 		GetListParameters: listParams,
@@ -59,7 +59,7 @@ func (c *VideoController) GetVideosList() {
 		LeftSignID:        leftSignID,
 		RightSignID:       rightSignID,
 		SignID:            signID,
-		ConstructType:     constructType,
+		WordFormation:     wordFormation,
 		ConstructWords:    constructWords,
 		PerformerID:       performerID,
 	}

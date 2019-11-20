@@ -20,14 +20,14 @@
       <div class="tags">
         <span class="tag-label">{{ $t("WordFormation") }}</span>
         <span
-          v-if="video.constructType"
+          v-if="video.wordFormation"
           class="tag-value"
-        >{{ $t(constructTypes[video.constructType].name) }}</span>
+        >{{ $t(wordFormations[video.wordFormation].name) }}</span>
         <span v-else class="tag-value">
           <el-tag type="info">{{ $t("NoData") }}</el-tag>
         </span>
         <span class="tag-label">{{ $t("CompoundLexemes") }}</span>
-        <span v-if="video.constructType==='simple'" class="tag-value">
+        <span v-if="video.wordFormation==='simple'" class="tag-value">
           <el-tag type="danger">{{ $t("Unavailable") }}</el-tag>
         </span>
         <span v-else-if="video.constructWords.length > 0" class="tag-value">
@@ -89,7 +89,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["constructTypes", "settings"])
+    ...mapGetters(["wordFormations", "settings"])
   }
 };
 </script>
