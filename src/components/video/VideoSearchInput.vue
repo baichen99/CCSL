@@ -37,7 +37,7 @@
           <word-pos-selector v-model="searchParams.pos" />
           <city-selector v-model="searchParams.regionID" />
           <word-formation-selector v-model="searchParams.wordFormation" />
-          <lexemes-input v-model="searchParams.constructWords" style="width:200px" />
+          <morphemes-input v-model="searchParams.morpheme" style="width:200px" />
         </div>
       </el-card>
     </el-collapse-transition>
@@ -47,10 +47,10 @@
 <i18n>
 {
   "zh-CN": {
-    "lexemesTip": "请输入复合词构成词语"
+    "morphemesTip": "请输入复合词构成词语"
   },
   "en-US": {
-    "lexemesTip": "Input lexemes(Chinese)"
+    "morphemesTip": "Input morphemes(Chinese)"
   }
 }
 </i18n>
@@ -62,7 +62,7 @@ import CitySelector from "@/components/form/CitySelector.vue";
 import GenderSelector from "@/components/form/GenderSelector.vue";
 import WordPosSelector from "@/components/form/WordPosSelector.vue";
 import WordFormationSelector from "@/components/form/WordFormationSelector.vue";
-import LexemesInput from "@/components/form/LexemesInput.vue";
+import MorphemesInput from "@/components/form/MorphemesInput.vue";
 
 export default {
   name: "VideoSearchInput",
@@ -72,7 +72,7 @@ export default {
     GenderSelector,
     WordPosSelector,
     WordFormationSelector,
-    LexemesInput
+    MorphemesInput
   },
   model: {
     prop: "params",

@@ -21,7 +21,7 @@
 </template>
 <script>
 export default {
-  name: "ConstructWordsPicker",
+  name: "MorphemesPicker",
   model: {
     prop: "value",
     event: "update"

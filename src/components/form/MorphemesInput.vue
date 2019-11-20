@@ -5,17 +5,17 @@
 <i18n>
 {
   "zh-CN": {
-    "tip": "请输入复合词构成词语"
+    "tip": "请输入复合词构词语素"
   },
   "en-US": {
-    "tip": "Input lexemes(Chinese)"
+    "tip": "Input morpheme(Chinese)"
   }
 }
 </i18n>
 
 <script>
 export default {
-  name: "LexemesInput",
+  name: "MorphemeInput",
   model: {
     prop: "value",
     event: "update"

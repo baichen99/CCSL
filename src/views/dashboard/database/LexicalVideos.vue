@@ -13,7 +13,7 @@
       <sign-selector v-model="params.signID" @update="handleSearch" />
       <sign-selector v-model="params.leftSignID" orientation="left" @update="handleSearch" />
       <sign-selector v-model="params.rightSignID" orientation="right" @update="handleSearch" />
-      <lexemes-input v-model="params.constructWords" @update="handleSearch" @enter="handleSearch" />
+      <morphemes-input v-model="params.morpheme" @update="handleSearch" @enter="handleSearch" />
       <el-button type="primary" plain @click="handleNew">
         {{ $t("New") }}
         <i class="el-icon-plus el-icon--right" />
@@ -90,16 +90,16 @@
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('CompoundLexemes')" align="center" min-width="160px">
+        <el-table-column :label="$t('Morpheme')" align="center" min-width="160px">
           <template slot-scope="{row}">
             <div v-if="row.wordFormation==='simple'">
               <el-tag type="danger">{{ $t("Unavailable") }}</el-tag>
             </div>
-            <div v-else-if="row.constructWords.length > 0">
+            <div v-else-if="row.morpheme.length > 0">
               <el-tag
-                v-for="value in row.constructWords"
+                v-for="value in row.morpheme"
                 :key="value"
-                class="construct-tags"
+                class="morpheme-tags"
               >{{ value }}</el-tag>
             </div>
             <div v-else>
@@ -172,7 +172,7 @@ import { mapGetters } from "vuex";
 import LexicalVideoForm from "@/views/dashboard/form/LexicalVideoForm";
 import CitySelector from "@/components/form/CitySelector.vue";
 import SignSelector from "@/components/form/SignSelector.vue";
-import LexemesInput from "@/components/form/LexemesInput.vue";
+import MorphemesInput from "@/components/form/MorphemesInput.vue";
 import listMixin from "@/views/dashboard/listMixin";
 import {
   GetLexicalVideosList,
@@ -186,7 +186,7 @@ export default {
     LexicalVideoForm,
     CitySelector,
     SignSelector,
-    LexemesInput
+    MorphemesInput
   },
   mixins: [listMixin],
   data() {
@@ -200,7 +200,7 @@ export default {
         leftSignID: "",
         rightSignID: "",
         wordFormation: "",
-        constructWords: "",
+        morpheme: "",
         orderBy: "performers.gender"
       },
       initialFilters: []
@@ -294,7 +294,7 @@ export default {
             构词类型: item.wordFormation
               ? this.$t(this.wordFormations[item.wordFormation].name)
               : null,
-            构词词语: item.constructWords.join(","),
+            构词词语: item.morpheme.join(","),
             左手手形: leftSigns.join(","),
             右手手形: rightSigns.join(","),
             被试姓名: item.performer.name,
@@ -317,7 +317,7 @@ export default {
         !this.params.leftSignID &&
         !this.params.rightSignID &&
         !this.params.wordFormation &&
-        !this.params.constructWords
+        !this.params.morpheme
       ) {
         this.$notify({
           title: "导出失败",
@@ -333,7 +333,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.construct-tags {
+.morpheme-tags {
   margin: 4px;
 }
 </style>

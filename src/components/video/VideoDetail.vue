@@ -26,13 +26,13 @@
         <span v-else class="tag-value">
           <el-tag type="info">{{ $t("NoData") }}</el-tag>
         </span>
-        <span class="tag-label">{{ $t("CompoundLexemes") }}</span>
+        <span class="tag-label">{{ $t("Morpheme") }}</span>
         <span v-if="video.wordFormation==='simple'" class="tag-value">
           <el-tag type="danger">{{ $t("Unavailable") }}</el-tag>
         </span>
-        <span v-else-if="video.constructWords.length > 0" class="tag-value">
+        <span v-else-if="video.morpheme.length > 0" class="tag-value">
           <el-tag
-            v-for="(item,index) in video.constructWords"
+            v-for="(item,index) in video.morpheme"
             :key="index"
             class="tag-words"
           >{{ item }}</el-tag>

@@ -57,7 +57,7 @@ export default {
         pos: "", // 词性
         initial: "",
         wordFormation: "",
-        constructWords: "",
+        morpheme: "",
         orderBy: "performers.gender"
       }
     };
@@ -75,7 +75,7 @@ export default {
       this.params.english = "";
       this.params.initial = "";
       this.params.wordFormation = "";
-      this.params.constructWords = "";
+      this.params.morpheme = "";
     },
     getData() {
       GetLexicalVideosList(this.params, true).then(res => {

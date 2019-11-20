@@ -18,8 +18,8 @@
       <word-formation-selector v-model="formData.wordFormation" />
     </el-form-item>
 
-    <el-form-item v-if="formData.wordFormation==='compound'" :label="$t('CompoundLexemes')" prop="constructWords">
-      <construct-words-picker v-model="formData.constructWords" />
+    <el-form-item v-if="formData.wordFormation==='compound'" :label="$t('Morpheme')" prop="morpheme">
+      <morphemes-picker v-model="formData.morpheme" />
     </el-form-item>
 
     <el-form-item :label="$t('LeftSign')" prop="leftSigns">
@@ -36,7 +36,7 @@
 import { mapGetters } from "vuex";
 import VideoPlayer from "@/components/video/VideoPlayer"
 import WordFormationSelector from "@/components/form/WordFormationSelector";
-import ConstructWordsPicker from "@/components/form/ConstructWordsPicker";
+import MorphemesPicker from "@/components/form/MorphemesPicker";
 import PerformerSelector from "@/components/form/PerformerSelector";
 import WordSelector from "@/components/form/WordSelector";
 import MultiSignSelector from "@/components/form/MultiSignSelector";
@@ -45,7 +45,7 @@ export default {
   name: "LexicalVideoForm",
   components: {
     WordFormationSelector,
-    ConstructWordsPicker,
+    MorphemesPicker,
     PerformerSelector,
     WordSelector,
     MultiSignSelector,

@@ -133,19 +133,19 @@ type GetPerformerListParameters struct {
 // GetVideoListParameters parameters for get videos list queries
 type GetVideoListParameters struct {
 	GetListParameters
-	WordID         string
-	Initial        string
-	Chinese        string
-	English        string
-	Pos            string
-	RegionID       string
-	Gender         string
-	LeftSignID     string
-	RightSignID    string
-	SignID         string
-	WordFormation  string
-	ConstructWords string
-	PerformerID    string
+	WordID        string
+	Initial       string
+	Chinese       string
+	English       string
+	Pos           string
+	RegionID      string
+	Gender        string
+	LeftSignID    string
+	RightSignID   string
+	SignID        string
+	WordFormation string
+	Morpheme      string
+	PerformerID   string
 }
 
 // GetNewsListParameters parameters for get list queries

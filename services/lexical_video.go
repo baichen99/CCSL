@@ -67,7 +67,7 @@ func (s *LexicalVideoService) GetVideosList(parameters utils.GetVideoListParamet
 		utils.FilterInSubQuery("lexical_videos.id", rightSignSubQuery),
 		utils.FilterInSubQuery("lexical_videos.id", signSubQuery),
 		utils.FilterByColumn("lexical_videos.word_formation", parameters.WordFormation),
-		utils.SearchInList("lexical_videos.construct_words", parameters.ConstructWords),
+		utils.SearchInList("lexical_videos.morpheme", parameters.Morpheme),
 	)
 
 	orderQuery := fmt.Sprintf("%s %s", parameters.OrderBy, parameters.Order)

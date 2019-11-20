@@ -88,7 +88,7 @@ export default {
   Gender: "性别",
   PoS: "词性",
   WordFormation: "构词",
-  CompoundLexemes: "构词语素",
+  Morpheme: "构词语素",
   Website: "网址",
   Tel: "电话",
   Email: "邮箱",

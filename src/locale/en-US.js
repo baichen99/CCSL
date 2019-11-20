@@ -88,7 +88,7 @@ export default {
   Gender: "Gender",
   PoS: "Part of Speech",
   WordFormation: "Word Formation",
-  CompoundLexemes: "Lexemes",
+  Morpheme: "Morpheme",
   Website: "Website",
   Tel: "Tel",
   Email: "E-mail",
