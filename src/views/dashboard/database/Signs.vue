@@ -107,7 +107,7 @@
 <script>
 import { mapGetters } from "vuex";
 import SignForm from "@/views/dashboard/form/SignForm";
-import listMixin from "./listMixin";
+import listMixin from "@/views/dashboard/listMixin";
 import { GetSignsList, DeleteSign, CreateSign, UpdateSign } from "@/api/signs";
 
 export default {

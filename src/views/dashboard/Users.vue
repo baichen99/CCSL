@@ -156,7 +156,7 @@
 <script>
 import { mapGetters } from "vuex";
 import UserForm from "@/views/dashboard/form/UserForm";
-import listMixin from "./listMixin";
+import listMixin from "@/views/dashboard/listMixin";
 import { GetUsersList, CreateUser, UpdateUser, DeleteUser } from "@/api/users";
 export default {
   name: "Users",

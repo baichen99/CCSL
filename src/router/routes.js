@@ -126,7 +126,7 @@ const routes = [
       {
         path: "systems",
         name: "Systems",
-        component: () => import("@/views/dashboard/Systems"),
+        component: () => import("@/views/dashboard/website/Systems"),
         meta: {
           title: "SystemManagement",
           icon: "maintain",
@@ -137,7 +137,7 @@ const routes = [
       {
         path: "carousels",
         name: "Carousels",
-        component: () => import("@/views/dashboard/Carousels"),
+        component: () => import("@/views/dashboard/website/Carousels"),
         meta: {
           title: "CarouselManagement",
           icon: "pictures",
@@ -147,7 +147,7 @@ const routes = [
       {
         path: "news",
         name: "News",
-        component: () => import("@/views/dashboard/News"),
+        component: () => import("@/views/dashboard/website/News"),
         meta: {
           title: "NewsManagement",
           icon: "news",
@@ -157,7 +157,7 @@ const routes = [
       {
         path: "members",
         name: "Members",
-        component: () => import("@/views/dashboard/Members"),
+        component: () => import("@/views/dashboard/website/Members"),
         meta: {
           title: "MemberManagement",
           icon: "member",
@@ -180,7 +180,7 @@ const routes = [
       {
         path: "performers",
         name: "Performers",
-        component: () => import("@/views/dashboard/Performers"),
+        component: () => import("@/views/dashboard/database/Performers"),
         meta: {
           title: "PerformerManagement",
           icon: "peoples",
@@ -190,7 +190,7 @@ const routes = [
       {
         path: "words",
         name: "LexicalWords",
-        component: () => import("@/views/dashboard/LexicalWords"),
+        component: () => import("@/views/dashboard/database/LexicalWords"),
         meta: {
           title: "LexicalWordManagement",
           icon: "words",
@@ -200,7 +200,7 @@ const routes = [
       {
         path: "videos",
         name: "LexicalVideos",
-        component: () => import("@/views/dashboard/LexicalVideos"),
+        component: () => import("@/views/dashboard/database/LexicalVideos"),
         meta: {
           title: "LexicalVideoManagement",
           icon: "video",
@@ -210,7 +210,7 @@ const routes = [
       {
         path: "signs",
         name: "Signs",
-        component: () => import("@/views/dashboard/Signs"),
+        component: () => import("@/views/dashboard/database/Signs"),
         meta: {
           title: "SignManagement",
           icon: "sign",

@@ -15,13 +15,13 @@
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('url')" align="center" width="200">
+        <el-table-column :label="$t('url')" align="center" width="300">
           <template slot-scope="{row}">
             <span>{{ row.url }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('source')" align="center" min-width="200">
+        <el-table-column :label="$t('source')" align="center" width="150">
           <template slot-scope="{row}">
             <span>{{ row.info }}</span>
           </template>
@@ -82,7 +82,7 @@
 <script>
 import VueJsonPretty from "vue-json-pretty";
 import { GetDatabaseDump, GetJsErrorList } from "@/api/systems";
-import listMixin from "./listMixin";
+import listMixin from "@/views/dashboard/listMixin";
 export default {
   name: "Systems",
   components: {

@@ -1,32 +1,32 @@
 <template>
   <el-form ref="form" label-position="left" label-width="150px" :model="formData" :rules="rules">
-    <el-form-item label="视频" prop="videoPath">
+    <el-form-item :label="$t('Video')" prop="videoPath">
       <div class="video-container">
         <video-player :src="formData.videoPath" />
       </div>
     </el-form-item>
 
-    <el-form-item label="被试" prop="performerID" required>
+    <el-form-item :label="$t('Performer')" prop="performerID" required>
       <performer-selector v-model="formData.performerID" />
     </el-form-item>
 
-    <el-form-item label="词语" prop="lexicalWordID" required>
+    <el-form-item :label="$t('Word')" prop="lexicalWordID" required>
       <word-selector v-model="formData.lexicalWordID" />
     </el-form-item>
 
-    <el-form-item label="构词方式" prop="wordFormation" required>
-      <word-construct-selector v-model="formData.wordFormation" />
+    <el-form-item :label="$t('WordFormation')" prop="wordFormation" required>
+      <word-formation-selector v-model="formData.wordFormation" />
     </el-form-item>
 
-    <el-form-item v-if="formData.wordFormation==='compound'" label="复合词构词词语" prop="constructWords">
+    <el-form-item v-if="formData.wordFormation==='compound'" :label="$t('CompoundLexemes')" prop="constructWords">
       <construct-words-picker v-model="formData.constructWords" />
     </el-form-item>
 
-    <el-form-item label="左手手形" prop="leftSigns">
+    <el-form-item :label="$t('LeftSign')" prop="leftSigns">
       <multi-sign-selector v-model="formData.leftSignsID" />
     </el-form-item>
 
-    <el-form-item label="右手手形" prop="rightSigns">
+    <el-form-item :label="$t('RightSign')" prop="rightSigns">
       <multi-sign-selector v-model="formData.rightSignsID" />
     </el-form-item>
   </el-form>
@@ -57,7 +57,7 @@ export default {
       rules: {
         performerID: [{ required: true, message: "请选择被试" }],
         lexicalWordID: [{ required: true, message: "请选择词语" }],
-        // videoPath: [{ required: true, message: "请上传视频" }],
+        videoPath: [{ required: true, message: "请上传视频" }],
         wordFormation: [{ required: true, message: "请选择构词方式" }]
       }
     };

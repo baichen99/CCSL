@@ -3,6 +3,7 @@
     <div ref="watermark" class="video-watermark">
       <div>{{ $store.state.user.username }}</div>
       <svg-icon icon-class="logo" class="logo" />
+      <div>{{ $t("copyright") }}</div>
     </div>
     <video-player
       :class="{
@@ -14,6 +15,17 @@
     />
   </div>
 </template>
+
+<i18n>
+{
+  "zh-CN": {
+    "copyright":"版权所有"
+  },
+  "en-US": {
+    "copyright":"Copyright Reserved."
+  }
+}
+</i18n>
 
 <script>
 import { mapGetters } from "vuex";
@@ -46,7 +58,8 @@ export default {
         controlBar: {
           volumeBar: false,
           volumePanel: false,
-          currentTimeDisplay: false
+          currentTimeDisplay: false,
+          fullscreenToggle: false
         },
         sources: [
           {

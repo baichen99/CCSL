@@ -183,7 +183,7 @@
 <script>
 import { mapGetters } from "vuex";
 import NewsForm from "@/views/dashboard/form/NewsForm";
-import listMixin from "./listMixin";
+import listMixin from "@/views/dashboard/listMixin";
 import { GetNewsList, CreateNews, UpdateNews, DeleteNews } from "@/api/news";
 
 export default {

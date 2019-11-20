@@ -173,7 +173,7 @@ import LexicalVideoForm from "@/views/dashboard/form/LexicalVideoForm";
 import CitySelector from "@/components/form/CitySelector.vue";
 import SignSelector from "@/components/form/SignSelector.vue";
 import LexemesInput from "@/components/form/LexemesInput.vue";
-import listMixin from "./listMixin";
+import listMixin from "@/views/dashboard/listMixin";
 import {
   GetLexicalVideosList,
   CreateLexicalVideo,

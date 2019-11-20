@@ -1,43 +1,56 @@
 <template>
   <el-form ref="form" label-position="left" label-width="100px" :model="formData" :rules="rules">
-    <el-form-item label="重要性" prop="importance">
+    <el-form-item :label="$t('Importance')" prop="importance">
       <el-rate v-model="formData.importance" />
-      <el-button size="mini" @click="formData.importance=0">重置</el-button>
+      <el-button size="mini" @click="formData.importance=0">{{ $t("Reset") }}</el-button>
     </el-form-item>
 
-    <el-form-item label="新闻语言" prop="language">
-      <language-selector v-model="formData.language" placeholder="请选择新闻语言" />
+    <el-form-item :label="$t('Language')" prop="language">
+      <language-selector v-model="formData.language" />
     </el-form-item>
 
-    <el-form-item label="新闻标题" prop="title" required>
-      <el-input v-model="formData.title" placeholder="请输入新闻标题" clearable />
+    <el-form-item :label="$t('Title')" prop="title" required>
+      <el-input v-model="formData.title" :placeholder="$t('titleTip')" clearable />
     </el-form-item>
 
-    <el-form-item label="新闻状态" prop="state" required>
+    <el-form-item :label="$t('State')" prop="state" required>
       <news-state-selector v-model="formData.state" />
     </el-form-item>
 
-    <el-form-item label="日期" prop="date" required>
+    <el-form-item :label="$t('Date')" prop="date" required>
       <date-picker v-model="formData.date" />
     </el-form-item>
 
-    <el-form-item label="新闻栏目" prop="column" required>
+    <el-form-item :label="$t('Column')" prop="column" required>
       <news-column-selector v-model="formData.column" />
     </el-form-item>
 
-    <el-form-item label="新闻类型" prop="type" required>
+    <el-form-item :label="$t('Type')" prop="type" required>
       <news-type-selector v-model="formData.type" />
     </el-form-item>
 
-    <el-form-item v-if="formData.type==='document'" label="新闻内容" required>
+    <el-form-item v-if="formData.type==='document'" :label="$t('Content')" required>
       <rich-text-editor v-model="formData.text" />
     </el-form-item>
 
-    <el-form-item v-if="formData.type==='link'" label="新闻链接" prop="text" required>
-      <el-input v-model="formData.text" placeholder="请输入新闻链接" />
+    <el-form-item v-if="formData.type==='link'" :label="$t('Link')" prop="text" required>
+      <el-input v-model="formData.text" :placeholder="$t('linkTip')" />
     </el-form-item>
   </el-form>
 </template>
+
+<i18n>
+{
+  "zh-CN": {
+    "titleTip":"请输入新闻标题",
+    "linkTip": "请输入新闻链接"
+  },
+  "en-US": {
+    "titleTip":"Input news title",
+    "linkTip": "Input news link"
+  }
+}
+</i18n>
 
 <script>
 import NewsStateSelector from "@/components/form/NewsStateSelector";
@@ -92,12 +105,5 @@ export default {
       }
     };
   }
-  // watch: {
-  //   "formData.type"() {
-  //     if (this.formData.text) {
-  //       this.formData.text = "";
-  //     }
-  //   }
-  // }
 };
 </script>

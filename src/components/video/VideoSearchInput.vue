@@ -36,7 +36,7 @@
           <sign-selector v-model="searchParams.rightSignID" orientation="right" />
           <word-pos-selector v-model="searchParams.pos" />
           <city-selector v-model="searchParams.regionID" />
-          <word-construct-selector v-model="searchParams.wordFormation" />
+          <word-formation-selector v-model="searchParams.wordFormation" />
           <lexemes-input v-model="searchParams.constructWords" style="width:200px" />
         </div>
       </el-card>

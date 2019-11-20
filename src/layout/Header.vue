@@ -73,7 +73,7 @@ export default {
     ],
     languages: {
       "zh-CN": { name: "简体中文" },
-      "en-US": { name: "English" }
+      "en-US": { name: "English(US)" }
     }
   }),
   computed: {

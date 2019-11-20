@@ -11,12 +11,11 @@
     :action="'/api/files?dir='+dir"
     :on-success="onUploadSuccess"
     :on-remove="clearFile"
-    :style="{height}"
     :show-file-list="false"
   >
     <div v-if="imageUrl === ''" class="el-upload__text">
       <i class="el-icon-upload" />
-      <div>
+      <div class="upload-text">
         {{ $t("drag") }}
         <em>{{ $t("click") }}</em>
         <br />
@@ -107,6 +106,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.upload-text {
+  margin: 30px;
+}
+
 img {
   max-height: 100%;
   max-width: 100%;

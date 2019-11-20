@@ -1,89 +1,68 @@
 <template>
-  <div class="app-container flex-column">
+  <div class="app-container">
     <div class="table-toolbar">
       <el-input
-        v-model="titleModel"
+        v-model="params.name"
         prefix-icon="el-icon-search"
-        :placeholder="$t('tipTitle')"
+        :placeholder="$t('tipName')"
         clearable
         @keyup.enter="handleSearch"
         @change="handleSearch"
       />
+      <city-selector v-model="params.regionID" @update="handleSearch" />
       <el-button type="primary" plain @click="handleNew">
         {{ $t("New") }}
         <i class="el-icon-plus el-icon--right" />
+      </el-button>
+      <el-button type="primary" plain @click="handleExport">
+        {{ $t("Export") }}
+        <i class="el-icon-download el-icon--right" />
       </el-button>
     </div>
 
     <div class="table-content">
       <el-table v-loading="loading" :data="list" stripe border @filter-change="handleFilter">
-        <el-table-column :label="$t('CreatedAt')" align="center" width="180px">
+        <el-table-column :label="$t('CreatedAt')" align="center">
           <template slot-scope="{row}">
             <span>{{ $d(new Date(row.createdAt), 'long') }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('Publisher')" align="center" width="100px">
+        <el-table-column :label="$t('UpdatedAt')" align="center">
           <template slot-scope="{row}">
-            <span>{{ row.creator.name }}</span>
+            <span>{{ $d(new Date(row.updatedAt), 'long') }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('Importance')" align="center" width="150px">
+        <el-table-column :label="$t('Name')" align="center">
           <template slot-scope="{row}">
-            <el-rate v-model="row.importance" disabled />
+            <span>{{ row.name }}</span>
           </template>
         </el-table-column>
 
         <el-table-column
-          column-key="state"
+          column-key="gender"
           :filters="[
-            { text: $t('Draft'), value: 'draft'}, 
-            { text: $t('Published'), value: 'published'},
+            { text: $t('Male'), value: 'M'}, 
+            { text: $t('Female'), value: 'F'},
           ]"
           :filter-multiple="false"
-          :label="$t('State')"
+          :label="$t('Gender')"
           align="center"
-          width="100px"
         >
           <template slot-scope="{row}">
-            <el-tag :type="newsState[row.state].color">{{ $t(newsState[row.state].name) }}</el-tag>
+            <span>{{ $t(genderTypes[row.gender].name) }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column
-          v-if="$i18n.locale==='en-US'"
-          :label="$t('Title')"
-          align="center"
-          min-width="300px"
-        >
+        <el-table-column :label="$t('Region')" align="center">
           <template slot-scope="{row}">
-            <span>{{ row.titleEn }}</span>
+            <span>{{ row.region.name }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column v-else :label="$t('Title')" align="center" min-width="300px">
+        <el-table-column :label="$t('Action')" align="center" width="180px" fixed="right">
           <template slot-scope="{row}">
-            <span>{{ row.titleZh }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column :label="$t('Action')" align="center" width="250px" fixed="right">
-          <template slot-scope="{row}">
-            <el-button
-              v-if="row.state==='draft'"
-              type="success"
-              size="mini"
-              plain
-              @click="handlePublish(row.id)"
-            >{{ $t("Publish") }}</el-button>
-            <el-button
-              v-if="row.state==='published'"
-              type="warning"
-              size="mini"
-              plain
-              @click="handleDraft(row.id)"
-            >{{ $t("Recall") }}</el-button>
             <el-button type="primary" size="mini" plain @click="handleEdit(row)">{{ $t("Edit") }}</el-button>
             <el-button
               type="danger"
@@ -97,12 +76,12 @@
     </div>
 
     <el-pagination
-      v-if="total>params.limit"
       background
-      layout="total,prev, pager, next, jumper"
+      layout="total, sizes, prev, pager, next, jumper"
       :total="total"
       :page-size.sync="params.limit"
       :current-page.sync="params.page"
+      :hide-on-single-page="true"
     />
 
     <el-drawer
@@ -115,7 +94,7 @@
       direction="rtl"
     >
       <div class="form-drawer__content">
-        <carousel-form ref="form" :data="data" :mode="mode" />
+        <performer-form ref="form" :data="data" :mode="mode" />
         <div class="form-drawer__footer">
           <el-button @click="handleClose">{{ $t("Cancel") }}</el-button>
           <el-button
@@ -133,66 +112,49 @@
 <i18n>
 {
   "zh-CN": {
-    "tipTitle": "请输入标题"
+    "tipName": "请输入姓名"
   },
   "en-US": {
-    "tipTitle": "Input title"
+    "tipName": "Input name"
   }
 }
 </i18n>
 
 <script>
 import { mapGetters } from "vuex";
-import CarouselForm from "@/views/dashboard/form/CarouselForm";
-import listMixin from "./listMixin";
+import PerformerForm from "@/views/dashboard/form/PerformerForm";
+import CitySelector from "@/components/form/CitySelector";
+import listMixin from "@/views/dashboard/listMixin";
 import {
-  GetCarouselsList,
-  CreateCarousel,
-  DeleteCarousel,
-  UpdateCarousel
-} from "@/api/carousel";
-
+  GetPerformersList,
+  CreatePerformer,
+  UpdatePerformer,
+  DeletePerformer
+} from "@/api/performers";
 export default {
-  name: "Carousels",
+  name: "Performers",
   components: {
-    CarouselForm
+    PerformerForm,
+    CitySelector
   },
   mixins: [listMixin],
   data() {
     return {
+      removeProperties: ["region"],
       params: {
-        order: "desc",
-        titleZh: "",
-        titleEn: "",
-        state: ""
+        regionID: undefined,
+        name: "",
+        gender: ""
       }
     };
   },
   computed: {
-    ...mapGetters(["newsState"]),
-    titleModel: {
-      get() {
-        const lang = this.$i18n.locale;
-        if (lang === "en-US") {
-          return this.params.titleEn;
-        } else {
-          return this.params.titleZh;
-        }
-      },
-      set(val) {
-        const lang = this.$i18n.locale;
-        if (lang === "en-US") {
-          this.params.titleEn = val;
-        } else {
-          this.params.titleZh = val;
-        }
-      }
-    }
+    ...mapGetters(["genderTypes"])
   },
   methods: {
     getList() {
       this.loading = true;
-      GetCarouselsList(this.params)
+      GetPerformersList(this.params)
         .then(res => {
           this.list = res.data;
           this.total = res.total;
@@ -203,7 +165,7 @@ export default {
         });
     },
     handleCreate(data) {
-      CreateCarousel(data)
+      CreatePerformer(data)
         .then(() => {
           this.handleModify();
         })
@@ -212,7 +174,7 @@ export default {
         });
     },
     handleUpdate(id, updateData) {
-      UpdateCarousel(id, updateData)
+      UpdatePerformer(id, updateData)
         .then(() => {
           this.handleModify();
         })
@@ -223,7 +185,7 @@ export default {
     handleDelete(id) {
       this.loading = true;
       this.$confirm(
-        "此操作将永久删除, 如果想暂时不显示请选择撤回, 是否继续?",
+        "此操作会删除所有视频中含有该被试信息的标注，此操作将永久删除, 是否继续?",
         this.$t("Warning"),
         {
           confirmButtonText: this.$t("Confirm"),
@@ -232,7 +194,7 @@ export default {
         }
       )
         .then(() => {
-          DeleteCarousel(id).then(() => {
+          DeletePerformer(id).then(() => {
             this.handleModify();
           });
         })
@@ -240,13 +202,22 @@ export default {
           this.showCancel();
         });
     },
-    handlePublish(id) {
-      const updateData = { state: "published" };
-      this.handleUpdate(id, updateData);
-    },
-    handleDraft(id) {
-      const updateData = { state: "draft" };
-      this.handleUpdate(id, updateData);
+    handleExport() {
+      const params = JSON.parse(JSON.stringify(this.params));
+      params.limit = 0;
+      GetPerformersList(params, true).then(res => {
+        const sheetData = res.data.map(item => {
+          return {
+            创建时间: new Date(item.createdAt),
+            上次更新: new Date(item.updatedAt),
+            姓名: item.name,
+            性别: this.$t(this.genderTypes[item.gender].name),
+            所在地区: item.region.name,
+            地区代码: item.regionID
+          };
+        });
+        this.handleDownloadSheet(sheetData, "performer");
+      });
     }
   }
 };

@@ -111,7 +111,7 @@
 <script>
 import LexicalWordForm from "@/views/dashboard/form/LexicalWordForm";
 import WordPosSelector from "@/components/form/WordPosSelector";
-import listMixin from "./listMixin";
+import listMixin from "@/views/dashboard/listMixin";
 import { mapGetters } from "vuex";
 import {
   GetLexicalWordsList,
