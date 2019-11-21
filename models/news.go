@@ -11,8 +11,8 @@ import (
 type Carousel struct {
 	Base
 	Image      string    `gorm:"DEFAULT:NULL" json:"image"`
-	TitleZh    string    `gorm:"DEFAULT:NULL" json:"titleZh"`
-	TitleEn    string    `gorm:"DEFAULT:NULL" json:"titleEn"`
+	TitleZh    string    `gorm:"DEFAULT:NULL;INDEX:title_zh" json:"titleZh"`
+	TitleEn    string    `gorm:"DEFAULT:NULL;INDEX:title_en" json:"titleEn"`
 	Creator    User      `json:"creator"`
 	CreatorID  uuid.UUID `gorm:"DEFAULT:NULL" json:"creatorID"`
 	State      string    `gorm:"DEFAULT:'published'" json:"state"` // State can be 'draft' or 'published'

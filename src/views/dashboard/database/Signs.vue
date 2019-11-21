@@ -184,10 +184,12 @@ export default {
       GetSignsList(params, true).then(res => {
         const sheetData = res.data.map(item => {
           return {
-            创建时间: new Date(item.createdAt),
-            上次更新: new Date(item.updatedAt),
-            手形名称: item.name,
-            手形图片: item.image ? this.settings.publicURL + item.image : ""
+            [this.$t("CreatedAt")]: new Date(item.createdAt),
+            [this.$t("UpdatedAt")]: new Date(item.updatedAt),
+            [this.$t("SignName")]: item.name,
+            [this.$t("SignImage")]: item.image
+              ? this.settings.publicURL + item.image
+              : this.$t("NoData")
           };
         });
         this.handleDownloadSheet(sheetData, "sign");

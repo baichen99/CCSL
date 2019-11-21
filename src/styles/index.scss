@@ -178,7 +178,7 @@ aside {
 }
 
 .el-drawer {
-  overflow: scroll;
+  overflow: auto;
   .form-drawer__content {
     padding: 10px 50px;
     .el-form-item__content {

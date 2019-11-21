@@ -82,6 +82,7 @@
           <template slot-scope="{row}">
             <el-button
               v-if="row.state==='inactive'"
+              :disabled="isSuperUser(row)"
               type="success"
               size="mini"
               plain
@@ -89,13 +90,21 @@
             >{{ $t("Enable") }}</el-button>
             <el-button
               v-if="row.state==='active'"
+              :disabled="isSuperUser(row)"
               type="warning"
               size="mini"
               plain
               @click="handleInactive(row.id)"
             >{{ $t("Disable") }}</el-button>
-            <el-button type="primary" size="mini" plain @click="handleEdit(row)">{{ $t("Edit") }}</el-button>
             <el-button
+              :disabled="isSuperUser(row)"
+              type="primary"
+              size="mini"
+              plain
+              @click="handleEdit(row)"
+            >{{ $t("Edit") }}</el-button>
+            <el-button
+              :disabled="isSuperUser(row)"
               type="danger"
               size="mini"
               plain
@@ -174,7 +183,9 @@ export default {
       }
     };
   },
-  computed: { ...mapGetters(["userTypes", "userState"]) },
+  computed: {
+    ...mapGetters(["userTypes", "userState"])
+  },
   methods: {
     getList() {
       this.loading = true;
@@ -246,6 +257,9 @@ export default {
     handleInactive(id) {
       const updateData = { state: "inactive" };
       this.handleUpdate(id, updateData);
+    },
+    isSuperUser(row) {
+      return row.userType === "super";
     }
   }
 };

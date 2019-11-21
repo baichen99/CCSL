@@ -16,7 +16,7 @@
 <i18n>
 {
   "zh-CN": {
-    "adminPanel": "后台管理系统"
+    "adminPanel": "控制中心"
   },
   "en-US": {
     "adminPanel": "Admin Panel"
@@ -32,11 +32,6 @@ export default {
       type: Boolean,
       required: true
     }
-  },
-  data() {
-    return {
-      title: "后台管理系统"
-    };
   }
 };
 </script>

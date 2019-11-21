@@ -208,12 +208,11 @@ export default {
       GetPerformersList(params, true).then(res => {
         const sheetData = res.data.map(item => {
           return {
-            创建时间: new Date(item.createdAt),
-            上次更新: new Date(item.updatedAt),
-            姓名: item.name,
-            性别: this.$t(this.genderTypes[item.gender].name),
-            所在地区: item.region.name,
-            地区代码: item.regionID
+            [this.$t("CreatedAt")]: new Date(item.createdAt),
+            [this.$t("UpdatedAt")]: new Date(item.updatedAt),
+            [this.$t("Name")]: item.name,
+            [this.$t("Gender")]: this.$t(this.genderTypes[item.gender].name),
+            [this.$t("Region")]: item.region.name
           };
         });
         this.handleDownloadSheet(sheetData, "performer");

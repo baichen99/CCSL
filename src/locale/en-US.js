@@ -106,6 +106,7 @@ export default {
   Export: "Export",
   Save: "Save",
   Saving: "Saving...",
+  Loading: "Loading...",
   Edit: "Edit",
   Delete: "Delete",
   Cancel: "Cancel",

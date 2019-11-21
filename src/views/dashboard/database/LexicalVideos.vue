@@ -96,11 +96,7 @@
               <el-tag type="danger">{{ $t("Unavailable") }}</el-tag>
             </div>
             <div v-else-if="row.morpheme.length > 0">
-              <el-tag
-                v-for="value in row.morpheme"
-                :key="value"
-                class="morpheme-tags"
-              >{{ value }}</el-tag>
+              <el-tag v-for="value in row.morpheme" :key="value" class="morpheme-tags">{{ value }}</el-tag>
             </div>
             <div v-else>
               <el-tag type="info">{{ $t("NoData") }}</el-tag>
@@ -269,9 +265,9 @@ export default {
         });
     },
     handleExport() {
-      if (!this.checkParam()) {
-        return;
-      }
+      // if (!this.checkParam()) {
+      //   return;
+      // }
       const params = JSON.parse(JSON.stringify(this.params));
       params.limit = 0;
       GetLexicalVideosList(params, true).then(res => {
@@ -285,48 +281,30 @@ export default {
             rightSigns.push(sign.name);
           });
           return {
-            创建时间: new Date(item.createdAt),
-            上次更新: new Date(item.updatedAt),
-            汉语拼音音序: item.lexicalWord.initial,
-            中文转写: item.lexicalWord.chinese,
-            英文转写: item.lexicalWord.english,
-            词性: item.lexicalWord.pos,
-            构词类型: item.wordFormation
+            [this.$t("CreatedAt")]: new Date(item.createdAt),
+            [this.$t("UpdatedAt")]: new Date(item.updatedAt),
+            [this.$t("Initial")]: item.lexicalWord.initial,
+            [this.$t("Chinese")]: item.lexicalWord.chinese,
+            [this.$t("English")]: item.lexicalWord.english,
+            [this.$t("PoS")]: item.lexicalWord.pos,
+            [this.$t("WordFormation")]: item.wordFormation
               ? this.$t(this.wordFormations[item.wordFormation].name)
-              : null,
-            构词词语: item.morpheme.join(","),
-            左手手形: leftSigns.join(","),
-            右手手形: rightSigns.join(","),
-            被试姓名: item.performer.name,
-            被试性别: this.$t(this.genderTypes[item.performer.gender].name),
-            被试地区: item.performer.region.name,
-            视频文件: item.videoPath
+              : this.$t("NoData"),
+            [this.$t("Morpheme")]: item.morpheme.join(","),
+            [this.$t("LeftSign")]: leftSigns.join(","),
+            [this.$t("RightSign")]: rightSigns.join(","),
+            [this.$t("Name")]: item.performer.name,
+            [this.$t("Gender")]: this.$t(
+              this.genderTypes[item.performer.gender].name
+            ),
+            [this.$t("Region")]: item.performer.region.name,
+            [this.$t("Video")]: item.videoPath
               ? this.$store.state.settings.publicURL + item.videoPath
-              : null
+              : this.$t("NoData")
           };
         });
         this.handleDownloadSheet(sheetData, "video");
       });
-    },
-    checkParam() {
-      if (
-        !this.params.chinese &&
-        !this.params.regionID &&
-        !this.params.gender &&
-        !this.params.signID &&
-        !this.params.leftSignID &&
-        !this.params.rightSignID &&
-        !this.params.wordFormation &&
-        !this.params.morpheme
-      ) {
-        this.$notify({
-          title: "导出失败",
-          message: "请至少选择一样查询条件",
-          type: "warning"
-        });
-        return false;
-      }
-      return true;
     }
   }
 };

@@ -1,18 +1,18 @@
 <template>
   <el-form ref="form" label-position="left" label-width="150px" :model="formData" :rules="rules">
-    <el-form-item :label="$t('Name')" prop="name" required>
+    <el-form-item :label="$t('Name')" prop="name">
       <el-input v-model="formData.name" :placeholder="$t('tipName')" />
     </el-form-item>
 
-    <el-form-item :label="$t('UserRole')" prop="userType" required>
+    <el-form-item :label="$t('UserRole')" prop="userType">
       <user-type-selector v-model="formData.userType" />
     </el-form-item>
 
-    <el-form-item :label="$t('Account')" prop="username" required>
+    <el-form-item :label="$t('Account')" prop="username">
       <el-input v-model="formData.username" :placeholder="$t('tipAccount')" />
     </el-form-item>
 
-    <el-form-item :label="$t('AccountState')" prop="state" required>
+    <el-form-item :label="$t('AccountState')" prop="state">
       <user-state-selector v-model="formData.state" />
     </el-form-item>
   </el-form>

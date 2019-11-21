@@ -6,19 +6,23 @@
       </div>
     </el-form-item>
 
-    <el-form-item :label="$t('Performer')" prop="performerID" required>
+    <el-form-item :label="$t('Performer')" prop="performerID">
       <performer-selector v-model="formData.performerID" />
     </el-form-item>
 
-    <el-form-item :label="$t('Word')" prop="lexicalWordID" required>
+    <el-form-item :label="$t('Word')" prop="lexicalWordID">
       <word-selector v-model="formData.lexicalWordID" />
     </el-form-item>
 
-    <el-form-item :label="$t('WordFormation')" prop="wordFormation" required>
-      <word-formation-selector v-model="formData.wordFormation" />
+    <el-form-item :label="$t('WordFormation')" prop="wordFormation">
+      <word-formation-selector v-model="formData.wordFormation" @update="resetMorpheme" />
     </el-form-item>
 
-    <el-form-item v-if="formData.wordFormation==='compound'" :label="$t('Morpheme')" prop="morpheme">
+    <el-form-item
+      v-if="formData.wordFormation==='compound'"
+      :label="$t('Morpheme')"
+      prop="morpheme"
+    >
       <morphemes-picker v-model="formData.morpheme" />
     </el-form-item>
 
@@ -34,7 +38,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import VideoPlayer from "@/components/video/VideoPlayer"
+import VideoPlayer from "@/components/video/VideoPlayer";
 import WordFormationSelector from "@/components/form/WordFormationSelector";
 import MorphemesPicker from "@/components/form/MorphemesPicker";
 import PerformerSelector from "@/components/form/PerformerSelector";
@@ -64,6 +68,12 @@ export default {
   },
   computed: {
     ...mapGetters(["settings"])
+  },
+
+  methods: {
+    resetMorpheme() {
+      this.formData.morpheme = [];
+    }
   }
 };
 </script>

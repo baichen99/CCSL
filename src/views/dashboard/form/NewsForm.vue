@@ -9,31 +9,31 @@
       <language-selector v-model="formData.language" />
     </el-form-item>
 
-    <el-form-item :label="$t('Title')" prop="title" required>
+    <el-form-item :label="$t('Title')" prop="title">
       <el-input v-model="formData.title" :placeholder="$t('titleTip')" clearable />
     </el-form-item>
 
-    <el-form-item :label="$t('State')" prop="state" required>
+    <el-form-item :label="$t('State')" prop="state">
       <news-state-selector v-model="formData.state" />
     </el-form-item>
 
-    <el-form-item :label="$t('Date')" prop="date" required>
+    <el-form-item :label="$t('Date')" prop="date">
       <date-picker v-model="formData.date" />
     </el-form-item>
 
-    <el-form-item :label="$t('Column')" prop="column" required>
+    <el-form-item :label="$t('Column')" prop="column">
       <news-column-selector v-model="formData.column" />
     </el-form-item>
 
-    <el-form-item :label="$t('Type')" prop="type" required>
+    <el-form-item :label="$t('Type')" prop="type">
       <news-type-selector v-model="formData.type" />
     </el-form-item>
 
-    <el-form-item v-if="formData.type==='document'" :label="$t('Content')" required>
+    <el-form-item v-if="formData.type==='document'" :label="$t('Content')">
       <rich-text-editor v-model="formData.text" />
     </el-form-item>
 
-    <el-form-item v-if="formData.type==='link'" :label="$t('Link')" prop="text" required>
+    <el-form-item v-if="formData.type==='link'" :label="$t('Link')" prop="text">
       <el-input v-model="formData.text" :placeholder="$t('linkTip')" />
     </el-form-item>
   </el-form>

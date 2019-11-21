@@ -1,10 +1,10 @@
 <template>
   <el-form ref="form" label-position="left" label-width="100px" :model="formData" :rules="rules">
-    <el-form-item label="手形名称" prop="name" required>
+    <el-form-item label="手形名称" prop="name">
       <el-input v-model="formData.name" placeholder="请输入手形名称" />
     </el-form-item>
 
-    <el-form-item label="手形图片（SVG）" prop="image" required>
+    <el-form-item label="手形图片（SVG）" prop="image">
       <image-uploader v-model="formData.image" type="svg" dir="signs" height="300px" />
     </el-form-item>
   </el-form>

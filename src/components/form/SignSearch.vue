@@ -70,7 +70,7 @@ export default {
   width: 18%;
   min-height: 600px;
   max-height: 80vh;
-  overflow: scroll;
+  overflow: auto;
   .title {
     text-align: center;
   }

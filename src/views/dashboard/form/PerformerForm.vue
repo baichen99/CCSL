@@ -1,14 +1,14 @@
 <template>
   <el-form ref="form" label-position="left" label-width="100px" :model="formData" :rules="rules">
-    <el-form-item label="姓名" prop="name" required>
+    <el-form-item :label="$t('Name')" prop="name">
       <el-input v-model="formData.name" placeholder="请输入被试姓名" clearable />
     </el-form-item>
 
-    <el-form-item label="地区" prop="regionID" required>
+    <el-form-item :label="$t('Region')" prop="regionID">
       <city-selector v-model="formData.regionID" />
     </el-form-item>
 
-    <el-form-item label="性别" prop="gender" required>
+    <el-form-item :label="$t('Gender')" prop="gender">
       <gender-selector v-model="formData.gender" />
     </el-form-item>
   </el-form>

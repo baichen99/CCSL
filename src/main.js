@@ -1,9 +1,10 @@
 import Vue from "vue";
 import ElementUI from "element-ui";
 import App from "./App";
+import i18n from "@/locale";
 import store from "@/store";
 import router from "@/router";
-import i18n from "@/locale";
+
 import "@/directives";
 import "@/utils/error";
 import "normalize.css/normalize.css"; // CSS resets

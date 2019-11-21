@@ -105,6 +105,7 @@ export default {
   Export: "导出",
   Save: "保存",
   Saving: "保存中 ...",
+  Loading: "努力加载中...",
   Edit: "编辑",
   Delete: "删除",
   Cancel: "取消",

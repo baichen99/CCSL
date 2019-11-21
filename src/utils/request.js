@@ -1,6 +1,7 @@
 import axios from "axios";
 import store from "@/store";
 import router from "@/router";
+import i18n from "@/locale";
 import { Notification, Loading } from "element-ui";
 
 // create an axios instance
@@ -17,7 +18,7 @@ function showFullScreenLoading() {
     loading = Loading.service({
       lock: true,
       fullscreen: true,
-      text: "努力加载中..."
+      text: i18n.t("Loading")
     });
   }
   needLoadingRequestCount++;

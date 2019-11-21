@@ -5,19 +5,19 @@
       <el-button size="mini" @click="formData.importance=0">{{ $t("Reset") }}</el-button>
     </el-form-item>
 
-    <el-form-item :label="$t('TitleZh')" prop="titleZh" required>
+    <el-form-item :label="$t('TitleZh')" prop="titleZh">
       <el-input v-model="formData.titleZh" :placeholder="$t('titleZhTip')" />
     </el-form-item>
 
-    <el-form-item :label="$t('TitleEn')" prop="titleEn" required>
+    <el-form-item :label="$t('TitleEn')" prop="titleEn">
       <el-input v-model="formData.titleEn" :placeholder="$t('titleEnTip')" />
     </el-form-item>
 
-    <el-form-item :label="$t('Carousel')" prop="image" required>
+    <el-form-item :label="$t('Carousel')" prop="image">
       <image-uploader v-model="formData.image" dir="news" />
     </el-form-item>
 
-    <el-form-item :label="$t('State')" prop="state" required>
+    <el-form-item :label="$t('State')" prop="state">
       <news-state-selector v-model="formData.state" />
     </el-form-item>
   </el-form>
