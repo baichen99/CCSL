@@ -86,20 +86,30 @@
         >
           <template slot-scope="{row}">
             <span v-if="row.wordFormation">{{ $t(wordFormations[row.wordFormation].name) }}</span>
-            <el-tag v-else type="info">{{ $t("NoData") }}</el-tag>
+            <el-tag v-else size="small" type="info">{{ $t("NoData") }}</el-tag>
           </template>
         </el-table-column>
 
         <el-table-column :label="$t('Morpheme')" align="center" min-width="160px">
           <template slot-scope="{row}">
             <div v-if="row.wordFormation==='simple'">
-              <el-tag type="danger">{{ $t("Unavailable") }}</el-tag>
+              <el-tag size="small">
+                <span
+                  class="tag-value"
+                  v-html="$options.filters.addNumberSup(row.lexicalWord.chinese)"
+                ></span>
+              </el-tag>
             </div>
             <div v-else-if="row.morpheme.length > 0">
-              <el-tag v-for="value in row.morpheme" :key="value" class="morpheme-tags">{{ value }}</el-tag>
+              <el-tag
+                v-for="value in row.morpheme"
+                :key="value"
+                class="morpheme-tags"
+                size="small"
+              >{{ value }}</el-tag>
             </div>
             <div v-else>
-              <el-tag type="info">{{ $t("NoData") }}</el-tag>
+              <el-tag size="small" type="info">{{ $t("NoData") }}</el-tag>
             </div>
           </template>
         </el-table-column>
@@ -196,8 +206,7 @@ export default {
         leftSignID: "",
         rightSignID: "",
         wordFormation: "",
-        morpheme: "",
-        orderBy: "performers.gender"
+        morpheme: ""
       },
       initialFilters: []
     };

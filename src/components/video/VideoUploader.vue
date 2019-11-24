@@ -9,9 +9,12 @@
       Authorization: `Bearer ${$store.getters.token}`
     }"
     :action="'/api/files?dir='+dir"
-    :on-success="onUploadSuccess"
+    :on-success="onSuccess"
+    :on-error="onError"
     :on-remove="clearFile"
+    :before-upload="beforeUpload"
     :show-file-list="false"
+    :with-credentials="true"
   >
     <div v-if="fileUrl === ''" class="el-upload__text">
       <i class="el-icon-upload" />
@@ -19,10 +22,10 @@
         {{ $t("drag") }}
         <em>{{ $t("click") }}</em>
         <br />
-        {{ $t("size") }}
+        {{ $t("size", { size }) }}
       </div>
     </div>
-    <div v-else class="video-container">
+    <div v-else class="video-container" @click.stop>
       <video-player :src="fileUrl" />
     </div>
   </el-upload>
@@ -33,12 +36,14 @@
   "zh-CN": {
     "drag": "将文件拖到此处，或",
     "click": "点击上传",
-    "size": "大小不超过5Mb"
+    "size": "大小不超过{size}Mb",
+    "sizeError": "文件太大，请压缩后再上传"
   },
   "en-US": {
     "drag": "Drag file to here, or",
     "click": "click to upload",
-    "size": "Maximal file size 5Mb"
+    "size": "Maximal file size {size}Mb",
+    "sizeError": "File size exceed limitation, please compress it"
   }
 }
 </i18n>
@@ -63,6 +68,10 @@ export default {
     dir: {
       type: String,
       required: true
+    },
+    size: {
+      type: Number,
+      default: 2
     }
   },
   computed: {
@@ -80,10 +89,26 @@ export default {
     this.clearFile();
   },
   methods: {
-    onUploadSuccess(res) {
+    onSuccess(res) {
       const fileUrl = res.data;
       this.fileUrl = fileUrl;
       this.$refs.uploader.clearFiles();
+    },
+    onError(err) {
+      const error = JSON.parse(err.message);
+      this.$notify.error({
+        title: error.message,
+        message: error.error
+      });
+    },
+    beforeUpload(file) {
+      const lessThanMaxSize = file.size / 1024 / 1024 < this.size;
+      if (!lessThanMaxSize) {
+        this.$notify.error({
+          title: this.$t("sizeError")
+        });
+      }
+      return lessThanMaxSize;
     },
     clearFile() {
       this.fileUrl = "";
@@ -99,6 +124,6 @@ export default {
 }
 
 .video-container {
-  margin: 20px;
+  margin: 40px;
 }
 </style>

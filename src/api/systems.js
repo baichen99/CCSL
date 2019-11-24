@@ -25,3 +25,18 @@ export function GetJsErrorList(params) {
     params
   });
 }
+
+export function GetAppInfo(key) {
+  return request({
+    url: `${baseURL}/info/${key}`,
+    method: "get"
+  });
+}
+
+export function UpdateAppInfo(key, data) {
+  return request({
+    url: `${baseURL}/info/${key}`,
+    method: "put",
+    data: { data: data }
+  });
+}

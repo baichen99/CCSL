@@ -28,11 +28,11 @@
       <el-input v-model="formData.employerEn" :placeholder="$t('employerEnTip')" />
     </el-form-item>
 
-    <el-form-item v-if="formData" :label="$t('DescriptionZh')" prop="descriptionZh">
+    <el-form-item :label="$t('DescriptionZh')" prop="descriptionZh">
       <rich-text-editor v-model="formData.descriptionZh" />
     </el-form-item>
 
-    <el-form-item v-if="formData" :label="$t('DescriptionEn')" prop="descriptionEn">
+    <el-form-item :label="$t('DescriptionEn')" prop="descriptionEn">
       <rich-text-editor v-model="formData.descriptionEn" />
     </el-form-item>
   </el-form>

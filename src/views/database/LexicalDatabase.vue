@@ -57,14 +57,13 @@ export default {
         pos: "", // 词性
         initial: "",
         wordFormation: "",
-        morpheme: "",
-        orderBy: "performers.gender"
+        morpheme: ""
       }
     };
   },
   methods: {
     clearParams() {
-      this.params.word = "";
+      this.params.wordID = "";
       this.params.gender = "";
       this.params.regionID = undefined;
       this.params.leftSignID = "";

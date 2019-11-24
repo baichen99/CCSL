@@ -9,7 +9,7 @@
         <span class="tag-label">{{ $t("Region") }}</span>
         <span class="tag-value">{{ video.performer.region.name }}</span>
         <span class="tag-label">{{ $t("Chinese") }}</span>
-        <span class="tag-value" v-html="$options.filters.addNumberSup(video.lexicalWord.chinese) "></span>
+        <span class="tag-value" v-html="$options.filters.addNumberSup(video.lexicalWord.chinese)"></span>
       </div>
       <div class="tags">
         <span class="tag-label">{{ $t("PoS") }}</span>
@@ -28,7 +28,12 @@
         </span>
         <span class="tag-label">{{ $t("Morpheme") }}</span>
         <span v-if="video.wordFormation==='simple'" class="tag-value">
-          <el-tag type="danger">{{ $t("Unavailable") }}</el-tag>
+          <el-tag>
+            <span
+              class="tag-value"
+              v-html="$options.filters.addNumberSup(video.lexicalWord.chinese)"
+            ></span>
+          </el-tag>
         </span>
         <span v-else-if="video.morpheme.length > 0" class="tag-value">
           <el-tag v-for="(item,index) in video.morpheme" :key="index" class="tag-words">{{ item }}</el-tag>
@@ -39,7 +44,7 @@
       </div>
       <div v-if="video.leftSigns.length !== 0" class="tags">
         <span class="tag-label">{{ $t("LeftSign") }}</span>
-        <span class="tag-value" style="width:50%">
+        <span class="tag-value" style="width:85%">
           <span v-for="item in video.leftSigns" :key="item.id">
             <el-tooltip effect="dark" :content="item.name" placement="top">
               <img style="width:150px" :src="settings.publicURL + item.image" :alt="item.name" />
@@ -49,7 +54,7 @@
       </div>
       <div v-if="video.rightSigns.length !== 0" class="tags">
         <span class="tag-label">{{ $t("RightSign") }}</span>
-        <span class="tag-value" style="width:50%">
+        <span class="tag-value" style="width:85%">
           <span v-for="item in video.rightSigns" :key="item.id">
             <el-tooltip effect="dark" :content="item.name" placement="top">
               <img style="width:150px" :src="settings.publicURL + item.image" :alt="item.name" />
@@ -84,29 +89,33 @@ export default {
 
 <style lang="scss" scoped>
 .video-container {
-  margin:10px 40px;
+  margin: 10px 40px;
 }
 
-.tags {
-  text-align: center;
-  padding: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-  line-height: 30px;
-  .tag-label {
-    width: 25%;
-    font-weight: bold;
-  }
-  .tag-value {
-    img {
-      height: 100px;
-      padding: 10px;
+.tags-container {
+  padding: 20px;
+  .tags {
+    text-align: center;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    line-height: 30px;
+    .tag-label {
+      width: 15%;
+      font-weight: bold;
+      word-break: keep-all;
     }
-    width: 25%;
-  }
-  .tag-words {
-    margin: 0 10px;
+    .tag-value {
+      img {
+        height: 100px;
+        padding: 10px;
+      }
+      width: 35%;
+    }
+    .tag-words {
+      margin: 0 10px;
+    }
   }
 }
 </style>

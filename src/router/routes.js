@@ -135,6 +135,16 @@ const routes = [
         }
       },
       {
+        path: "introduction",
+        name: "IntroductionManagement",
+        component: () => import("@/views/dashboard/website/Introduction"),
+        meta: {
+          title: "IntroductionManagement",
+          icon: "introduction",
+          auth: true
+        }
+      },
+      {
         path: "carousels",
         name: "Carousels",
         component: () => import("@/views/dashboard/website/Carousels"),

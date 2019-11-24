@@ -38,7 +38,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import VideoUploader from "@/components/form/VideoUploader";
+import VideoUploader from "@/components/video/VideoUploader";
 import WordFormationSelector from "@/components/form/WordFormationSelector";
 import MorphemesPicker from "@/components/form/MorphemesPicker";
 import PerformerSelector from "@/components/form/PerformerSelector";

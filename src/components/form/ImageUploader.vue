@@ -12,8 +12,8 @@
     :action="'/api/files?dir='+dir"
     :on-success="onSuccess"
     :on-error="onError"
-    :before-upload="beforeUpload"
     :on-remove="clearFile"
+    :before-upload="beforeUpload"
     :show-file-list="false"
     :with-credentials="true"
   >

@@ -5,7 +5,9 @@
       <el-collapse accordion>
         <el-collapse-item v-for="(value, key) in words" :key="key" :title="key">
           <div v-for="word in value" :key="word.id">
-            <el-link type="primary" @click="onWordSelected(word.id)">{{ word.chinese }}</el-link>
+            <el-link type="primary" @click="onWordSelected(word.id)">
+              <span v-html="$options.filters.addNumberSup(word.chinese)"></span>
+            </el-link>
           </div>
         </el-collapse-item>
       </el-collapse>

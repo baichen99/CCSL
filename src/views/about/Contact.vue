@@ -2,16 +2,16 @@
   <div class="contact flex-column">
     <h2 class="title">{{ $t("ContactMenu") }}</h2>
     <el-row :gutter="20" class="container">
-      <el-col :span="12">
+      <el-col :span="16">
         <el-card shadow="hover">
           <el-table :data="tableData">
-            <el-table-column prop="key" width="100" />
+            <el-table-column prop="key" width="90" />
             <el-table-column prop="value" />
             <br />
           </el-table>
         </el-card>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="8">
         <el-card shadow="hover">
           <h3>{{ $t("wechat") }}</h3>
           <img src="@/assets/wechat.png" />
@@ -57,15 +57,15 @@ export default {
 @import "@/styles/element-variables.scss";
 .contact {
   align-items: center;
-  
+
   .title {
     color: $--color-primary;
     margin: 20px;
   }
 
   .el-card {
-    width: 450px;
-    height: 380px;
+    width: 100%;
+    min-height: 360px;
     margin: 1rem auto;
     text-align: center;
   }

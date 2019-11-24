@@ -9,12 +9,13 @@
     :loading="loading"
     @clear="filterRemote"
   >
-    <el-option
-      v-for="item in options"
-      :key="item.id"
-      :label="item.chinese"
-      :value="item.id"
-    >{{ item.initial }} - {{ item.chinese }}</el-option>
+    <el-option v-for="item in options" :key="item.id" :label="item.chinese" :value="item.id">
+      {{ item.initial }} -
+      <span
+        class="tag-value"
+        v-html="$options.filters.addNumberSup(item.chinese)"
+      ></span>
+    </el-option>
   </el-select>
 </template>
 

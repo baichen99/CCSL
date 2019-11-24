@@ -24,9 +24,8 @@ func (c *SystemController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Handle("POST", "/error", "JsErrorLogger")
 	app.Handle("GET", "/cities", "GetCitiesList")
 	app.Handle("GET", "/info/{key: string}", "GetAppInfo")
-	app.Handle("PUT", "/info/{key: string}", "UpdateAppInfo")
 	app.Router().Use(middlewares.CheckJWTToken, middlewares.CheckSuper)
-
+	app.Handle("PUT", "/info/{key: string}", "UpdateAppInfo")
 	app.Handle("GET", "/error", "GetJsErrorList")
 	app.Handle("GET", "/login", "GetLoginHistoryList")
 	app.Handle("GET", "/dump", "DumpDatabase")

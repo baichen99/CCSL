@@ -29,7 +29,7 @@ func (c *VideoController) BeforeActivation(app mvc.BeforeActivation) {
 // GetVideosList GET /lexical/videos
 func (c *VideoController) GetVideosList() {
 	defer c.Context.Next()
-	listParams, err := utils.GetListParamsFromContext(c.Context, "lexical_words.initial")
+	listParams, err := utils.GetListParamsFromContext(c.Context, "lexical_words.initial, lexical_words.id, performers.region_id, performers.gender")
 	if err != nil {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "order only accepts 'asc' or 'desc'", err)
 		return

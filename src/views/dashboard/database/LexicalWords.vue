@@ -35,7 +35,7 @@
           :filter-multiple="false"
           :label="$t('Initial')"
           align="center"
-          width="150px"
+          width="80px"
         >
           <template slot-scope="{row}">
             <span>{{ row.initial }}</span>

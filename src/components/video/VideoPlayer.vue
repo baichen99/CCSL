@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div ref="watermark" class="video-watermark">
+    <div ref="watermark" class="video-watermark" @contextmenu.prevent>
       <div>{{ $store.state.user.username }}</div>
       <svg-icon icon-class="logo" class="logo" />
       <div>{{ $t("copyright") }}</div>
@@ -98,7 +98,7 @@ export default {
 .video-watermark {
   font-size: 1vw;
   font-weight: bolder;
-  color: rgba($color: #fff, $alpha: 0.5);
+  color: rgba($color: #000, $alpha: 0.5);
   text-align: center;
   user-select: none;
   position: relative;

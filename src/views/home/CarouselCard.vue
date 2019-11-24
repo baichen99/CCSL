@@ -42,6 +42,7 @@ export default {
   height: 562px;
   border-radius: 5px;
   margin: 1rem;
+  overflow: hidden; // Fix Safari css bug
 
   // @media only screen and (max-device-width: 480px) {
   //   height: 200px;

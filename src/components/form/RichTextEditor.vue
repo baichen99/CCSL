@@ -31,7 +31,7 @@ export default {
   name: "RichTextEditor",
   model: {
     prop: "value",
-    event: "input"
+    event: "update"
   },
   props: {
     id: {
@@ -86,9 +86,9 @@ export default {
   watch: {
     value(val) {
       if (!this.hasChange && this.hasInit) {
-        this.$nextTick(() =>
-          window.tinymce.get(this.tinymceId).setContent(val || "")
-        );
+        this.$nextTick(() => {
+          window.tinymce.get(this.tinymceId).setContent(val);
+        });
       }
     }
   },
@@ -145,7 +145,6 @@ export default {
           this.$notify.error({ title: err });
           return;
         }
-        console.log("Init instance", this.tinymceId);
         this.initTinymce();
       });
     },
@@ -172,12 +171,10 @@ export default {
         nonbreaking_force_tab: true, // inserting nonbreaking space &nbsp; need Nonbreaking Space Plugin
         init_instance_callback: editor => {
           _this.hasInit = true;
-          if (_this.value) {
-            editor.setContent(_this.value);
-          }
-          editor.on("NodeChange Change KeyUp SetContent", () => {
+          editor.setContent(_this.value);
+          editor.on("Keyup SetContent", () => {
             this.hasChange = true;
-            this.$emit("input", editor.getContent());
+            this.$emit("update", editor.getContent());
           });
         },
         setup(editor) {

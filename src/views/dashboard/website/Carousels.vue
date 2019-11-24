@@ -47,7 +47,10 @@
           width="100px"
         >
           <template slot-scope="{row}">
-            <el-tag :type="newsState[row.state].color">{{ $t(newsState[row.state].name) }}</el-tag>
+            <el-tag
+              size="small"
+              :type="newsState[row.state].color"
+            >{{ $t(newsState[row.state].name) }}</el-tag>
           </template>
         </el-table-column>
 

@@ -35,7 +35,7 @@
 
         <el-table-column :label="$t('SignName')" align="center">
           <template slot-scope="{row}">
-            <el-tag>{{ row.name }}</el-tag>
+            <span>{{ row.name }}</span>
           </template>
         </el-table-column>
 
@@ -119,8 +119,7 @@ export default {
   data() {
     return {
       params: {
-        title: "",
-        state: ""
+        name: ""
       }
     };
   },

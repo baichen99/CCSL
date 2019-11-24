@@ -6,6 +6,7 @@ export default {
   UserManagement: "Users",
   PerformerManagement: "Performers",
   WebsiteManagement: "Website",
+  IntroductionManagement: "Introduction",
   SystemManagement: "System",
   CarouselManagement: "Carousels",
   NewsManagement: "News",

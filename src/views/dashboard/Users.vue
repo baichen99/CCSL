@@ -44,7 +44,10 @@
           width="150px"
         >
           <template slot-scope="{row}">
-            <el-tag :type="userState[row.state].color">{{ $t(userState[row.state].name) }}</el-tag>
+            <el-tag
+              size="small"
+              :type="userState[row.state].color"
+            >{{ $t(userState[row.state].name) }}</el-tag>
           </template>
         </el-table-column>
 
@@ -59,10 +62,13 @@
           :filter-multiple="false"
           :label="$t('UserRole')"
           align="center"
-          width="150px"
+          width="120px"
         >
           <template slot-scope="{row}">
-            <el-tag :type="userTypes[row.userType].color">{{ $t(userTypes[row.userType].name) }}</el-tag>
+            <el-tag
+              size="small"
+              :type="userTypes[row.userType].color"
+            >{{ $t(userTypes[row.userType].name) }}</el-tag>
           </template>
         </el-table-column>
 

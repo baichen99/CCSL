@@ -6,6 +6,7 @@ export default {
   UserManagement: "用户管理",
   PerformerManagement: "被试管理",
   WebsiteManagement: "网站管理",
+  IntroductionManagement: "中心介绍管理",
   SystemManagement: "系统维护管理",
   CarouselManagement: "轮播图片管理",
   NewsManagement: "网站新闻管理",
