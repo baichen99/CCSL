@@ -223,7 +223,7 @@ func (c *UserController) UserLogin() {
 		utils.SetResponseError(c.Context, iris.StatusUnauthorized, "Sign Token Error", errors.New("AuthFailed"))
 		return
 	}
-	ipAddress := c.Context.RemoteAddr()
+	ipAddress := c.Context.GetHeader("X-Real-IP")
 	c.UpdateUserLoginHistory(ipAddress, user.ID)
 	c.Context.JSON(iris.Map{
 		message: success,
@@ -241,7 +241,7 @@ func (c *UserController) RefreshToken() {
 		utils.SetResponseError(c.Context, iris.StatusUnauthorized, "Sign Token Error", errors.New("AuthFailed"))
 		return
 	}
-	ipAddress := c.Context.RemoteAddr()
+	ipAddress := c.Context.GetHeader("X-Real-IP")
 	c.UpdateUserLoginHistory(ipAddress, userID)
 	c.Context.JSON(iris.Map{
 		message: success,

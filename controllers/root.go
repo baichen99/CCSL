@@ -24,9 +24,11 @@ func (c *RootController) Get() {
 	}
 	versionFile := workPath + "/configs/.version"
 	ver, _ := ioutil.ReadFile(versionFile)
+	ip := c.Context.GetHeader("X-Real-IP")
 	c.Context.JSON(iris.Map{
 		message:  hello,
 		language: lang,
 		version:  strings.Replace(string(ver), "\n", "", -1),
+		"IP":     ip,
 	})
 }
