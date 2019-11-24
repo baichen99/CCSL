@@ -31,7 +31,7 @@ func main() {
 		app.Handle(new(controllers.FileController))
 	})
 	mvc.Configure(app.Party("/systems"), func(app *mvc.Application) {
-		app.Register(services.NewSystemService(pg))
+		app.Register(services.NewSystemService(pg), services.NewUserService(pg))
 		app.Handle(new(controllers.SystemController))
 	})
 	mvc.Configure(app.Party("/carousels"), func(app *mvc.Application) {
@@ -111,7 +111,7 @@ func initDB(app *iris.Application) *gorm.DB {
 	pg.SetLogger(configs.GetPostgresLogger())
 	pg.LogMode(true)
 	// AutoMigrate will create missing tables and missing index keys
-	pg.AutoMigrate(&models.User{}, &models.LexicalWord{}, &models.LexicalVideo{}, &models.Sign{}, &models.Performer{}, &models.Carousel{}, &models.News{}, &models.Member{}, &models.District{}, &models.City{}, &models.Province{}, &models.JsError{}, &models.Info{})
+	pg.AutoMigrate(&models.User{}, &models.LexicalWord{}, &models.LexicalVideo{}, &models.Sign{}, &models.Performer{}, &models.Carousel{}, &models.News{}, &models.Member{}, &models.District{}, &models.City{}, &models.Province{}, &models.JsError{}, &models.Info{}, &models.LoginHistory{})
 
 	// Don't use UNIQUE to declare gorm models because you can't create a alreay deleted object with the same value, manually Add UNIQUE key for table columns, comment these lines when keys are added
 
@@ -131,6 +131,7 @@ func initDB(app *iris.Application) *gorm.DB {
 	pg.Model(&models.News{}).AddForeignKey("creator_id", "users(id)", "RESTRICT", "CASCADE")
 	pg.Model(&models.Carousel{}).AddForeignKey("creator_id", "users(id)", "RESTRICT", "CASCADE")
 	pg.Model(&models.Performer{}).AddForeignKey("region", "districts(code)", "RESTRICT", "CASCADE")
+	pg.Model(&models.LoginHistory{}).AddForeignKey("user_id", "users(id)", "RESTRICT", "CASCADE")
 
 	// These tables are many to many connections table, also need to add foreign keys manually
 	pg.Table("lexical_left_sign").AddForeignKey("lexical_video_id", "lexical_videos(id)", "RESTRICT", "CASCADE").AddForeignKey("sign_id", "signs(id)", "RESTRICT", "CASCADE")

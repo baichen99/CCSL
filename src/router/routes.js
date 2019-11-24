@@ -115,7 +115,7 @@ const routes = [
   {
     path: "/website-management",
     component: AdminLayout,
-    redirect: "/website-management/systems",
+    redirect: "/website-management/introduction",
     name: "Website",
     meta: {
       title: "WebsiteManagement",
@@ -123,17 +123,6 @@ const routes = [
       roles: [superUser, adminUser]
     },
     children: [
-      {
-        path: "systems",
-        name: "Systems",
-        component: () => import("@/views/dashboard/website/Systems"),
-        meta: {
-          title: "SystemManagement",
-          icon: "maintain",
-          auth: true,
-          roles: [superUser]
-        }
-      },
       {
         path: "introduction",
         name: "IntroductionManagement",
@@ -172,6 +161,28 @@ const routes = [
           title: "MemberManagement",
           icon: "member",
           auth: true
+        }
+      },
+      {
+        path: "login-history",
+        name: "LoginHistory",
+        component: () => import("@/views/dashboard/website/LoginHistory"),
+        meta: {
+          title: "LoginHistory",
+          icon: "history",
+          auth: true,
+          roles: [superUser]
+        }
+      },
+      {
+        path: "systems",
+        name: "Systems",
+        component: () => import("@/views/dashboard/website/Systems"),
+        meta: {
+          title: "SystemManagement",
+          icon: "maintain",
+          auth: true,
+          roles: [superUser]
         }
       }
     ]

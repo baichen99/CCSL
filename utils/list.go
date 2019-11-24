@@ -184,3 +184,11 @@ type GetSignListParameters struct {
 type GetJsErrorListParameters struct {
 	GetListParameters
 }
+
+// GetUserLoginListParameters parameters for get login history
+type GetUserLoginListParameters struct {
+	GetListParameters
+	UserID string
+	Status string
+	IP     string
+}

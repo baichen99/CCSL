@@ -10,6 +10,14 @@ export function GetDatabaseDump(loading) {
   });
 }
 
+export function GetLoginHistory(params) {
+  return request({
+    url: `${baseURL}/login`,
+    method: "get",
+    params
+  });
+}
+
 export function SaveJsError(error) {
   return request({
     url: `${baseURL}/error`,

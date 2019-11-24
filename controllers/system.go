@@ -17,6 +17,7 @@ import (
 type SystemController struct {
 	Context       iris.Context
 	SystemService services.SystemInterface
+	UserService   services.UserInterface
 }
 
 // BeforeActivation register routes
@@ -24,10 +25,12 @@ func (c *SystemController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Handle("POST", "/error", "JsErrorLogger")
 	app.Handle("GET", "/cities", "GetCitiesList")
 	app.Handle("GET", "/info/{key: string}", "GetAppInfo")
-	app.Router().Use(middlewares.CheckJWTToken, middlewares.CheckSuper)
-	app.Handle("PUT", "/info/{key: string}", "UpdateAppInfo")
-	app.Handle("GET", "/error", "GetJsErrorList")
 	app.Handle("GET", "/login", "GetLoginHistoryList")
+	app.Router().Use(middlewares.CheckJWTToken, middlewares.CheckAdmin)
+	app.Handle("PUT", "/info/{key: string}", "UpdateAppInfo")
+	app.Router().Use(middlewares.CheckSuper)
+	app.Handle("GET", "/error", "GetJsErrorList")
+
 	app.Handle("GET", "/dump", "DumpDatabase")
 }
 
@@ -115,6 +118,32 @@ func (c *SystemController) GetJsErrorList() {
 // GetLoginHistoryList GET /systems/login
 func (c *SystemController) GetLoginHistoryList() {
 	defer c.Context.Next()
+	listParams, err := utils.GetListParamsFromContext(c.Context, "login_histories.created_at")
+	if err != nil {
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "order only accepts 'asc' or 'desc'", err)
+		return
+	}
+	userID := c.Context.URLParamDefault("userID", "")
+	status := c.Context.URLParamDefault("status", "")
+	ip := c.Context.URLParamDefault("ip", "")
+	listParameters := utils.GetUserLoginListParameters{
+		GetListParameters: listParams,
+		UserID:            userID,
+		Status:            status,
+		IP:                ip,
+	}
+	list, count, err := c.UserService.GetLoginHistoryList(listParameters)
+	if err != nil {
+		utils.SetResponseError(c.Context, iris.StatusInternalServerError, "UserService::GetLoginHistoryList", err)
+		return
+	}
+	c.Context.JSON(iris.Map{
+		message: success,
+		data:    list,
+		page:    listParams.Page,
+		limit:   listParams.Limit,
+		total:   count,
+	})
 }
 
 // DumpDatabase POST /systems/dump

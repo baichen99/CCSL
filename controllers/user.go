@@ -223,8 +223,8 @@ func (c *UserController) UserLogin() {
 		utils.SetResponseError(c.Context, iris.StatusUnauthorized, "Sign Token Error", errors.New("AuthFailed"))
 		return
 	}
-	ipAddress := c.Context.GetHeader("X-Real-IP")
-	c.UpdateUserLoginHistory(ipAddress)
+	ipAddress := c.Context.RemoteAddr()
+	c.UpdateUserLoginHistory(ipAddress, user.ID)
 	c.Context.JSON(iris.Map{
 		message: success,
 		data:    token,
@@ -241,6 +241,8 @@ func (c *UserController) RefreshToken() {
 		utils.SetResponseError(c.Context, iris.StatusUnauthorized, "Sign Token Error", errors.New("AuthFailed"))
 		return
 	}
+	ipAddress := c.Context.RemoteAddr()
+	c.UpdateUserLoginHistory(ipAddress, userID)
 	c.Context.JSON(iris.Map{
 		message: success,
 		data:    token,
@@ -248,7 +250,12 @@ func (c *UserController) RefreshToken() {
 }
 
 // UpdateUserLoginHistory nsters log to login history
-func (c *UserController) UpdateUserLoginHistory(ipAddress string) {
+func (c *UserController) UpdateUserLoginHistory(ipAddress string, userID uuid.UUID) {
 	defer c.Context.Next()
-	utils.LogInfo(c.Context, "UPDATE LOGIN HISTORY: "+ipAddress)
+	info, _ := utils.GetIPInfo(ipAddress)
+	info.UserID = userID
+	if err := c.UserService.CreateLoginHistory(info); err != nil {
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "UserService::CreateLoginHistory", err)
+		return
+	}
 }

@@ -1,6 +1,12 @@
 package utils
 
 import (
+	"ccsl/models"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net"
+	"net/http"
 	"reflect"
 	"regexp"
 	"runtime"
@@ -45,4 +51,71 @@ func MakeUpdateData(dataStruct interface{}) map[string]interface{} {
 func IsShuUser(username string) bool {
 	r, _ := regexp.Compile("^[0-9]{8}$")
 	return r.MatchString(username)
+}
+
+// IsPublicIP checks if given ip is public ip address
+func IsPublicIP(IP net.IP) bool {
+	if IP.IsLoopback() || IP.IsLinkLocalMulticast() || IP.IsLinkLocalUnicast() {
+		return false
+	}
+	if ip4 := IP.To4(); ip4 != nil {
+		switch true {
+		case ip4[0] == 10:
+			return false
+		case ip4[0] == 172 && ip4[1] >= 16 && ip4[1] <= 31:
+			return false
+		case ip4[0] == 192 && ip4[1] == 168:
+			return false
+		default:
+			return true
+		}
+	}
+	return false
+}
+
+// GetIPInfo returns info of given ip address
+func GetIPInfo(ipAddress string) (info models.LoginHistory, err error) {
+	ip := net.ParseIP(ipAddress)
+	if IsPublicIP(ip) {
+		errInfo := models.LoginHistory{
+			IP:          ipAddress,
+			Country:     "Unkown Area",
+			CountryCode: "UNKNOWN",
+			Status:      "unknown",
+		}
+		url := fmt.Sprintf("http://ip-api.com/json/%s?fields=status,message,country,countryCode,region,regionName,city,district,lat,lon,timezone,isp,org,query", ipAddress)
+		var req *http.Request
+		if req, err = http.NewRequest("GET", url, nil); err != nil {
+			info = errInfo
+			return
+		}
+		var res *http.Response
+		if res, err = http.DefaultClient.Do(req); err != nil {
+			info = errInfo
+			return
+		}
+		defer res.Body.Close()
+		var body []byte
+		if body, err = ioutil.ReadAll(res.Body); err != nil {
+			info = errInfo
+			return
+		}
+		if err = json.Unmarshal([]byte(body), &info); err != nil {
+			info = errInfo
+			return
+		}
+		if info.Status != "success" {
+			info = errInfo
+			return
+		}
+		info.IP = ipAddress
+		return
+	}
+	info = models.LoginHistory{
+		IP:          ipAddress,
+		Country:     "Internal IP Address",
+		CountryCode: "INTERNAL",
+		Status:      "internal",
+	}
+	return
 }
