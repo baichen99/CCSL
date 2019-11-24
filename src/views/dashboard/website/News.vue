@@ -145,11 +145,11 @@
     />
 
     <el-drawer
+      v-if="show"
       ref="drawer"
       size="60%"
       :before-close="handleClose"
       :show-close="false"
-      :destroy-on-close="true"
       :visible.sync="show"
       direction="rtl"
     >

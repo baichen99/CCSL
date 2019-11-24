@@ -1,5 +1,6 @@
 <template>
   <div
+    v-show="hasInit"
     v-loading="loading"
     :class="{fullscreen:fullscreen}"
     class="tinymce-container"
@@ -20,7 +21,7 @@ const toolbar = [
 
 const menubar = "file edit insert view format table";
 
-const tinymceCDN = "https://cdn.jsdelivr.net/npm/tinymce@5.1.1/tinymce.min.js";
+const tinymceCDN = "https://cdn.jsdelivr.net/npm/tinymce@5.1.2/tinymce.min.js";
 
 let callbacks = [];
 
@@ -60,7 +61,7 @@ export default {
   },
   data() {
     return {
-      loading: false,
+      loading: true,
       hasChange: false,
       hasInit: false,
       tinymceId: this.id,
@@ -139,12 +140,12 @@ export default {
       // dynamic load tinymce from cdn
       this.loading = true;
       this.dynamicLoadScript(tinymceCDN, err => {
+        this.loading = false;
         if (err) {
-          this.loading = false;
-          this.$notify({ title: err, type: "error" });
+          this.$notify.error({ title: err });
           return;
         }
-        this.loading = false;
+        console.log("Init instance", this.tinymceId);
         this.initTinymce();
       });
     },
@@ -170,10 +171,10 @@ export default {
         language_url: "/tinymce/langs/zh_CN.js",
         nonbreaking_force_tab: true, // inserting nonbreaking space &nbsp; need Nonbreaking Space Plugin
         init_instance_callback: editor => {
+          _this.hasInit = true;
           if (_this.value) {
             editor.setContent(_this.value);
           }
-          _this.hasInit = true;
           editor.on("NodeChange Change KeyUp SetContent", () => {
             this.hasChange = true;
             this.$emit("input", editor.getContent());
@@ -225,7 +226,7 @@ export default {
       }
     },
     setContent(value) {
-      window.tinymce.get(this.tinymceId).setContent(value);
+      window.tinymce.get(this.tinymceId).setContent(value || "");
     },
     getContent() {
       window.tinymce.get(this.tinymceId).getContent();

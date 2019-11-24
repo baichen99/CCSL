@@ -2,7 +2,7 @@
   <el-form ref="form" label-position="left" label-width="150px" :model="formData" :rules="rules">
     <el-form-item :label="$t('Video')" prop="videoPath">
       <div class="video-container">
-        <video-player :src="formData.videoPath" />
+        <video-uploader dir="lexical_videos" :src="formData.videoPath" />
       </div>
     </el-form-item>
 
@@ -38,7 +38,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import VideoPlayer from "@/components/video/VideoPlayer";
+import VideoUploader from "@/components/form/VideoUploader";
 import WordFormationSelector from "@/components/form/WordFormationSelector";
 import MorphemesPicker from "@/components/form/MorphemesPicker";
 import PerformerSelector from "@/components/form/PerformerSelector";
@@ -53,7 +53,7 @@ export default {
     PerformerSelector,
     WordSelector,
     MultiSignSelector,
-    VideoPlayer
+    VideoUploader
   },
   mixins: [formMixin],
   data() {

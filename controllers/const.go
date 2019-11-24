@@ -61,42 +61,39 @@ type carouselUpdateForm struct {
 // ============
 
 type newsCreateForm struct {
-	Column      string    `json:"column" validate:"required"`
-	Date        time.Time `json:"date" validate:"required"`
-	Title       string    `json:"title" validate:"required"`
-	Type        string    `json:"type" validate:"required,oneof=link document"`     // Type can be 'link' or 'document'
-	Text        string    `json:"text" validate:"required"`                         // Text
-	Language    string    `json:"language"  validate:"omitempty,oneof=zh-CN en-US"` // Can be zh-CN or en-US
-	Importance  int       `json:"importance" validate:"omitempty,max=5,min=0" `
-	State       string    `json:"state" validate:"omitempty,oneof=draft published"`
-	Attachments []string  `json:"attachments" validate:"omitempty"`
+	Column     string    `json:"column" validate:"required"`
+	Date       time.Time `json:"date" validate:"required"`
+	Title      string    `json:"title" validate:"required"`
+	Type       string    `json:"type" validate:"required,oneof=link document"`     // Type can be 'link' or 'document'
+	Text       string    `json:"text" validate:"required"`                         // Text
+	Language   string    `json:"language"  validate:"omitempty,oneof=zh-CN en-US"` // Can be zh-CN or en-US
+	Importance int       `json:"importance" validate:"omitempty,max=5,min=0" `
+	State      string    `json:"state" validate:"omitempty,oneof=draft published"`
 }
 
 func (f newsCreateForm) ConvertToModel() (news models.News) {
 	news = models.News{
-		Column:      f.Column,
-		Date:        f.Date,
-		Title:       f.Title,
-		Type:        f.Type,
-		Text:        f.Text,
-		Language:    f.Language,
-		Importance:  f.Importance,
-		State:       f.State,
-		Attachments: f.Attachments,
+		Column:     f.Column,
+		Date:       f.Date,
+		Title:      f.Title,
+		Type:       f.Type,
+		Text:       f.Text,
+		Language:   f.Language,
+		Importance: f.Importance,
+		State:      f.State,
 	}
 	return
 }
 
 type newsUpdateForm struct {
-	Column      *string    `json:"column"  validate:"omitempty"`
-	Date        *time.Time `json:"date"  validate:"omitempty"` // RFC3339 - example: 2000-12-30T00:00:00Z
-	Title       *string    `json:"title"  validate:"omitempty"`
-	Type        *string    `json:"type"  validate:"omitempty,oneof=link document"`
-	Text        *string    `json:"text"  validate:"omitempty"`
-	Language    *string    `json:"language" validate:"omitempty,oneof=zh-CN en-US"`
-	Importance  *int       `json:"importance" validate:"omitempty,max=5,min=0" `
-	State       *string    `json:"state" validate:"omitempty,oneof=draft published"`
-	Attachments *[]string  `json:"attachments" validate:"omitempty"`
+	Column     *string    `json:"column"  validate:"omitempty"`
+	Date       *time.Time `json:"date"  validate:"omitempty"` // RFC3339 - example: 2000-12-30T00:00:00Z
+	Title      *string    `json:"title"  validate:"omitempty"`
+	Type       *string    `json:"type"  validate:"omitempty,oneof=link document"`
+	Text       *string    `json:"text"  validate:"omitempty"`
+	Language   *string    `json:"language" validate:"omitempty,oneof=zh-CN en-US"`
+	Importance *int       `json:"importance" validate:"omitempty,max=5,min=0" `
+	State      *string    `json:"state" validate:"omitempty,oneof=draft published"`
 }
 
 // >> MEMBER <<
@@ -106,12 +103,11 @@ type memberCreateForm struct {
 	Type          string `json:"type" validate:"required"`
 	NameZh        string `json:"nameZh" validate:"required"`
 	NameEn        string `json:"nameEn" validate:"required"`
-	PositionZh    string `json:"positionZh" validate:"required"`
-	PositionEn    string `json:"positionEn" validate:"required"`
-	EmployerZh    string `json:"employerZh" validate:"required"`
-	EmployerEn    string `json:"employerEn" validate:"required"`
-	DescriptionZh string `json:"descriptionZh" validate:"required"`
-	DescriptionEn string `json:"descriptionEn" validate:"required"`
+	Degree        string `json:"degree" validate:"omitempty"`
+	EmployerZh    string `json:"employerZh" validate:"omitempty"`
+	EmployerEn    string `json:"employerEn" validate:"omitempty"`
+	DescriptionZh string `json:"descriptionZh" validate:"omitempty"`
+	DescriptionEn string `json:"descriptionEn" validate:"omitempty"`
 }
 
 func (f memberCreateForm) ConvertToModel() (member models.Member) {
@@ -120,8 +116,7 @@ func (f memberCreateForm) ConvertToModel() (member models.Member) {
 		Type:          f.Type,
 		NameZh:        f.NameZh,
 		NameEn:        f.NameEn,
-		PositionZh:    f.PositionZh,
-		PositionEn:    f.PositionEn,
+		Degree:        f.Degree,
 		EmployerZh:    f.EmployerZh,
 		EmployerEn:    f.EmployerEn,
 		DescriptionZh: f.DescriptionZh,
@@ -136,8 +131,7 @@ type memberUpdateForm struct {
 	Text          *string `json:"text" validate:"omitempty"`
 	NameZh        *string `json:"nameZh" validate:"omitempty"`
 	NameEn        *string `json:"nameEn" validate:"omitempty"`
-	PositionZh    *string `json:"positionZh" validate:"omitempty"`
-	PositionEn    *string `json:"positionEn" validate:"omitempty"`
+	Degree        *string `json:"degree" validate:"omitempty"`
 	EmployerZh    *string `json:"employerZh" validate:"omitempty"`
 	EmployerEn    *string `json:"employerEn" validate:"omitempty"`
 	DescriptionZh *string `json:"descriptionZh" validate:"omitempty"`

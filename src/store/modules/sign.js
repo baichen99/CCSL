@@ -80,18 +80,23 @@ const state = {
     consultant: {
       name: "SeniorConsultant"
     },
-    researcher: {
-      name: "Researcher"
+    researchFellow: {
+      name: "ResearchFellow"
     },
-    assistantResearcher: {
-      name: "AssistantResearcher"
+    assistantResearchFellow: {
+      name: "AssistantResearchFellow"
     },
     signLanguageTranslator: {
       name: "SignLanguageTranslator"
     },
-    deafResearchAssistant: {
-      name: "DeafResearchAssistant"
+    researchAssistantDeaf: {
+      name: "ResearchAssistantDeaf"
     }
+  },
+  memberDegrees: {
+    bachelor: { name: "Bachelor" },
+    master: { name: "Master" },
+    doctor: { name: "Doctor" }
   },
   languageTypes: {
     "zh-CN": { name: "Chinese" },

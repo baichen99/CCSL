@@ -31,11 +31,7 @@
           <el-tag type="danger">{{ $t("Unavailable") }}</el-tag>
         </span>
         <span v-else-if="video.morpheme.length > 0" class="tag-value">
-          <el-tag
-            v-for="(item,index) in video.morpheme"
-            :key="index"
-            class="tag-words"
-          >{{ item }}</el-tag>
+          <el-tag v-for="(item,index) in video.morpheme" :key="index" class="tag-words">{{ item }}</el-tag>
         </span>
         <span v-else class="tag-value">
           <el-tag type="info">{{ $t("NoData") }}</el-tag>
@@ -46,11 +42,7 @@
         <span class="tag-value" style="width:50%">
           <span v-for="item in video.leftSigns" :key="item.id">
             <el-tooltip effect="dark" :content="item.name" placement="top">
-              <img
-                style="width:150px"
-                :src="settings.publicURL + item.image"
-                :alt="item.name"
-              />
+              <img style="width:150px" :src="settings.publicURL + item.image" :alt="item.name" />
             </el-tooltip>
           </span>
         </span>
@@ -60,11 +52,7 @@
         <span class="tag-value" style="width:50%">
           <span v-for="item in video.rightSigns" :key="item.id">
             <el-tooltip effect="dark" :content="item.name" placement="top">
-              <img
-                style="width:150px"
-                :src="settings.publicURL + item.image"
-                :alt="item.name"
-              />
+              <img style="width:150px" :src="settings.publicURL + item.image" :alt="item.name" />
             </el-tooltip>
           </span>
         </span>
@@ -74,7 +62,7 @@
 </template>
 
 <script>
-import VideoPlayer from "@/components/video/VideoPlayer"
+import VideoPlayer from "@/components/video/VideoPlayer";
 import { mapGetters } from "vuex";
 export default {
   name: "VideoDetail",
@@ -95,6 +83,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.video-container {
+  margin:10px 40px;
+}
+
 .tags {
   text-align: center;
   padding: 5px;

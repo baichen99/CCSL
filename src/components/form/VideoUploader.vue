@@ -3,19 +3,15 @@
     ref="uploader"
     class="upload-container"
     drag
-    :multiple="false"
-    :accept="acceptType"
+    accept="video/mp4"
     :limit="1"
     :headers="{
       Authorization: `Bearer ${$store.getters.token}`
     }"
     :action="'/api/files?dir='+dir"
-    :on-success="onSuccess"
-    :on-error="onError"
-    :before-upload="beforeUpload"
+    :on-success="onUploadSuccess"
     :on-remove="clearFile"
     :show-file-list="false"
-    :with-credentials="true"
   >
     <div v-if="fileUrl === ''" class="el-upload__text">
       <i class="el-icon-upload" />
@@ -26,7 +22,9 @@
         {{ $t("size") }}
       </div>
     </div>
-    <img v-else :src="settings.publicURL + fileUrl" alt="image" />
+    <div v-else class="video-container">
+      <video-player :src="fileUrl" />
+    </div>
   </el-upload>
 </template>
 
@@ -35,62 +33,46 @@
   "zh-CN": {
     "drag": "将文件拖到此处，或",
     "click": "点击上传",
-    "size": "大小不超过2Mb",
-    "sizeError": "文件太大，请压缩后再上传"
+    "size": "大小不超过5Mb"
   },
   "en-US": {
     "drag": "Drag file to here, or",
     "click": "click to upload",
-    "size": "Maximal file size 2Mb",
-    "sizeError": "File size exceed limitation, please compress it"
+    "size": "Maximal file size 5Mb"
   }
 }
 </i18n>
 
 <script>
+import VideoPlayer from "@/components/video/VideoPlayer";
 import { mapGetters } from "vuex";
 export default {
-  name: "ImageUploader",
+  name: "VideoUploader",
+  components: {
+    VideoPlayer
+  },
   model: {
-    prop: "url",
+    prop: "src",
     event: "update"
   },
   props: {
-    url: {
+    src: {
       type: String,
       default: () => ""
     },
     dir: {
       type: String,
       required: true
-    },
-    type: {
-      type: String,
-      default: "all",
-      validator: function(value) {
-        return ["all", "svg"].indexOf(value) !== -1;
-      }
-    },
-    size: {
-      type: Number,
-      default: 2
     }
   },
   computed: {
     ...mapGetters(["settings"]),
     fileUrl: {
       get() {
-        return this.url;
+        return this.src;
       },
       set(val) {
         this.$emit("update", val);
-      }
-    },
-    acceptType() {
-      if (this.type === "svg") {
-        return "image/svg+xml";
-      } else {
-        return "image/*";
       }
     }
   },
@@ -98,26 +80,10 @@ export default {
     this.clearFile();
   },
   methods: {
-    onSuccess(res) {
+    onUploadSuccess(res) {
       const fileUrl = res.data;
       this.fileUrl = fileUrl;
       this.$refs.uploader.clearFiles();
-    },
-    onError(err) {
-      const error = JSON.parse(err.message);
-      this.$notify.error({
-        title: error.message,
-        message: error.error
-      });
-    },
-    beforeUpload(file) {
-      const lessThanMaxSize = file.size / 1024 / 1024 < this.size;
-      if (!lessThanMaxSize) {
-        this.$notify.error({
-          title: this.$t("sizeError")
-        });
-      }
-      return lessThanMaxSize;
     },
     clearFile() {
       this.fileUrl = "";
@@ -132,9 +98,7 @@ export default {
   margin: 30px;
 }
 
-img {
-  max-height: 100%;
-  max-width: 100%;
-  padding: 5px;
+.video-container {
+  margin: 20px;
 }
 </style>

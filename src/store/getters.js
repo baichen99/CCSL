@@ -17,7 +17,9 @@ const getters = {
   newsColumns: state => state.sign.newsColumns,
   newsState: state => state.sign.newsState,
   newsTypes: state => state.sign.newsTypes,
-  languageTypes: state => state.sign.languageTypes
+  languageTypes: state => state.sign.languageTypes,
+  memberTypes: state => state.sign.memberTypes,
+  memberDegrees: state => state.sign.memberDegrees
 };
 
 export default getters;
