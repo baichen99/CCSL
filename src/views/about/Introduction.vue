@@ -40,6 +40,7 @@ export default {
 @import "@/styles/element-variables.scss";
 .introduction {
   align-items: center;
+
   .title {
     color: $--color-primary;
     margin: 20px;
@@ -47,7 +48,7 @@ export default {
   .el-card {
     width: 900px;
     margin: 1rem auto;
-    padding: 3rem 2rem;
+    padding: 2rem;
     .content {
       text-indent: 2rem;
       padding: 10px 30px;

@@ -8,6 +8,7 @@
       <video-search-input v-model="params" @search="searchByButton" />
 
       <video-search-result
+        v-loading="loading"
         :videos="videos"
         :limit="params.limit"
         :page="params.page"
@@ -41,6 +42,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       videos: [],
       total: 0,
       params: {
@@ -77,19 +79,24 @@ export default {
       this.params.morpheme = "";
     },
     getData() {
-      GetLexicalVideosList(this.params, true).then(res => {
-        this.videos = res.data;
-        this.params.page = res.page;
-        this.params.limit = res.limit;
-        this.total = res.total;
-        if (this.total === 0) {
-          this.$notify({
-            title: "没有找到相关的数据哦～",
-            type: "warning",
-            duration: 2000
-          });
-        }
-      });
+      this.loading = true;
+      GetLexicalVideosList(this.params)
+        .then(res => {
+          this.loading = false;
+          this.videos = res.data;
+          this.params.page = res.page;
+          this.params.limit = res.limit;
+          this.total = res.total;
+          if (this.total === 0) {
+            this.$notify.info({
+              title: this.$t("VideoNotFound"),
+              duration: 2000
+            });
+          }
+        })
+        .catch(() => {
+          this.loading = false;
+        });
     },
     changePage(page) {
       this.params.page = page;

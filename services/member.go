@@ -39,12 +39,12 @@ func (s *MemberService) GetMemberList(parameters utils.GetMemberListParameters) 
 	if err != nil {
 		return
 	}
-
+	typeOrder := `array_position(array['consultant','researchFellow','assistantResearchFellow','postgraduate','signLanguageTranslator','researchAssistantDeaf'], members.type) asc`
 	orderQuery := parameters.OrderBy + " " + parameters.Order
 	if parameters.Limit != 0 {
-		err = db.Order(orderQuery).Limit(parameters.Limit).Offset(parameters.Limit * (parameters.Page - 1)).Find(&members).Error
+		err = db.Order(typeOrder).Order(orderQuery).Limit(parameters.Limit).Offset(parameters.Limit * (parameters.Page - 1)).Find(&members).Error
 	} else {
-		err = db.Order(orderQuery).Find(&members).Error
+		err = db.Order(typeOrder).Order(orderQuery).Find(&members).Error
 	}
 	return
 }

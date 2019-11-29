@@ -77,7 +77,6 @@ export default {
   data() {
     return {
       rules: {
-        profile: [{ required: true, message: "请上传照片", trigger: "blur" }],
         type: [{ required: true, message: "请选择类型", trigger: "blur" }],
         nameZh: [
           { required: true, message: "请输入中文姓名", trigger: "blur" }

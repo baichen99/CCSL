@@ -15,20 +15,10 @@
           </template>
         </el-table-column>
 
-        <el-table-column
-          v-if="$i18n.locale==='en-US'"
-          :label="$t('Name')"
-          align="center"
-          width="200px"
-        >
+        <el-table-column :label="$t('Name')" align="center" width="150px">
           <template slot-scope="{row}">
-            <span>{{ row.nameEn }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column v-else :label="$t('Name')" align="center" width="200px">
-          <template slot-scope="{row}">
-            <span>{{ row.nameZh }}</span>
+            <span v-if="$i18n.locale==='en-US'">{{ row.nameEn }}</span>
+            <span v-else>{{ row.nameZh }}</span>
           </template>
         </el-table-column>
 
@@ -38,20 +28,10 @@
           </template>
         </el-table-column>
 
-        <el-table-column
-          v-if="$i18n.locale==='en-US'"
-          :label="$t('EmployerEn')"
-          align="center"
-          min-width="300px"
-        >
+        <el-table-column :label="$t('Employer')" align="center" min-width="300px">
           <template slot-scope="{row}">
-            <span>{{ row.employerEn }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column v-else :label="$t('EmployerZh')" align="center" min-width="300px">
-          <template slot-scope="{row}">
-            <span>{{ row.employerZh }}</span>
+            <span v-if="$i18n.locale==='en-US'">{{ row.employerEn }}</span>
+            <span v-else>{{ row.employerZh }}</span>
           </template>
         </el-table-column>
 
@@ -111,7 +91,7 @@ import {
   CreateMember,
   UpdateMember,
   DeleteMember
-} from "@/api/member";
+} from "@/api/members";
 import { mapGetters } from "vuex";
 
 export default {

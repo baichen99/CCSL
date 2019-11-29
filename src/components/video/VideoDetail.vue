@@ -27,16 +27,10 @@
           <el-tag type="info">{{ $t("NoData") }}</el-tag>
         </span>
         <span class="tag-label">{{ $t("Morpheme") }}</span>
-        <span v-if="video.wordFormation==='simple'" class="tag-value">
-          <el-tag>
-            <span
-              class="tag-value"
-              v-html="$options.filters.addNumberSup(video.lexicalWord.chinese)"
-            ></span>
+        <span v-if="video.morpheme.length > 0" class="tag-value">
+          <el-tag v-for="(item,index) in video.morpheme" :key="index" class="tag-words">
+            <span v-html="$options.filters.addNumberSup(item)"></span>
           </el-tag>
-        </span>
-        <span v-else-if="video.morpheme.length > 0" class="tag-value">
-          <el-tag v-for="(item,index) in video.morpheme" :key="index" class="tag-words">{{ item }}</el-tag>
         </span>
         <span v-else class="tag-value">
           <el-tag type="info">{{ $t("NoData") }}</el-tag>
@@ -93,7 +87,7 @@ export default {
 }
 
 .tags-container {
-  padding: 20px;
+  padding: 20px 40px 0 40px;
   .tags {
     text-align: center;
     padding: 5px;

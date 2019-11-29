@@ -136,6 +136,8 @@ func initDB(app *iris.Application) *gorm.DB {
 	// These tables are many to many connections table, also need to add foreign keys manually
 	pg.Table("lexical_left_sign").AddForeignKey("lexical_video_id", "lexical_videos(id)", "RESTRICT", "CASCADE").AddForeignKey("sign_id", "signs(id)", "RESTRICT", "CASCADE")
 	pg.Table("lexical_right_sign").AddForeignKey("lexical_video_id", "lexical_videos(id)", "RESTRICT", "CASCADE").AddForeignKey("sign_id", "signs(id)", "RESTRICT", "CASCADE")
+
+	// utils.InitTestUser(pg)
 	return pg
 }
 

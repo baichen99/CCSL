@@ -1,9 +1,8 @@
 <template>
   <div>
-    <div ref="watermark" class="video-watermark" @contextmenu.prevent>
-      <div>{{ $store.state.user.username }}</div>
+    <div class="video-watermark video-watermark-logo" @contextmenu.prevent>
+      <!-- <div>{{ $store.state.user.username }}</div> -->
       <svg-icon icon-class="logo" class="logo" />
-      <div>{{ $t("copyright") }}</div>
     </div>
     <video-player
       :class="{
@@ -96,18 +95,25 @@ export default {
 
 <style lang="scss" scoped>
 .video-watermark {
-  font-size: 1vw;
   font-weight: bolder;
-  color: rgba($color: #000, $alpha: 0.5);
+  color: rgba($color: #fff, $alpha: 0.5);
   text-align: center;
   user-select: none;
-  position: relative;
-  top: 10px;
-  right: 10px;
-  float: right;
   z-index: 500;
-  .logo {
-    font-size: 3em;
-  }
+  float: right;
+}
+
+.video-watermark-logo {
+  position: relative;
+  right: 20px;
+  font-size: 50px;
+}
+
+.video-watermark-name {
+  bottom: 25px;
+  right: 10px;
+  position: relative;
+  float: right;
+  font-size: 1vw;
 }
 </style>

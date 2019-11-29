@@ -92,21 +92,10 @@
 
         <el-table-column :label="$t('Morpheme')" align="center" min-width="160px">
           <template slot-scope="{row}">
-            <div v-if="row.wordFormation==='simple'">
-              <el-tag size="small">
-                <span
-                  class="tag-value"
-                  v-html="$options.filters.addNumberSup(row.lexicalWord.chinese)"
-                ></span>
+            <div v-if="row.morpheme.length > 0">
+              <el-tag v-for="value in row.morpheme" :key="value" class="morpheme-tags" size="small">
+                <span v-html="$options.filters.addNumberSup(value)"></span>
               </el-tag>
-            </div>
-            <div v-else-if="row.morpheme.length > 0">
-              <el-tag
-                v-for="value in row.morpheme"
-                :key="value"
-                class="morpheme-tags"
-                size="small"
-              >{{ value }}</el-tag>
             </div>
             <div v-else>
               <el-tag size="small" type="info">{{ $t("NoData") }}</el-tag>

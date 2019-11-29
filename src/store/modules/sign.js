@@ -91,6 +91,9 @@ const state = {
     },
     researchAssistantDeaf: {
       name: "ResearchAssistantDeaf"
+    },
+    postgraduate: {
+      name: "Postgraduate"
     }
   },
   memberDegrees: {

@@ -18,11 +18,7 @@
       <word-formation-selector v-model="formData.wordFormation" @update="resetMorpheme" />
     </el-form-item>
 
-    <el-form-item
-      v-if="formData.wordFormation==='compound'"
-      :label="$t('Morpheme')"
-      prop="morpheme"
-    >
+    <el-form-item :label="$t('Morpheme')" prop="morpheme">
       <morphemes-picker v-model="formData.morpheme" />
     </el-form-item>
 

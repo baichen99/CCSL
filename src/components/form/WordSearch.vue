@@ -6,7 +6,8 @@
         <el-collapse-item v-for="(value, key) in words" :key="key" :title="key">
           <div v-for="word in value" :key="word.id">
             <el-link type="primary" @click="onWordSelected(word.id)">
-              <span v-html="$options.filters.addNumberSup(word.chinese)"></span>
+              <span v-if="$i18n.locale==='en-US'">{{ word.english }}</span>
+              <span v-else v-html="$options.filters.addNumberSup(word.chinese)"></span>
             </el-link>
           </div>
         </el-collapse-item>
@@ -45,30 +46,45 @@ export default {
       words: {}
     };
   },
+  watch: {
+    "$i18n.locale"() {
+      this.getData();
+    }
+  },
   created() {
-    GetLexicalWordsList({ limit: 0 }).then(res => {
-      let wordsDict = {};
-      const wordsArray = res.data;
-      wordsArray.map(item => {
-        const initial = item.initial;
-        if (wordsDict[initial]) {
-          wordsDict[initial].push(item);
-        } else {
-          wordsDict[initial] = [item];
-        }
-      });
-      let dict = {};
-      for (let key in wordsDict) {
-        if (this.start <= key && key <= this.end) {
-          dict[key] = wordsDict[key];
-        }
-      }
-      this.words = dict;
-    });
+    this.getData();
   },
   methods: {
     onWordSelected(wordID) {
       this.$emit("word-selected", wordID);
+    },
+    getData() {
+      GetLexicalWordsList({ limit: 0 }).then(res => {
+        let wordsDict = {};
+        const wordsArray = res.data;
+        wordsArray.map(item => {
+          let initial;
+          if (this.$i18n.locale == "en-US") {
+            initial = item.english[0].toUpperCase();
+          } else {
+            initial = item.initial;
+          }
+          if (wordsDict[initial]) {
+            wordsDict[initial].push(item);
+          } else {
+            wordsDict[initial] = [item];
+          }
+        });
+        let dict = {};
+        Object.keys(wordsDict)
+          .sort()
+          .map(key => {
+            if (this.start <= key && key <= this.end) {
+              dict[key] = wordsDict[key];
+            }
+          });
+        this.words = dict;
+      });
     }
   }
 };

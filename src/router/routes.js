@@ -55,6 +55,12 @@ const routes = [
         meta: { activeMenu: "/about/team" }
       },
       {
+        path: "/about/team-detail/:id",
+        name: "TeamDetail",
+        component: () => import("@/views/about/TeamDetail"),
+        meta: { activeMenu: "/about/team" }
+      },
+      {
         path: "/about/contact",
         name: "Contact",
         component: () => import("@/views/about/Contact"),
