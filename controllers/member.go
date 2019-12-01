@@ -22,7 +22,7 @@ func (c *MemberController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Router().Use(middlewares.CheckJWTToken, middlewares.CheckAdmin)
 	app.Handle("POST", "/", "CreateMember")
 	app.Handle("PUT", "/{id: string}", "UpdateMember")
-	app.Handle("DELETE", "/{id string", "DeleteMember")
+	app.Handle("DELETE", "/{id: string}", "DeleteMember")
 }
 
 // GetMemberList GET /members

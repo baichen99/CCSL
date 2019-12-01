@@ -34,7 +34,7 @@ export function UpdateMember(id, data) {
   });
 }
 
-export function DeleteNews(id) {
+export function DeleteMember(id) {
   return request({
     url: `${baseURL}/${id}`,
     method: "delete"
