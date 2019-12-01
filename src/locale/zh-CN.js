@@ -138,5 +138,6 @@ export default {
   NoData: "暂无数据",
   Enable: "启用",
   Disable: "停用",
+  Back: "返回",
   Unavailable: "不可用"
 };

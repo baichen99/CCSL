@@ -1,23 +1,29 @@
 <template>
-  <transition name="el-zoom-in-top">
-    <el-card v-if="videos.length!==0" shadow="hover">
-      <el-row :gutter="20">
-        <el-col v-for="video in videos" :key="video.id" :sm="sm" :md="md" :lg="lg">
+  <el-card v-if="videos.length!==0" shadow="hover">
+    <el-row :gutter="20">
+      <el-col v-for="video in videos" :key="video.id" :sm="sm" :md="md" :lg="lg">
+        <transition name="el-collapse-transition">
           <video-card :show-region="showRegion" :video="video" @on-video-click="showDetailModal" />
-        </el-col>
-      </el-row>
-      <el-pagination
-        background
-        layout="total, prev, pager, next"
-        :current-page.sync="pageNumber"
-        :total="total"
-        :page-size.sync="limit"
-      />
-      <el-dialog :visible.sync="showDetail" :show-close="false" :destroy-on-close="true" top="10px">
-        <video-detail :video="videoDetail" />
-      </el-dialog>
-    </el-card>
-  </transition>
+        </transition>
+      </el-col>
+    </el-row>
+    <el-pagination
+      background
+      layout="total, prev, pager, next"
+      :current-page.sync="pageNumber"
+      :total="total"
+      :page-size.sync="limit"
+    />
+    <el-dialog
+      v-if="showDetail"
+      :visible.sync="showDetail"
+      :show-close="false"
+      :destroy-on-close="true"
+      top="10px"
+    >
+      <video-detail :video="videoDetail" />
+    </el-dialog>
+  </el-card>
 </template>
 
 <script>

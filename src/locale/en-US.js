@@ -139,5 +139,6 @@ export default {
   NoData: "No Data",
   Enable: "Enable",
   Disable: "Disable",
+  Back: "Back",
   Unavailable: "Unavailable"
 };

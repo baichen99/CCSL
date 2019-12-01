@@ -29,7 +29,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('Action')" align="center" width="100px" fixed="right">
+        <el-table-column :label="$t('Action')" align="center" width="80px" fixed="right">
           <template slot-scope="{row}">
             <el-link
               v-if="showView(row)"

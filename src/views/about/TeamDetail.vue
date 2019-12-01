@@ -1,7 +1,12 @@
 <template>
   <div class="team flex-column">
     <h2 class="title">{{ $t("TeamMenu") }}</h2>
-    <el-card>
+    <el-card shadow="hover">
+      <div slot="header">
+        <div>
+          <el-link type="primary" class="back" @click="$router.push('/about/team')">{{ $t("Back") }}</el-link>
+        </div>
+      </div>
       <div class="profile">
         <img v-if="data.profile" :src="settings.publicURL + data.profile" alt="profile" />
         <h3>

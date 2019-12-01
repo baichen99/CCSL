@@ -29,9 +29,15 @@ export default {
     ...mapGetters(["settings"])
   },
   mounted() {
-    this.player = new Plyr(this.$refs.player, {
-      controls: ["play-large", "progress"]
-    });
+    this.setPlayer();
+  },
+  methods: {
+    setPlayer() {
+      this.player = new Plyr(this.$refs.player, {
+        controls: ["play-large", "progress"],
+        ratio: "16:9"
+      });
+    }
   }
 };
 </script>
