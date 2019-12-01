@@ -67,6 +67,13 @@ import { GetLoginHistory } from "@/api/systems";
 export default {
   name: "LoginHistory",
   mixins: [listMixin],
+  data() {
+    return {
+      params: {
+        order: "desc"
+      }
+    };
+  },
   methods: {
     getList() {
       this.loading = true;
