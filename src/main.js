@@ -8,7 +8,7 @@ import router from "@/router";
 import "@/directives";
 import "@/utils/error";
 import "normalize.css/normalize.css"; // CSS resets
-import "@/styles/index.scss";
+import "@/styles/index.scss"; 
 import "@/icons"; // icon
 
 Vue.use(ElementUI, {
