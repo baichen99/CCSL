@@ -16,7 +16,7 @@
     :show-file-list="false"
     :with-credentials="true"
   >
-    <div v-if="fileUrl === ''" class="el-upload__text">
+    <div v-if="fileUrl===''" class="el-upload__text">
       <i class="el-icon-upload" />
       <div class="upload-text">
         {{ $t("drag") }}

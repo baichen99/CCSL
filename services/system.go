@@ -7,6 +7,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+// SystemInterface struct
 type SystemInterface interface {
 	CreateJsError(jsErr models.JsError) (err error)
 	GetJsErrorList(parameters utils.GetJsErrorListParameters) (errors []models.JsError, count int, err error)
@@ -15,6 +16,7 @@ type SystemInterface interface {
 	UpdateAppInfo(key string, updatedData map[string]interface{}) (err error)
 }
 
+// SystemService implements system interface
 type SystemService struct {
 	PG *gorm.DB
 }
@@ -53,7 +55,12 @@ func (s *SystemService) GetJsErrorList(parameters utils.GetJsErrorListParameters
 	// Fetching the items to be returned by the query.
 	orderQuery := parameters.OrderBy + " " + parameters.Order
 	if parameters.Limit != 0 {
-		err = db.Order(orderQuery).Limit(parameters.Limit).Offset(parameters.Limit * (parameters.Page - 1)).Find(&errors).Error
+		err = db.
+			Order(orderQuery).
+			Limit(parameters.Limit).
+			Offset(parameters.Limit * (parameters.Page - 1)).
+			Find(&errors).
+			Error
 	} else {
 		err = db.Order(orderQuery).Find(&errors).Error
 	}

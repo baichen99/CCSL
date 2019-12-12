@@ -40,3 +40,8 @@ Postgresql:
 
 File:
     Dir: /Users/adrian/Temp/
+
+Email:
+    Port: 
+    Account: 474558417@qq.com
+    Password: password

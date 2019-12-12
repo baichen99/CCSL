@@ -51,9 +51,17 @@ func (s *UserService) GetUsersList(parameters utils.GetUserListParameters) (user
 	// Fetching the items to be returned by the query.
 	orderQuery := parameters.OrderBy + " " + parameters.Order
 	if parameters.Limit != 0 {
-		err = db.Order(orderQuery).Limit(parameters.Limit).Offset(parameters.Limit * (parameters.Page - 1)).Find(&users).Error
+		err = db.
+			Order(orderQuery).
+			Limit(parameters.Limit).
+			Offset(parameters.Limit * (parameters.Page - 1)).
+			Find(&users).
+			Error
 	} else {
-		err = db.Order(orderQuery).Find(&users).Error
+		err = db.
+			Order(orderQuery).
+			Find(&users).
+			Error
 	}
 	return
 }
@@ -74,9 +82,19 @@ func (s *UserService) GetLoginHistoryList(parameters utils.GetUserLoginListParam
 	// Fetching the items to be returned by the query.
 	orderQuery := parameters.OrderBy + " " + parameters.Order
 	if parameters.Limit != 0 {
-		err = db.Set("gorm:auto_preload", true).Order(orderQuery).Limit(parameters.Limit).Offset(parameters.Limit * (parameters.Page - 1)).Find(&list).Error
+		err = db.
+			Set("gorm:auto_preload", true).
+			Order(orderQuery).
+			Limit(parameters.Limit).
+			Offset(parameters.Limit * (parameters.Page - 1)).
+			Find(&list).
+			Error
 	} else {
-		err = db.Set("gorm:auto_preload", true).Order(orderQuery).Find(&list).Error
+		err = db.
+			Set("gorm:auto_preload", true).
+			Order(orderQuery).
+			Find(&list).
+			Error
 	}
 	return
 }
@@ -113,13 +131,20 @@ func (s *UserService) GetUser(key string, value string) (user models.User, err e
 // UpdateUser updates user model
 func (s *UserService) UpdateUser(userID string, updatedData map[string]interface{}) (err error) {
 	var user models.User
-	err = s.PG.LogMode(true).Where("id = ?", userID).First(&user).Updates(updatedData).Error
+	err = s.PG.LogMode(true).
+		Where("id = ?", userID).
+		First(&user).
+		Updates(updatedData).
+		Error
 	return
 }
 
 // DeleteUser soft deletes a user model
 func (s *UserService) DeleteUser(userID string) (err error) {
 	var user models.User
-	err = s.PG.LogMode(true).Where("id = ?", userID).Delete(&user).Error
+	err = s.PG.LogMode(true).
+		Where("id = ?", userID).
+		Delete(&user).
+		Error
 	return
 }

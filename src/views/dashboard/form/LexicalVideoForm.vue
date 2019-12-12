@@ -2,7 +2,7 @@
   <el-form ref="form" label-position="left" label-width="150px" :model="formData" :rules="rules">
     <el-form-item :label="$t('Video')" prop="videoPath">
       <div class="video-container">
-        <video-uploader dir="lexical_videos" :src="formData.videoPath" />
+        <video-uploader v-model="formData.videoPath" dir="lexical_videos" />
       </div>
     </el-form-item>
 

@@ -215,6 +215,16 @@ const routes = [
         }
       },
       {
+        path: "signs",
+        name: "Signs",
+        component: () => import("@/views/dashboard/database/Signs"),
+        meta: {
+          title: "SignManagement",
+          icon: "sign",
+          auth: true
+        }
+      },
+      {
         path: "words",
         name: "LexicalWords",
         component: () => import("@/views/dashboard/database/LexicalWords"),
@@ -231,16 +241,6 @@ const routes = [
         meta: {
           title: "LexicalVideoManagement",
           icon: "video",
-          auth: true
-        }
-      },
-      {
-        path: "signs",
-        name: "Signs",
-        component: () => import("@/views/dashboard/database/Signs"),
-        meta: {
-          title: "SignManagement",
-          icon: "sign",
           auth: true
         }
       }

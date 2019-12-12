@@ -233,27 +233,29 @@ export default {
 </script>
 
 <style lang="scss">
-// .tinymce-container {
-//   position: relative;
-//   line-height: normal;
-// }
+.tinymce-container {
+  // position: relative;
+  // line-height: normal;
+  min-height: 200px;
+}
 
 .tox-tinymce {
   border-radius: 3px !important;
 }
-/* .tinymce-container >>> .mce-fullscreen {
-  z-index: 10000;
-}
+//  .tinymce-container >>> .mce-fullscreen {
+//   z-index: 10000;
+// }
+
 .tinymce-textarea {
   visibility: hidden;
   z-index: -1;
 }
 
-.fullscreen .editor-custom-btn-container {
-  z-index: 10000;
-  position: fixed;
-}
-.editor-upload-btn {
-  display: inline-block;
-} */
+// .fullscreen .editor-custom-btn-container {
+//   z-index: 10000;
+//   position: fixed;
+// }
+// .editor-upload-btn {
+//   display: inline-block;
+// }
 </style>
