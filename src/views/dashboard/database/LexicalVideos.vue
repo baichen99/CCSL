@@ -295,10 +295,7 @@ export default {
             [this.$t("Gender")]: this.$t(
               this.genderTypes[item.performer.gender].name
             ),
-            [this.$t("Region")]: item.performer.region.name,
-            [this.$t("Video")]: item.videoPath
-              ? this.$store.state.settings.publicURL + item.videoPath
-              : this.$t("NoData")
+            [this.$t("Region")]: item.performer.region.name
           };
         });
         this.handleDownloadSheet(sheetData, "video");

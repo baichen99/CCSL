@@ -185,10 +185,7 @@ export default {
           return {
             [this.$t("CreatedAt")]: new Date(item.createdAt),
             [this.$t("UpdatedAt")]: new Date(item.updatedAt),
-            [this.$t("SignName")]: item.name,
-            [this.$t("SignImage")]: item.image
-              ? this.settings.publicURL + item.image
-              : this.$t("NoData")
+            [this.$t("SignName")]: item.name
           };
         });
         this.handleDownloadSheet(sheetData, "sign");
