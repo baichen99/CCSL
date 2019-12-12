@@ -18,7 +18,7 @@
         <el-input
           ref="username"
           v-model="loginForm.username"
-          placeholder="请输入用户名"
+          :placeholder="$t('username')"
           name="username"
           type="text"
           tabindex="1"
@@ -34,7 +34,7 @@
           ref="password"
           v-model="loginForm.password"
           :type="passwordType"
-          placeholder="请输入密码"
+          :placeholder="$t('password')"
           name="password"
           tabindex="2"
           auto-complete="on"
@@ -60,10 +60,14 @@
 <i18n>
 {
   "zh-CN": {
-    "tips": "如果您是校内用户，请使用一卡通账号和统一身份认证密码登录，如果您是校外用户，请使用邮箱和密码登录"
+    "tips": "如果您是校内用户，请使用一卡通账号和统一身份认证密码登录，如果您是校外用户，请使用邮箱和密码登录",
+    "username": "请输入用户名",
+    "password": "请输入密码"
   },
   "en-US": {
-    "tips": "If you are staff or student of Shanghai University, please login with your SHU account. If not, please login with your email and password."
+    "tips": "If you are staff or student of Shanghai University, please login with your SHU account. If not, please login with your email and password.",
+    "username": "Input username",
+    "password": "Input password"
   }
 }
 </i18n>
