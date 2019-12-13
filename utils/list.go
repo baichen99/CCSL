@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/jinzhu/gorm"
-	"github.com/kataras/iris"
+	"github.com/kataras/iris/v12"
 )
 
 // SearchByColumn where clause to execute a pseudo-search on the provided value against the given column

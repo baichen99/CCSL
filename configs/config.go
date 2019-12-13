@@ -55,6 +55,11 @@ type Config struct {
 	File struct {
 		Dir string `yaml:"Dir"`
 	} `yaml:"File"`
+	Email struct {
+		Port     int    `yaml:"Port"`
+		Account  string `yaml:"Account"`
+		Password string `yaml:"Password"`
+	} `yaml:"Email"`
 }
 
 // ReadConfig read configs from a configuration file

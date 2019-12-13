@@ -8,15 +8,15 @@
       <video-search-input v-model="params" @search="searchByButton" />
 
       <video-search-result
+        v-model="params.page"
         v-loading="loading"
         :videos="videos"
         :limit="params.limit"
-        :page="params.page"
         :total="total"
         :sm="24"
         :md="12"
         :lg="12"
-        @change-page="changePage"
+        @page-change="changePage"
       />
     </div>
 
@@ -98,8 +98,7 @@ export default {
           this.loading = false;
         });
     },
-    changePage(page) {
-      this.params.page = page;
+    changePage() {
       this.getData();
     },
     searchByButton() {

@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/kataras/iris"
+	"github.com/kataras/iris/v12"
 )
 
 // RootController is the root controller for test

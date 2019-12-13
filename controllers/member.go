@@ -5,8 +5,8 @@ import (
 	"ccsl/services"
 	"ccsl/utils"
 
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/mvc"
+	"github.com/kataras/iris/v12"
+	"github.com/kataras/iris/v12/mvc"
 )
 
 // MemberController is for member CURD

@@ -11,7 +11,7 @@ import (
 	"regexp"
 	"runtime"
 
-	"github.com/kataras/iris"
+	"github.com/kataras/iris/v12"
 )
 
 // LogInfo logs information about what is happening on the server

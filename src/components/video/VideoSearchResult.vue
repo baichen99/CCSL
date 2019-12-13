@@ -13,6 +13,7 @@
       :current-page.sync="pageNumber"
       :total="total"
       :page-size.sync="limit"
+      @current-change="$emit('page-change', page)"
     />
     <el-dialog
       v-if="showDetail"
@@ -34,6 +35,10 @@ export default {
   components: {
     VideoCard,
     VideoDetail
+  },
+  model: {
+    prop: "page",
+    event: "update"
   },
   props: {
     showRegion: {
@@ -79,7 +84,7 @@ export default {
         return this.page;
       },
       set(page) {
-        this.$emit("change-page", page);
+        this.$emit("update", page);
       }
     }
   },

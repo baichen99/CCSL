@@ -9,8 +9,8 @@ import (
 	"fmt"
 	"os/exec"
 
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/mvc"
+	"github.com/kataras/iris/v12"
+	"github.com/kataras/iris/v12/mvc"
 )
 
 // SystemController is for system monitor and maintenance

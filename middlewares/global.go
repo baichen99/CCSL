@@ -4,8 +4,8 @@ import (
 	"ccsl/configs"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/middleware/i18n"
+	"github.com/kataras/iris/v12"
+	"github.com/kataras/iris/v12/middleware/i18n"
 	uuid "github.com/satori/go.uuid"
 )
 

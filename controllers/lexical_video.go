@@ -5,8 +5,8 @@ import (
 	"ccsl/services"
 	"ccsl/utils"
 
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/mvc"
+	"github.com/kataras/iris/v12"
+	"github.com/kataras/iris/v12/mvc"
 )
 
 // VideoController is for video CURD
@@ -18,8 +18,8 @@ type VideoController struct {
 // BeforeActivation will register routes for controllers
 func (c *VideoController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Router().Use(middlewares.CheckJWTToken)
-	app.Handle("GET", "/", "GetVideosList")
-	app.Handle("GET", "/{id: string}", "GetVideo")
+	app.Handle("GET", "/", "GetVideosList", middlewares.CheckRateLimit(1))
+	app.Handle("GET", "/{id: string}", "GetVideo", middlewares.CheckRateLimit(1))
 	app.Router().Use(middlewares.CheckAdmin)
 	app.Handle("POST", "/", "CreateVideo")
 	app.Handle("PUT", "/{id: string}", "UpdateVideo")

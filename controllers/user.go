@@ -6,8 +6,8 @@ import (
 	"ccsl/utils"
 	"errors"
 
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/mvc"
+	"github.com/kataras/iris/v12"
+	"github.com/kataras/iris/v12/mvc"
 	uuid "github.com/satori/go.uuid"
 )
 
@@ -19,9 +19,9 @@ type UserController struct {
 
 // BeforeActivation will register routes for controllers
 func (c *UserController) BeforeActivation(app mvc.BeforeActivation) {
-	app.Handle("POST", "/login", "UserLogin")
+	app.Handle("POST", "/login", "UserLogin", middlewares.CheckRateLimit(2))
 	app.Router().Use(middlewares.CheckJWTToken)
-	app.Handle("GET", "/refresh", "RefreshToken")
+	app.Handle("GET", "/refresh", "RefreshToken", middlewares.CheckRateLimit(2))
 	app.Handle("GET", "/{id: string}", "GetUser")
 	app.Handle("PUT", "/{id: string}", "UpdateUser")
 	app.Router().Use(middlewares.CheckSuper)

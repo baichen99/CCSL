@@ -1,7 +1,7 @@
 package middlewares
 
 import (
-	"github.com/kataras/iris"
+	"github.com/kataras/iris/v12"
 )
 
 const (
@@ -24,6 +24,8 @@ const (
 	ConfictError string = "ConfictError"
 	// UnprocessableEntity 422 Error
 	UnprocessableEntity string = "UnprocessableEntity"
+	// TooManyRequests 429 Error
+	TooManyRequests string = "TooManyRequests"
 	// InternalError 500 Error
 	InternalError string = "InternalError"
 	// UnknownError other error code
@@ -49,6 +51,8 @@ func ErrorHandler(ctx iris.Context) {
 		msg = ConfictError
 	case iris.StatusUnprocessableEntity: // 422 Error
 		msg = UnprocessableEntity
+	case iris.StatusTooManyRequests: // 429 Error
+		msg = TooManyRequests
 	case iris.StatusInternalServerError: // 500 Error
 		msg = InternalError
 	default:
