@@ -9,6 +9,7 @@ import (
 	"os"
 	"path"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/kataras/iris/v12"
@@ -49,7 +50,7 @@ func (c *FileController) UploadFile() {
 		return
 	}
 	defer file.Close()
-	fileSuffix := path.Ext(info.Filename)
+	fileSuffix := strings.ToLower(path.Ext(info.Filename))
 	filePrefix := uuid.NewV4()
 	// Rename file, avoid file name conflict
 	// fileName = UUID + current timestamp + filename extension
