@@ -29,12 +29,12 @@ func (c *VideoController) BeforeActivation(app mvc.BeforeActivation) {
 // GetVideosList GET /lexical/videos
 func (c *VideoController) GetVideosList() {
 	defer c.Context.Next()
-	listParams, err := utils.GetListParamsFromContext(c.Context, "lexical_words.initial, lexical_words.id, performers.region_id, performers.gender")
+	listParams, err := utils.GetListParamsFromContext(c.Context, "lexicons.initial, lexicons.id, performers.region_id, performers.gender")
 	if err != nil {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "order only accepts 'asc' or 'desc'", err)
 		return
 	}
-	wordID := c.Context.URLParamDefault("wordID", "")
+	lexiconID := c.Context.URLParamDefault("lexiconID", "")
 	initial := c.Context.URLParamDefault("initial", "")
 	chinese := c.Context.URLParamDefault("chinese", "")
 	english := c.Context.URLParamDefault("english", "")
@@ -49,7 +49,7 @@ func (c *VideoController) GetVideosList() {
 	performerID := c.Context.URLParamDefault("performerID", "")
 	listParameters := utils.GetVideoListParameters{
 		GetListParameters: listParams,
-		WordID:            wordID,
+		LexiconID:         lexiconID,
 		Initial:           initial,
 		Chinese:           chinese,
 		English:           english,

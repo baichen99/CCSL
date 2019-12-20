@@ -13,7 +13,7 @@ export default {
   NewsManagement: "网站新闻",
   MemberManagement: "研究团队",
   DatabaseManagement: "语料库管理",
-  LexicalWordManagement: "比对语料库词表",
+  LexiconManagement: "词表管理",
   LexicalVideoManagement: "比对语料库视频",
   SignManagement: "手形管理",
   ISP: "运营商",

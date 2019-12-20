@@ -23,7 +23,7 @@ import formMixin from "./formMixin";
 import WordPosSelector from "@/components/form/WordPosSelector";
 import WordInitialSelector from "@/components/form/WordInitialSelector";
 export default {
-  name: "LexicalWordForm",
+  name: "LexiconForm",
   components: {
     WordPosSelector,
     WordInitialSelector

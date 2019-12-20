@@ -8,8 +8,8 @@ import (
 // LexicalVideo mdoel for Lexical Database
 type LexicalVideo struct {
 	Base
-	LexicalWord   LexicalWord    `gorm:"FOREIGNKEY:LexicalWordID" json:"lexicalWord"`
-	LexicalWordID uuid.UUID      `gorm:"NOT NULL;INDEX:lexical_word_id" json:"lexicalWordID"`
+	Lexicon       Lexicon        `gorm:"FOREIGNKEY:LexiconID" json:"lexicon"`
+	LexiconID     uuid.UUID      `gorm:"NOT NULL;INDEX:lexicon_id" json:"lexiconID"`
 	Performer     Performer      `gorm:"FOREIGNKEY:PerformerID" json:"performer"`
 	PerformerID   uuid.UUID      `gorm:"NOT NULL;INDEX:performer_id" json:"performerID"`                                     // 表演者
 	WordFormation string         `gorm:"DEFAULT:NULL;INDEX:word_formation" json:"wordFormation"`                             // 构词方式

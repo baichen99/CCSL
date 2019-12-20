@@ -18,7 +18,7 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
-  name: "WordPosSelector",
+  name: "WordInitialSelector",
   model: {
     prop: "value",
     event: "update"

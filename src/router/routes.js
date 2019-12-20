@@ -225,11 +225,11 @@ const routes = [
         }
       },
       {
-        path: "words",
-        name: "LexicalWords",
-        component: () => import("@/views/dashboard/database/LexicalWords"),
+        path: "lexicon",
+        name: "Lexicon",
+        component: () => import("@/views/dashboard/database/Lexicons"),
         meta: {
-          title: "LexicalWordManagement",
+          title: "LexiconManagement",
           icon: "words",
           auth: true
         }

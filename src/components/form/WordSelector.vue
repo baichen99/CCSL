@@ -12,7 +12,7 @@
     <el-option v-for="item in options" :key="item.id" :label="item.chinese" :value="item.id">
       {{ item.initial }} -
       <span
-        class="tag-value"
+        class="tag-value word-sup"
         v-html="$options.filters.addNumberSup(item.chinese)"
       ></span>
     </el-option>
@@ -31,7 +31,7 @@
 </i18n>
 
 <script>
-import { GetLexicalWordsList } from "@/api/words";
+import { GetWordsList } from "@/api/lexicons";
 export default {
   name: "WordSelector",
   model: {
@@ -66,7 +66,7 @@ export default {
   methods: {
     filterRemote(query) {
       this.loading = true;
-      GetLexicalWordsList({
+      GetWordsList({
         limit: 0,
         chinese: query,
         orderBy: "initial, id"

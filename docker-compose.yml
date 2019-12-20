@@ -8,12 +8,12 @@ services:
     volumes:
       - /var/lib/postgresql/data:/var/lib/postgresql/data
     ports: 
-      - 5432:5432
+      - 127.0.0.1:5432:5432
   api:
     image: ccsl-api:${CCSL_VERSION:-latest}
     restart: always
     ports: 
-      - 8888:8888
+      - 127.0.0.1:8888:8888
     env_file: 
       - .env.production
     depends_on:

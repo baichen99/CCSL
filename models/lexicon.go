@@ -1,7 +1,7 @@
 package models
 
-// LexicalWord words for Lexical Database
-type LexicalWord struct {
+// Lexicon words for Lexical Database
+type Lexicon struct {
 	Base
 	Initial string `gorm:"DEFAULT:NULL" json:"initial"` // 首字母
 	Chinese string `gorm:"DEFAULT:NULL" json:"chinese"` // 汉语转写

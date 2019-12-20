@@ -44,7 +44,7 @@
 
         <el-table-column :label="$t('Chinese')" align="center" min-width="200px">
           <template slot-scope="{row}">
-            <span v-html="$options.filters.addNumberSup(row.chinese) " />
+            <span class="word-sup" v-html="$options.filters.addNumberSup(row.chinese) " />
           </template>
         </el-table-column>
 
@@ -93,7 +93,7 @@
       direction="rtl"
     >
       <div class="form-drawer__content">
-        <lexical-word-form ref="form" :data="data" :mode="mode" />
+        <lexicon-form ref="form" :data="data" :mode="mode" />
         <div class="form-drawer__footer">
           <el-button @click="handleClose">{{ $t("Cancel") }}</el-button>
           <el-button
@@ -109,22 +109,22 @@
 </template>
 
 <script>
-import LexicalWordForm from "@/views/dashboard/form/LexicalWordForm";
+import LexiconForm from "@/views/dashboard/form/LexiconForm";
 import WordPosSelector from "@/components/form/WordPosSelector";
 import listMixin from "@/views/dashboard/listMixin";
 import { mapGetters } from "vuex";
 import {
-  GetLexicalWordsList,
-  CreateLexicalWord,
-  UpdateLexicalWord,
-  DeleteLexicalWord
-} from "@/api/words";
+  GetWordsList,
+  CreateWord,
+  UpdateWord,
+  DeleteWord
+} from "@/api/lexicons";
 
 export default {
-  name: "LexicalWords",
+  name: "Lexicons",
   components: {
     WordPosSelector,
-    LexicalWordForm
+    LexiconForm
   },
   mixins: [listMixin],
   data() {
@@ -153,7 +153,7 @@ export default {
   methods: {
     getList() {
       this.loading = true;
-      GetLexicalWordsList(this.params)
+      GetWordsList(this.params)
         .then(res => {
           this.list = res.data;
           this.total = res.total;
@@ -164,7 +164,7 @@ export default {
         });
     },
     handleCreate(data) {
-      CreateLexicalWord(data)
+      CreateWord(data)
         .then(() => {
           this.handleModify();
         })
@@ -173,7 +173,7 @@ export default {
         });
     },
     handleUpdate(id, updateData) {
-      UpdateLexicalWord(id, updateData)
+      UpdateWord(id, updateData)
         .then(() => {
           this.handleModify();
         })
@@ -193,7 +193,7 @@ export default {
         }
       )
         .then(() => {
-          DeleteLexicalWord(id).then(() => {
+          DeleteWord(id).then(() => {
             this.handleModify();
           });
         })
@@ -204,7 +204,7 @@ export default {
     handleExport() {
       const params = JSON.parse(JSON.stringify(this.params));
       params.limit = 0;
-      GetLexicalWordsList(params, true).then(res => {
+      GetWordsList(params, true).then(res => {
         const sheetData = res.data.map(item => {
           return {
             [this.$t("CreatedAt")]: new Date(item.createdAt),
@@ -215,7 +215,7 @@ export default {
             [this.$t("PoS")]: item.pos
           };
         });
-        this.handleDownloadSheet(sheetData, "word");
+        this.handleDownloadSheet(sheetData, "lexicon");
       });
     }
   }

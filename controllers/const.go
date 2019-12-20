@@ -221,18 +221,18 @@ type signUpdateForm struct {
 	Image *string `json:"image" validate:"omitempty"`
 }
 
-// >>> LEXICAL_WORD <<<
+// >>> LEXICON <<<
 // ============
 
-type lexicalWordCreateForm struct {
+type lexiconCreateForm struct {
 	Initial string `json:"initial" validate:"required"`
 	Chinese string `json:"chinese" validate:"required"`
 	English string `json:"english" validate:"required"`
 	Pos     string `json:"pos" validate:"required"`
 }
 
-func (f lexicalWordCreateForm) ConvertToModel() (word models.LexicalWord) {
-	word = models.LexicalWord{
+func (f lexiconCreateForm) ConvertToModel() (word models.Lexicon) {
+	word = models.Lexicon{
 		Initial: f.Initial,
 		Chinese: f.Chinese,
 		English: f.English,
@@ -241,7 +241,7 @@ func (f lexicalWordCreateForm) ConvertToModel() (word models.LexicalWord) {
 	return
 }
 
-type lexicalWordUpdateForm struct {
+type lexiconUpdateForm struct {
 	Initial *string `json:"initial" validate:"omitempty"`
 	Chinese *string `json:"chinese" validate:"omitempty"`
 	English *string `json:"english" validate:"omitempty"`
@@ -253,7 +253,7 @@ type lexicalWordUpdateForm struct {
 
 type lexicalVideoCreateForm struct {
 	PerformerID   string   `json:"performerID"  validate:"required,uuid4" `
-	LexicalWordID string   `json:"lexicalWordID" validate:"required,uuid4"`
+	LexiconID     string   `json:"lexiconID" validate:"required,uuid4"`
 	VideoPath     string   `json:"videoPath" validate:"required"`                // 视频文件路径
 	WordFormation string   `json:"wordFormation" validate:"required"`            // 构词方式
 	Morpheme      []string `json:"morpheme" validate:"omitempty"`                // 构词词语
@@ -263,10 +263,10 @@ type lexicalVideoCreateForm struct {
 
 func (f lexicalVideoCreateForm) ConvertToModel() (video models.LexicalVideo) {
 	performerID, _ := uuid.FromString(f.PerformerID)
-	lexicalWordID, _ := uuid.FromString(f.LexicalWordID)
+	lexiconID, _ := uuid.FromString(f.LexiconID)
 	video = models.LexicalVideo{
 		PerformerID:   performerID,
-		LexicalWordID: lexicalWordID,
+		LexiconID:     lexiconID,
 		VideoPath:     f.VideoPath,
 		WordFormation: f.WordFormation,
 		Morpheme:      f.Morpheme,
@@ -276,7 +276,7 @@ func (f lexicalVideoCreateForm) ConvertToModel() (video models.LexicalVideo) {
 
 type lexicalVideoUpdateForm struct {
 	PerformerID   *string   `json:"performerID" validate:"omitempty,uuid4"`
-	LexicalWordID *string   `json:"lexicalWordID" validate:"omitempty,uuid4"`
+	LexiconID     *string   `json:"lexiconID" validate:"omitempty,uuid4"`
 	VideoPath     *string   `json:"videoPath" validate:"omitempty"`               // 视频文件路径
 	WordFormation *string   `json:"wordFormation" validate:"omitempty"`           // 构词方式
 	Morpheme      *[]string `json:"morpheme" validate:"omitempty"`                // 构词词语

@@ -10,8 +10,8 @@
       <performer-selector v-model="formData.performerID" />
     </el-form-item>
 
-    <el-form-item :label="$t('Word')" prop="lexicalWordID">
-      <word-selector v-model="formData.lexicalWordID" />
+    <el-form-item :label="$t('Word')" prop="lexiconID">
+      <word-selector v-model="formData.lexiconID" />
     </el-form-item>
 
     <el-form-item :label="$t('WordFormation')" prop="wordFormation">
@@ -56,7 +56,7 @@ export default {
     return {
       rules: {
         performerID: [{ required: true, message: "请选择被试" }],
-        lexicalWordID: [{ required: true, message: "请选择词语" }],
+        lexiconID: [{ required: true, message: "请选择词语" }],
         videoPath: [{ required: true, message: "请上传视频" }],
         wordFormation: [{ required: true, message: "请选择构词方式" }]
       }

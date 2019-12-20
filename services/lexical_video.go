@@ -55,11 +55,11 @@ func (s *LexicalVideoService) GetVideosList(parameters utils.GetVideoListParamet
 	}
 
 	db := s.PG.LogMode(true).Scopes(
-		utils.FilterByColumn("lexical_words.id", parameters.WordID),
-		utils.SearchByColumn("lexical_words.chinese", parameters.Chinese),
-		utils.FilterByArray("lexical_words.english", parameters.English, " "),
-		utils.FilterByColumn("lexical_words.pos", parameters.Pos),
-		utils.FilterByColumn("lexical_words.initial", parameters.Initial),
+		utils.FilterByColumn("lexicons.id", parameters.LexiconID),
+		utils.SearchByColumn("lexicons.chinese", parameters.Chinese),
+		utils.FilterByArray("lexicons.english", parameters.English, " "),
+		utils.FilterByColumn("lexicons.pos", parameters.Pos),
+		utils.FilterByColumn("lexicons.initial", parameters.Initial),
 		utils.FilterByColumn("performers.region_id", parameters.RegionID),
 		utils.FilterByColumn("performers.gender", parameters.Gender),
 		utils.FilterByColumn("performers.id", parameters.PerformerID),
@@ -72,7 +72,7 @@ func (s *LexicalVideoService) GetVideosList(parameters utils.GetVideoListParamet
 
 	orderQuery := fmt.Sprintf("%s %s", parameters.OrderBy, parameters.Order)
 
-	queryExp := db.Joins("JOIN performers ON performers.id = lexical_videos.performer_id").Joins("JOIN lexical_words ON lexical_words.id = lexical_videos.lexical_word_id").Joins("JOIN districts ON districts.code = performers.region_id").Order(orderQuery)
+	queryExp := db.Joins("JOIN performers ON performers.id = lexical_videos.performer_id").Joins("JOIN lexicons ON lexicons.id = lexical_videos.lexicon_id").Joins("JOIN districts ON districts.code = performers.region_id").Order(orderQuery)
 
 	err = queryExp.Find(&videos).Count(&count).Error
 
@@ -97,7 +97,6 @@ func (s *LexicalVideoService) GetVideosList(parameters utils.GetVideoListParamet
 		for _, sign := range video.RightSigns {
 			videos[index].RightSignsID = append(videos[index].RightSignsID, sign.ID.String())
 		}
-
 	}
 	return
 }

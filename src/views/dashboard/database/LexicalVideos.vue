@@ -35,7 +35,7 @@
           width="80px"
         >
           <template slot-scope="{row}">
-            <span>{{ row.lexicalWord.initial }}</span>
+            <span>{{ row.lexicon.initial }}</span>
           </template>
         </el-table-column>
 
@@ -69,7 +69,7 @@
 
         <el-table-column :label="$t('Chinese')" align="center" min-width="150px">
           <template slot-scope="{row}">
-            <span v-html="$options.filters.addNumberSup(row.lexicalWord.chinese) " />
+            <span class="word-sup" v-html="$options.filters.addNumberSup(row.lexicon.chinese) " />
           </template>
         </el-table-column>
 
@@ -186,7 +186,7 @@ export default {
   mixins: [listMixin],
   data() {
     return {
-      removeProperties: ["performer", "lexicalWord", "leftSigns", "rightSigns"],
+      removeProperties: ["performer", "lexicon", "leftSigns", "rightSigns"],
       params: {
         chinese: "",
         regionID: undefined,
@@ -281,10 +281,10 @@ export default {
           return {
             [this.$t("CreatedAt")]: new Date(item.createdAt),
             [this.$t("UpdatedAt")]: new Date(item.updatedAt),
-            [this.$t("Initial")]: item.lexicalWord.initial,
-            [this.$t("Chinese")]: item.lexicalWord.chinese,
-            [this.$t("English")]: item.lexicalWord.english,
-            [this.$t("PoS")]: item.lexicalWord.pos,
+            [this.$t("Initial")]: item.lexicon.initial,
+            [this.$t("Chinese")]: item.lexicon.chinese,
+            [this.$t("English")]: item.lexicon.english,
+            [this.$t("PoS")]: item.lexicon.pos,
             [this.$t("WordFormation")]: item.wordFormation
               ? this.$t(this.wordFormations[item.wordFormation].name)
               : this.$t("NoData"),

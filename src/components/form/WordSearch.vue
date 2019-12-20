@@ -7,7 +7,7 @@
           <div v-for="word in value" :key="word.id">
             <el-link type="primary" @click="onWordSelected(word.id)">
               <span v-if="$i18n.locale==='en-US'">{{ word.english }}</span>
-              <span v-else v-html="$options.filters.addNumberSup(word.chinese)"></span>
+              <span v-else class="word-sup" v-html="$options.filters.addNumberSup(word.chinese)"></span>
             </el-link>
           </div>
         </el-collapse-item>
@@ -28,7 +28,7 @@
 </i18n>
 
 <script>
-import { GetLexicalWordsList } from "@/api/words";
+import { GetWordsList } from "@/api/lexicons";
 export default {
   name: "WordSearch",
   props: {
@@ -59,7 +59,7 @@ export default {
       this.$emit("word-selected", wordID);
     },
     getData() {
-      GetLexicalWordsList({ limit: 0 }).then(res => {
+      GetWordsList({ limit: 0 }).then(res => {
         let wordsDict = {};
         const wordsArray = res.data;
         wordsArray.map(item => {

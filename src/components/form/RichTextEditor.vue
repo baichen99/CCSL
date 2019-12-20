@@ -1,6 +1,5 @@
 <template>
   <div
-    v-show="hasInit"
     v-loading="loading"
     :class="{fullscreen:fullscreen}"
     class="tinymce-container"
@@ -234,28 +233,13 @@ export default {
 
 <style lang="scss">
 .tinymce-container {
-  // position: relative;
-  // line-height: normal;
-  min-height: 200px;
-}
+  min-height: 400px;
+  .tinymce-textarea {
+    visibility: hidden;
+  }
 
-.tox-tinymce {
-  border-radius: 3px !important;
+  .tox-tinymce {
+    border-radius: 3px !important;
+  }
 }
-//  .tinymce-container >>> .mce-fullscreen {
-//   z-index: 10000;
-// }
-
-.tinymce-textarea {
-  visibility: hidden;
-  z-index: -1;
-}
-
-// .fullscreen .editor-custom-btn-container {
-//   z-index: 10000;
-//   position: fixed;
-// }
-// .editor-upload-btn {
-//   display: inline-block;
-// }
 </style>

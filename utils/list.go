@@ -113,8 +113,8 @@ type GetUserListParameters struct {
 	State    string
 }
 
-// GetWordListParameters parameters for get word list queries
-type GetWordListParameters struct {
+// GetLexiconListParameters parameters for get word list queries
+type GetLexiconListParameters struct {
 	GetListParameters
 	Initial string
 	Chinese string
@@ -133,7 +133,7 @@ type GetPerformerListParameters struct {
 // GetVideoListParameters parameters for get videos list queries
 type GetVideoListParameters struct {
 	GetListParameters
-	WordID        string
+	LexiconID     string
 	Initial       string
 	Chinese       string
 	English       string

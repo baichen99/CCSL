@@ -56,7 +56,7 @@ export default {
       total: 0,
       params: {
         chinese: "",
-        wordID: "",
+        lexiconID: "",
         gender: "M",
         regionID: 100000,
         page: 1,
@@ -66,7 +66,7 @@ export default {
   },
   methods: {
     clearParams() {
-      this.params.wordID = "";
+      this.params.lexiconID = "";
       this.params.chinese = "";
     },
     getData() {
@@ -93,13 +93,13 @@ export default {
       this.getData();
     },
     searchByButton() {
-      this.params.wordID = "";
+      this.params.lexiconID = "";
       this.params.page = 1;
       this.getData();
     },
-    searchByWord(wordID) {
+    searchByWord(lexiconID) {
       this.clearParams();
-      this.params.wordID = wordID;
+      this.params.lexiconID = lexiconID;
       this.params.page = 1;
       this.getData();
     }

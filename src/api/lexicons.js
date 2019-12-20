@@ -1,8 +1,8 @@
 import request from "@/utils/request";
 
-const baseURL = "/lexical/words";
+const baseURL = "/lexicons";
 
-export function GetLexicalWordsList(params, loading) {
+export function GetWordsList(params, loading) {
   return request({
     url: baseURL,
     method: "get",
@@ -11,7 +11,7 @@ export function GetLexicalWordsList(params, loading) {
   });
 }
 
-export function CreateLexicalWord(data) {
+export function CreateWord(data) {
   return request({
     url: baseURL,
     method: "post",
@@ -19,14 +19,14 @@ export function CreateLexicalWord(data) {
   });
 }
 
-export function GetLexicalWord(id) {
+export function GetWord(id) {
   return request({
     url: `${baseURL}/${id}`,
     method: "get"
   });
 }
 
-export function UpdateLexicalWord(id, data) {
+export function UpdateWord(id, data) {
   return request({
     url: `${baseURL}/${id}`,
     method: "put",
@@ -34,7 +34,7 @@ export function UpdateLexicalWord(id, data) {
   });
 }
 
-export function DeleteLexicalWord(id) {
+export function DeleteWord(id) {
   return request({
     url: `${baseURL}/${id}`,
     method: "delete"

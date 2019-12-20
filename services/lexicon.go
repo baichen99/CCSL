@@ -7,35 +7,35 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// LexicalWordInterface struct
-type LexicalWordInterface interface {
-	GetWordsList(parameters utils.GetWordListParameters) (words []models.LexicalWord, count int, err error)
-	CreateWord(word models.LexicalWord) (err error)
-	GetWord(wordID string) (word models.LexicalWord, err error)
+// LexiconInterface struct
+type LexiconInterface interface {
+	GetWordsList(parameters utils.GetLexiconListParameters) (words []models.Lexicon, count int, err error)
+	CreateWord(word models.Lexicon) (err error)
+	GetWord(wordID string) (word models.Lexicon, err error)
 	UpdateWord(wordID string, updatedData map[string]interface{}) (err error)
 	DeleteWord(wordID string) (err error)
 }
 
-// LexicalWordService implements word interface
-type LexicalWordService struct {
+// LexiconService implements lexicon interface
+type LexiconService struct {
 	PG *gorm.DB
 }
 
-// NewLexicalWordService returns new word serivce
-func NewLexicalWordService(pg *gorm.DB) LexicalWordInterface {
-	return &LexicalWordService{
+// NewLexiconService returns new lexicon serivce
+func NewLexiconService(pg *gorm.DB) LexiconInterface {
+	return &LexiconService{
 		PG: pg,
 	}
 }
 
 // GetWordsList returns words list
-func (s *LexicalWordService) GetWordsList(parameters utils.GetWordListParameters) (words []models.LexicalWord, count int, err error) {
+func (s *LexiconService) GetWordsList(parameters utils.GetLexiconListParameters) (words []models.Lexicon, count int, err error) {
 	// Adding custom scopes to the query based on get list parameters.
 	db := s.PG.LogMode(false).Scopes(
-		utils.FilterByColumn("lexical_words.pos", parameters.Pos),
-		utils.FilterByColumn("lexical_words.initial", parameters.Initial),
-		utils.SearchByColumn("lexical_words.chinese", parameters.Chinese),
-		utils.FilterByArray("lexical_words.english", parameters.English, " "),
+		utils.FilterByColumn("lexicons.pos", parameters.Pos),
+		utils.FilterByColumn("lexicons.initial", parameters.Initial),
+		utils.SearchByColumn("lexicons.chinese", parameters.Chinese),
+		utils.FilterByArray("lexicons.english", parameters.English, " "),
 	)
 
 	// Fetching the total number of rows based on the conditions provided.
@@ -57,27 +57,27 @@ func (s *LexicalWordService) GetWordsList(parameters utils.GetWordListParameters
 }
 
 // CreateWord creates a new word
-func (s *LexicalWordService) CreateWord(word models.LexicalWord) (err error) {
+func (s *LexiconService) CreateWord(word models.Lexicon) (err error) {
 	err = s.PG.LogMode(true).Create(&word).Error
 	return
 }
 
 // GetWord returns word with given id
-func (s *LexicalWordService) GetWord(wordID string) (word models.LexicalWord, err error) {
+func (s *LexiconService) GetWord(wordID string) (word models.Lexicon, err error) {
 	err = s.PG.LogMode(false).Where("id = ?", wordID).Take(&word).Error
 	return
 }
 
 // UpdateWord updates word with given id
-func (s *LexicalWordService) UpdateWord(wordID string, updatedData map[string]interface{}) (err error) {
-	var word models.LexicalWord
+func (s *LexiconService) UpdateWord(wordID string, updatedData map[string]interface{}) (err error) {
+	var word models.Lexicon
 	err = s.PG.LogMode(true).Where("id = ?", wordID).First(&word).Updates(updatedData).Error
 	return
 }
 
 // DeleteWord soft deletes a word with given id
-func (s *LexicalWordService) DeleteWord(wordID string) (err error) {
-	var word models.LexicalWord
+func (s *LexiconService) DeleteWord(wordID string) (err error) {
+	var word models.Lexicon
 	err = s.PG.LogMode(true).Where("id = ?", wordID).Delete(&word).Error
 	return
 }

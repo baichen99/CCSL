@@ -13,7 +13,7 @@ export default {
   NewsManagement: "News",
   MemberManagement: "Members",
   DatabaseManagement: "Database",
-  LexicalWordManagement: "Lexicon",
+  LexiconManagement: "Lexicon",
   LexicalVideoManagement: "Lexical Database",
   SignManagement: "Signs",
   ISP: "ISP",

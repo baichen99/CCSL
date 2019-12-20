@@ -9,14 +9,14 @@ import (
 	"github.com/kataras/iris/v12/mvc"
 )
 
-// WordController is for word CURD
-type WordController struct {
-	Context     iris.Context
-	WordService services.LexicalWordInterface
+// LexiconController is for word CURD
+type LexiconController struct {
+	Context        iris.Context
+	LexiconService services.LexiconInterface
 }
 
 // BeforeActivation will register routes for controllers
-func (c *WordController) BeforeActivation(app mvc.BeforeActivation) {
+func (c *LexiconController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Router().Use(middlewares.CheckJWTToken)
 	app.Handle("GET", "/", "GetWordsList")
 	app.Handle("GET", "/{id: string}", "GetWord")
@@ -26,28 +26,28 @@ func (c *WordController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Handle("DELETE", "/{id: string}", "DeleteWord")
 }
 
-// GetWordsList GET /lexical/words
-func (c *WordController) GetWordsList() {
+// GetWordsList GET /lexicon
+func (c *LexiconController) GetWordsList() {
 	defer c.Context.Next()
-	listParams, err := utils.GetListParamsFromContext(c.Context, "lexical_words.initial")
+	listParams, err := utils.GetListParamsFromContext(c.Context, "lexicons.initial")
 	if err != nil {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "order only accepts 'asc' or 'desc'", err)
 		return
 	}
 	pos := c.Context.URLParamDefault("pos", "")
-	wordInitial := c.Context.URLParamDefault("initial", "")
+	initial := c.Context.URLParamDefault("initial", "")
 	searchChinese := c.Context.URLParamDefault("chinese", "")
 	searchEnglish := c.Context.URLParamDefault("english", "")
-	listParameters := utils.GetWordListParameters{
+	listParameters := utils.GetLexiconListParameters{
 		GetListParameters: listParams,
 		Pos:               pos,
-		Initial:           wordInitial,
+		Initial:           initial,
 		Chinese:           searchChinese,
 		English:           searchEnglish,
 	}
-	words, count, err := c.WordService.GetWordsList(listParameters)
+	words, count, err := c.LexiconService.GetWordsList(listParameters)
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusInternalServerError, "WordService::GetWordsList", err)
+		utils.SetResponseError(c.Context, iris.StatusInternalServerError, "LexiconService::GetWordsList", err)
 		return
 	}
 	c.Context.JSON(iris.Map{
@@ -59,19 +59,19 @@ func (c *WordController) GetWordsList() {
 	})
 }
 
-// CreateWord POST /lexical/words
-func (c *WordController) CreateWord() {
+// CreateWord POST /lexicon
+func (c *LexiconController) CreateWord() {
 	defer c.Context.Next()
-	var form lexicalWordCreateForm
+	var form lexiconCreateForm
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "WordController::ParamsError", err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "LexiconController::ParamsError", err)
 		return
 	}
 	// PSQL - Create word in database.
 	word := form.ConvertToModel()
-	if err := c.WordService.CreateWord(word); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "WordService::CreateWord", err)
+	if err := c.LexiconService.CreateWord(word); err != nil {
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "LexiconService::CreateWord", err)
 		return
 	}
 	// Return 201 Created
@@ -81,16 +81,16 @@ func (c *WordController) CreateWord() {
 	})
 }
 
-// GetWord GET /lexical/words/{id:string}
-func (c *WordController) GetWord() {
+// GetWord GET /lexicon/{id:string}
+func (c *LexiconController) GetWord() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
 	wordID := c.Context.Params().Get("id")
 
 	// PSQL - Looking for specified word via the ID.
-	word, err := c.WordService.GetWord(wordID)
+	word, err := c.LexiconService.GetWord(wordID)
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "WordService::GetWord", err)
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "LexiconService::GetWord", err)
 		return
 	}
 
@@ -101,25 +101,25 @@ func (c *WordController) GetWord() {
 	})
 }
 
-// UpdateWord PUT /lexical/words/{id:string}
-func (c *WordController) UpdateWord() {
+// UpdateWord PUT /lexicon/{id:string}
+func (c *LexiconController) UpdateWord() {
 	defer c.Context.Next()
 
 	// Getting ID from parameters in the URL
 	wordID := c.Context.Params().Get("id")
-	var form lexicalWordUpdateForm
+	var form lexiconUpdateForm
 
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "WordController::ParamsError", err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "LexiconController::ParamsError", err)
 		return
 	}
 
 	updateData := utils.MakeUpdateData(form)
 
 	// PSQL - Update of the given ID
-	if err := c.WordService.UpdateWord(wordID, updateData); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "WordService::UpdateWord", err)
+	if err := c.LexiconService.UpdateWord(wordID, updateData); err != nil {
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "LexiconService::UpdateWord", err)
 		return
 	}
 
@@ -128,14 +128,14 @@ func (c *WordController) UpdateWord() {
 }
 
 // DeleteWord DELETE /lexical/words/{id:string}
-func (c *WordController) DeleteWord() {
+func (c *LexiconController) DeleteWord() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
 	wordID := c.Context.Params().Get("id")
 
 	// PSQL - Soft delete of the given ID
-	if err := c.WordService.DeleteWord(wordID); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "WordService::DeleteWord", err)
+	if err := c.LexiconService.DeleteWord(wordID); err != nil {
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "LexiconService::DeleteWord", err)
 		return
 	}
 

@@ -48,7 +48,7 @@ export default {
       params: {
         page: 1,
         limit: 4,
-        wordID: "",
+        lexiconID: "",
         chinese: "",
         english: "",
         gender: "",
@@ -65,7 +65,7 @@ export default {
   },
   methods: {
     clearParams() {
-      this.params.wordID = "";
+      this.params.lexiconID = "";
       this.params.gender = "";
       this.params.regionID = undefined;
       this.params.leftSignID = "";
@@ -102,14 +102,14 @@ export default {
       this.getData();
     },
     searchByButton() {
-      this.params.wordID = "";
+      this.params.lexiconID = "";
       this.params.signID = "";
       this.params.page = 1;
       this.getData();
     },
-    searchByWord(wordID) {
+    searchByWord(lexiconID) {
       this.clearParams();
-      this.params.wordID = wordID;
+      this.params.lexiconID = lexiconID;
       this.params.page = 1;
       this.getData();
     },

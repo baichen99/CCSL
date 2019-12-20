@@ -24,7 +24,7 @@ html {
   box-sizing: border-box;
 }
 
-sup {
+.word-sup sup {
   color: #fff;
   font-family: "Courier New", Courier, monospace;
   font-weight: 800;
@@ -139,9 +139,9 @@ aside {
   border-radius: 5px;
 }
 
-// .el-loading-mask {
-//   z-index: 10000;
-// }
+.el-loading-mask {
+  z-index: 700;
+}
 
 .el-table-filter {
   max-height: 300px;
