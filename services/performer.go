@@ -32,7 +32,7 @@ func NewPerformerService(pg *gorm.DB) PerformerInterface {
 func (s *PerformerService) GetPerformersList(parameters utils.GetPerformerListParameters) (performers []models.Performer, count int, err error) {
 
 	// Adding custom scopes to the query based on get list parameters.
-	db := s.PG.LogMode(false).Scopes(
+	db := s.PG.Scopes(
 		utils.FilterByColumn("performers.gender", parameters.Gender),
 		utils.FilterByColumn("performers.region_id", parameters.RegionID),
 		utils.SearchByColumn("performers.name", parameters.Name),
@@ -66,7 +66,7 @@ func (s *PerformerService) GetPerformersList(parameters utils.GetPerformerListPa
 
 // GetPerformer get performer by id
 func (s *PerformerService) GetPerformer(performerID string) (performer models.Performer, err error) {
-	err = s.PG.LogMode(false).
+	err = s.PG.
 		Preload("Region").
 		Where("id = ?", performerID).
 		Take(&performer).
@@ -76,7 +76,7 @@ func (s *PerformerService) GetPerformer(performerID string) (performer models.Pe
 
 // CreatePerformer creates performer
 func (s *PerformerService) CreatePerformer(performer models.Performer) (err error) {
-	err = s.PG.LogMode(true).Create(&performer).Error
+	err = s.PG.Create(&performer).Error
 	return
 }
 

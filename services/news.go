@@ -26,7 +26,7 @@ func NewNewsService(pg *gorm.DB) NewsInterface {
 }
 
 func (s *NewsService) GetNewsList(parameters utils.GetNewsListParameters) (news []models.News, count int, err error) {
-	db := s.PG.LogMode(false).Scopes(
+	db := s.PG.Scopes(
 		utils.FilterByColumn("news.language", parameters.Language),
 		utils.FilterByColumn("news.type", parameters.Type),
 		utils.FilterByColumn("news.column", parameters.Column),
@@ -48,23 +48,23 @@ func (s *NewsService) GetNewsList(parameters utils.GetNewsListParameters) (news 
 }
 
 func (s *NewsService) GetNews(newsID string) (news models.News, err error) {
-	err = s.PG.LogMode(false).Preload("Creator").Where("id = ?", newsID).Take(&news).Error
+	err = s.PG.Preload("Creator").Where("id = ?", newsID).Take(&news).Error
 	return
 }
 
 func (s *NewsService) CreateNews(news models.News) (err error) {
-	err = s.PG.LogMode(true).Create(&news).Error
+	err = s.PG.Create(&news).Error
 	return
 }
 
 func (s *NewsService) UpdateNews(newsID string, updatedData map[string]interface{}) (err error) {
 	var news models.News
-	err = s.PG.LogMode(true).Where("id = ?", newsID).First(&news).Updates(updatedData).Error
+	err = s.PG.Where("id = ?", newsID).First(&news).Updates(updatedData).Error
 	return
 }
 
 func (s *NewsService) DeleteNews(newsID string) (err error) {
 	var news models.News
-	err = s.PG.LogMode(true).Where("id = ?", newsID).Delete(&news).Error
+	err = s.PG.Where("id = ?", newsID).Delete(&news).Error
 	return
 }

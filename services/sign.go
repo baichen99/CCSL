@@ -29,7 +29,7 @@ func NewSignService(pg *gorm.DB) SignInterface {
 }
 
 func (s *SignService) GetSignList(parameters utils.GetSignListParameters) (signs []models.Sign, count int, err error) {
-	db := s.PG.LogMode(false).Scopes(
+	db := s.PG.Scopes(
 		utils.SearchByColumn("signs.name", parameters.Name),
 	)
 	err = db.Model(&signs).Count(&count).Error
@@ -37,37 +37,38 @@ func (s *SignService) GetSignList(parameters utils.GetSignListParameters) (signs
 		return
 	}
 	orderQuery := parameters.OrderBy + " " + parameters.Order
+	// nameOrder is used to sort signs list by checking its contained number through a string typed value
+	// If we don't do like this, signs order would be 1, 10, 11, ..., 2, 20, ..., ZH
+	// This regular expression can help sort signs as we expected: 1, 2, 3, ..., 11, ..., ZH
+	const nameOrder = `cast(substring(signs.name, '^\d+') as int) asc`
 	if parameters.Limit != 0 {
-		// `cast(substring(signs.name, '^\d+') as int) asc` is used to sort signs list by checking its contained number through a string typed value
-		// If we don't do like this, signs order would be 1, 10, 11, ..., 2, 20, ..., ZH
-		// This regular expression can help sort signs as we expected: 1, 2, 3, ..., 11, ..., ZH
-		err = db.Order(`cast(substring(signs.name, '^\d+') as int) asc`).Order(orderQuery).Limit(parameters.Limit).Offset(parameters.Limit * (parameters.Page - 1)).Find(&signs).Error
+		err = db.Order(nameOrder).Order(orderQuery).Limit(parameters.Limit).Offset(parameters.Limit * (parameters.Page - 1)).Find(&signs).Error
 	} else {
-		err = db.Order(`cast(substring(signs.name, '^\d+') as int) asc`).Order(orderQuery).Find(&signs).Error
+		err = db.Order(nameOrder).Order(orderQuery).Find(&signs).Error
 	}
 
 	return
 }
 
 func (s *SignService) CreateSign(sign models.Sign) (err error) {
-	err = s.PG.LogMode(true).Create(&sign).Error
+	err = s.PG.Create(&sign).Error
 	return
 }
 
 func (s *SignService) GetSign(signID string) (sign models.Sign, err error) {
-	err = s.PG.LogMode(false).Where("id = ?", signID).Take(&sign).Error
+	err = s.PG.Where("id = ?", signID).Take(&sign).Error
 	return
 }
 
 func (s *SignService) UpdateSign(signID string, updatedData map[string]interface{}) (err error) {
 	var sign models.Sign
-	err = s.PG.LogMode(true).Where("id = ?", signID).First(&sign).Updates(updatedData).Error
+	err = s.PG.Where("id = ?", signID).First(&sign).Updates(updatedData).Error
 	return
 }
 
 func (s *SignService) DeleteSign(signID string) (err error) {
 	var sign models.Sign
-	db := s.PG.LogMode(true)
+	db := s.PG
 	err = db.Where("id = ?", signID).Find(&sign).Delete(&sign).Error
 	// Delete all the video associations related to this sign
 	db.Model(&sign).Association("LexicalVideoLeft").Clear()

@@ -96,7 +96,15 @@ func main() {
 func initApp() *iris.Application {
 	app := iris.New()
 	app.Use(recover.New())
-	app.Use(logger.New())
+	app.Use(logger.New(logger.Config{
+		Status:             true,
+		IP:                 true,
+		Method:             true,
+		Path:               true,
+		Query:              true,
+		MessageContextKeys: []string{"RequestID"},
+		MessageHeaderKeys:  []string{"User-Agent"},
+	}))
 	app.I18n.Load("./locales/*/*.ini", "zh-CN", "en-US")
 	app.OnAnyErrorCode(middlewares.ErrorHandler)
 	app.Use(middlewares.BeforeHandleRequest)

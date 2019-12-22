@@ -28,24 +28,24 @@ func NewSystemService(pg *gorm.DB) SystemInterface {
 }
 
 func (s *SystemService) GetAppInfo(key string) (data models.Info, err error) {
-	db := s.PG.LogMode(false)
+	db := s.PG
 	err = db.Where("key = ?", key).First(&data).Error
 	return
 }
 
 func (s *SystemService) UpdateAppInfo(key string, updatedData map[string]interface{}) (err error) {
 	var info models.Info
-	err = s.PG.LogMode(true).Where("key = ?", key).First(&info).Updates(updatedData).Error
+	err = s.PG.Where("key = ?", key).First(&info).Updates(updatedData).Error
 	return
 }
 
 func (s *SystemService) CreateJsError(jsErr models.JsError) (err error) {
-	err = s.PG.LogMode(true).Create(&jsErr).Error
+	err = s.PG.Create(&jsErr).Error
 	return
 }
 
 func (s *SystemService) GetJsErrorList(parameters utils.GetJsErrorListParameters) (errors []models.JsError, count int, err error) {
-	db := s.PG.LogMode(true)
+	db := s.PG
 	// Fetching the total number of rows based on the conditions provided.
 	err = db.Model(&errors).Count(&count).Error
 
@@ -68,7 +68,7 @@ func (s *SystemService) GetJsErrorList(parameters utils.GetJsErrorListParameters
 }
 
 func (s *SystemService) GetCitiesList() (jProvinces []models.JSONProvince, err error) {
-	db := s.PG.LogMode(false)
+	db := s.PG
 	var provinces []models.Province
 	err = db.Order("code asc").Find(&provinces).Error
 	if err != nil {
