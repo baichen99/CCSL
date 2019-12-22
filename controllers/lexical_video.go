@@ -4,6 +4,7 @@ import (
 	"ccsl/middlewares"
 	"ccsl/services"
 	"ccsl/utils"
+	"errors"
 
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
@@ -31,7 +32,7 @@ func (c *VideoController) GetVideosList() {
 	defer c.Context.Next()
 	listParams, err := utils.GetListParamsFromContext(c.Context, "lexicons.initial, lexicons.id, performers.region_id, performers.gender")
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "order only accepts 'asc' or 'desc'", err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "VideoController::GetVideosList", errors.New("ParamsError"))
 		return
 	}
 	lexiconID := c.Context.URLParamDefault("lexiconID", "")
@@ -65,7 +66,7 @@ func (c *VideoController) GetVideosList() {
 	}
 	videos, count, err := c.VideoService.GetVideosList(listParameters)
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusInternalServerError, "VideoService::GetVideosList", err)
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "VideoService::GetVideosList", errors.New("SqlError"))
 		return
 	}
 
@@ -84,7 +85,7 @@ func (c *VideoController) CreateVideo() {
 	var form lexicalVideoCreateForm
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "VideoController::ParamsError", err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "VideoController::CreateVideo", errParams)
 		return
 	}
 	// PSQL - Create video in database.
@@ -92,7 +93,7 @@ func (c *VideoController) CreateVideo() {
 	leftSignsIds := form.LeftSignsID
 	rightSignsIds := form.RightSignsID
 	if err := c.VideoService.CreateVideo(video, leftSignsIds, rightSignsIds); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "VideoService::CreateVideo", err)
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "VideoService::CreateVideo", errSQL)
 		return
 	}
 	// Return 201 Created
@@ -109,7 +110,7 @@ func (c *VideoController) GetVideo() {
 	videoID := c.Context.Params().Get("id")
 	video, err := c.VideoService.GetVideo(videoID)
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "VideoService::GetVideo", err)
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "VideoService::GetVideo", errSQL)
 	}
 	c.Context.JSON(iris.Map{
 		message: success,
@@ -127,7 +128,7 @@ func (c *VideoController) UpdateVideo() {
 
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "VideoController::ParamsError", err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "VideoController::UpdateVideo", errParams)
 		return
 	}
 
@@ -138,7 +139,7 @@ func (c *VideoController) UpdateVideo() {
 
 	// PSQL - Update of the given ID
 	if err := c.VideoService.UpdateVideo(videoID, updateData, form.LeftSignsID, form.RightSignsID); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "VideoService::UpdateVideo", err)
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "VideoService::UpdateVideo", errSQL)
 		return
 	}
 
@@ -154,7 +155,7 @@ func (c *VideoController) DeleteVideo() {
 
 	// PSQL - Soft delete of the given ID
 	if err := c.VideoService.DeleteVideo(videoID); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "WordService::DeleteWord", err)
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "WordService::DeleteWord", errSQL)
 		return
 	}
 

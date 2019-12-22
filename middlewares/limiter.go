@@ -16,6 +16,7 @@ func LimitHandler(l *limiter.Limiter) context.Handler {
 		error := tollbooth.LimitByRequest(l, ctx.ResponseWriter(), ctx.Request())
 		if error != nil {
 			ctx.ContentType(l.GetMessageContentType())
+			utils.LogInfo(ctx, "Request reached rate limit")
 			utils.SetResponseError(ctx, iris.StatusTooManyRequests, "LimitMiddleware", errors.New("TryAgainLater"))
 			return
 		}

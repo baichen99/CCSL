@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"ccsl/models"
+	"errors"
 	"time"
 
 	"github.com/jinzhu/gorm/dialects/postgres"
@@ -19,6 +20,13 @@ const (
 	language  string = "language"
 	version   string = "version"
 	ipAddress string = "ip"
+)
+
+var (
+	errParams error = errors.New("ParamsError")
+	errSQL    error = errors.New("SqlError")
+	errAuth   error = errors.New("AuthFailed")
+	errRole   error = errors.New("RoleError")
 )
 
 // >>> INFO <<<

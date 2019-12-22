@@ -21,7 +21,7 @@ func LogInfo(context iris.Context, info string) {
 		fileName = "UNKNOWN"
 		lineNumber = 0
 	}
-	context.Application().Logger().Infof("[%s:%d] %s - ", fileName, lineNumber, info)
+	context.Application().Logger().Infof("[%s:%d] %s ", fileName, lineNumber, info)
 }
 
 // MakeUpdateData returns a map of update data model

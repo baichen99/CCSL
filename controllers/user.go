@@ -35,7 +35,7 @@ func (c *UserController) GetUsersList() {
 	defer c.Context.Next()
 	listParams, err := utils.GetListParamsFromContext(c.Context, "users.username")
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "order only accepts 'asc' or 'desc'", err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "UserController::GetUsersList", errParams)
 		return
 	}
 	userType := c.Context.URLParamDefault("userType", "")
@@ -51,7 +51,7 @@ func (c *UserController) GetUsersList() {
 	}
 	users, count, err := c.UserService.GetUsersList(listParameters)
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusInternalServerError, "UserService::GetUsersList", err)
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "UserService::GetUsersList", errSQL)
 		return
 	}
 	c.Context.JSON(iris.Map{
@@ -69,14 +69,14 @@ func (c *UserController) CreateUser() {
 	var form userCreateForm
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "UserController::ParamsError", err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "UserController::CreateUser", errParams)
 		return
 	}
 
 	// If user not shu account, must have password set
 	if form.Password == "" {
 		if !utils.IsShuUser(form.Username) {
-			utils.SetResponseError(c.Context, iris.StatusBadRequest, "UserController::ParamsError", errors.New("PasswordRequired"))
+			utils.SetResponseError(c.Context, iris.StatusBadRequest, "UserController::CreateUser", errors.New("PasswordRequired"))
 			return
 		}
 	}
@@ -84,7 +84,7 @@ func (c *UserController) CreateUser() {
 	// PSQL - Create user in database.
 	user := form.ConvertToModel()
 	if err := c.UserService.CreateUser(user); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "UserService::CreateUser", err)
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "UserService::CreateUser", errSQL)
 		return
 	}
 
@@ -105,14 +105,14 @@ func (c *UserController) GetUser() {
 	tokenUser, tokenRole := middlewares.GetJWTParams(c.Context)
 
 	if !(tokenRole == "super" || tokenUser == userID) {
-		utils.SetResponseError(c.Context, iris.StatusForbidden, "Not super user or self", errors.New("RoleError"))
+		utils.SetResponseError(c.Context, iris.StatusForbidden, "UserController::GetUser", errRole)
 		return
 	}
 
 	// PSQL - Looking for specified user via the ID.
 	user, err := c.UserService.GetUser("id", userID)
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "UserService::GetUser", err)
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "UserService::GetUser", errSQL)
 		return
 	}
 
@@ -133,14 +133,14 @@ func (c *UserController) UpdateUser() {
 
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "UserController::ParamsError", err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "UserController::UpdateUser", errParams)
 		return
 	}
 
 	// Only super admin and user
 	tokenUser, tokenRole := middlewares.GetJWTParams(c.Context)
 	if tokenRole != "super" && tokenUser != userID {
-		utils.SetResponseError(c.Context, iris.StatusForbidden, "Not super user or self", errors.New("RoleError"))
+		utils.SetResponseError(c.Context, iris.StatusForbidden, "UserController::UpdateUser", errRole)
 		return
 	}
 
@@ -148,13 +148,11 @@ func (c *UserController) UpdateUser() {
 
 	// PSQL - Update of the given user ID.
 	if err := c.UserService.UpdateUser(userID, updateData); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "UserService::UpdateUser", err)
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "UserService::UpdateUser", errSQL)
 		return
 	}
-
 	// Returns with 204 No Content status.
 	c.Context.StatusCode(iris.StatusNoContent)
-
 }
 
 // DeleteUser Controller: DELETE /users/{id: string}
@@ -166,7 +164,7 @@ func (c *UserController) DeleteUser() {
 
 	// PSQL - Soft delete of the given user.
 	if err := c.UserService.DeleteUser(userID); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "UserService::DeleteUser", err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "UserService::DeleteUser", errParams)
 		return
 	}
 
@@ -181,20 +179,20 @@ func (c *UserController) UserLogin() {
 
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "UserController::ParamsError", err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "UserController::UserLogin", errParams)
 		return
 	}
 
 	// PSQL - Get user from database
 	user, err := c.UserService.GetUser("username", form.Username)
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnauthorized, "UserService::GetUser", errors.New("AuthFailed"))
+		utils.SetResponseError(c.Context, iris.StatusUnauthorized, "UserService::GetUser", errAuth)
 		return
 	}
 
 	// Only active user can login
 	if user.State != "active" {
-		utils.SetResponseError(c.Context, iris.StatusUnauthorized, "Account State Error", errors.New("InactiveAccount"))
+		utils.SetResponseError(c.Context, iris.StatusUnauthorized, "UserController::UserLogin", errors.New("InactiveAccount"))
 		return
 	}
 
@@ -203,24 +201,24 @@ func (c *UserController) UserLogin() {
 		// Is SHU user, auth by shu oauth
 		result, err := utils.ShuLogin(form.Username, form.Password)
 		if err != nil {
-			utils.SetResponseError(c.Context, iris.StatusUnauthorized, "Password incorrect", err)
+			utils.SetResponseError(c.Context, iris.StatusUnauthorized, "UserController::UserLogin::OauthLogin", errors.New("OauthUnavailable"))
 			return
 		}
 		if !result {
-			utils.SetResponseError(c.Context, iris.StatusUnauthorized, "Password incorrect", errors.New("AuthFailed"))
+			utils.SetResponseError(c.Context, iris.StatusUnauthorized, "UserController::UserLogin::OauthLogin", errAuth)
 			return
 		}
 	} else {
 		utils.LogInfo(c.Context, "Password Login")
 		// Not shu user, compare password
 		if result := utils.ComparePassword(user.Password, form.Password); !result {
-			utils.SetResponseError(c.Context, iris.StatusUnauthorized, "Password incorrect", errors.New("AuthFailed"))
+			utils.SetResponseError(c.Context, iris.StatusUnauthorized, "UserController::UserLogin::PasswordLogin", errAuth)
 			return
 		}
 	}
 	token, err := middlewares.SignJWTToken(user.ID, user.UserType)
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnauthorized, "Sign Token Error", errors.New("AuthFailed"))
+		utils.SetResponseError(c.Context, iris.StatusUnauthorized, "UserController::UserLogin::SignToken", errAuth)
 		return
 	}
 	ipAddress := c.Context.GetHeader("X-Real-IP")
@@ -238,7 +236,7 @@ func (c *UserController) RefreshToken() {
 	userID, _ := uuid.FromString(tokenUser)
 	token, err := middlewares.SignJWTToken(userID, tokenRole)
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnauthorized, "Sign Token Error", errors.New("AuthFailed"))
+		utils.SetResponseError(c.Context, iris.StatusUnauthorized, "UserController::RefreshToken::SignToken", errAuth)
 		return
 	}
 	ipAddress := c.Context.GetHeader("X-Real-IP")
@@ -255,7 +253,7 @@ func (c *UserController) UpdateUserLoginHistory(ipAddress string, userID uuid.UU
 	info, _ := utils.GetIPInfo(ipAddress)
 	info.UserID = userID
 	if err := c.UserService.CreateLoginHistory(info); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "UserService::CreateLoginHistory", err)
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "UserService::CreateLoginHistory", errSQL)
 		return
 	}
 }

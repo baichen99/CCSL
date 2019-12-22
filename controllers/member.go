@@ -30,7 +30,7 @@ func (c *MemberController) GetMemberList() {
 	defer c.Context.Next()
 	listParams, err := utils.GetListParamsFromContext(c.Context, "members.created_at")
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "order only accepts 'asc' or 'desc'", err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "MemberController::GetMemberList", errParams)
 	}
 	nameZh := c.Context.URLParamDefault("nameZh", "")
 	nameEn := c.Context.URLParamDefault("nameEn", "")
@@ -55,13 +55,13 @@ func (c *MemberController) CreateMember() {
 	var form memberCreateForm
 	//   Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "MemberService::CreateMember", err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "MemberService::CreateMember", errParams)
 		return
 	}
 	//    PSQL - Create  member in database.
 	member := form.ConvertToModel()
 	if err := c.MemberService.CreateMember(member); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "MemberService::CreateMember", err)
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "MemberService::CreateMember", errSQL)
 		return
 	}
 	//    return 201 Created
@@ -81,7 +81,7 @@ func (c *MemberController) GetMember() {
 	// PSQL - Looking for specified word viea the ID.
 	member, err := c.MemberService.GetMember(MemberID)
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "MemberServcie:GetMember", err)
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "MemberServcie:GetMember", errSQL)
 		return
 	}
 	// Returning word information in data key.
@@ -102,14 +102,14 @@ func (c *MemberController) UpdateMember() {
 
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "MemberController::ParamsError", err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "MemberController::UpdateMember", err)
 		return
 	}
 	updateData := utils.MakeUpdateData(form)
 
 	// PSQL - Update of the give ID
 	if err := c.MemberService.UpdateMember(memberID, updateData); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "MemberService::UpdateMember", err)
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "MemberService::UpdateMember", errSQL)
 		return
 	}
 
@@ -125,7 +125,7 @@ func (c *MemberController) DeleteMember() {
 
 	// PSQL = Soft delete of the given ID
 	if err := c.MemberService.DeleteMember(memberID); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "MemberService::DeleteMember", err)
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "MemberService::DeleteMember", errSQL)
 		return
 	}
 

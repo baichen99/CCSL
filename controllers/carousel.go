@@ -30,7 +30,7 @@ func (c *CarouselController) GetCarouselsList() {
 	defer c.Context.Next()
 	listParams, err := utils.GetListParamsFromContext(c.Context, "created_at")
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "order only accepts 'asc' or 'desc'", err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "CarouselController::GetCarouselsList", errParams)
 		return
 	}
 	titleZh := c.Context.URLParamDefault("titleZh", "")
@@ -44,7 +44,7 @@ func (c *CarouselController) GetCarouselsList() {
 	}
 	carousels, count, err := c.CarouselService.GetCarouselList(listParameters)
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusInternalServerError, "CarouselService::GetCarouselsList", err)
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "CarouselService::GetCarouselsList", errSQL)
 		return
 	}
 	c.Context.JSON(iris.Map{
@@ -62,7 +62,7 @@ func (c *CarouselController) CreateCarousel() {
 	var form carouselCreateForm
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "CarouselCroller::ParamsError", err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "CarouselCroller::CreateCarousel", errParams)
 		return
 	}
 	// PSQL - Create carousel in database.
@@ -72,7 +72,7 @@ func (c *CarouselController) CreateCarousel() {
 	tokenID, _ := uuid.FromString(tokenUser)
 	carousel.CreatorID = tokenID
 	if err := c.CarouselService.CreateCarousel(carousel); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "Carouselervice::CreateCarousel", err)
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "Carouselervice::CreateCarousel", errSQL)
 		return
 	}
 	// Return 201 Created
@@ -89,7 +89,7 @@ func (c *CarouselController) GetCarousel() {
 	carouselID := c.Context.Params().Get("id")
 	carousel, err := c.CarouselService.GetCarousel(carouselID)
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "CarouselCroller::GetCarousel", err)
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "CarouselCroller::GetCarousel", errSQL)
 		return
 	}
 	c.Context.JSON(iris.Map{
@@ -107,13 +107,13 @@ func (c *CarouselController) UpdateCarousel() {
 
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "CarouselCroller::ParamsError", err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "CarouselCroller::UpdateCarousel", errParams)
 		return
 	}
 	updateData := utils.MakeUpdateData(form)
 	// PSQL - Update of the given ID
 	if err := c.CarouselService.UpdateCarousel(carouselID, updateData); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "CarouselService::UpdateCarousel", err)
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "CarouselService::UpdateCarousel", errSQL)
 		return
 	}
 	// Returns with 204 No Content status.
@@ -128,7 +128,7 @@ func (c *CarouselController) DeleteCarousel() {
 
 	// PSQL - Soft delete of the given ID
 	if err := c.CarouselService.DeleteCarousel(carouselID); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "CarouselService::DeleteCarousel", err)
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "CarouselService::DeleteCarousel", errSQL)
 		return
 	}
 

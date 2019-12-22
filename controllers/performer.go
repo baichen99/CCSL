@@ -31,7 +31,7 @@ func (c *PerformerController) GetPerformersList() {
 	defer c.Context.Next()
 	listParams, err := utils.GetListParamsFromContext(c.Context, "performers.region_id")
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "order only accepts 'asc' or 'desc'", err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "PerformerController::GetPerformersList", errParams)
 		return
 	}
 	name := c.Context.URLParamDefault("name", "")
@@ -45,7 +45,7 @@ func (c *PerformerController) GetPerformersList() {
 	}
 	performers, count, err := c.PerformerService.GetPerformersList(listParameters)
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusInternalServerError, "PerformerService::GetPerformersList", err)
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "PerformerService::GetPerformersList", errSQL)
 		return
 	}
 	c.Context.JSON(iris.Map{
@@ -63,13 +63,13 @@ func (c *PerformerController) CreatePerformer() {
 	var form performerCreateForm
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "PerformerController::ParamsError", err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "PerformerController::CreatePerformer", errParams)
 		return
 	}
 	// PSQL - Create performer in database.
 	performer := form.ConvertToModel()
 	if err := c.PerformerService.CreatePerformer(performer); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "PerformerService::CreatePerformer", err)
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "PerformerService::CreatePerformer", errSQL)
 		return
 	}
 	// Return 201 Created
@@ -88,7 +88,7 @@ func (c *PerformerController) GetPerformer() {
 	// PSQL - Looking for specified performer via the ID.
 	performer, err := c.PerformerService.GetPerformer(performerID)
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "PerformerService::GetPerformer", err)
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "PerformerService::GetPerformer", errSQL)
 		return
 	}
 
@@ -108,14 +108,14 @@ func (c *PerformerController) UpdatePerformer() {
 
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "PerformerController::ParamsError", err)
+		utils.SetResponseError(c.Context, iris.StatusBadRequest, "PerformerController::UpdatePerformer", errParams)
 		return
 	}
 	updateData := utils.MakeUpdateData(form)
 	// PSQL - Looking for specified performer via the ID.
 
 	if err := c.PerformerService.UpdatePerformer(performerID, updateData); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "PerformerService::UpdatePerformer", err)
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "PerformerService::UpdatePerformer", errSQL)
 		return
 	}
 
@@ -132,7 +132,7 @@ func (c *PerformerController) DeletePerformer() {
 
 	// PSQL - Soft delete of the given ID
 	if err := c.PerformerService.DeletePerformer(performerID); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "PerformerService::DeletePerformer", err)
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "PerformerService::DeletePerformer", errSQL)
 		return
 	}
 
