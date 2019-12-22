@@ -95,10 +95,10 @@ func main() {
 
 func initApp() *iris.Application {
 	app := iris.New()
-	app.OnAnyErrorCode(middlewares.ErrorHandler)
 	app.Use(recover.New())
 	app.Use(logger.New())
-	app.Use(middlewares.I18nConf)
+	app.I18n.Load("./locales/*/*.ini", "zh-CN", "en-US")
+	app.OnAnyErrorCode(middlewares.ErrorHandler)
 	app.Use(middlewares.BeforeHandleRequest)
 	app.Done(middlewares.AfterHandleRequest)
 	app.Configure(iris.WithConfiguration(iris.YAML(configs.AppConf)))

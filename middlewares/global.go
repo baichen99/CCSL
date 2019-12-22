@@ -5,7 +5,6 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/kataras/iris/v12"
-	"github.com/kataras/iris/v12/middleware/i18n"
 	uuid "github.com/satori/go.uuid"
 )
 
@@ -26,16 +25,6 @@ var (
 	// 	AllowedOrigins:   configs.Conf.App.CORS,
 	// 	AllowCredentials: configs.Conf.App.AllowCookie,
 	// }
-
-	// I18nConf is config for internationalization
-	I18nConf = i18n.New(i18n.Config{
-		Default:      "en-US",
-		URLParameter: "lang",
-		Languages: map[string]string{
-			"en-US": "./locales/en-US.ini",
-			"zh-CN": "./locales/zh-CN.ini",
-		},
-	})
 )
 
 // CheckJWTToken is a user authorization middleware

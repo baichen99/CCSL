@@ -28,6 +28,8 @@ const (
 	TooManyRequests string = "TooManyRequests"
 	// InternalError 500 Error
 	InternalError string = "InternalError"
+	// URLNotFound 404 Error
+	URLNotFound = "URLNotFound"
 	// UnknownError other error code
 	UnknownError string = "UnknownError"
 )
@@ -58,8 +60,8 @@ func ErrorHandler(ctx iris.Context) {
 	default:
 		msg = UnknownError
 	}
-	msg = ctx.Translate(msg)
-	err := ctx.Translate(errMessage)
+	msg = ctx.Tr(msg)
+	err := ctx.Tr(errMessage)
 	if errMessage != "" {
 		ctx.JSON(iris.Map{
 			message: msg,
@@ -68,6 +70,6 @@ func ErrorHandler(ctx iris.Context) {
 		return
 	}
 	ctx.JSON(iris.Map{
-		message: NotFound,
+		message: ctx.Tr(URLNotFound),
 	})
 }

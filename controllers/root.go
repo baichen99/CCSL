@@ -16,8 +16,8 @@ type RootController struct {
 // Get Controller: GET /
 func (c *RootController) Get() {
 	defer c.Context.Next()
-	hello := c.Context.Translate("Hello")
-	lang := c.Context.Values().GetString(c.Context.Application().ConfigurationReadOnly().GetTranslateLanguageContextKey())
+	hello := c.Context.Tr("Hello")
+	lang := c.Context.GetLocale().Language()
 	workPath, err := os.Getwd()
 	if err != nil {
 		panic(err)
@@ -26,9 +26,9 @@ func (c *RootController) Get() {
 	ver, _ := ioutil.ReadFile(versionFile)
 	ip := c.Context.GetHeader("X-Real-IP")
 	c.Context.JSON(iris.Map{
-		message:  hello,
-		language: lang,
-		version:  strings.Replace(string(ver), "\n", "", -1),
-		"IP":     ip,
+		message:   hello,
+		language:  lang,
+		version:   strings.Replace(string(ver), "\n", "", -1),
+		ipAddress: ip,
 	})
 }

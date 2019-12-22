@@ -9,15 +9,16 @@ import (
 )
 
 const (
-	data     string = "data"
-	message  string = "message"
-	success  string = "success" // 200 OK
-	errinfo  string = "error"
-	page     string = "page"
-	total    string = "total"
-	limit    string = "limit"
-	language string = "language"
-	version  string = "version"
+	data      string = "data"
+	message   string = "message"
+	success   string = "success" // 200 OK
+	errinfo   string = "error"
+	page      string = "page"
+	total     string = "total"
+	limit     string = "limit"
+	language  string = "language"
+	version   string = "version"
+	ipAddress string = "ip"
 )
 
 // >>> INFO <<<
