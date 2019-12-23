@@ -153,7 +153,7 @@ type userCreateForm struct {
 	Name     string `json:"name" validate:"required"`
 	Username string `json:"username" validate:"required,numeric|email"`
 	Password string `json:"password" validate:"omitempty"`
-	UserType string `json:"userType" validate:"required,oneof=admin user learner"`
+	UserType string `json:"userType" validate:"required,oneof=super admin user learner"`
 	State    string `json:"state" validate:"required,oneof=active inactive"`
 }
 
