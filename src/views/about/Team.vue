@@ -62,7 +62,7 @@ export default {
   },
   methods: {
     getData() {
-      GetMembersList({ limit: 0, orderBy: "type, created_at" }).then(res => {
+      GetMembersList({ limit: 0, orderBy: "type,created_at" }).then(res => {
         this.tableData = res.data;
       });
     },

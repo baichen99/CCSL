@@ -9,7 +9,7 @@
         <span class="tag-label">{{ $t("Region") }}</span>
         <span class="tag-value">{{ video.performer.region.name }}</span>
         <span class="tag-label">{{ $t("Chinese") }}</span>
-        <span class="tag-value" v-html="$options.filters.addNumberSup(video.lexicon.chinese)"></span>
+        <span class="tag-value word-sup" v-html="$options.filters.addNumberSup(video.lexicon.chinese)"></span>
       </div>
       <div class="tags">
         <span class="tag-label">{{ $t("PoS") }}</span>
@@ -29,7 +29,7 @@
         <span class="tag-label">{{ $t("Morpheme") }}</span>
         <span v-if="video.morpheme.length > 0" class="tag-value">
           <el-tag v-for="(item,index) in video.morpheme" :key="index" class="tag-words">
-            <span v-html="$options.filters.addNumberSup(item)"></span>
+            <span class="word-sup" v-html="$options.filters.addNumberSup(item)"></span>
           </el-tag>
         </span>
         <span v-else class="tag-value">

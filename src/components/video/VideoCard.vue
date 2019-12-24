@@ -6,7 +6,7 @@
         <span v-if="showRegion" class="tag-value">{{ video.performer.region.name }}</span>
         <span
           v-if="$i18n.locale==='zh-CN'"
-          class="tag-value"
+          class="tag-value word-sup"
           v-html="$options.filters.addNumberSup(video.lexicon.chinese.split('（')[0])"
         />
         <span v-else-if="$i18n.locale==='en-US'" class="tag-value">{{ video.lexicon.english }}</span>
