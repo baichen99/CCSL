@@ -117,7 +117,6 @@ func initApp() *iris.Application {
 func initDB(app *iris.Application) *gorm.DB {
 	pg := utils.ConnectPostgres(app)
 	pg.SetLogger(configs.GetPostgresLogger())
-	pg.LogMode(true)
 	// AutoMigrate will create missing tables and missing index keys
 	pg.AutoMigrate(&models.User{}, &models.Lexicon{}, &models.LexicalVideo{}, &models.Sign{}, &models.Performer{}, &models.Carousel{}, &models.News{}, &models.Member{}, &models.District{}, &models.City{}, &models.Province{}, &models.JsError{}, &models.Info{}, &models.LoginHistory{})
 
