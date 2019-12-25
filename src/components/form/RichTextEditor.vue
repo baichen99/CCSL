@@ -171,7 +171,7 @@ export default {
         init_instance_callback: editor => {
           _this.hasInit = true;
           editor.setContent(_this.value);
-          editor.on("Keyup SetContent", () => {
+          editor.on("Change Keyup SetContent", () => {
             this.hasChange = true;
             this.$emit("update", editor.getContent());
           });
