@@ -3,7 +3,7 @@
     <svg-icon icon-class="logo" class="logo" />
     <div>{{ $t("icpLicense") }}</div>
     <div>{{ $t("CCSL") }}</div>
-    <div>{{ $t("copyright") }} &copy; 2018-2019 {{ $t("SHU") }}</div>
+    <div>{{ $t("copyright") }} &copy; 2018-{{ currentYear }} {{ $t("SHU") }}</div>
     <div>
       {{ $t("Email") }}:
       <a href="mailto:ccsl@oa.shu.edu.cn">ccsl@oa.shu.edu.cn</a>
@@ -26,6 +26,16 @@
 }
 </i18n>
 
+<script>
+export default {
+  name: "Footer",
+  computed: {
+    currentYear() {
+      return new Date().getFullYear();
+    }
+  }
+};
+</script>
 
 <style lang="scss" scoped>
 @import "@/styles/element-variables.scss";

@@ -1,6 +1,6 @@
 module ccsl
 
-go 1.12
+go 1.13
 
 require (
 	cloud.google.com/go v0.48.0 // indirect
@@ -15,8 +15,8 @@ require (
 	github.com/jinzhu/gorm v1.9.11
 	github.com/json-iterator/go v1.1.9 // indirect
 	github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88 // indirect
-	github.com/kataras/iris/v12 v12.1.2
-	github.com/klauspost/compress v1.9.4 // indirect
+	github.com/kataras/iris/v12 v12.1.4
+	github.com/klauspost/compress v1.9.5 // indirect
 	github.com/leodido/go-urn v1.2.0 // indirect
 	github.com/lib/pq v1.3.0
 	github.com/mattn/go-colorable v0.1.1 // indirect
@@ -37,11 +37,12 @@ require (
 	github.com/yudai/gojsondiff v1.0.0 // indirect
 	github.com/yudai/golcs v0.0.0-20170316035057-ecda9a501e82 // indirect
 	github.com/yudai/pp v2.0.1+incompatible // indirect
-	golang.org/x/crypto v0.0.0-20191219195013-becbf705a915
-	golang.org/x/sys v0.0.0-20191220220014-0732a990476f // indirect
+	golang.org/x/crypto v0.0.0-20191227163750-53104e6ec876
+	golang.org/x/sys v0.0.0-20191228213918-04cbcbbfeed8 // indirect
 	golang.org/x/time v0.0.0-20191024005414-555d28b269f0 // indirect
 	google.golang.org/appengine v1.6.5 // indirect
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
-	gopkg.in/go-playground/validator.v9 v9.30.2
+	gopkg.in/go-playground/validator.v9 v9.31.0
+	gopkg.in/ini.v1 v1.51.1 // indirect
 	gopkg.in/yaml.v2 v2.2.7
 )
