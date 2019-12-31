@@ -1,7 +1,5 @@
 <template>
-  <div>
-      RESET PASSWORD
-  </div>
+  <div>RESET PASSWORD</div>
 </template>
 
 <script>
