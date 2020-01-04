@@ -1,0 +1,267 @@
+definitions:
+  controllers.ErrorResponse:
+    properties:
+      error:
+        example: erroro message
+        type: string
+      message:
+        example: error title
+        type: string
+    type: object
+  controllers.GetUsersListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.User'
+        type: array
+      limit:
+        example: 10
+        type: integer
+      message:
+        example: success
+        type: string
+      page:
+        example: 1
+        type: integer
+      total:
+        example: 100
+        type: integer
+    type: object
+  controllers.UserCreateForm:
+    properties:
+      avatar:
+        example: https://ccsl.shu.edu.cn/public/assets/default.png
+        type: string
+      name:
+        example: Adrian Duan
+        type: string
+      password:
+        example: p@ssw0rd
+        type: string
+      state:
+        enum:
+        - active
+        - inactive
+        example: active
+        type: string
+      userType:
+        enum:
+        - super
+        - admin
+        - user
+        - learner
+        example: admin
+        type: string
+      username:
+        example: adrianduan@icloud.com
+        type: string
+    required:
+    - name
+    - state
+    - userType
+    - username
+    type: object
+  controllers.UserUpdateForm:
+    properties:
+      avatar:
+        example: https://ccsl.shu.edu.cn/public/assets/default.png
+        type: string
+      name:
+        example: Adrian Duan
+        type: string
+      state:
+        enum:
+        - active
+        - inactive
+        example: active
+        type: string
+      userType:
+        enum:
+        - super
+        - admin
+        - user
+        - learner
+        example: admin
+        type: string
+      username:
+        example: adrianduan@icloud.com
+        type: string
+    type: object
+  models.User:
+    properties:
+      avatar:
+        example: https://ccsl.shu.edu.cn/public/assets/default.png
+        type: string
+      createdAt:
+        example: "2000-12-30T00:00:00Z"
+        type: string
+      id:
+        example: 550e8400-e29b-41d4-a716-446655440000
+        format: uuid
+        type: string
+      name:
+        example: Adrian Duan
+        type: string
+      state:
+        example: active
+        type: string
+      updatedAt:
+        example: "2000-12-30T00:00:00Z"
+        type: string
+      userType:
+        example: admin
+        type: string
+      username:
+        example: adrianduan@icloud.com
+        type: string
+    type: object
+host: localhost:8888
+info:
+  contact: {}
+  license: {}
+  title: CCSL API
+  version: "1.0"
+paths:
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: get users list
+      parameters:
+      - description: select from page
+        in: query
+        name: page
+        type: integer
+      - description: limit number
+        in: query
+        name: limit
+        type: integer
+      - description: order by field
+        in: query
+        name: order
+        type: string
+      - description: order by asc or desc
+        enum:
+        - asc
+        - desc
+        in: query
+        name: orderBy
+        type: string
+      - description: filter type of user
+        enum:
+        - super
+        - admin
+        - user
+        - learner
+        in: query
+        name: userType
+        type: string
+      - description: search name of user
+        in: query
+        name: name
+        type: string
+      - description: search username of user
+        in: query
+        name: username
+        type: string
+      - description: filter state of user
+        enum:
+        - active
+        - inactive
+        in: query
+        name: state
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.GetUsersListResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: List users
+      tags:
+      - Users
+    post:
+      consumes:
+      - application/json
+      description: create a new user
+      parameters:
+      - description: create user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.UserCreateForm'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Create user
+      tags:
+      - Users
+  /users/{id}:
+    put:
+      consumes:
+      - application/json
+      description: update a user by id
+      parameters:
+      - description: user id
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: updated user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.UserUpdateForm'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Update user
+      tags:
+      - Users
+swagger: "2.0"

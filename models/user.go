@@ -5,12 +5,12 @@ import uuid "github.com/satori/go.uuid"
 // User data model
 type User struct {
 	Base
-	Avatar   string `gorm:"DEFAULT:'https://ccsl.shu.edu.cn/public/assets/default.png'" json:"avatar"`
-	Username string `gorm:"NOT NULL;INDEX:username" json:"username"`
-	Name     string `gorm:"DEFAULT:NULL" json:"name"`
-	UserType string `gorm:"DEFAULT:'user'" json:"userType"`
+	Avatar   string `gorm:"DEFAULT:'https://ccsl.shu.edu.cn/public/assets/default.png'" json:"avatar" example:"https://ccsl.shu.edu.cn/public/assets/default.png"`
+	Username string `gorm:"NOT NULL;INDEX:username" json:"username" example:"adrianduan@icloud.com"`
+	Name     string `gorm:"DEFAULT:NULL" json:"name" example:"Adrian Duan"`
+	UserType string `gorm:"DEFAULT:'user'" json:"userType" example:"admin"`
 	Password string `gorm:"DEFAULT:NULL" json:"-"`
-	State    string `gorm:"DEFAULT:'inactive'" json:"state"`
+	State    string `gorm:"DEFAULT:'inactive'" json:"state" example:"active"`
 }
 
 // LoginHistory model

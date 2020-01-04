@@ -29,6 +29,12 @@ var (
 	errRole   error = errors.New("RoleError")
 )
 
+// ErrorResponse Response for error request
+type ErrorResponse struct {
+	Message string `json:"message" example:"error title"`
+	ErrInfo string `json:"error" example:"erroro message"`
+}
+
 // >>> INFO <<<
 // ============
 
@@ -149,16 +155,21 @@ type memberUpdateForm struct {
 
 // >>> USER <<<
 // ============
-type userCreateForm struct {
-	Name     string `json:"name" validate:"required"`
-	Username string `json:"username" validate:"required,numeric|email"`
-	Password string `json:"password" validate:"omitempty"`
-	UserType string `json:"userType" validate:"required,oneof=super admin user learner"`
-	State    string `json:"state" validate:"required,oneof=active inactive"`
+
+// UserCreateForm user create form
+type UserCreateForm struct {
+	Avatar   string `json:"avatar" validate:"omitempty" example:"https://ccsl.shu.edu.cn/public/assets/default.png"`
+	Name     string `json:"name" validate:"required" example:"Adrian Duan"`
+	Username string `json:"username" validate:"required,numeric|email" example:"adrianduan@icloud.com"`
+	Password string `json:"password" validate:"omitempty" example:"p@ssw0rd"`
+	UserType string `json:"userType" validate:"required,oneof=super admin user learner" example:"admin" enums:"super,admin,user,learner"`
+	State    string `json:"state" validate:"required,oneof=active inactive" example:"active" enums:"active,inactive"`
 }
 
-func (f userCreateForm) ConvertToModel() (user models.User) {
+// ConvertToModel convert form to model
+func (f UserCreateForm) ConvertToModel() (user models.User) {
 	user = models.User{
+		Avatar:   f.Avatar,
 		Name:     f.Name,
 		Username: f.Username,
 		Password: f.Password,
@@ -168,12 +179,13 @@ func (f userCreateForm) ConvertToModel() (user models.User) {
 	return
 }
 
-type userUpdateForm struct {
-	Avatar   *string `json:"avatar" validate:"omitempty"`
-	Name     *string `json:"name" validate:"omitempty"`
-	Username *string `json:"username" validate:"omitempty,numeric|email"`
-	UserType *string `json:"userType" validate:"omitempty,oneof=admin user learner"`
-	State    *string `json:"state" validate:"omitempty,oneof=active inactive"`
+// UserUpdateForm user update form
+type UserUpdateForm struct {
+	Avatar   *string `json:"avatar" validate:"omitempty"  example:"https://ccsl.shu.edu.cn/public/assets/default.png"`
+	Name     *string `json:"name" validate:"omitempty" example:"Adrian Duan"`
+	Username *string `json:"username" validate:"omitempty,numeric|email" example:"adrianduan@icloud.com"`
+	UserType *string `json:"userType" validate:"omitempty,oneof=admin user learner" example:"admin" enums:"super,admin,user,learner"`
+	State    *string `json:"state" validate:"omitempty,oneof=active inactive" example:"active" enums:"active,inactive"`
 }
 
 type userLoginForm struct {

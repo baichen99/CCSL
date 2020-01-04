@@ -3,17 +3,21 @@ package main
 import (
 	"ccsl/configs"
 	"ccsl/controllers"
+	_ "ccsl/docs"
 	"ccsl/middlewares"
 	"ccsl/models"
 	"ccsl/services"
 	"ccsl/utils"
 	"context"
+	"fmt"
 	"os"
 	"os/signal"
 	"strconv"
 	"syscall"
 	"time"
 
+	"github.com/iris-contrib/swagger/v12"
+	"github.com/iris-contrib/swagger/v12/swaggerFiles"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/kataras/iris/v12"
@@ -26,6 +30,18 @@ func main() {
 	app := initApp()
 	pg := initDB(app)
 	defer pg.Close()
+	// >>>>> DOCS  <<<<<
+	// =================
+	// @Title CCSL API
+	// @Version 1.0
+	// @Host localhost:8888
+	// =================
+	docHost := fmt.Sprintf("http://%s:%s/swagger/doc.json", configs.Conf.Listener.Server, strconv.Itoa(configs.Conf.Listener.Port))
+	config := &swagger.Config{
+		URL: docHost,
+	}
+	app.Get("/swagger/{any:path}", swagger.CustomWrapHandler(config, swaggerFiles.Handler))
+	// App Handler
 	mvc.New(app).Handle(new(controllers.RootController))
 	mvc.Configure(app.Party("/files"), func(app *mvc.Application) {
 		app.Handle(new(controllers.FileController))

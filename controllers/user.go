@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"ccsl/middlewares"
+	"ccsl/models"
 	"ccsl/services"
 	"ccsl/utils"
 	"errors"
@@ -31,6 +32,27 @@ func (c *UserController) BeforeActivation(app mvc.BeforeActivation) {
 }
 
 // GetUsersList GET /users
+// >>>>> DOCS  <<<<<
+// =================
+// @Tags Users
+// @Summary List users
+// @Description get users list
+// @Accept  json
+// @Produce json
+// @Router /users [GET]
+// @Param page 		query int 	 false	"select from page"
+// @Param limit 	query int 	 false	"limit number"
+// @Param order 	query string false	"order by field"
+// @Param orderBy 	query string false	"order by asc or desc" 	Enums(asc, desc)
+// @Param userType 	query string false	"filter type of user"	Enums(super, admin, user, learner)
+// @Param name 		query string false 	"search name of user"
+// @Param username 	query string false 	"search username of user"
+// @Param state 	query string false 	"filter state of user" 	Enums(active, inactive)
+// @Success 200 {object} controllers.GetUsersListResponse
+// @Failure 400 {object} controllers.ErrorResponse
+// @Failure 401 {object} controllers.ErrorResponse
+// @Failure 422 {object} controllers.ErrorResponse
+// =================
 func (c *UserController) GetUsersList() {
 	defer c.Context.Next()
 	listParams, err := utils.GetListParamsFromContext(c.Context, "users.username")
@@ -63,10 +85,32 @@ func (c *UserController) GetUsersList() {
 	})
 }
 
+// GetUsersListResponse Response for GetUsersList
+type GetUsersListResponse struct {
+	message string `example:"success"`
+	data    []models.User
+	page    int `example:"1"`
+	limit   int `example:"10"`
+	total   int `example:"100"`
+}
+
 // CreateUser POST /users
+// >>>>> DOCS  <<<<<
+// =================
+// @Tags Users
+// @Summary Create user
+// @Description create a new user
+// @Accept  json
+// @Produce json
+// @Router 	/users 	[POST]
+// @Param 	user 	body	 controllers.UserCreateForm	  true	"create user"
+// @Failure 400 	{object} controllers.ErrorResponse
+// @Failure 401 	{object} controllers.ErrorResponse
+// @Failure 422 	{object} controllers.ErrorResponse
+// =================
 func (c *UserController) CreateUser() {
 	defer c.Context.Next()
-	var form userCreateForm
+	var form UserCreateForm
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "UserController::CreateUser", errParams)
@@ -124,12 +168,27 @@ func (c *UserController) GetUser() {
 }
 
 // UpdateUser Controller: PUT /users/{id: string}
+// >>>>> DOCS  <<<<<
+// =================
+// @Tags Users
+// @Summary Update user
+// @Description update a user by id
+// @Accept  json
+// @Produce json
+// @Router 	/users/{id} [PUT]
+// @Param 	id 		path	 string						  true	"user id" format(uuid)
+// @Param 	user 	body	 controllers.UserUpdateForm	  true	"updated user"
+// @Failure 400 	{object} controllers.ErrorResponse
+// @Failure 401 	{object} controllers.ErrorResponse
+// @Failure 403 	{object} controllers.ErrorResponse
+// @Failure 422 	{object} controllers.ErrorResponse
+// =================
 func (c *UserController) UpdateUser() {
 	defer c.Context.Next()
 
 	// Getting ID from parameters in the URL
 	userID := c.Context.Params().Get("id")
-	var form userUpdateForm
+	var form UserUpdateForm
 
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {

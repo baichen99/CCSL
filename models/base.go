@@ -9,9 +9,9 @@ import (
 
 // Base data model
 type Base struct {
-	ID        uuid.UUID  `gorm:"TYPE:uuid;PRIMARY_KEY" json:"id"`
-	CreatedAt time.Time  `json:"createdAt"`
-	UpdatedAt time.Time  `json:"updatedAt"`
+	ID        uuid.UUID  `gorm:"TYPE:uuid;PRIMARY_KEY" json:"id" example:"550e8400-e29b-41d4-a716-446655440000" format:"uuid"`
+	CreatedAt time.Time  `json:"createdAt" example:"2000-12-30T00:00:00Z"`
+	UpdatedAt time.Time  `json:"updatedAt" example:"2000-12-30T00:00:00Z"`
 	DeletedAt *time.Time `json:"-"`
 }
 
