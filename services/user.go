@@ -133,7 +133,7 @@ func (s *UserService) UpdateUser(userID string, updatedData map[string]interface
 	var user models.User
 	err = s.PG.LogMode(true).
 		Where("id = ?", userID).
-		First(&user).
+		Take(&user).
 		Updates(updatedData).
 		Error
 	return

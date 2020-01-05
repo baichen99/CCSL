@@ -72,7 +72,7 @@ func (s *SignService) UpdateSign(signID string, updatedData map[string]interface
 	err = s.PG.
 		LogMode(true).
 		Where("id = ?", signID).
-		First(&sign).
+		Take(&sign).
 		Updates(updatedData).
 		Error
 	return
@@ -81,18 +81,31 @@ func (s *SignService) UpdateSign(signID string, updatedData map[string]interface
 func (s *SignService) DeleteSign(signID string) (err error) {
 	var sign models.Sign
 	db := s.PG
-	err = db.
+	tx := db.Begin()
+	err = tx.
 		LogMode(true).
 		Where("id = ?", signID).
-		Find(&sign).
 		Delete(&sign).
 		Error
+	if err != nil {
+		tx.Rollback()
+		return
+	}
 	// Delete all the video associations related to this sign
-	db.Model(&sign).
-		Association("LexicalVideoLeft").
-		Clear()
-	db.Model(&sign).
-		Association("LexicalVideoRight").
-		Clear()
+	err = tx.Table("lexical_videos").
+		UpdateColumn(
+			"left_signs_id",
+			gorm.Expr("array_remove(left_signs_id, ? )", signID),
+		).
+		UpdateColumn(
+			"right_signs_id",
+			gorm.Expr("array_remove(right_signs_id, ? )", signID),
+		).
+		Error
+	if err != nil {
+		tx.Rollback()
+		return
+	}
+	tx.Commit()
 	return
 }

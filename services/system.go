@@ -29,7 +29,10 @@ func NewSystemService(pg *gorm.DB) SystemInterface {
 
 func (s *SystemService) GetAppInfo(key string) (data models.Info, err error) {
 	db := s.PG.LogMode(false)
-	err = db.Where("key = ?", key).First(&data).Error
+	err = db.
+		Where("key = ?", key).
+		Take(&data).
+		Error
 	return
 }
 
@@ -38,21 +41,27 @@ func (s *SystemService) UpdateAppInfo(key string, updatedData map[string]interfa
 	err = s.PG.
 		LogMode(true).
 		Where("key = ?", key).
-		First(&info).
+		Take(&info).
 		Updates(updatedData).
 		Error
 	return
 }
 
 func (s *SystemService) CreateJsError(jsErr models.JsError) (err error) {
-	err = s.PG.LogMode(true).Create(&jsErr).Error
+	err = s.PG.
+		LogMode(true).
+		Create(&jsErr).
+		Error
 	return
 }
 
 func (s *SystemService) GetJsErrorList(parameters utils.GetJsErrorListParameters) (errors []models.JsError, count int, err error) {
 	db := s.PG
 	// Fetching the total number of rows based on the conditions provided.
-	err = db.LogMode(true).Model(&errors).Count(&count).Error
+	err = db.LogMode(true).
+		Model(&errors).
+		Count(&count).
+		Error
 
 	if err != nil {
 		return
@@ -67,11 +76,15 @@ func (s *SystemService) GetJsErrorList(parameters utils.GetJsErrorListParameters
 			Find(&errors).
 			Error
 	} else {
-		err = db.Order(orderQuery).Find(&errors).Error
+		err = db.
+			Order(orderQuery).
+			Find(&errors).
+			Error
 	}
 	return
 }
 
+// GetCitiesList returns json cities
 func (s *SystemService) GetCitiesList() (jProvinces []models.JSONProvince, err error) {
 	db := s.PG
 	var provinces []models.Province

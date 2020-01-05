@@ -89,7 +89,7 @@ func (s *PerformerService) UpdatePerformer(performerID string, updatedData map[s
 	err = s.PG.
 		LogMode(true).
 		Where("id = ?", performerID).
-		First(&performer).
+		Take(&performer).
 		Updates(updatedData).
 		Error
 	return

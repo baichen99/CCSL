@@ -30,17 +30,7 @@ func main() {
 	app := initApp()
 	pg := initDB(app)
 	defer pg.Close()
-	// >>>>> DOCS  <<<<<
-	// =================
-	// @Title CCSL API
-	// @Version 1.0
-	// @Host localhost:8888
-	// =================
-	docHost := fmt.Sprintf("http://%s:%s/swagger/doc.json", configs.Conf.Listener.Server, strconv.Itoa(configs.Conf.Listener.Port))
-	config := &swagger.Config{
-		URL: docHost,
-	}
-	app.Get("/swagger/{any:path}", swagger.CustomWrapHandler(config, swaggerFiles.Handler))
+	initDoc(app)
 	// App Handler
 	mvc.New(app).Handle(new(controllers.RootController))
 	mvc.Configure(app.Party("/files"), func(app *mvc.Application) {
@@ -130,17 +120,33 @@ func initApp() *iris.Application {
 	return app
 }
 
+func initDoc(app *iris.Application) {
+	// >>>>> DOCS  <<<<<
+	// =================
+	// @Title CCSL API
+	// @Version 1.0
+	// @Host localhost:8888
+	// =================
+	if os.Getenv(configs.EnvName) == configs.EnvDevelopment {
+		docHost := fmt.Sprintf("http://%s:%s/swagger/doc.json", configs.Conf.Listener.Server, strconv.Itoa(configs.Conf.Listener.Port))
+		config := &swagger.Config{
+			URL: docHost,
+		}
+		app.Get("/swagger/{any:path}", swagger.CustomWrapHandler(config, swaggerFiles.Handler))
+	}
+}
+
 func initDB(app *iris.Application) *gorm.DB {
 	pg := utils.ConnectPostgres(app)
 	pg.SetLogger(configs.GetPostgresLogger())
 	// AutoMigrate will create missing tables and missing index keys
 	pg.AutoMigrate(&models.User{}, &models.Lexicon{}, &models.LexicalVideo{}, &models.Sign{}, &models.Performer{}, &models.Carousel{}, &models.News{}, &models.Member{}, &models.District{}, &models.City{}, &models.Province{}, &models.JsError{}, &models.Info{}, &models.LoginHistory{})
 
-	// Don't use UNIQUE to declare gorm models because you can't create a alreay deleted object with the same value, manually Add UNIQUE key for table columns, comment these lines when keys are added
+	// Don't use UNIQUE to declare gorm models because you can't create a alreay deleted object with the same value, manually Add UNIQUE key for table columns
 
-	// pg.Exec("CREATE UNIQUE INDEX users_username_key ON users(username) WHERE deleted_at IS NULL")
-	// pg.Exec("CREATE UNIQUE INDEX signs_name_key ON signs(name) WHERE deleted_at IS NULL")
-	// pg.Exec("CREATE UNIQUE INDEX lexicons_chinese_key ON lexicon(chinese) WHERE deleted_at IS NULL")
+	pg.Exec("CREATE UNIQUE INDEX users_username_key ON users(username) WHERE deleted_at IS NULL")
+	pg.Exec("CREATE UNIQUE INDEX signs_name_key ON signs(name) WHERE deleted_at IS NULL")
+	pg.Exec("CREATE UNIQUE INDEX lexicons_chinese_key ON lexicon(chinese) WHERE deleted_at IS NULL")
 
 	// Manually Add foreign key for tables, because gorm won't create foreign keys, to make sure data is clean we need manually add these keys
 	// Data of cities are from https://github.com/modood/Administrative-divisions-of-China
@@ -155,10 +161,6 @@ func initDB(app *iris.Application) *gorm.DB {
 	pg.Model(&models.Carousel{}).AddForeignKey("creator_id", "users(id)", "RESTRICT", "CASCADE")
 	pg.Model(&models.Performer{}).AddForeignKey("region", "districts(code)", "RESTRICT", "CASCADE")
 	pg.Model(&models.LoginHistory{}).AddForeignKey("user_id", "users(id)", "RESTRICT", "CASCADE")
-
-	// These tables are many to many connections table, also need to add foreign keys manually
-	pg.Table("lexical_left_sign").AddForeignKey("lexical_video_id", "lexical_videos(id)", "RESTRICT", "CASCADE").AddForeignKey("sign_id", "signs(id)", "RESTRICT", "CASCADE")
-	pg.Table("lexical_right_sign").AddForeignKey("lexical_video_id", "lexical_videos(id)", "RESTRICT", "CASCADE").AddForeignKey("sign_id", "signs(id)", "RESTRICT", "CASCADE")
 	// utils.InitTestUser(pg)
 	return pg
 }
@@ -168,9 +170,9 @@ func gracefulShutdown(app *iris.Application) {
 	// Catch exit sign and shutdown server gracefully
 	// kill -SIGINT XXXX Or Ctrl+c
 	signal.Notify(ch,
+		os.Kill,
 		os.Interrupt,
 		syscall.SIGINT,
-		os.Kill,
 		syscall.SIGKILL,
 		syscall.SIGTERM,
 	)

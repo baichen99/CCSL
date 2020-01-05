@@ -291,6 +291,8 @@ func (f lexicalVideoCreateForm) ConvertToModel() (video models.LexicalVideo) {
 		VideoPath:     f.VideoPath,
 		WordFormation: f.WordFormation,
 		Morpheme:      f.Morpheme,
+		LeftSignsID:   f.LeftSignsID,
+		RightSignsID:  f.RightSignsID,
 	}
 	return
 }

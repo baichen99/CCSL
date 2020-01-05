@@ -90,9 +90,8 @@ func (c *VideoController) CreateVideo() {
 	}
 	// PSQL - Create video in database.
 	video := form.ConvertToModel()
-	leftSignsIds := form.LeftSignsID
-	rightSignsIds := form.RightSignsID
-	if err := c.VideoService.CreateVideo(video, leftSignsIds, rightSignsIds); err != nil {
+
+	if err := c.VideoService.CreateVideo(video); err != nil {
 		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "VideoService::CreateVideo", errSQL)
 		return
 	}
@@ -134,11 +133,8 @@ func (c *VideoController) UpdateVideo() {
 
 	updateData := utils.MakeUpdateData(form)
 
-	delete(updateData, "LeftSignsID")
-	delete(updateData, "RightSignsID")
-
 	// PSQL - Update of the given ID
-	if err := c.VideoService.UpdateVideo(videoID, updateData, form.LeftSignsID, form.RightSignsID); err != nil {
+	if err := c.VideoService.UpdateVideo(videoID, updateData); err != nil {
 		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "VideoService::UpdateVideo", errSQL)
 		return
 	}

@@ -19,6 +19,13 @@ import (
 // AppConf is iris application config file
 const AppConf string = "./configs/iris.yml"
 
+// EnvName is the environment variable name
+const (
+	EnvName        = "CCSL_ENV"
+	EnvDevelopment = "dev"
+	EnvProduction  = "prod"
+)
+
 var c Config
 
 // Conf reads configs from yaml file according to the environment variable
@@ -68,9 +75,9 @@ func (conf *Config) ReadConfig() *Config {
 	if err != nil {
 		panic(err)
 	}
-	env := os.Getenv("CCSL_ENV")
+	env := os.Getenv(EnvName)
 	if env == "" {
-		env = "dev"
+		env = EnvDevelopment
 	}
 	confFile := workPath + "/configs/app." + env + ".yml"
 	yamlFile, err := ioutil.ReadFile(confFile)
@@ -86,7 +93,7 @@ func (conf *Config) ReadConfig() *Config {
 
 // GetLogger : stdout for dev environment and file for prod environment
 func GetLogger(logName string) io.Writer {
-	if env := os.Getenv("CCSL_ENV"); env == "dev" {
+	if env := os.Getenv(EnvName); env == EnvDevelopment {
 		return os.Stdout
 	}
 	workPath, err := os.Getwd()

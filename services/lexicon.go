@@ -48,9 +48,17 @@ func (s *LexiconService) GetWordsList(parameters utils.GetLexiconListParameters)
 	// Fetching the items to be returned by the query.
 	orderQuery := parameters.OrderBy + " " + parameters.Order
 	if parameters.Limit != 0 {
-		err = db.Order(orderQuery).Limit(parameters.Limit).Offset(parameters.Limit * (parameters.Page - 1)).Find(&words).Error
+		err = db.
+			Order(orderQuery).
+			Limit(parameters.Limit).
+			Offset(parameters.Limit * (parameters.Page - 1)).
+			Find(&words).
+			Error
 	} else {
-		err = db.Order(orderQuery).Find(&words).Error
+		err = db.
+			Order(orderQuery).
+			Find(&words).
+			Error
 	}
 
 	return
@@ -58,26 +66,38 @@ func (s *LexiconService) GetWordsList(parameters utils.GetLexiconListParameters)
 
 // GetWord returns word with given id
 func (s *LexiconService) GetWord(wordID string) (word models.Lexicon, err error) {
-	err = s.PG.LogMode(false).Where("id = ?", wordID).Take(&word).Error
+	err = s.PG.LogMode(false).
+		Where("id = ?", wordID).
+		Take(&word).
+		Error
 	return
 }
 
 // CreateWord creates a new word
 func (s *LexiconService) CreateWord(word models.Lexicon) (err error) {
-	err = s.PG.LogMode(true).Create(&word).Error
+	err = s.PG.LogMode(true).
+		Create(&word).
+		Error
 	return
 }
 
 // UpdateWord updates word with given id
 func (s *LexiconService) UpdateWord(wordID string, updatedData map[string]interface{}) (err error) {
 	var word models.Lexicon
-	err = s.PG.LogMode(true).Where("id = ?", wordID).First(&word).Updates(updatedData).Error
+	err = s.PG.LogMode(true).
+		Where("id = ?", wordID).
+		Take(&word).
+		Updates(updatedData).
+		Error
 	return
 }
 
 // DeleteWord soft deletes a word with given id
 func (s *LexiconService) DeleteWord(wordID string) (err error) {
 	var word models.Lexicon
-	err = s.PG.LogMode(true).Where("id = ?", wordID).Delete(&word).Error
+	err = s.PG.LogMode(true).
+		Where("id = ?", wordID).
+		Delete(&word).
+		Error
 	return
 }

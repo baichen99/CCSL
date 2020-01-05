@@ -64,13 +64,20 @@ func (s *CarouselService) CreateCarousel(carousel models.Carousel) (err error) {
 // UpdateCarousel updates carousel with given id
 func (s *CarouselService) UpdateCarousel(carouselID string, updatedData map[string]interface{}) (err error) {
 	var carousel models.Carousel
-	err = s.PG.LogMode(true).Where("id = ?", carouselID).First(&carousel).Updates(updatedData).Error
+	err = s.PG.LogMode(true).
+		Where("id = ?", carouselID).
+		Take(&carousel).
+		Updates(updatedData).
+		Error
 	return
 }
 
 // DeleteCarousel soft deletes a carousel with given id
 func (s *CarouselService) DeleteCarousel(carouselID string) (err error) {
 	var carousel models.Carousel
-	err = s.PG.LogMode(true).Where("id = ?", carouselID).Delete(&carousel).Error
+	err = s.PG.LogMode(true).
+		Where("id = ?", carouselID).
+		Delete(&carousel).
+		Error
 	return
 }
