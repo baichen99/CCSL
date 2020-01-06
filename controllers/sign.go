@@ -9,7 +9,7 @@ import (
 	"github.com/kataras/iris/v12/mvc"
 )
 
-// SignController is for word CURD
+// SignController is for word CRUD
 type SignController struct {
 	Context     iris.Context
 	SignService services.SignInterface

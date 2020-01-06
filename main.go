@@ -133,6 +133,7 @@ func initDoc(app *iris.Application) {
 			URL: docHost,
 		}
 		app.Get("/swagger/{any:path}", swagger.CustomWrapHandler(config, swaggerFiles.Handler))
+		app.Logger().Debugf("Doc server is running on: http://%s:%s/swagger/index.html", configs.Conf.Listener.Server, strconv.Itoa(configs.Conf.Listener.Port))
 	}
 }
 
@@ -146,7 +147,7 @@ func initDB(app *iris.Application) *gorm.DB {
 
 	pg.Exec("CREATE UNIQUE INDEX users_username_key ON users(username) WHERE deleted_at IS NULL")
 	pg.Exec("CREATE UNIQUE INDEX signs_name_key ON signs(name) WHERE deleted_at IS NULL")
-	pg.Exec("CREATE UNIQUE INDEX lexicons_chinese_key ON lexicon(chinese) WHERE deleted_at IS NULL")
+	pg.Exec("CREATE UNIQUE INDEX lexicons_chinese_key ON lexicons(chinese) WHERE deleted_at IS NULL")
 
 	// Manually Add foreign key for tables, because gorm won't create foreign keys, to make sure data is clean we need manually add these keys
 	// Data of cities are from https://github.com/modood/Administrative-divisions-of-China

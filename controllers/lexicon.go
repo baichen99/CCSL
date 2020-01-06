@@ -9,7 +9,7 @@ import (
 	"github.com/kataras/iris/v12/mvc"
 )
 
-// LexiconController is for word CURD
+// LexiconController is for word CRUD
 type LexiconController struct {
 	Context        iris.Context
 	LexiconService services.LexiconInterface

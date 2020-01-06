@@ -36,7 +36,7 @@ func (s *CarouselService) GetCarouselList(parameters utils.GetCarouselListParame
 		utils.FilterByColumn("carousels.state", parameters.State),
 	)
 
-	err = db.Model(&carousels).Count(&count).Error
+	err = db.Model(&models.Carousel{}).Count(&count).Error
 	orderQuery := parameters.OrderBy + " " + parameters.Order
 	if err != nil {
 		return

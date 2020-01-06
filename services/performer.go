@@ -39,7 +39,7 @@ func (s *PerformerService) GetPerformersList(parameters utils.GetPerformerListPa
 	)
 
 	// Fetching the total number of rows based on the conditions provided.
-	err = db.Model(&performers).Count(&count).Error
+	err = db.Model(&models.Performer{}).Count(&count).Error
 	if err != nil {
 		return
 	}

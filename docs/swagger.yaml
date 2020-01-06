@@ -2,7 +2,7 @@ definitions:
   controllers.ErrorResponse:
     properties:
       error:
-        example: erroro message
+        example: error message
         type: string
       message:
         example: error title
@@ -13,6 +13,25 @@ definitions:
       data:
         items:
           $ref: '#/definitions/models.User'
+        type: array
+      limit:
+        example: 10
+        type: integer
+      message:
+        example: success
+        type: string
+      page:
+        example: 1
+        type: integer
+      total:
+        example: 100
+        type: integer
+    type: object
+  controllers.GetVideosListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.LexicalVideo'
         type: array
       limit:
         example: 10
@@ -87,31 +106,77 @@ definitions:
         example: adrianduan@icloud.com
         type: string
     type: object
+  models.LexicalVideo:
+    properties:
+      createdAt:
+        example: "2019-10-21T09:20:39.943618Z"
+        type: string
+      id:
+        example: 550e8400-e29b-41d4-a716-446655440000
+        format: uuid
+        type: string
+      leftSignsID:
+        description: 左手手形ID
+        example: '[''550e8400-e29b-41d4-a716-446655440000'']'
+        type: string
+      lexiconID:
+        description: 词汇ID
+        example: 550e8400-e29b-41d4-a716-446655440000
+        type: string
+      morpheme:
+        description: 构词语素
+        example: '[''hello'',''world'']'
+        type: string
+      performerID:
+        description: 被试ID
+        example: 550e8400-e29b-41d4-a716-446655440000
+        type: string
+      rightSignsID:
+        description: 右手手形ID
+        example: '[''550e8400-e29b-41d4-a716-446655440000'']'
+        type: string
+      updatedAt:
+        example: "2019-10-21T09:20:39.943618Z"
+        type: string
+      videoPath:
+        description: 视频路径
+        example: lexical_videos/550e8400-e29b-41d4-a716-446655440000.mp4
+        type: string
+      wordFormation:
+        description: 构词方式
+        example: simple
+        type: string
+    type: object
   models.User:
     properties:
       avatar:
+        description: 头像
         example: https://ccsl.shu.edu.cn/public/assets/default.png
         type: string
       createdAt:
-        example: "2000-12-30T00:00:00Z"
+        example: "2019-10-21T09:20:39.943618Z"
         type: string
       id:
         example: 550e8400-e29b-41d4-a716-446655440000
         format: uuid
         type: string
       name:
+        description: 姓名
         example: Adrian Duan
         type: string
       state:
+        description: 状态
         example: active
         type: string
       updatedAt:
-        example: "2000-12-30T00:00:00Z"
+        example: "2019-10-21T09:20:39.943618Z"
         type: string
       userType:
+        description: 用户角色
         example: admin
         type: string
       username:
+        description: 账号（一卡通或者邮箱）
         example: adrianduan@icloud.com
         type: string
     type: object
@@ -122,6 +187,111 @@ info:
   title: CCSL API
   version: "1.0"
 paths:
+  /lexical/videos:
+    get:
+      consumes:
+      - application/json
+      description: get videos list
+      parameters:
+      - description: select from page
+        in: query
+        name: page
+        type: integer
+      - description: limit number
+        in: query
+        name: limit
+        type: integer
+      - description: order by field
+        in: query
+        name: order
+        type: string
+      - description: order by asc or desc
+        enum:
+        - asc
+        - desc
+        in: query
+        name: orderBy
+        type: string
+      - description: filter by lexicon ID
+        in: query
+        name: lexiconID
+        type: string
+      - description: filter initial
+        in: query
+        name: initial
+        type: string
+      - description: search by Chinese
+        in: query
+        name: chinese
+        type: string
+      - description: search by English
+        in: query
+        name: english
+        type: string
+      - description: filter by part of speech
+        in: query
+        name: pos
+        type: string
+      - description: filter by region ID
+        in: query
+        name: regionID
+        type: integer
+      - description: filter by gender
+        enum:
+        - M
+        - F
+        in: query
+        name: gender
+        type: string
+      - description: filter by left sign ID
+        in: query
+        name: leftSignID
+        type: string
+      - description: filter by right sign ID
+        in: query
+        name: rightSignID
+        type: string
+      - description: filter by sign ID(left or right)
+        in: query
+        name: signID
+        type: string
+      - description: search by morpheme
+        in: query
+        name: morpheme
+        type: string
+      - description: filter by word formation
+        enum:
+        - simple
+        - compound
+        in: query
+        name: wordFormation
+        type: string
+      - description: filter by performer ID
+        in: query
+        name: performerID
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.GetVideosListResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: List lexical videos
+      tags:
+      - Lexical Videos
   /users:
     get:
       consumes:

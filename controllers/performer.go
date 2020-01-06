@@ -9,7 +9,7 @@ import (
 	"github.com/kataras/iris/v12/mvc"
 )
 
-// PerformerController is for performers CURD
+// PerformerController is for performers CRUD
 type PerformerController struct {
 	Context          iris.Context
 	PerformerService services.PerformerInterface

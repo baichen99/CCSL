@@ -34,7 +34,7 @@ func (s *MemberService) GetMemberList(parameters utils.GetMemberListParameters) 
 		utils.SearchByColumn("members.name_zh", parameters.NameZh),
 		utils.SearchByColumn("members.name_en", parameters.NameEn),
 	)
-	err = db.Find(&members).Count(&count).Error
+	err = db.Model(&models.Member{}).Count(&count).Error
 
 	if err != nil {
 		return

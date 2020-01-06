@@ -3,8 +3,8 @@ package models
 // Performer data model
 type Performer struct {
 	Base
-	Name     string   `gorm:"DEFAULT:NULL" json:"name"`
-	Region   District `gorm:"FOREIGNKEY:RegionID;DEFAULT:NULL" json:"region"`
-	RegionID int      `gorm:"DEFAULT:NULL" json:"regionID"`
-	Gender   string   `gorm:"DEFAULT:NULL" json:"gender"`
+	RegionID int    `gorm:"DEFAULT:NULL" json:"regionID"`
+	Name     string `gorm:"DEFAULT:NULL" json:"name"`
+	Gender   string `gorm:"DEFAULT:NULL" json:"gender"`
+	// Region   District `gorm:"FOREIGNKEY:RegionID" json:"region"`
 }

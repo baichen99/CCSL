@@ -19,10 +19,11 @@ type CarouselController struct {
 // BeforeActivation will register routes for controllers
 func (c *CarouselController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Handle("GET", "/", "GetCarouselsList")
-	app.Handle("POST", "/", "CreateCarousel", middlewares.CheckJWTToken, middlewares.CheckAdmin)
 	app.Handle("GET", "/{id: string}", "GetCarousel")
-	app.Handle("PUT", "/{id: string}", "UpdateCarousel", middlewares.CheckJWTToken, middlewares.CheckAdmin)
-	app.Handle("DELETE", "/{id: string}", "DeleteCarousel", middlewares.CheckJWTToken, middlewares.CheckAdmin)
+	app.Router().Use(middlewares.CheckJWTToken, middlewares.CheckAdmin)
+	app.Handle("POST", "/", "CreateCarousel")
+	app.Handle("PUT", "/{id: string}", "UpdateCarousel")
+	app.Handle("DELETE", "/{id: string}", "DeleteCarousel")
 }
 
 // GetCarouselsList GET

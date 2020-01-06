@@ -8,6 +8,163 @@
     },
     "host": "localhost:8888",
     "paths": {
+        "/lexical/videos": {
+            "get": {
+                "description": "get videos list",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Lexical Videos"
+                ],
+                "summary": "List lexical videos",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "select from page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "limit number",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "order by field",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "asc",
+                            "desc"
+                        ],
+                        "type": "string",
+                        "description": "order by asc or desc",
+                        "name": "orderBy",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "filter by lexicon ID",
+                        "name": "lexiconID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "filter initial",
+                        "name": "initial",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search by Chinese",
+                        "name": "chinese",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search by English",
+                        "name": "english",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "filter by part of speech",
+                        "name": "pos",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "filter by region ID",
+                        "name": "regionID",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "M",
+                            "F"
+                        ],
+                        "type": "string",
+                        "description": "filter by gender",
+                        "name": "gender",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "filter by left sign ID",
+                        "name": "leftSignID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "filter by right sign ID",
+                        "name": "rightSignID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "filter by sign ID(left or right)",
+                        "name": "signID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search by morpheme",
+                        "name": "morpheme",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "simple",
+                            "compound"
+                        ],
+                        "type": "string",
+                        "description": "filter by word formation",
+                        "name": "wordFormation",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "filter by performer ID",
+                        "name": "performerID",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.GetVideosListResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "get": {
                 "description": "get users list",
@@ -226,7 +383,7 @@
             "properties": {
                 "error": {
                     "type": "string",
-                    "example": "erroro message"
+                    "example": "error message"
                 },
                 "message": {
                     "type": "string",
@@ -241,6 +398,33 @@
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/models.User"
+                    }
+                },
+                "limit": {
+                    "type": "integer",
+                    "example": 10
+                },
+                "message": {
+                    "type": "string",
+                    "example": "success"
+                },
+                "page": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "total": {
+                    "type": "integer",
+                    "example": 100
+                }
+            }
+        },
+        "controllers.GetVideosListResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.LexicalVideo"
                     }
                 },
                 "limit": {
@@ -341,16 +525,70 @@
                 }
             }
         },
+        "models.LexicalVideo": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string",
+                    "example": "2019-10-21T09:20:39.943618Z"
+                },
+                "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                },
+                "leftSignsID": {
+                    "description": "左手手形ID",
+                    "type": "string",
+                    "example": "['550e8400-e29b-41d4-a716-446655440000']"
+                },
+                "lexiconID": {
+                    "description": "词汇ID",
+                    "type": "string",
+                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                },
+                "morpheme": {
+                    "description": "构词语素",
+                    "type": "string",
+                    "example": "['hello','world']"
+                },
+                "performerID": {
+                    "description": "被试ID",
+                    "type": "string",
+                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                },
+                "rightSignsID": {
+                    "description": "右手手形ID",
+                    "type": "string",
+                    "example": "['550e8400-e29b-41d4-a716-446655440000']"
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "example": "2019-10-21T09:20:39.943618Z"
+                },
+                "videoPath": {
+                    "description": "视频路径",
+                    "type": "string",
+                    "example": "lexical_videos/550e8400-e29b-41d4-a716-446655440000.mp4"
+                },
+                "wordFormation": {
+                    "description": "构词方式",
+                    "type": "string",
+                    "example": "simple"
+                }
+            }
+        },
         "models.User": {
             "type": "object",
             "properties": {
                 "avatar": {
+                    "description": "头像",
                     "type": "string",
                     "example": "https://ccsl.shu.edu.cn/public/assets/default.png"
                 },
                 "createdAt": {
                     "type": "string",
-                    "example": "2000-12-30T00:00:00Z"
+                    "example": "2019-10-21T09:20:39.943618Z"
                 },
                 "id": {
                     "type": "string",
@@ -358,22 +596,26 @@
                     "example": "550e8400-e29b-41d4-a716-446655440000"
                 },
                 "name": {
+                    "description": "姓名",
                     "type": "string",
                     "example": "Adrian Duan"
                 },
                 "state": {
+                    "description": "状态",
                     "type": "string",
                     "example": "active"
                 },
                 "updatedAt": {
                     "type": "string",
-                    "example": "2000-12-30T00:00:00Z"
+                    "example": "2019-10-21T09:20:39.943618Z"
                 },
                 "userType": {
+                    "description": "用户角色",
                     "type": "string",
                     "example": "admin"
                 },
                 "username": {
+                    "description": "账号（一卡通或者邮箱）",
                     "type": "string",
                     "example": "adrianduan@icloud.com"
                 }

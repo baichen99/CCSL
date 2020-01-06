@@ -10,7 +10,7 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-// NewsController is for news CURD
+// NewsController is for news CRUD
 type NewsController struct {
 	Context     iris.Context
 	NewsService services.NewsInterface

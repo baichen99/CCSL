@@ -9,7 +9,7 @@ import (
 	"github.com/kataras/iris/v12/mvc"
 )
 
-// MemberController is for member CURD
+// MemberController is for member CRUD
 type MemberController struct {
 	Context       iris.Context
 	MemberService services.MemberInterface

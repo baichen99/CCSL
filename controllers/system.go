@@ -13,7 +13,7 @@ import (
 	"github.com/kataras/iris/v12/mvc"
 )
 
-// SystemController is for system monitor and maintenance
+// SystemController is for system infomation CRUD
 type SystemController struct {
 	Context       iris.Context
 	SystemService services.SystemInterface

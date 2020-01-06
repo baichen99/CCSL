@@ -34,7 +34,7 @@ func (s *NewsService) GetNewsList(parameters utils.GetNewsListParameters) (news 
 		utils.SearchByColumn("news.text", parameters.Text),
 		utils.FilterByColumn("news.state", parameters.State),
 	)
-	err = db.Model(&news).Count(&count).Error
+	err = db.Model(&models.News{}).Count(&count).Error
 	orderQuery := parameters.OrderBy + " " + parameters.Order
 	if err != nil {
 		return

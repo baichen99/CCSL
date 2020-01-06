@@ -42,7 +42,7 @@ func (s *UserService) GetUsersList(parameters utils.GetUserListParameters) (user
 	)
 
 	// Fetching the total number of rows based on the conditions provided.
-	err = db.Model(&users).Count(&count).Error
+	err = db.Model(&models.User{}).Count(&count).Error
 
 	if err != nil {
 		return

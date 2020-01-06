@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"ccsl/middlewares"
+	"ccsl/models"
 	"ccsl/services"
 	"ccsl/utils"
 	"errors"
@@ -10,7 +11,7 @@ import (
 	"github.com/kataras/iris/v12/mvc"
 )
 
-// VideoController is for video CURD
+// VideoController is for video CRUD
 type VideoController struct {
 	Context      iris.Context
 	VideoService services.LexicalVideoInterface
@@ -28,6 +29,36 @@ func (c *VideoController) BeforeActivation(app mvc.BeforeActivation) {
 }
 
 // GetVideosList GET /lexical/videos
+// >>>>> DOCS  <<<<<
+// =================
+// @Tags Lexical Videos
+// @Summary List lexical videos
+// @Description get videos list
+// @Accept  json
+// @Produce json
+// @Router /lexical/videos [GET]
+// @Param page 		    query int    false "select from page"
+// @Param limit 	    query int    false "limit number"
+// @Param order		    query string false "order by field"
+// @Param orderBy 	    query string false "order by asc or desc" enums(asc, desc)
+// @Param lexiconID     query string false "filter by lexicon ID"
+// @Param initial 	    query string false "filter initial"
+// @Param chinese 	    query string false "search by Chinese"
+// @Param english 	    query string false "search by English"
+// @Param pos	 	    query string false "filter by part of speech"
+// @Param regionID	    query int	 false "filter by region ID"
+// @Param gender	    query string false "filter by gender" enums(M, F)
+// @Param leftSignID    query string false "filter by left sign ID"
+// @Param rightSignID   query string false "filter by right sign ID"
+// @Param signID	    query string false "filter by sign ID(left or right)"
+// @Param morpheme 	    query string false "search by morpheme"
+// @Param wordFormation query string false "filter by word formation" enums(simple, compound)
+// @Param performerID	query string false "filter by performer ID"
+// @Success 200 {object} controllers.GetVideosListResponse
+// @Failure 400 {object} controllers.ErrorResponse
+// @Failure 401 {object} controllers.ErrorResponse
+// @Failure 422 {object} controllers.ErrorResponse
+// =================
 func (c *VideoController) GetVideosList() {
 	defer c.Context.Next()
 	listParams, err := utils.GetListParamsFromContext(c.Context, "lexicons.initial, lexicons.id, performers.region_id, performers.gender")
@@ -72,11 +103,17 @@ func (c *VideoController) GetVideosList() {
 
 	c.Context.JSON(iris.Map{
 		message: success,
-		data:    videos,
 		page:    listParams.Page,
 		limit:   listParams.Limit,
 		total:   count,
+		data:    videos,
 	})
+}
+
+// GetVideosListResponse Response for GetVideosList
+type GetVideosListResponse struct {
+	GetListResponse
+	Data []models.LexicalVideo `json:"data"`
 }
 
 // CreateVideo POST /lexical/videos

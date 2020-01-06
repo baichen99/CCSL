@@ -32,7 +32,15 @@ var (
 // ErrorResponse Response for error request
 type ErrorResponse struct {
 	Message string `json:"message" example:"error title"`
-	ErrInfo string `json:"error" example:"erroro message"`
+	ErrInfo string `json:"error" example:"error message"`
+}
+
+// GetListResponse Response for get list request
+type GetListResponse struct {
+	Message string `json:"message" example:"success"`
+	Page    int    `json:"page" example:"1"`
+	Limit   int    `json:"limit" example:"10"`
+	Total   int    `json:"total" example:"100"`
 }
 
 // >>> INFO <<<

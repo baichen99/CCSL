@@ -39,7 +39,7 @@ func (s *LexiconService) GetWordsList(parameters utils.GetLexiconListParameters)
 	)
 
 	// Fetching the total number of rows based on the conditions provided.
-	err = db.Model(&words).Count(&count).Error
+	err = db.Model(&models.Lexicon{}).Count(&count).Error
 
 	if err != nil {
 		return

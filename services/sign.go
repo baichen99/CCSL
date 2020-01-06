@@ -32,7 +32,7 @@ func (s *SignService) GetSignList(parameters utils.GetSignListParameters) (signs
 	db := s.PG.LogMode(false).Scopes(
 		utils.SearchByColumn("signs.name", parameters.Name),
 	)
-	err = db.Model(&signs).Count(&count).Error
+	err = db.Model(&models.Sign{}).Count(&count).Error
 	if err != nil {
 		return
 	}
