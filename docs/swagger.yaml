@@ -117,24 +117,36 @@ definitions:
         type: string
       leftSignsID:
         description: 左手手形ID
-        example: '[''550e8400-e29b-41d4-a716-446655440000'']'
-        type: string
+        example:
+        - 550e8400-e29b-41d4-a716-446655440000
+        format: uuid
+        items:
+          type: string
+        type: array
       lexiconID:
         description: 词汇ID
         example: 550e8400-e29b-41d4-a716-446655440000
         type: string
       morpheme:
         description: 构词语素
-        example: '[''hello'',''world'']'
-        type: string
+        example:
+        - hello
+        - world
+        items:
+          type: string
+        type: array
       performerID:
         description: 被试ID
         example: 550e8400-e29b-41d4-a716-446655440000
         type: string
       rightSignsID:
         description: 右手手形ID
-        example: '[''550e8400-e29b-41d4-a716-446655440000'']'
-        type: string
+        example:
+        - 550e8400-e29b-41d4-a716-446655440000
+        format: uuid
+        items:
+          type: string
+        type: array
       updatedAt:
         example: "2019-10-21T09:20:39.943618Z"
         type: string
@@ -195,10 +207,12 @@ paths:
       parameters:
       - description: select from page
         in: query
+        minimum: 1
         name: page
         type: integer
       - description: limit number
         in: query
+        minimum: 0
         name: limit
         type: integer
       - description: order by field
@@ -251,7 +265,7 @@ paths:
         in: query
         name: rightSignID
         type: string
-      - description: filter by sign ID(left or right)
+      - description: filter by sign ID
         in: query
         name: signID
         type: string
@@ -300,10 +314,12 @@ paths:
       parameters:
       - description: select from page
         in: query
+        minimum: 1
         name: page
         type: integer
       - description: limit number
         in: query
+        minimum: 0
         name: limit
         type: integer
       - description: order by field

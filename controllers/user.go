@@ -40,14 +40,14 @@ func (c *UserController) BeforeActivation(app mvc.BeforeActivation) {
 // @Accept  json
 // @Produce json
 // @Router /users [GET]
-// @Param page 		query int 	 false	"select from page"
-// @Param limit 	query int 	 false	"limit number"
+// @Param page 		query int    false  "select from page" 			mininum(1)
+// @Param limit 	query int    false  "limit number" 				mininum(0)
 // @Param order 	query string false	"order by field"
-// @Param orderBy 	query string false	"order by asc or desc" 	enums(asc, desc)
-// @Param userType 	query string false	"filter type of user"	enums(super, admin, user, learner)
+// @Param orderBy 	query string false	"order by asc or desc" 		enums(asc, desc)
+// @Param userType 	query string false	"filter type of user"		enums(super, admin, user, learner)
 // @Param name 		query string false 	"search name of user"
 // @Param username 	query string false 	"search username of user"
-// @Param state 	query string false 	"filter state of user" 	enums(active, inactive)
+// @Param state 	query string false 	"filter state of user" 		enums(active, inactive)
 // @Success 200 {object} controllers.GetUsersListResponse
 // @Failure 400 {object} controllers.ErrorResponse
 // @Failure 401 {object} controllers.ErrorResponse
@@ -78,10 +78,10 @@ func (c *UserController) GetUsersList() {
 	}
 	c.Context.JSON(iris.Map{
 		message: success,
-		data:    users,
 		page:    listParams.Page,
 		limit:   listParams.Limit,
 		total:   count,
+		data:    users,
 	})
 }
 

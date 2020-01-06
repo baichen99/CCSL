@@ -37,22 +37,22 @@ func (c *VideoController) BeforeActivation(app mvc.BeforeActivation) {
 // @Accept  json
 // @Produce json
 // @Router /lexical/videos [GET]
-// @Param page 		    query int    false "select from page"
-// @Param limit 	    query int    false "limit number"
+// @Param page 		    query int    false "select from page" 			mininum(1)
+// @Param limit 	    query int    false "limit number" 				mininum(0)
 // @Param order		    query string false "order by field"
-// @Param orderBy 	    query string false "order by asc or desc" enums(asc, desc)
+// @Param orderBy 	    query string false "order by asc or desc" 		enums(asc, desc)
 // @Param lexiconID     query string false "filter by lexicon ID"
 // @Param initial 	    query string false "filter initial"
 // @Param chinese 	    query string false "search by Chinese"
 // @Param english 	    query string false "search by English"
 // @Param pos	 	    query string false "filter by part of speech"
 // @Param regionID	    query int	 false "filter by region ID"
-// @Param gender	    query string false "filter by gender" enums(M, F)
+// @Param gender	    query string false "filter by gender" 			enums(M, F)
 // @Param leftSignID    query string false "filter by left sign ID"
 // @Param rightSignID   query string false "filter by right sign ID"
-// @Param signID	    query string false "filter by sign ID(left or right)"
+// @Param signID	    query string false "filter by sign ID"
 // @Param morpheme 	    query string false "search by morpheme"
-// @Param wordFormation query string false "filter by word formation" enums(simple, compound)
+// @Param wordFormation query string false "filter by word formation" 	enums(simple, compound)
 // @Param performerID	query string false "filter by performer ID"
 // @Success 200 {object} controllers.GetVideosListResponse
 // @Failure 400 {object} controllers.ErrorResponse
