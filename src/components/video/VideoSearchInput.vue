@@ -1,19 +1,19 @@
 <template>
   <div>
     <el-input v-model="keyword" class="options" clearable @keyup.enter.native="search">
-      <el-select v-if="showAdvance" slot="prepend" v-model="keywordType" style="width:110px">
+      <el-select v-show="showAdvance" slot="prepend" v-model="keywordType" style="width:110px">
         <el-option label="中文" value="zh-CN" />
         <el-option label="English" value="en-US" />
       </el-select>
       <i
-        v-if="!advancedSearch && showAdvance"
+        v-show="!advancedSearch && showAdvance"
         slot="prefix"
         class="el-input__icon el-icon-setting"
         style="cursor:pointer;"
         @click="toggleAdvance"
       />
       <i
-        v-if="advancedSearch && showAdvance"
+        v-show="advancedSearch && showAdvance"
         slot="prefix"
         class="el-input__icon el-icon-s-tools"
         style="cursor:pointer;"
@@ -29,7 +29,7 @@
     </el-input>
 
     <el-collapse-transition>
-      <el-card v-if="advancedSearch && showAdvance" shadow="never" class="advance">
+      <el-card v-show="advancedSearch && showAdvance" shadow="never" class="advance">
         <div class="search-options">
           <gender-selector v-model="searchParams.gender" />
           <sign-selector v-model="searchParams.leftSignID" orientation="left" />

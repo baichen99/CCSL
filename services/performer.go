@@ -48,7 +48,6 @@ func (s *PerformerService) GetPerformersList(parameters utils.GetPerformerListPa
 	orderQuery := parameters.OrderBy + " " + parameters.Order
 	if parameters.Limit != 0 {
 		err = db.
-			Preload("Region").
 			Order(orderQuery).
 			Limit(parameters.Limit).
 			Offset(parameters.Limit * (parameters.Page - 1)).
@@ -56,7 +55,6 @@ func (s *PerformerService) GetPerformersList(parameters utils.GetPerformerListPa
 			Error
 	} else {
 		err = db.
-			Preload("Region").
 			Order(orderQuery).
 			Find(&performers).
 			Error
@@ -67,7 +65,6 @@ func (s *PerformerService) GetPerformersList(parameters utils.GetPerformerListPa
 // GetPerformer get performer by id
 func (s *PerformerService) GetPerformer(performerID string) (performer models.Performer, err error) {
 	err = s.PG.LogMode(false).
-		Preload("Region").
 		Where("id = ?", performerID).
 		Take(&performer).
 		Error

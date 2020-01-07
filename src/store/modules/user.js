@@ -1,6 +1,13 @@
 import { Login, RefreshToken, GetUser } from "@/api/users";
 import router from "@/router";
 
+const SET_TOKEN = "SET_TOKEN";
+const SET_ID = "SET_ID";
+const SET_NAME = "SET_NAME";
+const SET_AVATAR = "SET_AVATAR";
+const SET_ROLES = "SET_ROLES";
+const SET_USERNAME = "SET_USERNAME";
+
 const state = {
   token: "",
   name: "",
@@ -38,7 +45,7 @@ const actions = {
       Login({ username: username.trim(), password: password })
         .then(response => {
           const token = response.data;
-          commit("SET_TOKEN", token);
+          commit(SET_TOKEN, token);
           const user = JSON.parse(atob(token.split(".")[1]));
           const userID = user.user;
           GetUser(userID)
@@ -47,11 +54,11 @@ const actions = {
               if (!data) {
                 reject("身份校验失败，请重新登录");
               }
-              commit("SET_ID", data.id);
-              commit("SET_NAME", data.name);
-              commit("SET_ROLES", [data.userType]);
-              commit("SET_USERNAME", data.username);
-              commit("SET_AVATAR", data.avatar);
+              commit(SET_ID, data.id);
+              commit(SET_NAME, data.name);
+              commit(SET_ROLES, [data.userType]);
+              commit(SET_USERNAME, data.username);
+              commit(SET_AVATAR, data.avatar);
               resolve(data);
             })
             .catch(err => {
@@ -66,12 +73,12 @@ const actions = {
 
   logout({ commit }) {
     return new Promise(resolve => {
-      commit("SET_ID", "");
-      commit("SET_NAME", "");
-      commit("SET_ROLES", []);
-      commit("SET_USERNAME", "");
-      commit("SET_AVATAR", "");
-      commit("SET_TOKEN", "");
+      commit(SET_ID, "");
+      commit(SET_NAME, "");
+      commit(SET_ROLES, []);
+      commit(SET_USERNAME, "");
+      commit(SET_AVATAR, "");
+      commit(SET_TOKEN, "");
       router.push("/login");
       resolve();
     });
@@ -83,11 +90,11 @@ const actions = {
       GetUser(userID)
         .then(res => {
           const { data } = res;
-          commit("SET_ID", data.id);
-          commit("SET_NAME", data.name);
-          commit("SET_ROLES", [data.userType]);
-          commit("SET_USERNAME", data.username);
-          commit("SET_AVATAR", data.avatar);
+          commit(SET_ID, data.id);
+          commit(SET_NAME, data.name);
+          commit(SET_ROLES, [data.userType]);
+          commit(SET_USERNAME, data.username);
+          commit(SET_AVATAR, data.avatar);
           resolve(res.data);
         })
         .catch(err => {
@@ -102,7 +109,7 @@ const actions = {
       if (state.token) {
         RefreshToken()
           .then(res => {
-            commit("SET_TOKEN", res.data);
+            commit(SET_TOKEN, res.data);
             resolve();
           })
           .catch(err => {

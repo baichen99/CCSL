@@ -1,10 +1,14 @@
+const TOGGLE_SIDEBAR = "TOGGLE_SIDEBAR";
+const CLOSE_SIDEBAR = "CLOSE_SIDEBAR";
+const TOGGLE_DEVICE = "TOGGLE_DEVICE";
+const SET_LOCALE = "SET_LOCALE";
+
 const state = {
   sidebar: {
     opened: true,
     withoutAnimation: false
   },
   device: "desktop",
-  size: "medium",
   locale: ""
 };
 
@@ -20,9 +24,6 @@ const mutations = {
   TOGGLE_DEVICE: (state, device) => {
     state.device = device;
   },
-  SET_SIZE: (state, size) => {
-    state.size = size;
-  },
   SET_LOCALE: (state, locale) => {
     state.locale = locale;
   }
@@ -30,19 +31,16 @@ const mutations = {
 
 const actions = {
   toggleSideBar({ commit }) {
-    commit("TOGGLE_SIDEBAR");
+    commit(TOGGLE_SIDEBAR);
   },
   closeSideBar({ commit }, { withoutAnimation }) {
-    commit("CLOSE_SIDEBAR", withoutAnimation);
+    commit(CLOSE_SIDEBAR, withoutAnimation);
   },
   toggleDevice({ commit }, device) {
-    commit("TOGGLE_DEVICE", device);
-  },
-  setSize({ commit }, size) {
-    commit("SET_SIZE", size);
+    commit(TOGGLE_DEVICE, device);
   },
   setLocale({ commit }, locale) {
-    commit("SET_LOCALE", locale);
+    commit(SET_LOCALE, locale);
   }
 };
 

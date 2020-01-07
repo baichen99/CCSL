@@ -28,7 +28,6 @@
 </i18n>
 
 <script>
-import { GetWordsList } from "@/api/lexicons";
 export default {
   name: "WordSearch",
   props: {
@@ -51,7 +50,8 @@ export default {
       this.getData();
     }
   },
-  created() {
+  async created() {
+    await this.$store.dispatch("data/getLexicons");
     this.getData();
   },
   methods: {
@@ -59,32 +59,31 @@ export default {
       this.$emit("word-selected", wordID);
     },
     getData() {
-      GetWordsList({ limit: 0 }).then(res => {
-        let wordsDict = {};
-        const wordsArray = res.data;
-        wordsArray.map(item => {
-          let initial;
-          if (this.$i18n.locale == "en-US") {
-            initial = item.english[0].toUpperCase();
-          } else {
-            initial = item.initial;
-          }
-          if (wordsDict[initial]) {
-            wordsDict[initial].push(item);
-          } else {
-            wordsDict[initial] = [item];
+      let wordsDict = {};
+      const words = this.$store.state.data.lexicons;
+      Object.keys(words).map(id => {
+        const item = words[id];
+        let initial;
+        if (this.$i18n.locale == "en-US") {
+          initial = item.english[0].toUpperCase();
+        } else {
+          initial = item.initial;
+        }
+        if (wordsDict[initial]) {
+          wordsDict[initial].push(item);
+        } else {
+          wordsDict[initial] = [item];
+        }
+      });
+      let dict = {};
+      Object.keys(wordsDict)
+        .sort()
+        .map(key => {
+          if (this.start <= key && key <= this.end) {
+            dict[key] = wordsDict[key];
           }
         });
-        let dict = {};
-        Object.keys(wordsDict)
-          .sort()
-          .map(key => {
-            if (this.start <= key && key <= this.end) {
-              dict[key] = wordsDict[key];
-            }
-          });
-        this.words = dict;
-      });
+      this.words = dict;
     }
   }
 };

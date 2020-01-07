@@ -48,23 +48,31 @@ func InitTestUser(pg *gorm.DB) {
 	testUsers := []models.User{
 		models.User{
 			Username: "admin@ccsl.shu.edu.cn",
+			Name:     "Admin User",
 			Password: password,
 			UserType: "admin",
+			State:    "active",
 		},
 		models.User{
 			Username: "user@ccsl.shu.edu.cn",
+			Name:     "User",
 			Password: password,
 			UserType: "user",
+			State:    "active",
 		},
 		models.User{
 			Username: "learner@ccsl.shu.edu.cn",
+			Name:     "Learner",
 			Password: password,
 			UserType: "learner",
+			State:    "active",
 		},
 		models.User{
 			Username: "super@ccsl.shu.edu.cn",
+			Name:     "Super User",
 			Password: password,
 			UserType: "super",
+			State:    "active",
 		},
 	}
 	for _, user := range testUsers {

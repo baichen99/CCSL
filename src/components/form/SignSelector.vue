@@ -24,7 +24,6 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { GetSignsList } from "@/api/signs";
 export default {
   name: "SignSelector",
   model: {
@@ -62,10 +61,10 @@ export default {
       else return this.$t("sign");
     }
   },
-  created() {
-    GetSignsList({ limit: 0 }).then(res => {
-      this.signs = res.data;
-    });
+  async created() {
+    await this.$store.dispatch("data/getSigns");
+    const data = this.$store.state.data.signs;
+    this.signs = Object.values(data);
   }
 };
 </script>
