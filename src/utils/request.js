@@ -43,8 +43,13 @@ service.interceptors.request.use(
     if (token) {
       config.headers["Authorization"] = "Bearer " + token;
     }
-    if (locale && config.params) {
-      config.params.lang = locale;
+    if (locale) {
+      if (config.params) {
+        config.params.lang = locale;
+      } else {
+        config["params"] = {};
+        config.params.lang = locale;
+      }
     }
     return config;
   },

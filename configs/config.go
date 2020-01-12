@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path"
 	"reflect"
 	"regexp"
 	"strconv"
@@ -79,8 +80,9 @@ func (conf *Config) ReadConfig() *Config {
 	if env == "" {
 		env = EnvDevelopment
 	}
-	confFile := workPath + "/configs/app." + env + ".yml"
-	yamlFile, err := ioutil.ReadFile(confFile)
+	confFileName := fmt.Sprintf("app.%s.yml", env)
+	confFilePath := path.Join(workPath, "configs", confFileName)
+	yamlFile, err := ioutil.ReadFile(confFilePath)
 	if err != nil {
 		panic(err)
 	}
@@ -92,7 +94,7 @@ func (conf *Config) ReadConfig() *Config {
 }
 
 // GetLogger : stdout for dev environment and file for prod environment
-func GetLogger(logName string) io.Writer {
+func GetLogger(prefix string) io.Writer {
 	if env := os.Getenv(EnvName); env == EnvDevelopment {
 		return os.Stdout
 	}
@@ -100,7 +102,7 @@ func GetLogger(logName string) io.Writer {
 	if err != nil {
 		panic(err)
 	}
-	filePath := workPath + "/logs/" + todayFileName(logName)
+	filePath := path.Join(workPath, "logs", todayFileName(prefix))
 	f, err := os.OpenFile(filePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		panic(err)

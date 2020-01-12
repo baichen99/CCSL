@@ -94,7 +94,7 @@ func main() {
 	// mvc.Configure(app.Party("/terms"), func(app *mvc.Application) {
 	// 	// TODO
 	// })
-	go gracefulShutdown(app)
+	go shutdown(app)
 	host := configs.Conf.Listener.Server + ":" + strconv.Itoa(configs.Conf.Listener.Port)
 	app.Run(iris.Addr(host), iris.WithOptimizations, iris.WithoutStartupLog, iris.WithoutInterruptHandler)
 }
@@ -166,7 +166,7 @@ func initDB(app *iris.Application) *gorm.DB {
 	return pg
 }
 
-func gracefulShutdown(app *iris.Application) {
+func shutdown(app *iris.Application) {
 	ch := make(chan os.Signal, 1)
 	// Catch exit sign and shutdown server gracefully
 	// kill -SIGINT XXXX Or Ctrl+c

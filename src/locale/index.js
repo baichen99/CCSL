@@ -44,8 +44,9 @@ const savedLanguage = store.state.app.locale;
 if (savedLanguage) {
   locale = savedLanguage;
 } else {
-  switch (browserLanguage) {
-    case "en-US":
+  const langPrefix = browserLanguage.split("-")[0];
+  switch (langPrefix) {
+    case "en":
       locale = "en-US";
       break;
 
