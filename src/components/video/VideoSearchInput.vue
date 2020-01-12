@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-input v-model="keyword" class="options" clearable @keyup.enter.native="search">
-      <el-select v-show="showAdvance" slot="prepend" v-model="keywordType" style="width:110px">
+      <el-select v-if="showAdvance" slot="prepend" v-model="keywordType" style="width:110px">
         <el-option label="中文" value="zh-CN" />
         <el-option label="English" value="en-US" />
       </el-select>

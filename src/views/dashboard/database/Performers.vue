@@ -48,6 +48,7 @@
           ]"
           :filter-multiple="false"
           :label="$t('Gender')"
+          width="100px"
           align="center"
         >
           <template slot-scope="{row}">
@@ -57,7 +58,7 @@
 
         <el-table-column :label="$t('Region')" align="center">
           <template slot-scope="{row}">
-            <span>{{ row.region.name }}</span>
+            <span>{{ row.regionID | getRegionName }}</span>
           </template>
         </el-table-column>
 
@@ -140,7 +141,7 @@ export default {
   mixins: [listMixin],
   data() {
     return {
-      removeProperties: ["region"],
+      removeProperties: [],
       params: {
         regionID: undefined,
         name: "",
@@ -212,7 +213,9 @@ export default {
             [this.$t("UpdatedAt")]: new Date(item.updatedAt),
             [this.$t("Name")]: item.name,
             [this.$t("Gender")]: this.$t(this.genderTypes[item.gender].name),
-            [this.$t("Region")]: item.region.name
+            [this.$t("Region")]: this.$options.filters.getRegionName(
+              item.regionID
+            )
           };
         });
         this.handleDownloadSheet(sheetData, "performer");

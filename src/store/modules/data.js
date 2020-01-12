@@ -1,3 +1,4 @@
+import lodash from "lodash";
 import { GetWordsList } from "@/api/lexicons";
 import { GetPerformersList } from "@/api/performers";
 import { GetSignsList } from "@/api/signs";
@@ -120,62 +121,74 @@ const state = {
 
 const mutations = {
   SET_LEXICON: (state, data) => {
-    state.lexicons[data.id] = data;
+    data.map(item => {
+      state.lexicons[item.id] = item;
+    });
   },
   SET_SIGN: (state, data) => {
-    state.signs[data.id] = data;
+    data.map(item => {
+      state.signs[item.id] = item;
+    });
   },
   SET_PERFORMER: (state, data) => {
-    state.performers[data.id] = data;
+    data.map(item => {
+      state.performers[item.id] = item;
+    });
   }
 };
 
 const actions = {
-  getLexicons({ commit }) {
+  getLexicons({ commit, state }) {
     return new Promise((resolve, reject) => {
-      GetWordsList({ limit: 0 })
-        .then(res => {
-          const { data } = res;
-          data.map(item => {
-            commit(SET_LEXICON, item);
+      if (lodash.isEmpty(state.lexicons)) {
+        GetWordsList({ limit: 0 })
+          .then(res => {
+            const { data } = res;
+            commit(SET_LEXICON, data);
+            resolve();
+          })
+          .catch(err => {
+            reject(err);
           });
-          resolve();
-        })
-        .catch(err => {
-          reject(err);
-        });
+      } else {
+        resolve();
+      }
     });
   },
 
-  getPerformers({ commit }) {
+  getPerformers({ commit, state }) {
     return new Promise((resolve, reject) => {
-      GetPerformersList({ limit: 0 })
-        .then(res => {
-          const { data } = res;
-          data.map(item => {
-            commit(SET_PERFORMER, item);
+      if (lodash.isEmpty(state.performers)) {
+        GetPerformersList({ limit: 0 })
+          .then(res => {
+            const { data } = res;
+            commit(SET_PERFORMER, data);
+            resolve();
+          })
+          .catch(err => {
+            reject(err);
           });
-          resolve();
-        })
-        .catch(err => {
-          reject(err);
-        });
+      } else {
+        resolve();
+      }
     });
   },
 
-  getSigns({ commit }) {
+  getSigns({ commit, state }) {
     return new Promise((resolve, reject) => {
-      GetSignsList({ limit: 0 })
-        .then(res => {
-          const { data } = res;
-          data.map(item => {
-            commit(SET_SIGN, item);
+      if (lodash.isEmpty(state.signs)) {
+        GetSignsList({ limit: 0 })
+          .then(res => {
+            const { data } = res;
+            commit(SET_SIGN, data);
+            resolve();
+          })
+          .catch(err => {
+            reject(err);
           });
-          resolve();
-        })
-        .catch(err => {
-          reject(err);
-        });
+      } else {
+        resolve();
+      }
     });
   }
 };

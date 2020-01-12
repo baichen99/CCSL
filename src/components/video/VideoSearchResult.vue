@@ -88,6 +88,13 @@ export default {
       }
     }
   },
+  created() {
+    this.$nextTick(() => {
+      this.$store.dispatch("data/getPerformers");
+      this.$store.dispatch("data/getLexicons");
+      this.$store.dispatch("data/getSigns");
+    });
+  },
   methods: {
     showDetailModal(video) {
       this.videoDetail = video;

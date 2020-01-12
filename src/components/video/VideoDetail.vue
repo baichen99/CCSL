@@ -7,15 +7,18 @@
     <div class="tags-container">
       <div class="tags">
         <span class="tag-label">{{ $t("Region") }}</span>
-        <span class="tag-value">{{ video.performer.region.name }}</span>
+        <span class="tag-value">{{ performers[video.performerID].regionID | getRegionName }}</span>
         <span class="tag-label">{{ $t("Chinese") }}</span>
-        <span class="tag-value word-sup" v-html="$options.filters.addNumberSup(video.lexicon.chinese)"></span>
+        <span
+          class="tag-value word-sup"
+          v-html="$options.filters.addNumberSup(lexicons[video.lexiconID].chinese)"
+        ></span>
       </div>
       <div class="tags">
         <span class="tag-label">{{ $t("PoS") }}</span>
-        <span class="tag-value">{{ video.lexicon.pos }}</span>
+        <span class="tag-value">{{ lexicons[video.lexiconID].pos }}</span>
         <span class="tag-label">{{ $t("English") }}</span>
-        <span class="tag-value">{{ video.lexicon.english }}</span>
+        <span class="tag-value">{{ lexicons[video.lexiconID].english }}</span>
       </div>
       <div class="tags">
         <span class="tag-label">{{ $t("WordFormation") }}</span>
@@ -36,22 +39,30 @@
           <el-tag type="info">{{ $t("NoData") }}</el-tag>
         </span>
       </div>
-      <div v-if="video.leftSigns.length !== 0" class="tags">
+      <div v-if="video.leftSignsID.length !== 0" class="tags">
         <span class="tag-label">{{ $t("LeftSign") }}</span>
         <span class="tag-value" style="width:85%">
-          <span v-for="item in video.leftSigns" :key="item.id">
-            <el-tooltip effect="dark" :content="item.name" placement="top">
-              <img style="width:150px" :src="settings.publicURL + item.image" :alt="item.name" />
+          <span v-for="item in video.leftSignsID" :key="item">
+            <el-tooltip effect="dark" :content="signs[item].name" placement="top">
+              <img
+                style="width:150px"
+                :src="settings.publicURL + signs[item].image"
+                :alt="signs[item].name"
+              />
             </el-tooltip>
           </span>
         </span>
       </div>
-      <div v-if="video.rightSigns.length !== 0" class="tags">
+      <div v-if="video.rightSignsID.length !== 0" class="tags">
         <span class="tag-label">{{ $t("RightSign") }}</span>
         <span class="tag-value" style="width:85%">
-          <span v-for="item in video.rightSigns" :key="item.id">
-            <el-tooltip effect="dark" :content="item.name" placement="top">
-              <img style="width:150px" :src="settings.publicURL + item.image" :alt="item.name" />
+          <span v-for="item in video.rightSignsID" :key="item">
+            <el-tooltip effect="dark" :content="signs[item].name" placement="top">
+              <img
+                style="width:150px"
+                :src="settings.publicURL + signs[item].image"
+                :alt="signs[item].name"
+              />
             </el-tooltip>
           </span>
         </span>
@@ -76,7 +87,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["wordFormations", "settings"])
+    ...mapGetters([
+      "wordFormations",
+      "settings",
+      "lexicons",
+      "performers",
+      "signs"
+    ])
   }
 };
 </script>

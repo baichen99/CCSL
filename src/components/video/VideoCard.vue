@@ -3,13 +3,19 @@
     <video-player :src="video.videoPath " />
     <div class="tags-container" @click="onVideoClick(video)">
       <div class="tags">
-        <span v-if="showRegion" class="tag-value">{{ video.performer.region.name }}</span>
+        <span
+          v-if="showRegion"
+          class="tag-value"
+        >{{ performers[video.performerID].regionID | getRegionName }}</span>
         <span
           v-if="$i18n.locale==='zh-CN'"
           class="tag-value word-sup"
-          v-html="$options.filters.addNumberSup(video.lexicon.chinese.split('（')[0])"
+          v-html="$options.filters.addNumberSup(lexicons[video.lexiconID].chinese.split('（')[0])"
         />
-        <span v-else-if="$i18n.locale==='en-US'" class="tag-value">{{ video.lexicon.english }}</span>
+        <span
+          v-else-if="$i18n.locale==='en-US'"
+          class="tag-value"
+        >{{ lexicons[video.lexiconID].english }}</span>
       </div>
     </div>
   </el-card>
@@ -35,7 +41,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["settings"])
+    ...mapGetters(["settings", "lexicons", "performers"])
   },
   methods: {
     onVideoClick(video) {

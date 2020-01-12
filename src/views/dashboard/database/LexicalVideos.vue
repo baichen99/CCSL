@@ -35,13 +35,13 @@
           width="80px"
         >
           <template slot-scope="{row}">
-            <span>{{ row.lexicon.initial }}</span>
+            <span>{{ lexicons[row.lexiconID].initial }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('Region')" align="center" width="100px">
+        <el-table-column :label="$t('Region')" align="center" width="200px">
           <template slot-scope="{row}">
-            <span>{{ row.performer.region.name }}</span>
+            <span>{{ performers[row.performerID].regionID | getRegionName }}</span>
           </template>
         </el-table-column>
 
@@ -57,19 +57,22 @@
           width="100px"
         >
           <template slot-scope="{row}">
-            <span>{{ $t(genderTypes[row.performer.gender].name) }}</span>
+            <span>{{ $t(genderTypes[performers[row.performerID].gender].name) }}</span>
           </template>
         </el-table-column>
 
         <el-table-column :label="$t('Name')" align="center" width="120px">
           <template slot-scope="{row}">
-            <span>{{ row.performer.name }}</span>
+            <span>{{ performers[row.performerID].name }}</span>
           </template>
         </el-table-column>
 
         <el-table-column :label="$t('Chinese')" align="center" min-width="150px">
           <template slot-scope="{row}">
-            <span class="word-sup" v-html="$options.filters.addNumberSup(row.lexicon.chinese) " />
+            <span
+              class="word-sup"
+              v-html="$options.filters.addNumberSup(lexicons[row.lexiconID].chinese)"
+            />
           </template>
         </el-table-column>
 
@@ -186,7 +189,7 @@ export default {
   mixins: [listMixin],
   data() {
     return {
-      removeProperties: ["performer", "lexicon", "leftSigns", "rightSigns"],
+      removeProperties: [],
       params: {
         chinese: "",
         regionID: undefined,
@@ -201,13 +204,25 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["genderTypes", "wordFormations", "wordInitial"])
+    ...mapGetters([
+      "genderTypes",
+      "wordFormations",
+      "wordInitial",
+      "performers",
+      "lexicons",
+      "signs"
+    ])
   },
   created() {
-    this.wordInitial.map(item => {
-      this.initialFilters.push({
-        text: item,
-        value: item
+    this.$nextTick(() => {
+      this.$store.dispatch("data/getPerformers");
+      this.$store.dispatch("data/getLexicons");
+      this.$store.dispatch("data/getSigns");
+      this.wordInitial.map(item => {
+        this.initialFilters.push({
+          text: item,
+          value: item
+        });
       });
     });
   },
@@ -263,39 +278,40 @@ export default {
         });
     },
     handleExport() {
-      // if (!this.checkParam()) {
-      //   return;
-      // }
       const params = JSON.parse(JSON.stringify(this.params));
       params.limit = 0;
       GetLexicalVideosList(params, true).then(res => {
         const sheetData = res.data.map(item => {
           const leftSigns = [];
           const rightSigns = [];
-          item.leftSigns.map(sign => {
+          item.leftSignsID.map(signID => {
+            const sign = this.signs[signID];
             leftSigns.push(sign.name);
           });
-          item.rightSigns.map(sign => {
+          item.rightSignsID.map(signID => {
+            const sign = this.signs[signID];
             rightSigns.push(sign.name);
           });
           return {
             [this.$t("CreatedAt")]: new Date(item.createdAt),
             [this.$t("UpdatedAt")]: new Date(item.updatedAt),
-            [this.$t("Initial")]: item.lexicon.initial,
-            [this.$t("Chinese")]: item.lexicon.chinese,
-            [this.$t("English")]: item.lexicon.english,
-            [this.$t("PoS")]: item.lexicon.pos,
+            [this.$t("Initial")]: this.lexicons[item.lexiconID].initial,
+            [this.$t("Chinese")]: this.lexicons[item.lexiconID].chinese,
+            [this.$t("English")]: this.lexicons[item.lexiconID].english,
+            [this.$t("PoS")]: this.lexicons[item.lexiconID].pos,
             [this.$t("WordFormation")]: item.wordFormation
               ? this.$t(this.wordFormations[item.wordFormation].name)
               : this.$t("NoData"),
             [this.$t("Morpheme")]: item.morpheme.join(","),
             [this.$t("LeftSign")]: leftSigns.join(","),
             [this.$t("RightSign")]: rightSigns.join(","),
-            [this.$t("Name")]: item.performer.name,
+            [this.$t("Name")]: this.performers[item.performerID].name,
             [this.$t("Gender")]: this.$t(
-              this.genderTypes[item.performer.gender].name
+              this.genderTypes[this.performers[item.performerID].gender].name
             ),
-            [this.$t("Region")]: item.performer.region.name
+            [this.$t("Region")]: this.$options.filters.getRegionName(
+              this.performers[item.performerID].regionID
+            )
           };
         });
         this.handleDownloadSheet(sheetData, "video");

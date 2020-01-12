@@ -19,7 +19,10 @@ const getters = {
   newsTypes: state => state.data.newsTypes,
   languageTypes: state => state.data.languageTypes,
   memberTypes: state => state.data.memberTypes,
-  memberDegrees: state => state.data.memberDegrees
+  memberDegrees: state => state.data.memberDegrees,
+  signs: state => state.data.signs,
+  lexicons: state => state.data.lexicons,
+  performers: state => state.data.performers
 };
 
 export default getters;
