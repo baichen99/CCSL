@@ -32,7 +32,7 @@ func (c *VideoController) BeforeActivation(app mvc.BeforeActivation) {
 // >>>>> DOCS  <<<<<
 // =================
 // @Tags Lexical Videos
-// @Summary List lexical videos
+// @Summary List videos for lexical database
 // @Description get videos list
 // @Accept  json
 // @Produce json

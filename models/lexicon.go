@@ -3,8 +3,8 @@ package models
 // Lexicon words for Lexical Database
 type Lexicon struct {
 	Base
-	Initial string `gorm:"DEFAULT:NULL" json:"initial"` // 汉语音序
-	Chinese string `gorm:"DEFAULT:NULL" json:"chinese"` // 汉语转写
-	English string `gorm:"DEFAULT:NULL" json:"english"` // 英语转写
-	Pos     string `gorm:"DEFAULT:NULL" json:"pos"`     // 词性
+	Initial string `json:"initial" example:"W"` // 汉语音序
+	Chinese string `json:"chinese" example:"我"` // 汉语转写
+	English string `json:"english" example:"I"` // 英语转写
+	Pos     string `json:"pos" example:"代词"`    // 词性
 }

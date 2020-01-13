@@ -128,12 +128,13 @@ func initDoc(app *iris.Application) {
 	// @Host localhost:8888
 	// =================
 	if os.Getenv(configs.EnvName) == configs.EnvDevelopment {
-		docHost := fmt.Sprintf("http://%s:%s/swagger/doc.json", configs.Conf.Listener.Server, strconv.Itoa(configs.Conf.Listener.Port))
+		host := fmt.Sprintf("http://%s:%s", configs.Conf.Listener.Server, strconv.Itoa(configs.Conf.Listener.Port))
+		docHost := fmt.Sprintf("%s/swagger/doc.json", host)
 		config := &swagger.Config{
 			URL: docHost,
 		}
 		app.Get("/swagger/{any:path}", swagger.CustomWrapHandler(config, swaggerFiles.Handler))
-		app.Logger().Debugf("Doc server is running on: http://%s:%s/swagger/index.html", configs.Conf.Listener.Server, strconv.Itoa(configs.Conf.Listener.Port))
+		app.Logger().Debugf("Doc server is running on: %s/swagger/index.html", host)
 	}
 }
 
@@ -141,27 +142,59 @@ func initDB(app *iris.Application) *gorm.DB {
 	pg := utils.ConnectPostgres(app)
 	pg.SetLogger(configs.GetPostgresLogger())
 	// AutoMigrate will create missing tables and missing index keys
-	pg.AutoMigrate(&models.User{}, &models.Lexicon{}, &models.LexicalVideo{}, &models.Sign{}, &models.Performer{}, &models.Carousel{}, &models.News{}, &models.Member{}, &models.District{}, &models.City{}, &models.Province{}, &models.JsError{}, &models.Info{}, &models.LoginHistory{})
+	pg.AutoMigrate(
+		&models.User{},
+		&models.Lexicon{},
+		&models.LexicalVideo{},
+		&models.Sign{},
+		&models.Performer{},
+		&models.Carousel{},
+		&models.News{},
+		&models.Member{},
+		&models.District{},
+		&models.City{},
+		&models.Province{},
+		&models.JsError{},
+		&models.Info{},
+		&models.LoginHistory{},
+		&models.Notification{},
+	)
 
 	// Don't use UNIQUE to declare gorm models because you can't create a alreay deleted object with the same value, manually Add UNIQUE key for table columns
 
-	pg.Exec("CREATE UNIQUE INDEX users_username_key ON users(username) WHERE deleted_at IS NULL")
-	pg.Exec("CREATE UNIQUE INDEX signs_name_key ON signs(name) WHERE deleted_at IS NULL")
-	pg.Exec("CREATE UNIQUE INDEX lexicons_chinese_key ON lexicons(chinese) WHERE deleted_at IS NULL")
+	pg.Exec(
+		"CREATE UNIQUE INDEX users_username_key ON users(username) WHERE deleted_at IS NULL",
+	)
+	pg.Exec(
+		"CREATE UNIQUE INDEX signs_name_key ON signs(name) WHERE deleted_at IS NULL",
+	)
+	pg.Exec(
+		"CREATE UNIQUE INDEX lexicons_chinese_key ON lexicons(chinese) WHERE deleted_at IS NULL",
+	)
 
 	// Manually Add foreign key for tables, because gorm won't create foreign keys, to make sure data is clean we need manually add these keys
 	// Data of cities are from https://github.com/modood/Administrative-divisions-of-China
 	// You cannot neither change nor update them, so set to RESTRICT
-	pg.Model(&models.District{}).AddForeignKey("city_code", "cities(code)", "RESTRICT", "RESTRICT").AddForeignKey("province_code", "provinces(code)", "RESTRICT", "RESTRICT")
-	pg.Model(&models.City{}).AddForeignKey("province_code", "provinces(code)", "RESTRICT", "RESTRICT")
-
-	// For other data models, set delete mode to RESTRICT and update mode to CASCADE
-	pg.Model(&models.LexicalVideo{}).AddForeignKey("lexicon_id", "lexicons(id)", "RESTRICT", "CASCADE")
-	pg.Model(&models.LexicalVideo{}).AddForeignKey("performer_id", "performers(id)", "RESTRICT", "CASCADE")
-	pg.Model(&models.News{}).AddForeignKey("creator_id", "users(id)", "RESTRICT", "CASCADE")
-	pg.Model(&models.Carousel{}).AddForeignKey("creator_id", "users(id)", "RESTRICT", "CASCADE")
-	pg.Model(&models.Performer{}).AddForeignKey("region", "districts(code)", "RESTRICT", "CASCADE")
-	pg.Model(&models.LoginHistory{}).AddForeignKey("user_id", "users(id)", "RESTRICT", "CASCADE")
+	pg.
+		Model(&models.District{}).
+		AddForeignKey("city_code", "cities(code)", "RESTRICT", "RESTRICT").
+		AddForeignKey("province_code", "provinces(code)", "RESTRICT", "RESTRICT").
+		Model(&models.City{}).
+		AddForeignKey("province_code", "provinces(code)", "RESTRICT", "RESTRICT").
+		// For other data models, set delete mode to RESTRICT and update mode to CASCADE
+		Model(&models.LexicalVideo{}).
+		AddForeignKey("lexicon_id", "lexicons(id)", "RESTRICT", "CASCADE").
+		AddForeignKey("performer_id", "performers(id)", "RESTRICT", "CASCADE").
+		Model(&models.Performer{}).
+		AddForeignKey("region", "districts(code)", "RESTRICT", "CASCADE").
+		Model(&models.News{}).
+		AddForeignKey("creator_id", "users(id)", "RESTRICT", "CASCADE").
+		Model(&models.Carousel{}).
+		AddForeignKey("creator_id", "users(id)", "RESTRICT", "CASCADE").
+		Model(&models.LoginHistory{}).
+		AddForeignKey("user_id", "users(id)", "RESTRICT", "CASCADE").
+		Model(&models.Notification{}).
+		AddForeignKey("user_id", "users(id)", "RESTRICT", "CASCADE")
 	// utils.InitTestUser(pg)
 	return pg
 }
