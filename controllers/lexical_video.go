@@ -20,8 +20,8 @@ type VideoController struct {
 // BeforeActivation will register routes for controllers
 func (c *VideoController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Router().Use(middlewares.CheckJWTToken)
-	app.Handle("GET", "/", "GetVideosList", middlewares.CheckRateLimit(1))
-	app.Handle("GET", "/{id: string}", "GetVideo", middlewares.CheckRateLimit(1))
+	app.Handle("GET", "/", "GetVideosList", middlewares.CheckRateLimit(3))
+	app.Handle("GET", "/{id: string}", "GetVideo", middlewares.CheckRateLimit(3))
 	app.Router().Use(middlewares.CheckAdmin)
 	app.Handle("POST", "/", "CreateVideo")
 	app.Handle("PUT", "/{id: string}", "UpdateVideo")

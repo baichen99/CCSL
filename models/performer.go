@@ -6,5 +6,4 @@ type Performer struct {
 	RegionID int    `gorm:"DEFAULT:NULL" json:"regionID"`
 	Name     string `gorm:"DEFAULT:NULL" json:"name"`
 	Gender   string `gorm:"DEFAULT:NULL" json:"gender"`
-	// Region   District `gorm:"FOREIGNKEY:RegionID" json:"region"`
 }
