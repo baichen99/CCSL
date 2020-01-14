@@ -192,3 +192,10 @@ type GetUserLoginListParameters struct {
 	Status string
 	IP     string
 }
+
+// GetNotificationListParameters parameters for get notification list queries
+type GetNotificationListParameters struct {
+    GetListParameters
+    UserID  string
+    Message string
+}
