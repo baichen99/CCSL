@@ -1,23 +1,25 @@
 package controllers
 
 import (
-    "ccsl/models"
-    "ccsl/services"
-    "ccsl/utils"
-    "github.com/kataras/iris/v12"
-    "github.com/kataras/iris/v12/mvc"
-    "time"
+	"ccsl/middlewares"
+	"ccsl/models"
+	"ccsl/services"
+	"ccsl/utils"
+	"time"
+
+	"github.com/kataras/iris/v12"
+	"github.com/kataras/iris/v12/mvc"
 )
 
 // NotificationController is for Notification CRUD
 type NotificationController struct {
-	Context     iris.Context
+	Context             iris.Context
 	NotificationService services.NotificationInterface
 }
 
 // BeforeActivation will register routes for controllers
 func (c *NotificationController) BeforeActivation(app mvc.BeforeActivation) {
-    //app.Router().Use(middlewares.CheckJWTToken)
+	app.Router().Use(middlewares.CheckJWTToken)
 	app.Handle("GET", "/", "GetNotificationList")
 	app.Handle("POST", "/", "CreateNotification")
 	app.Handle("GET", "/{id: string}", "GetNotification")
@@ -96,7 +98,6 @@ func (c *NotificationController) CreateNotification() {
 	})
 }
 
-
 // GetNotification GET /notifications/{id:string}
 // >>>>> DOCS  <<<<<
 // =================
@@ -126,13 +127,13 @@ func (c *NotificationController) GetNotification() {
 
 	notification.ReadAt = time.Now()
 	if notification.ReadAt.IsZero() {
-	    updateData := make(map[string]interface{})
-	    updateData["ReadAt"] = notification.ReadAt
-        if err := c.NotificationService.UpdateNotification(notificationID, updateData); err != nil {
-            utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "NotificationService::UpdateNotification", errSQL)
-            return
-        }
-    }
+		updateData := make(map[string]interface{})
+		updateData["ReadAt"] = notification.ReadAt
+		if err := c.NotificationService.UpdateNotification(notificationID, updateData); err != nil {
+			utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "NotificationService::UpdateNotification", errSQL)
+			return
+		}
+	}
 
 	// Returning word information in data key.
 	c.Context.JSON(iris.Map{
@@ -140,7 +141,6 @@ func (c *NotificationController) GetNotification() {
 		data:    notification,
 	})
 }
-
 
 // DeleteNotification DELETE /Notification/{id:string}
 func (c *NotificationController) DeleteNotification() {
