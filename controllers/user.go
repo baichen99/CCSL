@@ -101,6 +101,7 @@ type GetUsersListResponse struct {
 // @Produce json
 // @Router 	/users 	[POST]
 // @Param 	user 	body	 controllers.UserCreateForm	  true	"create user"
+// @Success 201		{object} controllers.CreateModelResponse
 // @Failure 400 	{object} controllers.ErrorResponse
 // @Failure 401 	{object} controllers.ErrorResponse
 // @Failure 422 	{object} controllers.ErrorResponse
@@ -175,6 +176,7 @@ func (c *UserController) GetUser() {
 // @Router 	/users/{id} [PUT]
 // @Param 	id 		path	 string						  true	"user id" format(uuid)
 // @Param 	user 	body	 controllers.UserUpdateForm	  true	"updated user"
+// @Success	204
 // @Failure 400 	{object} controllers.ErrorResponse
 // @Failure 401 	{object} controllers.ErrorResponse
 // @Failure 403 	{object} controllers.ErrorResponse

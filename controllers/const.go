@@ -43,6 +43,11 @@ type GetListResponse struct {
 	Total   int    `json:"total" example:"100"`
 }
 
+// CreateModelResponse Response for create a model
+type CreateModelResponse struct {
+	Message string `json:"message" example:"success"`
+}
+
 // >>> INFO <<<
 // ============
 

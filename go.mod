@@ -24,8 +24,11 @@ require (
 	github.com/lib/pq v1.3.0
 	github.com/mailru/easyjson v0.7.0 // indirect
 	github.com/mattn/go-colorable v0.1.1 // indirect
+	github.com/mediocregopher/radix/v3 v3.4.2 // indirect
 	github.com/moul/http2curl v1.0.0 // indirect
+	github.com/nats-io/jwt v0.3.2 // indirect
 	github.com/nats-io/nats-server/v2 v2.1.0 // indirect
+	github.com/nats-io/nats.go v1.9.1 // indirect
 	github.com/onsi/ginkgo v1.7.0 // indirect
 	github.com/onsi/gomega v1.4.3 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
@@ -44,7 +47,8 @@ require (
 	golang.org/x/crypto v0.0.0-20200109152110-61a87790db17
 	golang.org/x/sys v0.0.0-20200107162124-548cf772de50 // indirect
 	golang.org/x/time v0.0.0-20191024005414-555d28b269f0 // indirect
-	golang.org/x/tools v0.0.0-20200110213125-a7a6caa82ab2 // indirect
+	golang.org/x/tools v0.0.0-20200113040837-eac381796e91 // indirect
+	golang.org/x/xerrors v0.0.0-20191204190536-9bdfabe68543 // indirect
 	google.golang.org/appengine v1.6.5 // indirect
 	gopkg.in/go-playground/validator.v9 v9.31.0
 	gopkg.in/ini.v1 v1.51.1 // indirect

@@ -20,7 +20,7 @@
                 "tags": [
                     "Lexical Videos"
                 ],
-                "summary": "List lexical videos",
+                "summary": "List videos for lexical database",
                 "parameters": [
                     {
                         "minimum": 1,
@@ -298,6 +298,12 @@
                     }
                 ],
                 "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.CreateModelResponse"
+                        }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
@@ -353,6 +359,7 @@
                     }
                 ],
                 "responses": {
+                    "204": {},
                     "400": {
                         "description": "Bad Request",
                         "schema": {
@@ -382,6 +389,15 @@
         }
     },
     "definitions": {
+        "controllers.CreateModelResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "success"
+                }
+            }
+        },
         "controllers.ErrorResponse": {
             "type": "object",
             "properties": {

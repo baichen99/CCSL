@@ -56,7 +56,6 @@ func main() {
 		app.Register(services.NewUserService(pg))
 		app.Handle(new(controllers.UserController))
 	})
-	// sign language basic elements
 	mvc.Configure(app.Party("/signs"), func(app *mvc.Application) {
 		app.Register(services.NewSignService(pg))
 		app.Handle(new(controllers.SignController))
@@ -83,9 +82,9 @@ func main() {
 	// 	// TODO
 	// })
 	// // Chinese Sign Language Corpus for Sign Texts
-	// mvc.Configure(app.Party("/texts"), func(app *mvc.Application) {
-	// 	// TODO
-	// })
+	mvc.Configure(app.Party("/texts/videos"), func(app *mvc.Application) {
+		// TODO
+	})
 	// // Literature Database for Sign Language Research
 	// mvc.Configure(app.Party("/literature"), func(app *mvc.Application) {
 	// 	// TODO

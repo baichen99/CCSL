@@ -1,4 +1,10 @@
 definitions:
+  controllers.CreateModelResponse:
+    properties:
+      message:
+        example: success
+        type: string
+    type: object
   controllers.ErrorResponse:
     properties:
       error:
@@ -303,7 +309,7 @@ paths:
           description: Unprocessable Entity
           schema:
             $ref: '#/definitions/controllers.ErrorResponse'
-      summary: List lexical videos
+      summary: List videos for lexical database
       tags:
       - Lexical Videos
   /users:
@@ -394,6 +400,10 @@ paths:
       produces:
       - application/json
       responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/controllers.CreateModelResponse'
         "400":
           description: Bad Request
           schema:
@@ -431,6 +441,7 @@ paths:
       produces:
       - application/json
       responses:
+        "204": {}
         "400":
           description: Bad Request
           schema:
