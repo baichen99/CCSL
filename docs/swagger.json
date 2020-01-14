@@ -216,12 +216,6 @@
                         "description": "search message of notification",
                         "name": "message",
                         "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "filter by userID",
-                        "name": "userID",
-                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -254,7 +248,7 @@
         },
         "/notifications/{id}": {
             "get": {
-                "description": "GET a notification by id",
+                "description": "Get a notification by id",
                 "consumes": [
                     "application/json"
                 ],
@@ -264,18 +258,24 @@
                 "tags": [
                     "Notifications"
                 ],
-                "summary": "GET Notification",
+                "summary": "Get notification",
                 "parameters": [
                     {
                         "type": "string",
                         "format": "uuid",
-                        "description": "user id",
+                        "description": "notification id",
                         "name": "id",
                         "in": "path",
                         "required": true
                     }
                 ],
                 "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.GetNotificationResponse"
+                        }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
@@ -303,7 +303,7 @@
                 }
             },
             "delete": {
-                "description": "DELETE a notification by id",
+                "description": "delete a notification by id",
                 "consumes": [
                     "application/json"
                 ],
@@ -313,18 +313,19 @@
                 "tags": [
                     "Notifications"
                 ],
-                "summary": "DELETE Notification",
+                "summary": "Delete notification",
                 "parameters": [
                     {
                         "type": "string",
                         "format": "uuid",
-                        "description": "user id",
+                        "description": "notification id",
                         "name": "id",
                         "in": "path",
                         "required": true
                     }
                 ],
                 "responses": {
+                    "204": {},
                     "400": {
                         "description": "Bad Request",
                         "schema": {
@@ -477,6 +478,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
+                            "type": "object",
                             "$ref": "#/definitions/controllers.UserCreateForm"
                         }
                     }
@@ -485,7 +487,7 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/controllers.CreateModelResponse"
+                            "$ref": "#/definitions/controllers.SuccessResponse"
                         }
                     },
                     "400": {
@@ -537,6 +539,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
+                            "type": "object",
                             "$ref": "#/definitions/controllers.UserUpdateForm"
                         }
                     }
@@ -572,15 +575,6 @@
         }
     },
     "definitions": {
-        "controllers.CreateModelResponse": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "success"
-                }
-            }
-        },
         "controllers.ErrorResponse": {
             "type": "object",
             "properties": {
@@ -591,6 +585,19 @@
                 "message": {
                     "type": "string",
                     "example": "error title"
+                }
+            }
+        },
+        "controllers.GetNotificationResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object",
+                    "$ref": "#/definitions/models.Notification"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "success"
                 }
             }
         },
@@ -672,6 +679,15 @@
                 "total": {
                     "type": "integer",
                     "example": 100
+                }
+            }
+        },
+        "controllers.SuccessResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "success"
                 }
             }
         },

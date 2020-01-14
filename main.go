@@ -68,14 +68,14 @@ func main() {
 		app.Register(services.NewLexiconService(pg))
 		app.Handle(new(controllers.LexiconController))
 	})
+	mvc.Configure(app.Party("/notifications"), func(app *mvc.Application) {
+		app.Register(services.NewNotificationService(pg))
+		app.Handle(new(controllers.NotificationController))
+	})
 	// Lexical Database for Chinese National Sign Language
 	mvc.Configure(app.Party("/lexical/videos"), func(app *mvc.Application) {
 		app.Register(services.NewLexicalVideoService(pg))
 		app.Handle(new(controllers.VideoController))
-	})
-	mvc.Configure(app.Party("/notifications"), func(app *mvc.Application) {
-		app.Register(services.NewNotificationService(pg))
-		app.Handle(new(controllers.NotificationController))
 	})
 	// // Corpus for Shanghai Sign Language Verb
 	// mvc.Configure(app.Party("/verbs"), func(app *mvc.Application) {

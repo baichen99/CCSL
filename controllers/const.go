@@ -35,17 +35,17 @@ type ErrorResponse struct {
 	ErrInfo string `json:"error" example:"error message"`
 }
 
+// SuccessResponse Response for successful operation
+type SuccessResponse struct {
+	Message string `json:"message" example:"success"`
+}
+
 // GetListResponse Response for get list request
 type GetListResponse struct {
 	Message string `json:"message" example:"success"`
 	Page    int    `json:"page" example:"1"`
 	Limit   int    `json:"limit" example:"10"`
 	Total   int    `json:"total" example:"100"`
-}
-
-// CreateModelResponse Response for create a model
-type CreateModelResponse struct {
-	Message string `json:"message" example:"success"`
 }
 
 // >>> INFO <<<

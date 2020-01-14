@@ -101,7 +101,7 @@ type GetUsersListResponse struct {
 // @Produce json
 // @Router 	/users 	[POST]
 // @Param 	user 	body	 controllers.UserCreateForm	  true	"create user"
-// @Success 201		{object} controllers.CreateModelResponse
+// @Success 201		{object} controllers.SuccessResponse
 // @Failure 400 	{object} controllers.ErrorResponse
 // @Failure 401 	{object} controllers.ErrorResponse
 // @Failure 422 	{object} controllers.ErrorResponse

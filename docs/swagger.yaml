@@ -1,10 +1,4 @@
 definitions:
-  controllers.CreateModelResponse:
-    properties:
-      message:
-        example: success
-        type: string
-    type: object
   controllers.ErrorResponse:
     properties:
       error:
@@ -12,6 +6,15 @@ definitions:
         type: string
       message:
         example: error title
+        type: string
+    type: object
+  controllers.GetNotificationResponse:
+    properties:
+      data:
+        $ref: '#/definitions/models.Notification'
+        type: object
+      message:
+        example: success
         type: string
     type: object
   controllers.GetNotificationsListResponse:
@@ -70,6 +73,12 @@ definitions:
       total:
         example: 100
         type: integer
+    type: object
+  controllers.SuccessResponse:
+    properties:
+      message:
+        example: success
+        type: string
     type: object
   controllers.UserCreateForm:
     properties:
@@ -383,10 +392,6 @@ paths:
         in: query
         name: message
         type: string
-      - description: filter by userID
-        in: query
-        name: userID
-        type: string
       produces:
       - application/json
       responses:
@@ -413,9 +418,9 @@ paths:
     delete:
       consumes:
       - application/json
-      description: DELETE a notification by id
+      description: delete a notification by id
       parameters:
-      - description: user id
+      - description: notification id
         format: uuid
         in: path
         name: id
@@ -424,6 +429,7 @@ paths:
       produces:
       - application/json
       responses:
+        "204": {}
         "400":
           description: Bad Request
           schema:
@@ -440,15 +446,15 @@ paths:
           description: Unprocessable Entity
           schema:
             $ref: '#/definitions/controllers.ErrorResponse'
-      summary: DELETE Notification
+      summary: Delete notification
       tags:
       - Notifications
     get:
       consumes:
       - application/json
-      description: GET a notification by id
+      description: Get a notification by id
       parameters:
-      - description: user id
+      - description: notification id
         format: uuid
         in: path
         name: id
@@ -457,6 +463,10 @@ paths:
       produces:
       - application/json
       responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.GetNotificationResponse'
         "400":
           description: Bad Request
           schema:
@@ -473,7 +483,7 @@ paths:
           description: Unprocessable Entity
           schema:
             $ref: '#/definitions/controllers.ErrorResponse'
-      summary: GET Notification
+      summary: Get notification
       tags:
       - Notifications
   /users:
@@ -560,13 +570,14 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/controllers.UserCreateForm'
+          type: object
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/controllers.CreateModelResponse'
+            $ref: '#/definitions/controllers.SuccessResponse'
         "400":
           description: Bad Request
           schema:
@@ -600,6 +611,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/controllers.UserUpdateForm'
+          type: object
       produces:
       - application/json
       responses:

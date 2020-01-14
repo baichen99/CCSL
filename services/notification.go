@@ -9,11 +9,11 @@ import (
 
 // NotificationInterface struct
 type NotificationInterface interface {
-	GetNotificationList(parameters utils.GetNotificationListParameters) (Notifications []models.Notification, count int, err error)
-	GetNotification(NotificationID string) (Notification models.Notification, err error)
-	CreateNotification(Notification models.Notification) (err error)
-	UpdateNotification(NotificationID string, updateData map[string]interface{}) (err error)
-	DeleteNotification(NotificationID string) (err error)
+	GetNotificationList(parameters utils.GetNotificationListParameters) (notifications []models.Notification, count int, err error)
+	GetNotification(notificationID string) (notification models.Notification, err error)
+	CreateNotification(notification models.Notification) (err error)
+	UpdateNotification(notificationID string, updateData map[string]interface{}) (err error)
+	DeleteNotification(notificationID string) (err error)
 }
 
 // NotificationService implements Notification interface
@@ -29,7 +29,7 @@ func NewNotificationService(pg *gorm.DB) NotificationInterface {
 }
 
 // GetNotificationList returns Notifications list
-func (s *NotificationService) GetNotificationList(parameters utils.GetNotificationListParameters) (Notifications []models.Notification, count int, err error) {
+func (s *NotificationService) GetNotificationList(parameters utils.GetNotificationListParameters) (notifications []models.Notification, count int, err error) {
 	db := s.PG.LogMode(false).Scopes(
 		utils.FilterByColumn("notifications.user_id", parameters.UserID),
 		utils.SearchByColumn("notifications.message", parameters.Message),
@@ -45,42 +45,42 @@ func (s *NotificationService) GetNotificationList(parameters utils.GetNotificati
 			Order(orderQuery).
 			Limit(parameters.Limit).
 			Offset(parameters.Limit * (parameters.Page - 1)).
-			Find(&Notifications).
+			Find(&notifications).
 			Error
 	} else {
 		err = db.
 			Order(orderQuery).
-			Find(&Notifications).
+			Find(&notifications).
 			Error
 	}
 	return
 }
 
 // GetNotification returns Notification with given id
-func (s *NotificationService) GetNotification(NotificationID string) (Notification models.Notification, err error) {
+func (s *NotificationService) GetNotification(notificationID string) (notification models.Notification, err error) {
 	err = s.PG.
 		LogMode(false).
-		Where("id = ?", NotificationID).
-		Take(&Notification).
+		Where("id = ?", notificationID).
+		Take(&notification).
 		Error
 	return
 }
 
 // CreateNotification creates a new Notification
-func (s *NotificationService) CreateNotification(Notification models.Notification) (err error) {
+func (s *NotificationService) CreateNotification(notification models.Notification) (err error) {
 	err = s.PG.
 		LogMode(true).
-		Create(&Notification).
+		Create(&notification).
 		Error
 	return
 }
 
 // UpdateNotification updates Notification with given id
-func (s *NotificationService) UpdateNotification(NotificationID string, updateData map[string]interface{}) (err error) {
+func (s *NotificationService) UpdateNotification(notificationID string, updateData map[string]interface{}) (err error) {
 	var notification models.Notification
 	err = s.PG.
 		LogMode(true).
-		Where("id = ?", NotificationID).
+		Where("id = ?", notificationID).
 		Take(&notification).
 		Update(updateData).
 		Error
@@ -88,12 +88,12 @@ func (s *NotificationService) UpdateNotification(NotificationID string, updateDa
 }
 
 // DeleteNotification soft deletes a Notification with given id
-func (s *NotificationService) DeleteNotification(NotificationID string) (err error) {
-	var Notification models.Notification
+func (s *NotificationService) DeleteNotification(notificationID string) (err error) {
+	var notification models.Notification
 	err = s.PG.
 		LogMode(true).
-		Where("id = ?", NotificationID).
-		Delete(&Notification).
+		Where("id = ?", notificationID).
+		Delete(&notification).
 		Error
 	return
 }

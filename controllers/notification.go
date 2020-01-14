@@ -26,7 +26,7 @@ func (c *NotificationController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Handle("DELETE", "/{id: string}", "DeleteNotification")
 }
 
-// GetNotificationsList GET /notifications
+// GetNotificationList GET /notifications
 // >>>>> DOCS  <<<<<
 // =================
 // @Tags Notifications
@@ -40,7 +40,6 @@ func (c *NotificationController) BeforeActivation(app mvc.BeforeActivation) {
 // @Param order 	query string false	"order by field"
 // @Param orderBy 	query string false	"order by asc or desc" 		    enums(asc, desc)
 // @Param message 	query string false 	"search message of notification"
-// @Param userID 	query string false 	"filter by userID"
 // @Success 200 {object} controllers.GetNotificationsListResponse
 // @Failure 400 {object} controllers.ErrorResponse
 // @Failure 401 {object} controllers.ErrorResponse
@@ -83,12 +82,13 @@ type GetNotificationsListResponse struct {
 // >>>>> DOCS  <<<<<
 // =================
 // @Tags Notifications
-// @Summary GET Notification
-// @Description GET a notification by id
+// @Summary Get notification
+// @Description Get a notification by id
 // @Accept  json
 // @Produce json
 // @Router 	/notifications/{id} [GET]
-// @Param 	id 		path	 string						  true	"user id" format(uuid)
+// @Param 	id 		path	 string						  true	"notification id" format(uuid)
+// @Success 200 	{object} controllers.GetNotificationResponse
 // @Failure 400 	{object} controllers.ErrorResponse
 // @Failure 401 	{object} controllers.ErrorResponse
 // @Failure 403 	{object} controllers.ErrorResponse
@@ -116,23 +116,29 @@ func (c *NotificationController) GetNotification() {
 		}
 	}
 
-	// Returning word information in data key.
 	c.Context.JSON(iris.Map{
 		message: success,
 		data:    notification,
 	})
 }
 
+// GetNotificationResponse Response for get notification
+type GetNotificationResponse struct {
+	SuccessResponse
+	Data models.Notification `json:"data"`
+}
+
 // DeleteNotification DELETE /Notification/{id:string}
 // >>>>> DOCS  <<<<<
 // =================
 // @Tags Notifications
-// @Summary DELETE Notification
-// @Description DELETE a notification by id
+// @Summary Delete notification
+// @Description delete a notification by id
 // @Accept  json
 // @Produce json
 // @Router 	/notifications/{id} [DELETE]
-// @Param 	id 		path	 string						  true	"user id" format(uuid)
+// @Param 	id 		path	 string						  true	"notification id" format(uuid)
+// @Success 204
 // @Failure 400 	{object} controllers.ErrorResponse
 // @Failure 401 	{object} controllers.ErrorResponse
 // @Failure 403 	{object} controllers.ErrorResponse
@@ -140,8 +146,24 @@ func (c *NotificationController) GetNotification() {
 // =================
 func (c *NotificationController) DeleteNotification() {
 	defer c.Context.Next()
+
 	// Getting ID from parameters in the URL
 	notificationID := c.Context.Params().Get("id")
+
+	// Check notification.UserID == userID
+	notfication, err := c.NotificationService.GetNotification(notificationID)
+	if err != nil {
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "NotificationService::GetNotification", errSQL)
+		return
+	}
+
+	tokenUser, _ := middlewares.GetJWTParams(c.Context)
+	userID, _ := uuid.FromString(tokenUser)
+
+	if notfication.UserID != userID {
+		utils.SetResponseError(c.Context, iris.StatusForbidden, "NotificationService::GetNotification", errRole)
+		return
+	}
 
 	// PSQL - Soft delete of the given ID
 	if err := c.NotificationService.DeleteNotification(notificationID); err != nil {
@@ -149,18 +171,6 @@ func (c *NotificationController) DeleteNotification() {
 		return
 	}
 
-	// Check notification.userID == UserID
-	notfication, err := c.NotificationService.GetNotification(notificationID)
-	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "NotificationService::GetNotification", errSQL)
-		return
-	}
-	TokenUser, _ := middlewares.GetJWTParams(c.Context)
-	userID, _ := uuid.FromString(TokenUser)
-	if notfication.UserID != userID {
-		utils.SetResponseError(c.Context, iris.StatusForbidden, "NotificationService::GetNotification", errRole)
-		return
-	}
 	// Returns with 204 No Content status.
 	c.Context.StatusCode(iris.StatusNoContent)
 }
