@@ -9,6 +9,7 @@ import (
 
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
+	uuid "github.com/satori/go.uuid"
 )
 
 // NotificationController is for Notification CRUD
@@ -21,7 +22,6 @@ type NotificationController struct {
 func (c *NotificationController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Router().Use(middlewares.CheckJWTToken)
 	app.Handle("GET", "/", "GetNotificationList")
-	app.Handle("POST", "/", "CreateNotification")
 	app.Handle("GET", "/{id: string}", "GetNotification")
 	app.Handle("DELETE", "/{id: string}", "DeleteNotification")
 }
@@ -53,9 +53,11 @@ func (c *NotificationController) GetNotificationList() {
 		utils.SetResponseError(c.Context, iris.StatusBadRequest, "NotificationController::GetNotificationList", errParams)
 		return
 	}
+	userID, _ := middlewares.GetJWTParams(c.Context)
 
 	listParameters := utils.GetNotificationListParameters{
 		GetListParameters: listParams,
+		UserID:            userID,
 	}
 	notifications, count, err := c.NotificationService.GetNotificationList(listParameters)
 	if err != nil {
@@ -75,27 +77,6 @@ func (c *NotificationController) GetNotificationList() {
 type GetNotificationsListResponse struct {
 	GetListResponse
 	Data []models.Notification `json:"data"`
-}
-
-func (c *NotificationController) CreateNotification() {
-	defer c.Context.Next()
-	var form NotificationCreateForm
-	// Read JSON from request and validate request
-	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "NotificationController::CreateNotification", errParams)
-		return
-	}
-	notification := form.ConvertToModel()
-	if err := c.NotificationService.CreateNotification(notification); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "NotificationService::CreateNotification", errSQL)
-		return
-	}
-
-	// Return 201 Created
-	c.Context.StatusCode(iris.StatusCreated)
-	c.Context.JSON(iris.Map{
-		message: success,
-	})
 }
 
 // GetNotification GET /notifications/{id:string}
@@ -125,8 +106,8 @@ func (c *NotificationController) GetNotification() {
 		return
 	}
 
-	notification.ReadAt = time.Now()
 	if notification.ReadAt.IsZero() {
+		notification.ReadAt = time.Now()
 		updateData := make(map[string]interface{})
 		updateData["ReadAt"] = notification.ReadAt
 		if err := c.NotificationService.UpdateNotification(notificationID, updateData); err != nil {
@@ -143,6 +124,20 @@ func (c *NotificationController) GetNotification() {
 }
 
 // DeleteNotification DELETE /Notification/{id:string}
+// >>>>> DOCS  <<<<<
+// =================
+// @Tags Notifications
+// @Summary DELETE Notification
+// @Description DELETE a notification by id
+// @Accept  json
+// @Produce json
+// @Router 	/notifications/{id} [DELETE]
+// @Param 	id 		path	 string						  true	"user id" format(uuid)
+// @Failure 400 	{object} controllers.ErrorResponse
+// @Failure 401 	{object} controllers.ErrorResponse
+// @Failure 403 	{object} controllers.ErrorResponse
+// @Failure 422 	{object} controllers.ErrorResponse
+// =================
 func (c *NotificationController) DeleteNotification() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
@@ -154,6 +149,18 @@ func (c *NotificationController) DeleteNotification() {
 		return
 	}
 
+	// Check notification.userID == UserID
+	notfication, err := c.NotificationService.GetNotification(notificationID)
+	if err != nil {
+		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "NotificationService::GetNotification", errSQL)
+		return
+	}
+	TokenUser, _ := middlewares.GetJWTParams(c.Context)
+	userID, _ := uuid.FromString(TokenUser)
+	if notfication.UserID != userID {
+		utils.SetResponseError(c.Context, iris.StatusForbidden, "NotificationService::GetNotification", errRole)
+		return
+	}
 	// Returns with 204 No Content status.
 	c.Context.StatusCode(iris.StatusNoContent)
 }

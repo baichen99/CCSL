@@ -31,8 +31,8 @@ func NewNotificationService(pg *gorm.DB) NotificationInterface {
 // GetNotificationList returns Notifications list
 func (s *NotificationService) GetNotificationList(parameters utils.GetNotificationListParameters) (Notifications []models.Notification, count int, err error) {
 	db := s.PG.LogMode(false).Scopes(
-		utils.FilterByColumn("Notifications.user_id", parameters.UserID),
-		utils.SearchByColumn("Notifications.message", parameters.Message),
+		utils.FilterByColumn("notifications.user_id", parameters.UserID),
+		utils.SearchByColumn("notifications.message", parameters.Message),
 	)
 	err = db.Model(&models.Notification{}).Count(&count).Error
 
