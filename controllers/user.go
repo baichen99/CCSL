@@ -279,8 +279,7 @@ func (c *UserController) UserLogin() {
 		utils.SetResponseError(c.Context, iris.StatusUnauthorized, "UserController::UserLogin::SignToken", errAuth)
 		return
 	}
-	ipAddress := c.Context.GetHeader("X-Real-IP")
-	c.UpdateUserLoginHistory(ipAddress, user.ID)
+	c.UpdateUserLoginHistory()
 	c.Context.JSON(iris.Map{
 		message: success,
 		data:    token,
@@ -297,8 +296,7 @@ func (c *UserController) RefreshToken() {
 		utils.SetResponseError(c.Context, iris.StatusUnauthorized, "UserController::RefreshToken::SignToken", errAuth)
 		return
 	}
-	ipAddress := c.Context.GetHeader("X-Real-IP")
-	c.UpdateUserLoginHistory(ipAddress, userID)
+	c.UpdateUserLoginHistory()
 	c.Context.JSON(iris.Map{
 		message: success,
 		data:    token,
@@ -306,8 +304,11 @@ func (c *UserController) RefreshToken() {
 }
 
 // UpdateUserLoginHistory nsters log to login history
-func (c *UserController) UpdateUserLoginHistory(ipAddress string, userID uuid.UUID) {
+func (c *UserController) UpdateUserLoginHistory() {
 	defer c.Context.Next()
+	tokenUser, _ := middlewares.GetJWTParams(c.Context)
+	userID, _ := uuid.FromString(tokenUser)
+	ipAddress := c.Context.GetHeader("X-Real-IP")
 	info, _ := utils.GetIPInfo(ipAddress)
 	info.UserID = userID
 	if err := c.UserService.CreateLoginHistory(info); err != nil {

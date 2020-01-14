@@ -203,15 +203,16 @@ definitions:
         format: uuid
         type: string
       message:
+        example: notification content
         type: string
       readAt:
         example: "2019-10-21T09:20:39.943618Z"
         type: string
+      title:
+        example: notification title
+        type: string
       updatedAt:
         example: "2019-10-21T09:20:39.943618Z"
-        type: string
-      userID:
-        example: 550e8400-e29b-41d4-a716-446655440000
         type: string
     type: object
   models.User:

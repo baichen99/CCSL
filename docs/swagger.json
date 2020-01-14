@@ -855,19 +855,20 @@
                     "example": "550e8400-e29b-41d4-a716-446655440000"
                 },
                 "message": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "notification content"
                 },
                 "readAt": {
                     "type": "string",
                     "example": "2019-10-21T09:20:39.943618Z"
                 },
+                "title": {
+                    "type": "string",
+                    "example": "notification title"
+                },
                 "updatedAt": {
                     "type": "string",
                     "example": "2019-10-21T09:20:39.943618Z"
-                },
-                "userID": {
-                    "type": "string",
-                    "example": "550e8400-e29b-41d4-a716-446655440000"
                 }
             }
         },

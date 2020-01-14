@@ -132,9 +132,9 @@ func initDoc(app *iris.Application) {
 	// =================
 	if os.Getenv(configs.EnvName) == configs.EnvDevelopment {
 		host := fmt.Sprintf("http://%s:%s", configs.Conf.Listener.Server, strconv.Itoa(configs.Conf.Listener.Port))
-		docHost := fmt.Sprintf("%s/swagger/doc.json", host)
+		docFile := fmt.Sprintf("%s/swagger/doc.json", host)
 		config := &swagger.Config{
-			URL: docHost,
+			URL: docFile,
 		}
 		app.Get("/swagger/{any:path}", swagger.CustomWrapHandler(config, swaggerFiles.Handler))
 		app.Logger().Debugf("Doc server is running on: %s/swagger/index.html", host)
@@ -143,6 +143,7 @@ func initDoc(app *iris.Application) {
 
 func initDB(app *iris.Application) *gorm.DB {
 	pg := utils.ConnectPostgres(app)
+	pg.LogMode(true)
 	pg.SetLogger(configs.GetPostgresLogger())
 	// AutoMigrate will create missing tables and missing index keys
 	pg.AutoMigrate(
