@@ -74,6 +74,10 @@ func main() {
 		app.Register(services.NewLexicalVideoService(pg))
 		app.Handle(new(controllers.VideoController))
 	})
+	mvc.Configure(app.Party("/notifications"), func(app *mvc.Application) {
+		app.Register(services.NewNotificationService(pg))
+		app.Handle(new(controllers.NotificationController))
+	})
 	// // Corpus for Shanghai Sign Language Verb
 	// mvc.Configure(app.Party("/verbs"), func(app *mvc.Application) {
 	// 	// TODO

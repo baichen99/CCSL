@@ -8,6 +8,25 @@ definitions:
         example: error title
         type: string
     type: object
+  controllers.GetNotificationsListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.Notification'
+        type: array
+      limit:
+        example: 10
+        type: integer
+      message:
+        example: success
+        type: string
+      page:
+        example: 1
+        type: integer
+      total:
+        example: 100
+        type: integer
+    type: object
   controllers.GetUsersListResponse:
     properties:
       data:
@@ -159,6 +178,27 @@ definitions:
         example: simple
         type: string
     type: object
+  models.Notification:
+    properties:
+      createdAt:
+        example: "2019-10-21T09:20:39.943618Z"
+        type: string
+      id:
+        example: 550e8400-e29b-41d4-a716-446655440000
+        format: uuid
+        type: string
+      message:
+        type: string
+      readAt:
+        example: "2019-10-21T09:20:39.943618Z"
+        type: string
+      updatedAt:
+        example: "2019-10-21T09:20:39.943618Z"
+        type: string
+      userID:
+        example: 550e8400-e29b-41d4-a716-446655440000
+        type: string
+    type: object
   models.User:
     properties:
       avatar:
@@ -303,9 +343,133 @@ paths:
           description: Unprocessable Entity
           schema:
             $ref: '#/definitions/controllers.ErrorResponse'
-      summary: List lexical videos
+      summary: List videos for lexical database
       tags:
       - Lexical Videos
+  /notifications:
+    get:
+      consumes:
+      - application/json
+      description: get notifications list
+      parameters:
+      - description: select from page
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      - description: limit number
+        in: query
+        minimum: 0
+        name: limit
+        type: integer
+      - description: order by field
+        in: query
+        name: order
+        type: string
+      - description: order by asc or desc
+        enum:
+        - asc
+        - desc
+        in: query
+        name: orderBy
+        type: string
+      - description: search message of notification
+        in: query
+        name: message
+        type: string
+      - description: filter by userID
+        in: query
+        name: userID
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.GetNotificationsListResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: List notifications
+      tags:
+      - Notifications
+  /notifications/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: DELETE a notification by id
+      parameters:
+      - description: user id
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: DELETE Notification
+      tags:
+      - Notifications
+    get:
+      consumes:
+      - application/json
+      description: GET a notification by id
+      parameters:
+      - description: user id
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: GET Notification
+      tags:
+      - Notifications
   /users:
     get:
       consumes:
@@ -390,7 +554,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/controllers.UserCreateForm'
-          type: object
       produces:
       - application/json
       responses:
@@ -427,7 +590,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/controllers.UserUpdateForm'
-          type: object
       produces:
       - application/json
       responses:
