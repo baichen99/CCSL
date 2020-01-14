@@ -74,6 +74,10 @@ func main() {
 		app.Register(services.NewLexicalVideoService(pg))
 		app.Handle(new(controllers.VideoController))
 	})
+    mvc.Configure(app.Party("/notifications"), func(app *mvc.Application) {
+        app.Register(services.NewNotificationService(pg))
+        app.Handle(new(controllers.NotificationController))
+    })
 	// // Corpus for Shanghai Sign Language Verb
 	// mvc.Configure(app.Party("/verbs"), func(app *mvc.Application) {
 	// 	// TODO
@@ -195,7 +199,7 @@ func initDB(app *iris.Application) *gorm.DB {
 		AddForeignKey("user_id", "users(id)", "RESTRICT", "CASCADE").
 		Model(&models.Notification{}).
 		AddForeignKey("user_id", "users(id)", "RESTRICT", "CASCADE")
-	// utils.InitTestUser(pg)
+	utils.InitTestUser(pg)
 	return pg
 }
 

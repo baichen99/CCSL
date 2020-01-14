@@ -314,3 +314,20 @@ type lexicalVideoUpdateForm struct {
 	LeftSignsID   *[]string `json:"leftSignsID" validate:"omitempty,dive,uuid4"`  // 左手手势
 	RightSignsID  *[]string `json:"rightSignsID" validate:"omitempty,dive,uuid4"` // 右手手势
 }
+
+// >>> NOTIFICATION <<<
+// ============
+
+type NotificationCreateForm struct {
+    UserID  string      `json:"userID" validate:"omitempty,uuid4"`
+    Message string      `json:"message" validate:"omitempty"`
+}
+
+func(f NotificationCreateForm) ConvertToModel() (notification models.Notification) {
+    UserID, _ := uuid.FromString(f.UserID)
+    notification = models.Notification{
+        UserID: UserID,
+        Message: f.Message,
+    }
+    return
+}
