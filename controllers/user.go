@@ -279,7 +279,7 @@ func (c *UserController) UserLogin() {
 		utils.SetResponseError(c.Context, iris.StatusUnauthorized, "UserController::UserLogin::SignToken", errAuth)
 		return
 	}
-	c.UpdateUserLoginHistory()
+	c.UpdateLoginHistory(user.ID)
 	c.Context.JSON(iris.Map{
 		message: success,
 		data:    token,
@@ -296,18 +296,16 @@ func (c *UserController) RefreshToken() {
 		utils.SetResponseError(c.Context, iris.StatusUnauthorized, "UserController::RefreshToken::SignToken", errAuth)
 		return
 	}
-	c.UpdateUserLoginHistory()
+	c.UpdateLoginHistory(userID)
 	c.Context.JSON(iris.Map{
 		message: success,
 		data:    token,
 	})
 }
 
-// UpdateUserLoginHistory nsters log to login history
-func (c *UserController) UpdateUserLoginHistory() {
+// UpdateLoginHistory nsters log to login history
+func (c *UserController) UpdateLoginHistory(userID uuid.UUID) {
 	defer c.Context.Next()
-	tokenUser, _ := middlewares.GetJWTParams(c.Context)
-	userID, _ := uuid.FromString(tokenUser)
 	ipAddress := c.Context.GetHeader("X-Real-IP")
 	info, _ := utils.GetIPInfo(ipAddress)
 	info.UserID = userID
