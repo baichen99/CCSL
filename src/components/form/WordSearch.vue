@@ -50,9 +50,11 @@ export default {
       this.getData();
     }
   },
-  async created() {
-    await this.$store.dispatch("data/getLexicons");
-    this.getData();
+  created() {
+    this.$nextTick(async () => {
+      await this.$store.dispatch("data/getLexicons");
+      this.getData();
+    });
   },
   methods: {
     onWordSelected(wordID) {

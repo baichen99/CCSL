@@ -210,6 +210,11 @@ export default {
   computed: {
     ...mapGetters(["newsColumns", "newsTypes", "newsState", "languageTypes"])
   },
+  created() {
+    this.$nextTick(() => {
+      this.getList();
+    });
+  },
   methods: {
     getList() {
       this.loading = true;

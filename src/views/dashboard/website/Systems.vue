@@ -89,6 +89,11 @@ export default {
     VueJsonPretty
   },
   mixins: [listMixin],
+  created() {
+    this.$nextTick(() => {
+      this.getList();
+    });
+  },
   methods: {
     getList() {
       this.loading = true;

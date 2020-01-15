@@ -166,6 +166,7 @@
 </i18n>
 
 <script>
+import lodash from "lodash";
 import { mapGetters } from "vuex";
 import LexicalVideoForm from "@/views/dashboard/form/LexicalVideoForm";
 import CitySelector from "@/components/form/CitySelector.vue";
@@ -214,10 +215,11 @@ export default {
     ])
   },
   created() {
-    this.$nextTick(() => {
-      this.$store.dispatch("data/getPerformers");
-      this.$store.dispatch("data/getLexicons");
-      this.$store.dispatch("data/getSigns");
+    this.$nextTick(async () => {
+      await this.$store.dispatch("data/getPerformers");
+      await this.$store.dispatch("data/getLexicons");
+      await this.$store.dispatch("data/getSigns");
+      await this.getList();
       this.wordInitial.map(item => {
         this.initialFilters.push({
           text: item,
@@ -278,7 +280,7 @@ export default {
         });
     },
     handleExport() {
-      const params = JSON.parse(JSON.stringify(this.params));
+      const params = lodash.cloneDeep(this.params);
       params.limit = 0;
       GetLexicalVideosList(params, true).then(res => {
         const sheetData = res.data.map(item => {

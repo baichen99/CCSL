@@ -42,10 +42,12 @@ export default {
   computed: {
     ...mapGetters(["settings"])
   },
-  async created() {
-    await this.$store.dispatch("data/getSigns");
-    const data = this.$store.state.data.signs;
-    this.signs = Object.values(data);
+  created() {
+    this.$nextTick(async () => {
+      await this.$store.dispatch("data/getSigns");
+      const data = this.$store.state.data.signs;
+      this.signs = Object.values(data);
+    });
   },
   methods: {
     onSignSelected(sign) {

@@ -1,6 +1,7 @@
 package middlewares
 
 import (
+	"ccsl/configs"
 	"ccsl/utils"
 	"errors"
 	"fmt"
@@ -32,7 +33,7 @@ func NewRoleMiddleware(cfg ...roleConfig) *RoleMiddleware {
 // CheckUserRole will check the user role
 func (m *RoleMiddleware) CheckUserRole(ctx context.Context) (err error) {
 	_, role := GetJWTParams(ctx)
-	if role != "super" && role != m.roleConfig.Role {
+	if role != configs.RoleSuperUser && role != m.roleConfig.Role {
 		err = fmt.Errorf("role '%s' does not have sufficient permissions", role)
 		utils.SetResponseError(ctx, iris.StatusForbidden, err.Error(), errors.New("RoleError"))
 		return

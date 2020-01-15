@@ -1,14 +1,5 @@
 <template>
-  <el-select
-    v-model="data"
-    filterable
-    remote
-    clearable
-    :placeholder="$t('tip')"
-    :remote-method="filterRemote"
-    :loading="loading"
-    @clear="filterRemote"
-  >
+  <el-select v-model="data" filterable clearable :placeholder="$t('tip')" :loading="loading">
     <el-option
       v-for="item in options"
       :key="item.id"
@@ -31,7 +22,6 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { GetPerformersList } from "@/api/performers";
 export default {
   name: "PerformerSelector",
   model: {
@@ -62,24 +52,12 @@ export default {
     }
   },
   created() {
-    this.filterRemote();
-  },
-  methods: {
-    filterRemote(query) {
-      if (query !== "") {
-        this.loading = true;
-        GetPerformersList({ limit: 0, name: query })
-          .then(res => {
-            this.options = res.data;
-            this.loading = false;
-          })
-          .catch(() => {
-            this.loading = false;
-          });
-      } else {
-        this.options = [];
-      }
-    }
+    this.$nextTick(async () => {
+      this.loading = true;
+      await this.$store.dispatch("data/getPerformers");
+      this.options = Object.values(this.$store.state.data.performers);
+      this.loading = false;
+    });
   }
 };
 </script>

@@ -113,6 +113,7 @@ import LexiconForm from "@/views/dashboard/form/LexiconForm";
 import WordPosSelector from "@/components/form/WordPosSelector";
 import listMixin from "@/views/dashboard/listMixin";
 import { mapGetters } from "vuex";
+import lodash from "lodash";
 import {
   GetWordsList,
   CreateWord,
@@ -143,10 +144,13 @@ export default {
     ...mapGetters(["wordInitial"])
   },
   created() {
-    this.wordInitial.map(item => {
-      this.initialFilters.push({
-        text: item,
-        value: item
+    this.$nextTick(() => {
+      this.getList();
+      this.wordInitial.map(item => {
+        this.initialFilters.push({
+          text: item,
+          value: item
+        });
       });
     });
   },
@@ -166,7 +170,7 @@ export default {
     handleCreate(data) {
       CreateWord(data)
         .then(() => {
-          this.handleModify();
+          this.handleModify("data/getLexicons");
         })
         .catch(() => {
           this.loading = false;
@@ -175,7 +179,7 @@ export default {
     handleUpdate(id, updateData) {
       UpdateWord(id, updateData)
         .then(() => {
-          this.handleModify();
+          this.handleModify("data/getLexicons");
         })
         .catch(() => {
           this.loading = false;
@@ -194,7 +198,7 @@ export default {
       )
         .then(() => {
           DeleteWord(id).then(() => {
-            this.handleModify();
+            this.handleModify("data/getLexicons");
           });
         })
         .catch(() => {
@@ -202,7 +206,7 @@ export default {
         });
     },
     handleExport() {
-      const params = JSON.parse(JSON.stringify(this.params));
+      const params = lodash.cloneDeep(this.params);
       params.limit = 0;
       GetWordsList(params, true).then(res => {
         const sheetData = res.data.map(item => {

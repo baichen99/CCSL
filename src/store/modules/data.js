@@ -138,9 +138,9 @@ const mutations = {
 };
 
 const actions = {
-  getLexicons({ commit, state }) {
+  getLexicons({ commit, state }, force) {
     return new Promise((resolve, reject) => {
-      if (lodash.isEmpty(state.lexicons)) {
+      if (force || lodash.isEmpty(state.lexicons)) {
         GetWordsList({ limit: 0 })
           .then(res => {
             const { data } = res;
@@ -156,9 +156,9 @@ const actions = {
     });
   },
 
-  getPerformers({ commit, state }) {
+  getPerformers({ commit, state }, force) {
     return new Promise((resolve, reject) => {
-      if (lodash.isEmpty(state.performers)) {
+      if (force || lodash.isEmpty(state.performers)) {
         GetPerformersList({ limit: 0 })
           .then(res => {
             const { data } = res;
@@ -174,9 +174,9 @@ const actions = {
     });
   },
 
-  getSigns({ commit, state }) {
+  getSigns({ commit, state }, force) {
     return new Promise((resolve, reject) => {
-      if (lodash.isEmpty(state.signs)) {
+      if (force || lodash.isEmpty(state.signs)) {
         GetSignsList({ limit: 0 })
           .then(res => {
             const { data } = res;

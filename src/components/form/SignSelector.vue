@@ -1,6 +1,6 @@
 <template>
-  <el-select v-model="sign" clearable :placeholder="tip" @clear="$emit('clear')">
-    <el-option v-for="item in signs" :key="item.id" :label="item.name" :value="item.id">
+  <el-select v-model="data" clearable :placeholder="tip" @clear="$emit('clear')">
+    <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
       <span>{{ item.name }}</span>
       <img :src="settings.publicURL + item.image" :alt="item.name" />
     </el-option>
@@ -42,12 +42,12 @@ export default {
   },
   data() {
     return {
-      signs: []
+      options: []
     };
   },
   computed: {
     ...mapGetters(["settings"]),
-    sign: {
+    data: {
       get() {
         return this.value;
       },
@@ -61,10 +61,12 @@ export default {
       else return this.$t("sign");
     }
   },
-  async created() {
-    await this.$store.dispatch("data/getSigns");
-    const data = this.$store.state.data.signs;
-    this.signs = Object.values(data);
+  created() {
+    this.$nextTick(async () => {
+      await this.$store.dispatch("data/getSigns");
+      const data = this.$store.state.data.signs;
+      this.options = Object.values(data);
+    });
   }
 };
 </script>

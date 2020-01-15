@@ -110,6 +110,11 @@ export default {
   computed: {
     ...mapGetters(["memberTypes"])
   },
+  created() {
+    this.$nextTick(() => {
+      this.getList();
+    });
+  },
   methods: {
     getList() {
       this.loading = true;

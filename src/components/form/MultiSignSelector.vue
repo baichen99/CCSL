@@ -3,13 +3,10 @@
     v-model="data"
     multiple
     filterable
-    remote
     clearable
     reserve-keyword
     :placeholder="$t('tip')"
-    :remote-method="filterRemote"
     :loading="loading"
-    @clear="filterRemote"
   >
     <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
       <span>{{ item.name }}</span>
@@ -31,7 +28,6 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { GetSignsList } from "@/api/signs";
 export default {
   name: "MultiSignSelector",
   model: {
@@ -62,20 +58,11 @@ export default {
     }
   },
   created() {
-    this.filterRemote();
-  },
-  methods: {
-    filterRemote(query) {
-      this.loading = true;
-      GetSignsList({ limit: 0, name: query })
-        .then(res => {
-          this.options = res.data;
-          this.loading = false;
-        })
-        .catch(() => {
-          this.loading = false;
-        });
-    }
+    this.$nextTick(async () => {
+      await this.$store.dispatch("data/getSigns");
+      const data = this.$store.state.data.signs;
+      this.options = Object.values(data);
+    });
   }
 };
 </script>

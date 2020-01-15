@@ -17,21 +17,6 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
-// AppConf is iris application config file
-const AppConf string = "./configs/iris.yml"
-
-// EnvName is the environment variable name
-const (
-	EnvName        = "CCSL_ENV"
-	EnvDevelopment = "dev"
-	EnvProduction  = "prod"
-)
-
-var c Config
-
-// Conf reads configs from yaml file according to the environment variable
-var Conf = c.ReadConfig()
-
 // Config struct for prasing app configs
 type Config struct {
 	App struct {

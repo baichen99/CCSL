@@ -1,14 +1,5 @@
 <template>
-  <el-select
-    v-model="data"
-    filterable
-    clearable
-    remote
-    :placeholder="$t('tip')"
-    :remote-method="filterRemote"
-    :loading="loading"
-    @clear="filterRemote"
-  >
+  <el-select v-model="data" filterable clearable :placeholder="$t('tip')" :loading="loading">
     <el-option v-for="item in options" :key="item.id" :label="item.chinese" :value="item.id">
       {{ item.initial }} -
       <span
@@ -31,7 +22,6 @@
 </i18n>
 
 <script>
-import { GetWordsList } from "@/api/lexicons";
 export default {
   name: "WordSelector",
   model: {
@@ -61,24 +51,12 @@ export default {
     }
   },
   created() {
-    this.filterRemote();
-  },
-  methods: {
-    filterRemote(query) {
+    this.$nextTick(async () => {
       this.loading = true;
-      GetWordsList({
-        limit: 0,
-        chinese: query,
-        orderBy: "initial, id"
-      })
-        .then(res => {
-          this.options = res.data;
-          this.loading = false;
-        })
-        .catch(() => {
-          this.loading = false;
-        });
-    }
+      await this.$store.dispatch("data/getLexicons");
+      this.options = Object.values(this.$store.state.data.lexicons);
+      this.loading = false;
+    });
   }
 };
 </script>

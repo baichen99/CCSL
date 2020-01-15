@@ -122,6 +122,7 @@
 </i18n>
 
 <script>
+import lodash from "lodash";
 import { mapGetters } from "vuex";
 import PerformerForm from "@/views/dashboard/form/PerformerForm";
 import CitySelector from "@/components/form/CitySelector";
@@ -152,6 +153,11 @@ export default {
   computed: {
     ...mapGetters(["genderTypes"])
   },
+  created() {
+    this.$nextTick(() => {
+      this.getList();
+    });
+  },
   methods: {
     getList() {
       this.loading = true;
@@ -168,7 +174,7 @@ export default {
     handleCreate(data) {
       CreatePerformer(data)
         .then(() => {
-          this.handleModify();
+          this.handleModify("data/getPerformers");
         })
         .catch(() => {
           this.loading = false;
@@ -177,7 +183,7 @@ export default {
     handleUpdate(id, updateData) {
       UpdatePerformer(id, updateData)
         .then(() => {
-          this.handleModify();
+          this.handleModify("data/getPerformers");
         })
         .catch(() => {
           this.loading = false;
@@ -196,7 +202,7 @@ export default {
       )
         .then(() => {
           DeletePerformer(id).then(() => {
-            this.handleModify();
+            this.handleModify("data/getPerformers");
           });
         })
         .catch(() => {
@@ -204,7 +210,7 @@ export default {
         });
     },
     handleExport() {
-      const params = JSON.parse(JSON.stringify(this.params));
+      const params = lodash.cloneDeep(this.params);
       params.limit = 0;
       GetPerformersList(params, true).then(res => {
         const sheetData = res.data.map(item => {

@@ -35,12 +35,12 @@ var GetJWTParams = NewJwtMiddleware(JwtConf).Get
 
 //CheckAdmin checks if user is admin or super
 var CheckAdmin = NewRoleMiddleware(roleConfig{
-	Role: "admin",
+	Role: configs.RoleAdminUser,
 }).Serve
 
 //CheckSuper checks if user is super
 var CheckSuper = NewRoleMiddleware(roleConfig{
-	Role: "super",
+	Role: configs.RoleSuperUser,
 }).Serve
 
 // BeforeHandleRequest is a global middleware before handle a request

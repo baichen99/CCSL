@@ -192,6 +192,11 @@ export default {
       }
     }
   },
+  created() {
+    this.$nextTick(() => {
+      this.getList();
+    });
+  },
   methods: {
     getList() {
       this.loading = true;

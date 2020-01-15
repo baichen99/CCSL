@@ -105,6 +105,7 @@
 </i18n>
 
 <script>
+import lodash from "lodash";
 import { mapGetters } from "vuex";
 import SignForm from "@/views/dashboard/form/SignForm";
 import listMixin from "@/views/dashboard/listMixin";
@@ -126,6 +127,11 @@ export default {
   computed: {
     ...mapGetters(["settings"])
   },
+  created() {
+    this.$nextTick(() => {
+      this.getList();
+    });
+  },
   methods: {
     getList() {
       this.loading = true;
@@ -142,7 +148,7 @@ export default {
     handleCreate(data) {
       CreateSign(data)
         .then(() => {
-          this.handleModify();
+          this.handleModify("data/getSigns");
         })
         .catch(() => {
           this.loading = false;
@@ -151,7 +157,7 @@ export default {
     handleUpdate(id, updateData) {
       UpdateSign(id, updateData)
         .then(() => {
-          this.handleModify();
+          this.handleModify("data/getSigns");
         })
         .catch(() => {
           this.loading = false;
@@ -170,7 +176,7 @@ export default {
       )
         .then(() => {
           DeleteSign(id).then(() => {
-            this.handleModify();
+            this.handleModify("data/getSigns");
           });
         })
         .catch(() => {
@@ -178,7 +184,7 @@ export default {
         });
     },
     handleExport() {
-      const params = JSON.parse(JSON.stringify(this.params));
+      const params = lodash.cloneDeep(this.params);
       params.limit = 0;
       GetSignsList(params, true).then(res => {
         const sheetData = res.data.map(item => {

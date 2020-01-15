@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"ccsl/configs"
 	"ccsl/middlewares"
 	"ccsl/models"
 	"ccsl/services"
@@ -146,7 +147,7 @@ func (c *UserController) GetUser() {
 	// Only super admin and user
 	tokenUser, tokenRole := middlewares.GetJWTParams(c.Context)
 
-	if !(tokenRole == "super" || tokenUser == userID) {
+	if !(tokenRole == configs.RoleSuperUser || tokenUser == userID) {
 		utils.SetResponseError(c.Context, iris.StatusForbidden, "UserController::GetUser", errRole)
 		return
 	}
@@ -197,7 +198,7 @@ func (c *UserController) UpdateUser() {
 
 	// Only super admin and user
 	tokenUser, tokenRole := middlewares.GetJWTParams(c.Context)
-	if tokenRole != "super" && tokenUser != userID {
+	if tokenRole != configs.RoleSuperUser && tokenUser != userID {
 		utils.SetResponseError(c.Context, iris.StatusForbidden, "UserController::UpdateUser", errRole)
 		return
 	}

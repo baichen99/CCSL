@@ -17,9 +17,6 @@ const listMixin = {
       list: []
     };
   },
-  created() {
-    this.getList();
-  },
   watch: {
     "params.page"() {
       this.getList();
@@ -53,8 +50,11 @@ const listMixin = {
       this.mode = "";
     },
     handleSearch() {
-      this.params.page = 1;
-      this.getList();
+      if (this.params.page !== 1) {
+        this.params.page = 1;
+      } else {
+        this.getList();
+      }
     },
     handleFilter(val) {
       for (const key in val) {
@@ -69,9 +69,8 @@ const listMixin = {
     handleEdit(data) {
       this.show = true;
       this.mode = "edit";
-      // Use JSON.parse(JSON.stringify(data)) to deep copy a object
-      this.originalData = JSON.parse(JSON.stringify(data));
-      this.data = JSON.parse(JSON.stringify(data));
+      this.originalData = lodash.cloneDeep(data);
+      this.data = lodash.cloneDeep(data);
     },
     handleClose() {
       this.clearData();
@@ -100,10 +99,13 @@ const listMixin = {
         this.handleClose();
       }
     },
-    handleModify() {
+    handleModify(forceUpdateActionName) {
       this.showSuccess();
       this.handleClose();
       this.getList();
+      if (forceUpdateActionName) {
+        this.$store.dispatch(forceUpdateActionName, true);
+      }
     },
     handleDownloadSheet(sheetData, filename) {
       const workbook = xlsx.utils.book_new();
@@ -117,7 +119,7 @@ const listMixin = {
         if (!this.removeProperties.includes(key)) {
           if (!lodash.isEqual(this.data[key], this.originalData[key])) {
             updateData[key] = this.data[key];
-            if (typeof updateData[key] == "string") {
+            if (lodash.isString(updateData[key])) {
               updateData[key] = updateData[key].trim();
             }
           }
