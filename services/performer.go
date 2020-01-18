@@ -32,39 +32,36 @@ func NewPerformerService(pg *gorm.DB) PerformerInterface {
 func (s *PerformerService) GetPerformersList(parameters utils.GetPerformerListParameters) (performers []models.Performer, count int, err error) {
 
 	// Adding custom scopes to the query based on get list parameters.
-	db := s.PG.LogMode(false).Scopes(
-		utils.FilterByColumn("performers.gender", parameters.Gender),
-		utils.FilterByColumn("performers.region_id", parameters.RegionID),
-		utils.SearchByColumn("performers.name", parameters.Name),
-	)
+	db := s.PG.
+		Scopes(
+			utils.FilterByColumn("performers.gender", parameters.Gender),
+			utils.FilterByColumn("performers.region_id", parameters.RegionID),
+			utils.SearchByColumn("performers.name", parameters.Name),
+		)
 
 	// Fetching the total number of rows based on the conditions provided.
-	err = db.Model(&models.Performer{}).Count(&count).Error
+	err = db.
+		Model(&models.Performer{}).
+		Count(&count).
+		Error
+
 	if err != nil {
 		return
 	}
 
 	// Fetching the items to be returned by the query.
-	orderQuery := parameters.OrderBy + " " + parameters.Order
-	if parameters.Limit != 0 {
-		err = db.
-			Order(orderQuery).
-			Limit(parameters.Limit).
-			Offset(parameters.Limit * (parameters.Page - 1)).
-			Find(&performers).
-			Error
-	} else {
-		err = db.
-			Order(orderQuery).
-			Find(&performers).
-			Error
-	}
+
+	err = db.
+		Scopes(utils.FilterByListParameters(parameters.GetListParameters)).
+		Find(&performers).
+		Error
+
 	return
 }
 
 // GetPerformer get performer by id
 func (s *PerformerService) GetPerformer(performerID string) (performer models.Performer, err error) {
-	err = s.PG.LogMode(false).
+	err = s.PG.
 		Where("id = ?", performerID).
 		Take(&performer).
 		Error
@@ -74,7 +71,6 @@ func (s *PerformerService) GetPerformer(performerID string) (performer models.Pe
 // CreatePerformer creates performer
 func (s *PerformerService) CreatePerformer(performer models.Performer) (err error) {
 	err = s.PG.
-		LogMode(true).
 		Create(&performer).
 		Error
 	return
@@ -84,7 +80,6 @@ func (s *PerformerService) CreatePerformer(performer models.Performer) (err erro
 func (s *PerformerService) UpdatePerformer(performerID string, updatedData map[string]interface{}) (err error) {
 	var performer models.Performer
 	err = s.PG.
-		LogMode(true).
 		Where("id = ?", performerID).
 		Take(&performer).
 		Updates(updatedData).
@@ -96,8 +91,8 @@ func (s *PerformerService) UpdatePerformer(performerID string, updatedData map[s
 func (s *PerformerService) DeletePerformer(performerID string) (err error) {
 	var performer models.Performer
 	err = s.PG.
-		LogMode(true).
 		Where("id = ?", performerID).
+		Take(&performer).
 		Delete(&performer).
 		Error
 	return

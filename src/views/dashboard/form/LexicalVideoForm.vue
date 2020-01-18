@@ -22,11 +22,11 @@
       <morphemes-picker v-model="formData.morpheme" />
     </el-form-item>
 
-    <el-form-item :label="$t('LeftSign')" prop="leftSigns">
+    <el-form-item :label="$t('LeftSign')" prop="leftSignsID">
       <multi-sign-selector v-model="formData.leftSignsID" />
     </el-form-item>
 
-    <el-form-item :label="$t('RightSign')" prop="rightSigns">
+    <el-form-item :label="$t('RightSign')" prop="rightSignsID">
       <multi-sign-selector v-model="formData.rightSignsID" />
     </el-form-item>
   </el-form>

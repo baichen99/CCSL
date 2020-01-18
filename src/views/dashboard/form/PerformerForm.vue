@@ -29,7 +29,7 @@ export default {
     return {
       rules: {
         name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
-        region: [{ required: true, message: "请选择地区", trigger: "blur" }],
+        regionID: [{ required: true, message: "请选择地区", trigger: "blur" }],
         gender: [{ required: true, message: "请选择性别", trigger: "blur" }]
       }
     };

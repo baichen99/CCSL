@@ -30,36 +30,32 @@ func NewNotificationService(pg *gorm.DB) NotificationInterface {
 
 // GetNotificationList returns Notifications list
 func (s *NotificationService) GetNotificationList(parameters utils.GetNotificationListParameters) (notifications []models.Notification, count int, err error) {
-	db := s.PG.LogMode(false).Scopes(
-		utils.FilterByColumn("notifications.user_id", parameters.UserID),
-		utils.SearchByColumn("notifications.message", parameters.Message),
-	)
-	err = db.Model(&models.Notification{}).Count(&count).Error
+	db := s.PG.
+		Scopes(
+			utils.FilterByColumn("notifications.user_id", parameters.UserID),
+			utils.SearchByColumn("notifications.message", parameters.Message),
+		)
+
+	err = db.
+		Model(&models.Notification{}).
+		Count(&count).
+		Error
 
 	if err != nil {
 		return
 	}
-	orderQuery := parameters.OrderBy + " " + parameters.Order
-	if parameters.Limit != 0 {
-		err = db.
-			Order(orderQuery).
-			Limit(parameters.Limit).
-			Offset(parameters.Limit * (parameters.Page - 1)).
-			Find(&notifications).
-			Error
-	} else {
-		err = db.
-			Order(orderQuery).
-			Find(&notifications).
-			Error
-	}
+
+	err = db.
+		Find(&notifications).
+		Scopes(utils.FilterByListParameters(parameters.GetListParameters)).
+		Error
+
 	return
 }
 
 // GetNotification returns Notification with given id
 func (s *NotificationService) GetNotification(notificationID string) (notification models.Notification, err error) {
 	err = s.PG.
-		LogMode(false).
 		Where("id = ?", notificationID).
 		Take(&notification).
 		Error
@@ -69,20 +65,18 @@ func (s *NotificationService) GetNotification(notificationID string) (notificati
 // CreateNotification creates a new Notification
 func (s *NotificationService) CreateNotification(notification models.Notification) (err error) {
 	err = s.PG.
-		LogMode(true).
 		Create(&notification).
 		Error
 	return
 }
 
 // UpdateNotification updates Notification with given id
-func (s *NotificationService) UpdateNotification(notificationID string, updateData map[string]interface{}) (err error) {
+func (s *NotificationService) UpdateNotification(notificationID string, updatedData map[string]interface{}) (err error) {
 	var notification models.Notification
 	err = s.PG.
-		LogMode(true).
 		Where("id = ?", notificationID).
 		Take(&notification).
-		Update(updateData).
+		Updates(updatedData).
 		Error
 	return
 }
@@ -91,8 +85,8 @@ func (s *NotificationService) UpdateNotification(notificationID string, updateDa
 func (s *NotificationService) DeleteNotification(notificationID string) (err error) {
 	var notification models.Notification
 	err = s.PG.
-		LogMode(true).
 		Where("id = ?", notificationID).
+		Take(&notification).
 		Delete(&notification).
 		Error
 	return

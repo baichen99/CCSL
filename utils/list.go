@@ -47,7 +47,7 @@ func FilterInSubQuery(columnName string, subQuery string) func(db *gorm.DB) *gor
 	}
 }
 
-// SearchInList generare function to search value from array
+// SearchInList generate function to search value from array
 func SearchInList(listName string, value string) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		// SQL select in array: SELCET * FROM column_name WHERE array_to_string(listName, ',') LIKE value
@@ -60,7 +60,7 @@ func SearchInList(listName string, value string) func(db *gorm.DB) *gorm.DB {
 	}
 }
 
-// FilterInList generare function to filter value from array
+// FilterInList generate function to filter value from array
 func FilterInList(columnName string, value string) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		// SQL select in array: SELCET * FROM column_name WHERE value = ANY(query)
@@ -72,7 +72,7 @@ func FilterInList(columnName string, value string) func(db *gorm.DB) *gorm.DB {
 	}
 }
 
-// FilterByArray generare function to search value from a comma escaped string
+// FilterByArray generate function to search value from a comma escaped string
 func FilterByArray(columnName string, value string, escape string) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		// SQL select in array: SELCET * FROM column_name WHERE value = ANY(string_to_array(query,','))
@@ -81,6 +81,20 @@ func FilterByArray(columnName string, value string, escape string) func(db *gorm
 			return db.Where(query, value)
 		}
 		return db
+	}
+}
+
+// FilterByListParameters generate function to limit get list counts
+func FilterByListParameters(parameters GetListParameters) func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		orderQuery := fmt.Sprintf("%s %s", parameters.OrderBy, parameters.Order)
+		if parameters.Limit != 0 {
+			return db.
+				Order(orderQuery).
+				Limit(parameters.Limit).
+				Offset(parameters.Limit * (parameters.Page - 1))
+		}
+		return db.Order(orderQuery)
 	}
 }
 
@@ -195,7 +209,7 @@ type GetUserLoginListParameters struct {
 
 // GetNotificationListParameters parameters for get notification list queries
 type GetNotificationListParameters struct {
-    GetListParameters
-    UserID  string
-    Message string
+	GetListParameters
+	UserID  string
+	Message string
 }

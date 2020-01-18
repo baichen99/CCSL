@@ -28,8 +28,7 @@ func NewSystemService(pg *gorm.DB) SystemInterface {
 }
 
 func (s *SystemService) GetAppInfo(key string) (data models.Info, err error) {
-	db := s.PG.LogMode(false)
-	err = db.
+	err = s.PG.
 		Where("key = ?", key).
 		Take(&data).
 		Error
@@ -39,7 +38,6 @@ func (s *SystemService) GetAppInfo(key string) (data models.Info, err error) {
 func (s *SystemService) UpdateAppInfo(key string, updatedData map[string]interface{}) (err error) {
 	var info models.Info
 	err = s.PG.
-		LogMode(true).
 		Where("key = ?", key).
 		Take(&info).
 		Updates(updatedData).
@@ -49,7 +47,6 @@ func (s *SystemService) UpdateAppInfo(key string, updatedData map[string]interfa
 
 func (s *SystemService) CreateJsError(jsErr models.JsError) (err error) {
 	err = s.PG.
-		LogMode(true).
 		Create(&jsErr).
 		Error
 	return
@@ -58,7 +55,7 @@ func (s *SystemService) CreateJsError(jsErr models.JsError) (err error) {
 func (s *SystemService) GetJsErrorList(parameters utils.GetJsErrorListParameters) (errors []models.JsError, count int, err error) {
 	db := s.PG
 	// Fetching the total number of rows based on the conditions provided.
-	err = db.LogMode(true).
+	err = db.
 		Model(&errors).
 		Count(&count).
 		Error
@@ -67,20 +64,12 @@ func (s *SystemService) GetJsErrorList(parameters utils.GetJsErrorListParameters
 		return
 	}
 	// Fetching the items to be returned by the query.
-	orderQuery := parameters.OrderBy + " " + parameters.Order
-	if parameters.Limit != 0 {
-		err = db.
-			Order(orderQuery).
-			Limit(parameters.Limit).
-			Offset(parameters.Limit * (parameters.Page - 1)).
-			Find(&errors).
-			Error
-	} else {
-		err = db.
-			Order(orderQuery).
-			Find(&errors).
-			Error
-	}
+
+	err = db.
+		Scopes(utils.FilterByListParameters(parameters.GetListParameters)).
+		Find(&errors).
+		Error
+
 	return
 }
 

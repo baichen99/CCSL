@@ -30,40 +30,35 @@ func NewMemberService(pg *gorm.DB) MemberInterface {
 
 // GetMemberList returns members list
 func (s *MemberService) GetMemberList(parameters utils.GetMemberListParameters) (members []models.Member, count int, err error) {
-	db := s.PG.LogMode(false).Scopes(
-		utils.SearchByColumn("members.name_zh", parameters.NameZh),
-		utils.SearchByColumn("members.name_en", parameters.NameEn),
-	)
-	err = db.Model(&models.Member{}).Count(&count).Error
+	db := s.PG.
+		Scopes(
+			utils.SearchByColumn("members.name_zh", parameters.NameZh),
+			utils.SearchByColumn("members.name_en", parameters.NameEn),
+		)
+
+	err = db.
+		Model(&models.Member{}).
+		Count(&count).
+		Error
 
 	if err != nil {
 		return
 	}
 	typeOrder :=
 		`array_position(array['consultant','researchFellow','assistantResearchFellow','postgraduate','signLanguageTranslator','researchAssistantDeaf'], members.type) asc`
-	orderQuery := parameters.OrderBy + " " + parameters.Order
-	if parameters.Limit != 0 {
-		err = db.
-			Order(typeOrder).
-			Order(orderQuery).
-			Limit(parameters.Limit).
-			Offset(parameters.Limit * (parameters.Page - 1)).
-			Find(&members).
-			Error
-	} else {
-		err = db.
-			Order(typeOrder).
-			Order(orderQuery).
-			Find(&members).
-			Error
-	}
+
+	err = db.
+		Order(typeOrder).
+		Scopes(utils.FilterByListParameters(parameters.GetListParameters)).
+		Find(&members).
+		Error
+
 	return
 }
 
 // GetMember returns member with given id
 func (s *MemberService) GetMember(memberID string) (member models.Member, err error) {
 	err = s.PG.
-		LogMode(false).
 		Where("id = ?", memberID).
 		Take(&member).
 		Error
@@ -73,7 +68,6 @@ func (s *MemberService) GetMember(memberID string) (member models.Member, err er
 // CreateMember creates a new member
 func (s *MemberService) CreateMember(member models.Member) (err error) {
 	err = s.PG.
-		LogMode(true).
 		Create(&member).
 		Error
 	return
@@ -83,7 +77,6 @@ func (s *MemberService) CreateMember(member models.Member) (err error) {
 func (s *MemberService) UpdateMember(memberID string, updateData map[string]interface{}) (err error) {
 	var member models.Member
 	err = s.PG.
-		LogMode(true).
 		Where("id = ?", memberID).
 		Take(&member).
 		Update(updateData).
@@ -95,8 +88,8 @@ func (s *MemberService) UpdateMember(memberID string, updateData map[string]inte
 func (s *MemberService) DeleteMember(memberID string) (err error) {
 	var member models.Member
 	err = s.PG.
-		LogMode(true).
 		Where("id = ?", memberID).
+		Take(&member).
 		Delete(&member).
 		Error
 	return

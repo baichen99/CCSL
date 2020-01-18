@@ -36,7 +36,7 @@ Vue.filter("getRegionName", regionID => {
       );
       if (districts.length == 1) {
         const district = districts[0];
-        return [province.label, city.label, district.label].join(" - ");
+        return [province.label, city.label, district.label].join(" / ");
       }
     }
   }

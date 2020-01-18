@@ -34,68 +34,58 @@ func NewUserService(pg *gorm.DB) UserInterface {
 // GetUsersList returns all users
 func (s *UserService) GetUsersList(parameters utils.GetUserListParameters) (users []models.User, count int, err error) {
 	// Adding custom scopes to the query based on get list parameters.
-	db := s.PG.LogMode(false).Scopes(
-		utils.FilterByColumn("users.user_type", parameters.UserType),
-		utils.FilterByColumn("users.state", parameters.State),
-		utils.SearchByColumn("users.username", parameters.Username),
-		utils.SearchByColumn("users.name", parameters.Name),
-	)
+	db := s.PG.
+		Scopes(
+			utils.FilterByColumn("users.user_type", parameters.UserType),
+			utils.FilterByColumn("users.state", parameters.State),
+			utils.SearchByColumn("users.username", parameters.Username),
+			utils.SearchByColumn("users.name", parameters.Name),
+		)
 
 	// Fetching the total number of rows based on the conditions provided.
-	err = db.Model(&models.User{}).Count(&count).Error
+	err = db.
+		Model(&models.User{}).
+		Count(&count).
+		Error
 
 	if err != nil {
 		return
 	}
 
-	// Fetching the items to be returned by the query.
-	orderQuery := parameters.OrderBy + " " + parameters.Order
-	if parameters.Limit != 0 {
-		err = db.
-			Order(orderQuery).
-			Limit(parameters.Limit).
-			Offset(parameters.Limit * (parameters.Page - 1)).
-			Find(&users).
-			Error
-	} else {
-		err = db.
-			Order(orderQuery).
-			Find(&users).
-			Error
-	}
+	err = db.
+		Scopes(utils.FilterByListParameters(parameters.GetListParameters)).
+		Find(&users).
+		Error
+
 	return
 }
 
 // GetLoginHistoryList returns users login history
 func (s *UserService) GetLoginHistoryList(parameters utils.GetUserLoginListParameters) (list []models.LoginHistory, count int, err error) {
-	db := s.PG.LogMode(false).Scopes(
-		utils.FilterByColumn("login_histories.user_id", parameters.UserID),
-		utils.FilterByColumn("login_histories.status", parameters.Status),
-		utils.FilterByColumn("login_histories.ip", parameters.IP),
-	)
+	db := s.PG.
+		Scopes(
+			utils.FilterByColumn("login_histories.user_id", parameters.UserID),
+			utils.FilterByColumn("login_histories.status", parameters.Status),
+			utils.FilterByColumn("login_histories.ip", parameters.IP),
+		)
 	// Fetching the total number of rows based on the conditions provided.
-	err = db.Model(&list).Count(&count).Error
+	err = db.
+		Model(&list).
+		Count(&count).
+		Error
+
 	if err != nil {
 		return
 	}
 
 	// Fetching the items to be returned by the query.
-	orderQuery := parameters.OrderBy + " " + parameters.Order
-	if parameters.Limit != 0 {
-		err = db.
-			Set("gorm:auto_preload", true).
-			Order(orderQuery).
-			Limit(parameters.Limit).
-			Offset(parameters.Limit * (parameters.Page - 1)).
-			Find(&list).
-			Error
-	} else {
-		err = db.
-			Set("gorm:auto_preload", true).
-			Order(orderQuery).
-			Find(&list).
-			Error
-	}
+
+	err = db.
+		Preload("User").
+		Scopes(utils.FilterByListParameters(parameters.GetListParameters)).
+		Find(&list).
+		Error
+
 	return
 }
 
@@ -103,20 +93,28 @@ func (s *UserService) GetLoginHistoryList(parameters utils.GetUserLoginListParam
 func (s *UserService) CreateUser(user models.User) (err error) {
 	if user.Password != "" {
 		user.Password, err = utils.HashPassword(user.Password)
+		if err != nil {
+			return
+		}
 	}
-	err = s.PG.LogMode(true).Create(&user).Error
+
+	err = s.PG.
+		Create(&user).
+		Error
 	return
 }
 
 // CreateLoginHistory creates login histroy
 func (s *UserService) CreateLoginHistory(info models.LoginHistory) (err error) {
-	err = s.PG.LogMode(true).Create(&info).Error
+	err = s.PG.
+		Create(&info).
+		Error
 	return
 }
 
 // GetUser gets user by id, username or email
 func (s *UserService) GetUser(key string, value string) (user models.User, err error) {
-	db := s.PG.LogMode(false)
+	db := s.PG
 	switch key {
 	case "id":
 		err = db.Where("id = ?", value).Take(&user).Error
@@ -131,7 +129,7 @@ func (s *UserService) GetUser(key string, value string) (user models.User, err e
 // UpdateUser updates user model
 func (s *UserService) UpdateUser(userID string, updatedData map[string]interface{}) (err error) {
 	var user models.User
-	err = s.PG.LogMode(true).
+	err = s.PG.
 		Where("id = ?", userID).
 		Take(&user).
 		Updates(updatedData).
@@ -142,8 +140,9 @@ func (s *UserService) UpdateUser(userID string, updatedData map[string]interface
 // DeleteUser soft deletes a user model
 func (s *UserService) DeleteUser(userID string) (err error) {
 	var user models.User
-	err = s.PG.LogMode(true).
+	err = s.PG.
 		Where("id = ?", userID).
+		Take(&user).
 		Delete(&user).
 		Error
 	return
