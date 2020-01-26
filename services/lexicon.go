@@ -92,7 +92,6 @@ func (s *LexiconService) DeleteWord(wordID string) (err error) {
 	var word models.Lexicon
 	err = s.PG.
 		Where("id = ?", wordID).
-		Take(&word).
 		Delete(&word).
 		Error
 	return

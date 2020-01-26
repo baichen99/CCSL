@@ -33,6 +33,7 @@ func (s *NotificationService) GetNotificationList(parameters utils.GetNotificati
 	db := s.PG.
 		Scopes(
 			utils.FilterByColumn("notifications.user_id", parameters.UserID),
+			utils.SearchByColumn("notifications.title", parameters.Title),
 			utils.SearchByColumn("notifications.message", parameters.Message),
 		)
 
@@ -86,7 +87,6 @@ func (s *NotificationService) DeleteNotification(notificationID string) (err err
 	var notification models.Notification
 	err = s.PG.
 		Where("id = ?", notificationID).
-		Take(&notification).
 		Delete(&notification).
 		Error
 	return

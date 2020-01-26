@@ -40,13 +40,13 @@ func (c *FileController) UploadFile() {
 	fileDirName := configs.Conf.File.Dir + dir
 	fileDir, err := os.Stat(fileDirName)
 	if err != nil || !fileDir.IsDir() {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "UploadFile::DirNotExsist", errors.New("DirNotExsist"))
+		utils.SetError(c.Context, iris.StatusBadRequest, "UploadFile::DirNotExsist", errors.New("DirNotExsist"))
 		return
 	}
 	// Read file from request form
 	file, info, err := c.Context.FormFile("file")
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "UploadFile::ReadFile", errParams)
+		utils.SetError(c.Context, iris.StatusBadRequest, "UploadFile::ReadFile", errParams)
 		return
 	}
 	defer file.Close()
@@ -59,7 +59,7 @@ func (c *FileController) UploadFile() {
 	// write file to directory
 	out, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "UploadFile::SaveFile", errParams)
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "UploadFile::SaveFile", errParams)
 		return
 	}
 	defer out.Close()

@@ -211,5 +211,6 @@ type GetUserLoginListParameters struct {
 type GetNotificationListParameters struct {
 	GetListParameters
 	UserID  string
+	Title   string
 	Message string
 }

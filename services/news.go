@@ -85,7 +85,6 @@ func (s *NewsService) DeleteNews(newsID string) (err error) {
 	var news models.News
 	err = s.PG.
 		Where("id = ?", newsID).
-		Take(&news).
 		Delete(&news).
 		Error
 	return

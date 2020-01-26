@@ -35,7 +35,7 @@ func (m *RoleMiddleware) CheckUserRole(ctx context.Context) (err error) {
 	_, role := GetJWTParams(ctx)
 	if role != configs.RoleSuperUser && role != m.roleConfig.Role {
 		err = fmt.Errorf("role '%s' does not have sufficient permissions", role)
-		utils.SetResponseError(ctx, iris.StatusForbidden, err.Error(), errors.New("RoleError"))
+		utils.SetError(ctx, iris.StatusForbidden, err.Error(), errors.New("RoleError"))
 		return
 	}
 	return nil

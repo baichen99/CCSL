@@ -7,8 +7,8 @@ import (
 	"gopkg.in/go-playground/validator.v9"
 )
 
-// SetResponseError logs the error and sets up the context to return with an response error
-func SetResponseError(context iris.Context, statusCode int, logPrefix string, err error) {
+// SetError logs the error and sets up the context to return with an response error
+func SetError(context iris.Context, statusCode int, logPrefix string, err error) {
 	_, fileName, lineNumber, ok := runtime.Caller(1)
 	if !ok {
 		fileName = "UNKNOWN"

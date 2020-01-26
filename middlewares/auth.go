@@ -2,6 +2,7 @@ package middlewares
 
 import (
 	"ccsl/configs"
+	"ccsl/utils"
 	"errors"
 	"fmt"
 	"strings"
@@ -50,8 +51,7 @@ func SignJWTToken(userID uuid.UUID, role string) (string, error) {
 }
 
 func onError(ctx context.Context, err string) {
-	ctx.StatusCode(iris.StatusUnauthorized)
-	ctx.Values().Set(errinfo, err)
+	utils.SetError(ctx, iris.StatusUnauthorized, "JwtMiddleware::Serve", errors.New(err))
 }
 
 func NewJwtMiddleware(cfg ...jwtConfig) *JwtMiddleware {

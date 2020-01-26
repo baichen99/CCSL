@@ -31,7 +31,7 @@ func (c *SignController) GetSignsList() {
 	defer c.Context.Next()
 	listParams, err := utils.GetListParamsFromContext(c.Context, "signs.name")
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "SignController::GetSignsList", errParams)
+		utils.SetError(c.Context, iris.StatusBadRequest, "SignController::GetSignsList", errParams)
 		return
 	}
 	name := c.Context.URLParamDefault("name", "")
@@ -41,7 +41,7 @@ func (c *SignController) GetSignsList() {
 	}
 	signs, count, err := c.SignService.GetSignList(listParameters)
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "SignService::GetSignsList", errSQL)
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SignService::GetSignsList", errSQL)
 		return
 	}
 	c.Context.JSON(iris.Map{
@@ -59,12 +59,12 @@ func (c *SignController) CreateSign() {
 	var form signCreateForm
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "SignController::CreateSign", errParams)
+		utils.SetError(c.Context, iris.StatusBadRequest, "SignController::CreateSign", errParams)
 		return
 	}
 	sign := form.ConvertToModel()
 	if err := c.SignService.CreateSign(sign); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "WordService::CreateSign", errSQL)
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "WordService::CreateSign", errSQL)
 		return
 	}
 	// Return 201 Created
@@ -80,7 +80,7 @@ func (c *SignController) GetSign() {
 	signID := c.Context.Params().Get("id")
 	sign, err := c.SignService.GetSign(signID)
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "SignService::GetSign", errSQL)
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SignService::GetSign", errSQL)
 		return
 	}
 	// Returning word information in data key.
@@ -97,10 +97,10 @@ func (c *SignController) UpdateSign() {
 	signID := c.Context.Params().Get("id")
 	var form signUpdateForm
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "SignController::UpdateSign", errParams)
+		utils.SetError(c.Context, iris.StatusBadRequest, "SignController::UpdateSign", errParams)
 	}
 	if err := c.SignService.UpdateSign(signID, utils.MakeUpdateData(form)); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "SignService::UpdateSign", errSQL)
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SignService::UpdateSign", errSQL)
 		return
 	}
 
@@ -116,7 +116,7 @@ func (c *SignController) DeleteSign() {
 
 	// PSQL - Soft delete of the given ID
 	if err := c.SignService.DeleteSign(signID); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "SignService::DeleteSign", errSQL)
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SignService::DeleteSign", errSQL)
 		return
 	}
 

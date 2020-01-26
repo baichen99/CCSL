@@ -31,7 +31,7 @@ func (c *LexiconController) GetWordsList() {
 	defer c.Context.Next()
 	listParams, err := utils.GetListParamsFromContext(c.Context, "lexicons.initial")
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "LexiconController::GetWordsList", errParams)
+		utils.SetError(c.Context, iris.StatusBadRequest, "LexiconController::GetWordsList", errParams)
 		return
 	}
 	pos := c.Context.URLParamDefault("pos", "")
@@ -47,7 +47,7 @@ func (c *LexiconController) GetWordsList() {
 	}
 	words, count, err := c.LexiconService.GetWordsList(listParameters)
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "LexiconService::GetWordsList", errSQL)
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "LexiconService::GetWordsList", errSQL)
 		return
 	}
 	c.Context.JSON(iris.Map{
@@ -65,13 +65,13 @@ func (c *LexiconController) CreateWord() {
 	var form lexiconCreateForm
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "LexiconController::CreateWord", errParams)
+		utils.SetError(c.Context, iris.StatusBadRequest, "LexiconController::CreateWord", errParams)
 		return
 	}
 	// PSQL - Create word in database.
 	word := form.ConvertToModel()
 	if err := c.LexiconService.CreateWord(word); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "LexiconService::CreateWord", errSQL)
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "LexiconService::CreateWord", errSQL)
 		return
 	}
 	// Return 201 Created
@@ -90,7 +90,7 @@ func (c *LexiconController) GetWord() {
 	// PSQL - Looking for specified word via the ID.
 	word, err := c.LexiconService.GetWord(wordID)
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "LexiconService::GetWord", errSQL)
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "LexiconService::GetWord", errSQL)
 		return
 	}
 
@@ -111,7 +111,7 @@ func (c *LexiconController) UpdateWord() {
 
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "LexiconController::UpdateWord", errParams)
+		utils.SetError(c.Context, iris.StatusBadRequest, "LexiconController::UpdateWord", errParams)
 		return
 	}
 
@@ -119,7 +119,7 @@ func (c *LexiconController) UpdateWord() {
 
 	// PSQL - Update of the given ID
 	if err := c.LexiconService.UpdateWord(wordID, updateData); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "LexiconService::UpdateWord", errSQL)
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "LexiconService::UpdateWord", errSQL)
 		return
 	}
 
@@ -135,7 +135,7 @@ func (c *LexiconController) DeleteWord() {
 
 	// PSQL - Soft delete of the given ID
 	if err := c.LexiconService.DeleteWord(wordID); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "LexiconService::DeleteWord", errSQL)
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "LexiconService::DeleteWord", errSQL)
 		return
 	}
 

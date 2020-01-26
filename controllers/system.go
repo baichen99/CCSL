@@ -39,7 +39,7 @@ func (c *SystemController) GetAppInfo() {
 	key := c.Context.Params().Get("key")
 	info, err := c.SystemService.GetAppInfo(key)
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "SystemService::GetAppInfo", errParams)
+		utils.SetError(c.Context, iris.StatusBadRequest, "SystemService::GetAppInfo", errParams)
 		return
 	}
 	c.Context.JSON(iris.Map{
@@ -54,7 +54,7 @@ func (c *SystemController) UpdateAppInfo() {
 	key := c.Context.Params().Get("key")
 	var form infoUpdateForm
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "SystemController::UpdateAppInfo", errParams)
+		utils.SetError(c.Context, iris.StatusBadRequest, "SystemController::UpdateAppInfo", errParams)
 		return
 	}
 
@@ -62,7 +62,7 @@ func (c *SystemController) UpdateAppInfo() {
 
 	err := c.SystemService.UpdateAppInfo(key, updateData)
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "SystemService::UpdateAppInfo", errSQL)
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SystemService::UpdateAppInfo", errSQL)
 		return
 	}
 
@@ -75,11 +75,11 @@ func (c *SystemController) JsErrorLogger() {
 	defer c.Context.Next()
 	var jsError models.JsError
 	if err := utils.ReadValidateForm(c.Context, &jsError); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "SystemController::JsErrorLogger", errParams)
+		utils.SetError(c.Context, iris.StatusBadRequest, "SystemController::JsErrorLogger", errParams)
 		return
 	}
 	if err := c.SystemService.CreateJsError(jsError); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "SystemService::CreateJsError", errSQL)
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SystemService::CreateJsError", errSQL)
 		return
 	}
 	// Return 201 Created
@@ -94,7 +94,7 @@ func (c *SystemController) GetJsErrorList() {
 	defer c.Context.Next()
 	listParams, err := utils.GetListParamsFromContext(c.Context, "js_errors.created_at")
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "SystemController::GetJsErrorList", errParams)
+		utils.SetError(c.Context, iris.StatusBadRequest, "SystemController::GetJsErrorList", errParams)
 		return
 	}
 	listParameters := utils.GetJsErrorListParameters{
@@ -102,7 +102,7 @@ func (c *SystemController) GetJsErrorList() {
 	}
 	errors, count, err := c.SystemService.GetJsErrorList(listParameters)
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "SystemService::GetJsErrorList", errSQL)
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SystemService::GetJsErrorList", errSQL)
 		return
 	}
 	c.Context.JSON(iris.Map{
@@ -119,7 +119,7 @@ func (c *SystemController) GetLoginHistoryList() {
 	defer c.Context.Next()
 	listParams, err := utils.GetListParamsFromContext(c.Context, "login_histories.created_at")
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "SystemController::GetLoginHistoryList", errParams)
+		utils.SetError(c.Context, iris.StatusBadRequest, "SystemController::GetLoginHistoryList", errParams)
 		return
 	}
 	userID := c.Context.URLParamDefault("userID", "")
@@ -133,7 +133,7 @@ func (c *SystemController) GetLoginHistoryList() {
 	}
 	list, count, err := c.UserService.GetLoginHistoryList(listParameters)
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "UserService::GetLoginHistoryList", errSQL)
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "UserService::GetLoginHistoryList", errSQL)
 		return
 	}
 	c.Context.JSON(iris.Map{
@@ -158,7 +158,7 @@ func (c *SystemController) DumpDatabase() {
 	}
 	out, err := exec.Command(PGDumpCmd, options...).Output()
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "SystemController::DumpDB", errSQL)
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SystemController::DumpDB", errSQL)
 		return
 	}
 	c.Context.Binary(out)
@@ -169,7 +169,7 @@ func (c *SystemController) GetCitiesList() {
 	defer c.Context.Next()
 	cities, err := c.SystemService.GetCitiesList()
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "SystemService::GetCitiesList", errSQL)
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SystemService::GetCitiesList", errSQL)
 		return
 	}
 	c.Context.JSON(iris.Map{

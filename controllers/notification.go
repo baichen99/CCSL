@@ -47,9 +47,9 @@ func (c *NotificationController) BeforeActivation(app mvc.BeforeActivation) {
 // =================
 func (c *NotificationController) GetNotificationList() {
 	defer c.Context.Next()
-	listParams, err := utils.GetListParamsFromContext(c.Context, "notifications.read_at")
+	listParams, err := utils.GetListParamsFromContext(c.Context, "notifications.created_at")
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "NotificationController::GetNotificationList", errParams)
+		utils.SetError(c.Context, iris.StatusBadRequest, "NotificationController::GetNotificationList", errParams)
 		return
 	}
 	userID, _ := middlewares.GetJWTParams(c.Context)
@@ -60,7 +60,7 @@ func (c *NotificationController) GetNotificationList() {
 	}
 	notifications, count, err := c.NotificationService.GetNotificationList(listParameters)
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "NotificationService::GetNotificationList", errSQL)
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "NotificationService::GetNotificationList", errSQL)
 		return
 	}
 	c.Context.JSON(iris.Map{
@@ -102,7 +102,7 @@ func (c *NotificationController) GetNotification() {
 	// PSQL - Looking for specified word via the ID.
 	notification, err := c.NotificationService.GetNotification(notificationID)
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "NotificationService::GetNotification", errSQL)
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "NotificationService::GetNotification", errSQL)
 		return
 	}
 
@@ -111,7 +111,7 @@ func (c *NotificationController) GetNotification() {
 		updateData := make(map[string]interface{})
 		updateData["ReadAt"] = notification.ReadAt
 		if err := c.NotificationService.UpdateNotification(notificationID, updateData); err != nil {
-			utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "NotificationService::UpdateNotification", errSQL)
+			utils.SetError(c.Context, iris.StatusUnprocessableEntity, "NotificationService::UpdateNotification", errSQL)
 			return
 		}
 	}
@@ -128,7 +128,7 @@ type GetNotificationResponse struct {
 	Data models.Notification `json:"data"`
 }
 
-// DeleteNotification DELETE /Notification/{id:string}
+// DeleteNotification DELETE /notifications/{id:string}
 // >>>>> DOCS  <<<<<
 // =================
 // @Tags Notifications
@@ -153,7 +153,7 @@ func (c *NotificationController) DeleteNotification() {
 	// Check notification.UserID == userID
 	notfication, err := c.NotificationService.GetNotification(notificationID)
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "NotificationService::GetNotification", errSQL)
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "NotificationService::GetNotification", errSQL)
 		return
 	}
 
@@ -161,13 +161,13 @@ func (c *NotificationController) DeleteNotification() {
 	userID, _ := uuid.FromString(tokenUser)
 
 	if notfication.UserID != userID {
-		utils.SetResponseError(c.Context, iris.StatusForbidden, "NotificationService::GetNotification", errRole)
+		utils.SetError(c.Context, iris.StatusForbidden, "NotificationService::GetNotification", errRole)
 		return
 	}
 
 	// PSQL - Soft delete of the given ID
 	if err := c.NotificationService.DeleteNotification(notificationID); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "NotificationService::DeleteNotification", errSQL)
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "NotificationService::DeleteNotification", errSQL)
 		return
 	}
 

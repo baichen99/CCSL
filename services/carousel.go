@@ -88,7 +88,6 @@ func (s *CarouselService) DeleteCarousel(carouselID string) (err error) {
 	var carousel models.Carousel
 	err = s.PG.
 		Where("id = ?", carouselID).
-		Take(&carousel).
 		Delete(&carousel).
 		Error
 	return

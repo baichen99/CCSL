@@ -89,7 +89,6 @@ func (s *MemberService) DeleteMember(memberID string) (err error) {
 	var member models.Member
 	err = s.PG.
 		Where("id = ?", memberID).
-		Take(&member).
 		Delete(&member).
 		Error
 	return

@@ -5,33 +5,19 @@ import (
 )
 
 const (
-	message string = "message"
-	errinfo string = "error"
-)
-
-const (
-	// BadRequest 400 Error
-	BadRequest string = "BadRequest"
-	// Unauthorized 401 Error
-	Unauthorized string = "Unauthorized"
-	// Forbidden 403 Error
-	Forbidden string = "Forbidden"
-	// MethodError 405 Error
-	MethodError string = "MethodError"
-	// NotFound 404 Error
-	NotFound string = "NotFound"
-	// ConfictError 409 Error
-	ConfictError string = "ConfictError"
-	// UnprocessableEntity 422 Error
-	UnprocessableEntity string = "UnprocessableEntity"
-	// TooManyRequests 429 Error
-	TooManyRequests string = "TooManyRequests"
-	// InternalError 500 Error
-	InternalError string = "InternalError"
-	// URLNotFound 404 Error
-	URLNotFound = "URLNotFound"
-	// UnknownError other error code
-	UnknownError string = "UnknownError"
+	message             = "message"
+	errinfo             = "error"
+	BadRequest          = "BadRequest"          // BadRequest 400 Error
+	Unauthorized        = "Unauthorized"        // Unauthorized 401 Error
+	Forbidden           = "Forbidden"           // Forbidden 403 Error
+	MethodError         = "MethodError"         // MethodError 405 Error
+	NotFound            = "NotFound"            // NotFound 404 Error
+	ConfictError        = "ConfictError"        // ConfictError 409 Error
+	UnprocessableEntity = "UnprocessableEntity" // UnprocessableEntity 422 Error
+	TooManyRequests     = "TooManyRequests"     // TooManyRequests 429 Error
+	InternalError       = "InternalError"       // InternalError 500 Error
+	URLNotFound         = "URLNotFound"         // URLNotFound 404 Error
+	UnknownError        = "UnknownError"        // UnknownError other error code
 )
 
 // ErrorHandler handles request error
@@ -71,5 +57,7 @@ func ErrorHandler(ctx iris.Context) {
 	}
 	ctx.JSON(iris.Map{
 		message: ctx.Tr(URLNotFound),
+		errinfo: nil,
 	})
+	ctx.StopExecution()
 }

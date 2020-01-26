@@ -86,7 +86,6 @@ func (s *SignService) DeleteSign(signID string) (err error) {
 	tx := s.PG.Begin()
 	err = tx.
 		Where("id = ?", signID).
-		Take(&sign).
 		Delete(&sign).
 		Error
 	if err != nil {

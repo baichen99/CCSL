@@ -92,7 +92,6 @@ func (s *PerformerService) DeletePerformer(performerID string) (err error) {
 	var performer models.Performer
 	err = s.PG.
 		Where("id = ?", performerID).
-		Take(&performer).
 		Delete(&performer).
 		Error
 	return

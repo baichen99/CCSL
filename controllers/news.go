@@ -31,7 +31,7 @@ func (c *NewsController) GetNewsList() {
 	defer c.Context.Next()
 	listParams, err := utils.GetListParamsFromContext(c.Context, "news.date")
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "NewsController::GetNewsList", errParams)
+		utils.SetError(c.Context, iris.StatusBadRequest, "NewsController::GetNewsList", errParams)
 		return
 	}
 	column := c.Context.URLParamDefault("column", "")
@@ -51,7 +51,7 @@ func (c *NewsController) GetNewsList() {
 	}
 	news, count, err := c.NewsService.GetNewsList(listParameters)
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "NewsService::GetNewsList", errSQL)
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "NewsService::GetNewsList", errSQL)
 		return
 	}
 	c.Context.JSON(iris.Map{
@@ -69,7 +69,7 @@ func (c *NewsController) CreateNews() {
 	var form newsCreateForm
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "NewsController::CreateNews", errParams)
+		utils.SetError(c.Context, iris.StatusBadRequest, "NewsController::CreateNews", errParams)
 		return
 	}
 	// PSQL - Create news in database.
@@ -79,7 +79,7 @@ func (c *NewsController) CreateNews() {
 	tokenID, _ := uuid.FromString(tokenUser)
 	news.CreatorID = tokenID
 	if err := c.NewsService.CreateNews(news); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "NewsService::CreateNews", errSQL)
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "NewsService::CreateNews", errSQL)
 		return
 	}
 	// Return 201 Created
@@ -98,7 +98,7 @@ func (c *NewsController) GetNews() {
 	// PSQL - Looking for specified word via the ID.
 	news, err := c.NewsService.GetNews(newsID)
 	if err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "NewsService::GetNews", errSQL)
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "NewsService::GetNews", errSQL)
 		return
 	}
 	// Returning word information in data key.
@@ -118,14 +118,14 @@ func (c *NewsController) UpdateNews() {
 
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusBadRequest, "NewsController::UpdateNews", errParams)
+		utils.SetError(c.Context, iris.StatusBadRequest, "NewsController::UpdateNews", errParams)
 		return
 	}
 	updateData := utils.MakeUpdateData(form)
 
 	// PSQL - Update of the given ID
 	if err := c.NewsService.UpdateNews(newsID, updateData); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "NewsService::UpdateNews", errSQL)
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "NewsService::UpdateNews", errSQL)
 		return
 	}
 
@@ -141,7 +141,7 @@ func (c *NewsController) DeleteNews() {
 
 	// PSQL - Soft delete of the given ID
 	if err := c.NewsService.DeleteNews(newsID); err != nil {
-		utils.SetResponseError(c.Context, iris.StatusUnprocessableEntity, "NewsService::DeleteNews", errSQL)
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "NewsService::DeleteNews", errSQL)
 		return
 	}
 

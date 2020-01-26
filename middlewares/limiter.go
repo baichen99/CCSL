@@ -17,7 +17,7 @@ func LimitHandler(l *limiter.Limiter) context.Handler {
 		if error != nil {
 			ctx.ContentType(l.GetMessageContentType())
 			utils.LogInfo(ctx, "Request reached rate limit")
-			utils.SetResponseError(ctx, iris.StatusTooManyRequests, "LimitMiddleware", errors.New("TryAgainLater"))
+			utils.SetError(ctx, iris.StatusTooManyRequests, "LimitMiddleware", errors.New("TryAgainLater"))
 			return
 		}
 		ctx.Next()

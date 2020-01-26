@@ -142,7 +142,6 @@ func (s *UserService) DeleteUser(userID string) (err error) {
 	var user models.User
 	err = s.PG.
 		Where("id = ?", userID).
-		Take(&user).
 		Delete(&user).
 		Error
 	return
