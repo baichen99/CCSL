@@ -97,6 +97,7 @@ func (s *LexicalVideoService) DeleteVideo(videoID string) (err error) {
 	var video models.LexicalVideo
 	err = s.PG.
 		Where("id = ?", videoID).
-		Delete(&video).Error
+		Delete(&video).
+		Error
 	return
 }

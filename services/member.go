@@ -79,7 +79,7 @@ func (s *MemberService) UpdateMember(memberID string, updateData map[string]inte
 	err = s.PG.
 		Where("id = ?", memberID).
 		Take(&member).
-		Update(updateData).
+		Updates(updateData).
 		Error
 	return
 }
