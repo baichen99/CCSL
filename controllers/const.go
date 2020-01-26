@@ -259,10 +259,10 @@ type signUpdateForm struct {
 // ============
 
 type lexiconCreateForm struct {
-	Initial string `json:"initial" validate:"required"`
-	Chinese string `json:"chinese" validate:"required"`
-	English string `json:"english" validate:"required"`
-	Pos     string `json:"pos" validate:"required"`
+	Initial string   `json:"initial" validate:"required"`
+	Chinese string   `json:"chinese" validate:"required"`
+	English string   `json:"english" validate:"required"`
+	Pos     []string `json:"pos" validate:"required"`
 }
 
 func (f lexiconCreateForm) ConvertToModel() (word models.Lexicon) {
@@ -276,10 +276,10 @@ func (f lexiconCreateForm) ConvertToModel() (word models.Lexicon) {
 }
 
 type lexiconUpdateForm struct {
-	Initial *string `json:"initial" validate:"omitempty"`
-	Chinese *string `json:"chinese" validate:"omitempty"`
-	English *string `json:"english" validate:"omitempty"`
-	Pos     *string `json:"pos" validate:"omitempty"`
+	Initial *string   `json:"initial" validate:"omitempty"`
+	Chinese *string   `json:"chinese" validate:"omitempty"`
+	English *string   `json:"english" validate:"omitempty"`
+	Pos     *[]string `json:"pos" validate:"omitempty"`
 }
 
 // >>> LEXICAL_VIDEO <<<

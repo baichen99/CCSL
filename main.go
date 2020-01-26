@@ -49,7 +49,7 @@ func main() {
 		app.Handle(new(controllers.MemberController))
 	})
 	mvc.Configure(app.Party("/users"), func(app *mvc.Application) {
-		app.Register(services.NewUserService(pg))
+		app.Register(services.NewUserService(pg), services.NewNotificationService(pg))
 		app.Handle(new(controllers.UserController))
 	})
 	mvc.Configure(app.Party("/signs"), func(app *mvc.Application) {

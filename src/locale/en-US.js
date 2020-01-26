@@ -1,6 +1,17 @@
 import enElementLocale from "element-ui/lib/locale/lang/en";
 export default {
   ...enElementLocale,
+  Noun: "Noun",
+  Verb: "Verb",
+  Adjective: "Adjective",
+  Auxiliary: "Auxiliary",
+  Numeral: "Numeral",
+  Classifier: "Classifier",
+  Pronoun: "Pronoun",
+  Conjunction: "Conjunction",
+  Interrogative: "Interrogative",
+  Adverb: "Adverb",
+  Prepositions: "Prepositions",
   ControlCenter: "Control Center",
   ProfileCenter: "Profile",
   UserManagement: "Users",

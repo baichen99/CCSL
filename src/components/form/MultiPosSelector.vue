@@ -1,6 +1,13 @@
 <template>
-  <el-select v-model="data" :placeholder="$t('tip')" clearable @clear="$emit('clear')">
-    <el-option v-for="(item,index) in wordPosTypes" :key="index" :label="item" :value="item" />
+  <el-select
+    v-model="data"
+    multiple
+    clearable
+    reserve-keyword
+    :placeholder="$t('tip')"
+    @clear="$emit('clear')"
+  >
+    <el-option v-for="(item,key) in partOfSpeech" :key="key" :label="$t(item.name)" :value="key" />
   </el-select>
 </template>
 
@@ -18,7 +25,7 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
-  name: "WordPosSelector",
+  name: "MultiPosSelector",
   model: {
     prop: "value",
     event: "update"
@@ -30,7 +37,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["wordPosTypes"]),
+    ...mapGetters(["wordPosTypes", "partOfSpeech"]),
     data: {
       get() {
         return this.value;

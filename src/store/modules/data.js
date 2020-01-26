@@ -112,6 +112,19 @@ const state = {
     "zh-CN": { name: "Chinese" },
     "en-US": { name: "English" }
   },
+  partOfSpeech: {
+    noun: { name: "Noun" },
+    verb: { name: "Verb" },
+    adjective: { name: "Adjective" },
+    auxiliary: { name: "Auxiliary" },
+    numeral: { name: "Numeral" },
+    classifier: { name: "Classifier" },
+    pronoun: { name: "Pronoun" },
+    conjunction: { name: "Conjunction" },
+    interrogative: { name: "Interrogative" },
+    adverb: { name: "Adverb" },
+    prepositions: { name: "Prepositions" }
+  },
   signs: {},
   lexicons: {},
   performers: {}

@@ -6,6 +6,7 @@ import (
 
 	"github.com/jinzhu/gorm"
 	"github.com/kataras/iris/v12"
+	"github.com/lib/pq"
 )
 
 // SearchByColumn where clause to execute a pseudo-search on the provided value against the given column
@@ -50,7 +51,7 @@ func FilterInSubQuery(columnName string, subQuery string) func(db *gorm.DB) *gor
 // SearchInList generate function to search value from array
 func SearchInList(listName string, value string) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
-		// SQL select in array: SELCET * FROM column_name WHERE array_to_string(listName, ',') LIKE value
+		// SQL select in array: SELCET * FROM table WHERE array_to_string(listName, ',') LIKE value
 		if value != "" {
 			value := "%" + value + "%"
 			query := fmt.Sprintf("array_to_string(%s,',') LIKE ?", listName)
@@ -63,9 +64,21 @@ func SearchInList(listName string, value string) func(db *gorm.DB) *gorm.DB {
 // FilterInList generate function to filter value from array
 func FilterInList(columnName string, value string) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
-		// SQL select in array: SELCET * FROM column_name WHERE value = ANY(query)
+		// SQL select in array: SELCET * FROM table WHERE value = ANY(query)
 		if value != "" {
 			query := fmt.Sprintf("? = ANY(%s)", columnName)
+			return db.Where(query, value)
+		}
+		return db
+	}
+}
+
+// FilterMultiInList generate function to filter multiple value from array
+func FilterMultiInList(columnName string, value pq.StringArray) func(db *gorm.DB) *gorm.DB {
+	// SQL select multiple value in array: SELCET * FROM table WHERE [element_1, element_2] <@ columnName
+	return func(db *gorm.DB) *gorm.DB {
+		if len(value) != 0 {
+			query := fmt.Sprintf("? <@ %s", columnName)
 			return db.Where(query, value)
 		}
 		return db
@@ -75,7 +88,7 @@ func FilterInList(columnName string, value string) func(db *gorm.DB) *gorm.DB {
 // FilterByArray generate function to search value from a comma escaped string
 func FilterByArray(columnName string, value string, escape string) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
-		// SQL select in array: SELCET * FROM column_name WHERE value = ANY(string_to_array(query,','))
+		// SQL select in array: SELCET * FROM table WHERE value = ANY(string_to_array(query,','))
 		if value != "" {
 			query := fmt.Sprintf("? = ANY(string_to_array(%s,'%s'))", columnName, escape)
 			return db.Where(query, value)
@@ -86,6 +99,7 @@ func FilterByArray(columnName string, value string, escape string) func(db *gorm
 
 // FilterByListParameters generate function to limit get list counts
 func FilterByListParameters(parameters GetListParameters) func(db *gorm.DB) *gorm.DB {
+	// SQL: ORDER orderQuery LIMIT limit OFFSET offset
 	return func(db *gorm.DB) *gorm.DB {
 		orderQuery := fmt.Sprintf("%s %s", parameters.OrderBy, parameters.Order)
 		if parameters.Limit != 0 {

@@ -1,6 +1,17 @@
 import zhElementLocale from "element-ui/lib/locale/lang/zh-CN";
 export default {
   ...zhElementLocale,
+  Noun: "名词",
+  Verb: "动词",
+  Adjective: "形容词",
+  Auxiliary: "助动词",
+  Numeral: "数词",
+  Classifier: "量词",
+  Pronoun: "代词",
+  Conjunction: "连词",
+  Interrogative: "疑问词",
+  Adverb: "副词",
+  Prepositions: "介词",
   ControlCenter: "控制中心",
   ProfileCenter: "个人中心",
   UserManagement: "用户管理",

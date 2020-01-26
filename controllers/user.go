@@ -15,8 +15,9 @@ import (
 
 // UserController is for user CRUD
 type UserController struct {
-	Context     iris.Context
-	UserService services.UserInterface
+	Context             iris.Context
+	UserService         services.UserInterface
+	NotificationService services.NotificationInterface
 }
 
 // BeforeActivation will register routes for controllers

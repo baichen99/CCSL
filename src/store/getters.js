@@ -20,6 +20,7 @@ const getters = {
   languageTypes: state => state.data.languageTypes,
   memberTypes: state => state.data.memberTypes,
   memberDegrees: state => state.data.memberDegrees,
+  partOfSpeech: state => state.data.partOfSpeech,
   signs: state => state.data.signs,
   lexicons: state => state.data.lexicons,
   performers: state => state.data.performers

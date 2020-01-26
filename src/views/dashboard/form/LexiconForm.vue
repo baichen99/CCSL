@@ -9,7 +9,7 @@
     </el-form-item>
 
     <el-form-item label="词性" prop="pos">
-      <word-pos-selector v-model="formData.pos" />
+      <multi-pos-selector v-model="formData.pos" />
     </el-form-item>
 
     <el-form-item label="音序" prop="initial">
@@ -20,12 +20,12 @@
 
 <script>
 import formMixin from "./formMixin";
-import WordPosSelector from "@/components/form/WordPosSelector";
+import MultiPosSelector from "@/components/form/MultiPosSelector";
 import WordInitialSelector from "@/components/form/WordInitialSelector";
 export default {
   name: "LexiconForm",
   components: {
-    WordPosSelector,
+    MultiPosSelector,
     WordInitialSelector
   },
   mixins: [formMixin],

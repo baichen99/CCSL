@@ -34,7 +34,7 @@
           <gender-selector v-model="searchParams.gender" />
           <sign-selector v-model="searchParams.leftSignID" orientation="left" />
           <sign-selector v-model="searchParams.rightSignID" orientation="right" />
-          <word-pos-selector v-model="searchParams.pos" />
+          <pos-selector v-model="searchParams.pos" />
           <city-selector v-model="searchParams.regionID" />
           <word-formation-selector v-model="searchParams.wordFormation" />
           <morphemes-input v-model="searchParams.morpheme" style="width:200px" />
@@ -60,7 +60,7 @@
 import SignSelector from "@/components/form/SignSelector.vue";
 import CitySelector from "@/components/form/CitySelector.vue";
 import GenderSelector from "@/components/form/GenderSelector.vue";
-import WordPosSelector from "@/components/form/WordPosSelector.vue";
+import PosSelector from "@/components/form/PosSelector.vue";
 import WordFormationSelector from "@/components/form/WordFormationSelector.vue";
 import MorphemesInput from "@/components/form/MorphemesInput.vue";
 
@@ -70,7 +70,7 @@ export default {
     CitySelector,
     SignSelector,
     GenderSelector,
-    WordPosSelector,
+    PosSelector,
     WordFormationSelector,
     MorphemesInput
   },

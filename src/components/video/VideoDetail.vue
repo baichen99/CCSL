@@ -16,7 +16,16 @@
       </div>
       <div class="tags">
         <span class="tag-label">{{ $t("PoS") }}</span>
-        <span class="tag-value">{{ lexicons[video.lexiconID].pos }}</span>
+        <span class="tag-value">
+          <el-tag
+            v-for="value in lexicons[video.lexiconID].pos"
+            :key="value"
+            size="small"
+            class="tag"
+          >
+            <span>{{ $t(partOfSpeech[value].name) }}</span>
+          </el-tag>
+        </span>
         <span class="tag-label">{{ $t("English") }}</span>
         <span class="tag-value">{{ lexicons[video.lexiconID].english }}</span>
       </div>
@@ -31,7 +40,7 @@
         </span>
         <span class="tag-label">{{ $t("Morpheme") }}</span>
         <span v-if="video.morpheme.length > 0" class="tag-value">
-          <el-tag v-for="(item,index) in video.morpheme" :key="index" class="tag-words">
+          <el-tag v-for="(item,index) in video.morpheme" :key="index" class="tag">
             <span class="word-sup" v-html="$options.filters.addNumberSup(item)"></span>
           </el-tag>
         </span>
@@ -89,6 +98,7 @@ export default {
   computed: {
     ...mapGetters([
       "wordFormations",
+      "partOfSpeech",
       "settings",
       "lexicons",
       "performers",
@@ -124,7 +134,7 @@ export default {
       }
       width: 35%;
     }
-    .tag-words {
+    .tag {
       margin: 0 10px;
     }
   }

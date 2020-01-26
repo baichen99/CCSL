@@ -33,7 +33,7 @@ func (s *LexiconService) GetWordsList(parameters utils.GetLexiconListParameters)
 	// Adding custom scopes to the query based on get list parameters.
 	db := s.PG.
 		Scopes(
-			utils.FilterByColumn("lexicons.pos", parameters.Pos),
+			utils.FilterInList("lexicons.pos", parameters.Pos),
 			utils.FilterByColumn("lexicons.initial", parameters.Initial),
 			utils.SearchByColumn("lexicons.chinese", parameters.Chinese),
 			utils.FilterByArray("lexicons.english", parameters.English, " "),

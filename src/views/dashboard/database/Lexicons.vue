@@ -16,7 +16,7 @@
         clearable
         @change="handleSearch"
       />
-      <word-pos-selector v-model="params.pos" @update="handleSearch" />
+      <pos-selector v-model="params.pos" @update="handleSearch" />
       <el-button type="primary" plain @click="handleNew">
         {{ $t("New") }}
         <i class="el-icon-plus el-icon--right" />
@@ -42,21 +42,23 @@
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('Chinese')" align="center" min-width="200px">
+        <el-table-column :label="$t('Chinese')" align="center" min-width="150px">
           <template slot-scope="{row}">
             <span class="word-sup" v-html="$options.filters.addNumberSup(row.chinese) " />
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('English')" align="center" min-width="200px">
+        <el-table-column :label="$t('English')" align="center" min-width="150px">
           <template slot-scope="{row}">
             <span>{{ row.english }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('PoS')" align="center" min-width="100px">
+        <el-table-column :label="$t('PoS')" align="center" min-width="200px">
           <template slot-scope="{row}">
-            <span>{{ row.pos }}</span>
+            <el-tag v-for="value in row.pos" :key="value" size="small" class="tags">
+              <span>{{ $t(partOfSpeech[value].name) }}</span>
+            </el-tag>
           </template>
         </el-table-column>
 
@@ -110,7 +112,7 @@
 
 <script>
 import LexiconForm from "@/views/dashboard/form/LexiconForm";
-import WordPosSelector from "@/components/form/WordPosSelector";
+import PosSelector from "@/components/form/PosSelector";
 import listMixin from "@/views/dashboard/listMixin";
 import { mapGetters } from "vuex";
 import lodash from "lodash";
@@ -124,7 +126,7 @@ import {
 export default {
   name: "Lexicons",
   components: {
-    WordPosSelector,
+    PosSelector,
     LexiconForm
   },
   mixins: [listMixin],
@@ -141,7 +143,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["wordInitial"])
+    ...mapGetters(["wordInitial", "partOfSpeech"])
   },
   created() {
     this.$nextTick(() => {
@@ -225,3 +227,9 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.tags {
+  margin: 4px;
+}
+</style>
