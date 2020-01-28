@@ -40,7 +40,7 @@
               type="primary"
               size="mini"
               plain
-              @click="handleView(row,index)"
+              @click="handleView(row)"
             >{{ $t("View") }}</el-button>
             <el-button
               type="danger"

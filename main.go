@@ -12,6 +12,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/iris-contrib/middleware/cors"
 	"github.com/iris-contrib/swagger/v12"
 	"github.com/iris-contrib/swagger/v12/swaggerFiles"
 	"github.com/jinzhu/gorm"
@@ -111,6 +112,8 @@ func initApp() *iris.Application {
 	}))
 	app.I18n.Load("./locales/*/*.ini", "zh-CN", "en-US")
 	app.OnAnyErrorCode(middlewares.ErrorHandler)
+	app.AllowMethods(iris.MethodOptions)
+	app.Use(cors.New(middlewares.CorsConf))
 	app.Use(middlewares.BeforeHandleRequest)
 	app.Done(middlewares.AfterHandleRequest)
 	app.Configure(iris.WithConfiguration(iris.YAML(configs.AppConf)))

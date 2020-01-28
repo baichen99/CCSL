@@ -3,6 +3,7 @@ App:
     Domain: "localhost:8888"
     CORS:
         - https://ccsl.shu.edu.cn
+        - http://localhost:8989
     AllowCookie: true
 
 Log:

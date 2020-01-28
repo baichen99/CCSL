@@ -4,6 +4,7 @@ import (
 	"ccsl/configs"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/iris-contrib/middleware/cors"
 	"github.com/kataras/iris/v12"
 	uuid "github.com/satori/go.uuid"
 )
@@ -21,10 +22,10 @@ var (
 	}
 
 	// CorsConf is config for Cross-Origin Resource Sharing
-	// CorsConf = corsConfig{
-	// 	AllowedOrigins:   configs.Conf.App.CORS,
-	// 	AllowCredentials: configs.Conf.App.AllowCookie,
-	// }
+	CorsConf = cors.Options{
+		AllowedOrigins:   configs.Conf.App.CORS,
+		AllowCredentials: configs.Conf.App.AllowCookie,
+	}
 )
 
 // CheckJWTToken is a user authorization middleware
