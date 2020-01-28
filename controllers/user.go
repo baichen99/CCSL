@@ -319,7 +319,7 @@ func (c *UserController) UpdateLoginHistory(userID uuid.UUID) {
 		},
 		UserID: userID.String(),
 	})
-	if len(loginHistories) >= 0 {
+	if len(loginHistories) > 0 {
 		lastLogin := loginHistories[0]
 		lastLoginTime := lastLogin.CreatedAt.Local().Format("2006-01-02 15:04")
 		lastLoginAddress := fmt.Sprintf("%s - %s - %s", lastLogin.Country, lastLogin.RegionName, lastLogin.City)
