@@ -47,8 +47,8 @@ func (s *NotificationService) GetNotificationList(parameters utils.GetNotificati
 	}
 
 	err = db.
-		Find(&notifications).
 		Scopes(utils.FilterByListParameters(parameters.GetListParameters)).
+		Find(&notifications).
 		Error
 
 	return

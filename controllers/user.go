@@ -7,6 +7,7 @@ import (
 	"ccsl/services"
 	"ccsl/utils"
 	"errors"
+	"fmt"
 
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
@@ -311,6 +312,29 @@ func (c *UserController) UpdateLoginHistory(userID uuid.UUID) {
 	ipAddress := c.Context.GetHeader("X-Real-IP")
 	info, _ := utils.GetIPInfo(ipAddress)
 	info.UserID = userID
+	loginHistories, _, err := c.UserService.GetLoginHistoryList(utils.GetUserLoginListParameters{
+		GetListParameters: utils.GetListParameters{
+			Order:   "desc",
+			OrderBy: "created_at",
+		},
+		UserID: userID.String(),
+	})
+	if len(loginHistories) >= 0 {
+		lastLogin := loginHistories[0]
+		lastLoginTime := lastLogin.CreatedAt.Local().Format("2006-01-02 15:04")
+		lastLoginAddress := fmt.Sprintf("%s - %s - %s", lastLogin.Country, lastLogin.RegionName, lastLogin.City)
+		notice := fmt.Sprintf("您的账号上次于 %s 在 %s 登录，IP地址为%s。如果不是您本人登录，请立即修改您的登录账号及密码。", lastLoginTime, lastLoginAddress, info.IP)
+		message := models.Notification{
+			UserID:  userID,
+			Title:   "登录通知",
+			Message: notice,
+		}
+		c.NotificationService.CreateNotification(message)
+	}
+	if err != nil {
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "UserService::GetLoginHistory", errSQL)
+		return
+	}
 	if err := c.UserService.CreateLoginHistory(info); err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "UserService::CreateLoginHistory", errSQL)
 		return

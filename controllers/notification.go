@@ -106,8 +106,9 @@ func (c *NotificationController) GetNotification() {
 		return
 	}
 
-	if notification.ReadAt.IsZero() {
-		notification.ReadAt = time.Now()
+	if notification.ReadAt == nil {
+		currentTime := time.Now()
+		notification.ReadAt = &currentTime
 		updateData := make(map[string]interface{})
 		updateData["ReadAt"] = notification.ReadAt
 		if err := c.NotificationService.UpdateNotification(notificationID, updateData); err != nil {

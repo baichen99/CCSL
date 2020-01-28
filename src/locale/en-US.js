@@ -49,6 +49,8 @@ export default {
   TextCorpus: "Chinese Sign Language Corpus for Sign Texts",
   LiteratureDatabase: "Literature Database for Sign Language Research",
   TermDatabase: "Database for Technical Terms in Sign Linguistics",
+  Notifications: "Notifications",
+  MessageContent: "Message Content",
   MyMenu: "My",
   ProfileMenu: "Profile",
   CreatedAt: "Created At",
@@ -151,5 +153,6 @@ export default {
   Enable: "Enable",
   Disable: "Disable",
   Back: "Back",
-  Unavailable: "Unavailable"
+  Unavailable: "Unavailable",
+  Unread: "Unread"
 };

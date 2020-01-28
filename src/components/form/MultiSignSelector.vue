@@ -1,12 +1,15 @@
 <template>
   <el-select
+    ref="dragableSelect"
     v-model="data"
+    class="dragable-select"
     multiple
     filterable
     clearable
     reserve-keyword
     :placeholder="$t('tip')"
     :loading="loading"
+    v-on="$listeners"
   >
     <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
       <span>{{ item.name }}</span>
@@ -27,6 +30,7 @@
 </i18n>
 
 <script>
+import Sortable from "sortablejs";
 import { mapGetters } from "vuex";
 export default {
   name: "MultiSignSelector",
@@ -63,6 +67,27 @@ export default {
       const data = this.$store.state.data.signs;
       this.options = Object.values(data);
     });
+  },
+  mounted() {
+    this.setSort();
+  },
+  methods: {
+    setSort() {
+      const el = this.$refs.dragableSelect.$el.querySelectorAll(
+        ".el-select__tags > span"
+      )[0];
+      this.sortable = Sortable.create(el, {
+        setData: function(dataTransfer) {
+          dataTransfer.setData("Text", "");
+          // to avoid Firefox bug
+          // Detail see : https://github.com/RubaXa/Sortable/issues/1012
+        },
+        onEnd: evt => {
+          const targetRow = this.value.splice(evt.oldIndex, 1)[0];
+          this.value.splice(evt.newIndex, 0, targetRow);
+        }
+      });
+    }
   }
 };
 </script>

@@ -89,19 +89,25 @@
         >
           <template slot-scope="{row}">
             <span v-if="row.wordFormation">{{ $t(wordFormations[row.wordFormation].name) }}</span>
-            <el-tag v-else size="small" type="info">{{ $t("NoData") }}</el-tag>
+            <el-tag v-else :disable-transitions="true" size="small" type="info">{{ $t("NoData") }}</el-tag>
           </template>
         </el-table-column>
 
         <el-table-column :label="$t('Morpheme')" align="center" min-width="160px">
           <template slot-scope="{row}">
             <div v-if="row.morpheme.length > 0">
-              <el-tag v-for="value in row.morpheme" :key="value" class="tags" size="small">
+              <el-tag
+                v-for="value in row.morpheme"
+                :key="value"
+                :disable-transitions="true"
+                class="tags"
+                size="small"
+              >
                 <span v-html="$options.filters.addNumberSup(value)"></span>
               </el-tag>
             </div>
             <div v-else>
-              <el-tag size="small" type="info">{{ $t("NoData") }}</el-tag>
+              <el-tag :disable-transitions="true" size="small" type="info">{{ $t("NoData") }}</el-tag>
             </div>
           </template>
         </el-table-column>

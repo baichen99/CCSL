@@ -75,15 +75,20 @@ func IsPublicIP(IP net.IP) bool {
 
 // GetIPInfo returns info of given ip address
 func GetIPInfo(ipAddress string) (info models.LoginHistory, err error) {
+	if ipAddress == "" {
+		ipAddress = "未知IP"
+	}
 	ip := net.ParseIP(ipAddress)
 	if IsPublicIP(ip) {
 		errInfo := models.LoginHistory{
 			IP:          ipAddress,
-			Country:     "Unkown Area",
+			Country:     "未知国家",
 			CountryCode: "UNKNOWN",
+			RegionName:  "未知地区",
+			City:        "未知城市",
 			Status:      "unknown",
 		}
-		url := fmt.Sprintf("http://ip-api.com/json/%s?fields=status,message,country,countryCode,region,regionName,city,district,lat,lon,timezone,isp,org,query", ipAddress)
+		url := fmt.Sprintf("http://ip-api.com/json/%s?fields=status,message,country,countryCode,region,regionName,city,district,lat,lon,timezone,isp,org,query&lang=zh-CN", ipAddress)
 		var req *http.Request
 		if req, err = http.NewRequest("GET", url, nil); err != nil {
 			info = errInfo
@@ -113,8 +118,10 @@ func GetIPInfo(ipAddress string) (info models.LoginHistory, err error) {
 	}
 	info = models.LoginHistory{
 		IP:          ipAddress,
-		Country:     "Internal IP Address",
+		Country:     "内网",
 		CountryCode: "INTERNAL",
+		RegionName:  "内网",
+		City:        "内网",
 		Status:      "internal",
 	}
 	return

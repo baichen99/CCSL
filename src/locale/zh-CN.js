@@ -49,6 +49,8 @@ export default {
   TextCorpus: "手语语篇数据库",
   LiteratureDatabase: "手语研究文献数据库",
   TermDatabase: "手语研究术语库",
+  Notifications: "消息通知",
+  MessageContent: "消息内容",
   MyMenu: "我的",
   ProfileMenu: "个人中心",
   CreatedAt: "创建时间",
@@ -150,5 +152,6 @@ export default {
   Enable: "启用",
   Disable: "停用",
   Back: "返回",
-  Unavailable: "不可用"
+  Unavailable: "不可用",
+  Unread: "未读"
 };

@@ -10,6 +10,8 @@
     <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
 
     <div class="right-menu">
+      <notifications class="right-menu-item hover-effect"></notifications>
+
       <template v-if="device!=='mobile'">
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
       </template>
@@ -48,15 +50,17 @@
 
 <script>
 import { mapGetters } from "vuex";
-import Breadcrumb from "@/components/Breadcrumb.vue";
-import Hamburger from "@/components/Hamburger";
-import Screenfull from "@/components/Screenfull";
+import Breadcrumb from "@/layout/components/Header/Breadcrumb";
+import Hamburger from "@/layout/components/Header/Hamburger";
+import Screenfull from "@/layout/components/Header/Screenfull";
+import Notifications from "@/layout/components/Header/Notifications";
 
 export default {
   components: {
     Breadcrumb,
     Hamburger,
-    Screenfull
+    Screenfull,
+    Notifications
   },
   computed: {
     ...mapGetters(["sidebar", "avatar", "device"])

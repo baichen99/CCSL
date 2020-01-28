@@ -56,7 +56,13 @@
 
         <el-table-column :label="$t('PoS')" align="center" min-width="200px">
           <template slot-scope="{row}">
-            <el-tag v-for="value in row.pos" :key="value" size="small" class="tags">
+            <el-tag
+              v-for="value in row.pos"
+              :key="value"
+              :disable-transitions="true"
+              size="small"
+              class="tags"
+            >
               <span>{{ $t(partOfSpeech[value].name) }}</span>
             </el-tag>
           </template>
