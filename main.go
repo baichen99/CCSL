@@ -183,6 +183,7 @@ func initDB(app *iris.Application) *gorm.DB {
 		AddForeignKey("province_code", "provinces(code)", "RESTRICT", "RESTRICT").
 		Model(&models.City{}).
 		AddForeignKey("province_code", "provinces(code)", "RESTRICT", "RESTRICT").
+
 		// For other data models, set delete mode to RESTRICT and update mode to CASCADE
 		Model(&models.LexicalVideo{}).
 		AddForeignKey("lexicon_id", "lexicons(id)", "RESTRICT", "CASCADE").
@@ -197,6 +198,11 @@ func initDB(app *iris.Application) *gorm.DB {
 		AddForeignKey("user_id", "users(id)", "RESTRICT", "CASCADE").
 		Model(&models.Notification{}).
 		AddForeignKey("user_id", "users(id)", "RESTRICT", "CASCADE")
-	// utils.InitTestUser(pg)
+
+	// Create test users for development environment
+	if os.Getenv(configs.EnvName) == configs.EnvDevelopment {
+		utils.InitTestUser(pg)
+	}
+
 	return pg
 }
