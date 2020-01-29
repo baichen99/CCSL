@@ -24,15 +24,15 @@ type UserController struct {
 // BeforeActivation will register routes for controllers
 func (c *UserController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Router().Use(middlewares.CheckRateLimit(2))
-	app.Handle("POST", "/login", "UserLogin")
+	app.Handle(iris.MethodPost, "/login", "UserLogin")
 	app.Router().Use(middlewares.CheckToken)
-	app.Handle("GET", "/refresh", "RefreshToken")
-	app.Handle("GET", "/{id: string}", "GetUser")
-	app.Handle("PUT", "/{id: string}", "UpdateUser")
+	app.Handle(iris.MethodGet, "/refresh", "RefreshToken")
+	app.Handle(iris.MethodGet, "/{id: string}", "GetUser")
+	app.Handle(iris.MethodPut, "/{id: string}", "UpdateUser")
 	app.Router().Use(middlewares.CheckUserRole([]string{configs.RoleSuperUser}))
-	app.Handle("GET", "/", "GetUsersList")
-	app.Handle("POST", "/", "CreateUser")
-	app.Handle("DELETE", "/{id: string}", "DeleteUser")
+	app.Handle(iris.MethodGet, "/", "GetUsersList")
+	app.Handle(iris.MethodPost, "/", "CreateUser")
+	app.Handle(iris.MethodDelete, "/{id: string}", "DeleteUser")
 }
 
 // GetUsersList GET /users

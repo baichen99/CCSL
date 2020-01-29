@@ -9,7 +9,6 @@ import (
 
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
-	uuid "github.com/satori/go.uuid"
 )
 
 // NotificationController is for Notification CRUD
@@ -21,9 +20,9 @@ type NotificationController struct {
 // BeforeActivation will register routes for controllers
 func (c *NotificationController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Router().Use(middlewares.CheckToken)
-	app.Handle("GET", "/", "GetNotificationList")
-	app.Handle("GET", "/{id: string}", "GetNotification")
-	app.Handle("DELETE", "/{id: string}", "DeleteNotification")
+	app.Handle(iris.MethodGet, "/", "GetNotificationList")
+	app.Handle(iris.MethodGet, "/{id: string}", "GetNotification")
+	app.Handle(iris.MethodDelete, "/{id: string}", "DeleteNotification")
 }
 
 // GetNotificationList GET /notifications
@@ -159,9 +158,8 @@ func (c *NotificationController) DeleteNotification() {
 	}
 
 	tokenUser, _ := middlewares.GetJWTParams(c.Context)
-	userID, _ := uuid.FromString(tokenUser)
 
-	if notfication.UserID != userID {
+	if notfication.UserID.String() != tokenUser {
 		utils.SetError(c.Context, iris.StatusForbidden, "NotificationService::GetNotification", errRole)
 		return
 	}

@@ -18,12 +18,12 @@ type MemberController struct {
 
 // BeforeActivation will register routes for controllers
 func (c *MemberController) BeforeActivation(app mvc.BeforeActivation) {
-	app.Handle("GET", "/", "GetMemberList")
-	app.Handle("GET", "/{id: string}", "GetMember")
+	app.Handle(iris.MethodGet, "/", "GetMemberList")
+	app.Handle(iris.MethodGet, "/{id: string}", "GetMember")
 	app.Router().Use(middlewares.CheckToken, middlewares.CheckUserRole([]string{configs.RoleAdminUser}))
-	app.Handle("POST", "/", "CreateMember")
-	app.Handle("PUT", "/{id: string}", "UpdateMember")
-	app.Handle("DELETE", "/{id: string}", "DeleteMember")
+	app.Handle(iris.MethodPost, "/", "CreateMember")
+	app.Handle(iris.MethodPut, "/{id: string}", "UpdateMember")
+	app.Handle(iris.MethodDelete, "/{id: string}", "DeleteMember")
 }
 
 // GetMemberList GET /members

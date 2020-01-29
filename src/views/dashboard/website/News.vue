@@ -23,18 +23,6 @@
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('Publisher')" align="center" width="100px">
-          <template slot-scope="{row}">
-            <span>{{ row.creator.name }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column :label="$t('Importance')" align="center" width="150px">
-          <template slot-scope="{row}">
-            <el-rate v-model="row.importance" disabled />
-          </template>
-        </el-table-column>
-
         <el-table-column
           column-key="state"
           :filters="[
@@ -51,6 +39,12 @@
               size="small"
               :type="newsState[row.state].color"
             >{{ $t(newsState[row.state].name) }}</el-tag>
+          </template>
+        </el-table-column>
+
+        <el-table-column :label="$t('Publisher')" align="center" width="100px">
+          <template slot-scope="{row}">
+            <span>{{ row.creator.name }}</span>
           </template>
         </el-table-column>
 
@@ -74,7 +68,7 @@
 
         <el-table-column :label="$t('Title')" align="center" min-width="300px">
           <template slot-scope="{row}">
-            <span>{{ row.title }}</span>
+            <span class="hide-overflow">{{ row.title }}</span>
           </template>
         </el-table-column>
 
@@ -107,6 +101,12 @@
         >
           <template slot-scope="{row}">
             <span>{{ $t(languageTypes[row.language].name) }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column :label="$t('Importance')" align="center" width="150px">
+          <template slot-scope="{row}">
+            <el-rate v-model="row.importance" disabled />
           </template>
         </el-table-column>
 

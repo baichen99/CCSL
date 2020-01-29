@@ -19,12 +19,12 @@ type NewsController struct {
 
 // BeforeActivation will register routes for controllers
 func (c *NewsController) BeforeActivation(app mvc.BeforeActivation) {
-	app.Handle("GET", "/", "GetNewsList")
-	app.Handle("GET", "/{id: string}", "GetNews")
+	app.Handle(iris.MethodGet, "/", "GetNewsList")
+	app.Handle(iris.MethodGet, "/{id: string}", "GetNews")
 	app.Router().Use(middlewares.CheckToken, middlewares.CheckUserRole([]string{configs.RoleAdminUser}))
-	app.Handle("POST", "/", "CreateNews")
-	app.Handle("PUT", "/{id: string}", "UpdateNews")
-	app.Handle("DELETE", "/{id: string}", "DeleteNews")
+	app.Handle(iris.MethodPost, "/", "CreateNews")
+	app.Handle(iris.MethodPut, "/{id: string}", "UpdateNews")
+	app.Handle(iris.MethodDelete, "/{id: string}", "DeleteNews")
 }
 
 // GetNewsList returns news list

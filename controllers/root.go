@@ -3,6 +3,7 @@ package controllers
 import (
 	"io/ioutil"
 	"os"
+	"path"
 	"strings"
 
 	"github.com/kataras/iris/v12"
@@ -22,7 +23,7 @@ func (c *RootController) Get() {
 	if err != nil {
 		panic(err)
 	}
-	versionFile := workPath + "/configs/.version"
+	versionFile := path.Join(workPath, "configs", ".version")
 	ver, _ := ioutil.ReadFile(versionFile)
 	ip := c.Context.GetHeader("X-Real-IP")
 	c.Context.JSON(iris.Map{

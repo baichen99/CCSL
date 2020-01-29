@@ -30,18 +30,13 @@
 
         <el-table-column :label="$t('MessageContent')" align="center" min-width="100px">
           <template slot-scope="{row}">
-            <span class="message">{{ row.message }}</span>
+            <span class="hide-overflow">{{ row.message }}</span>
           </template>
         </el-table-column>
 
         <el-table-column :label="$t('Action')" align="center" width="200px" fixed="right">
           <template slot-scope="{row}">
-            <el-button
-              type="primary"
-              size="mini"
-              plain
-              @click="handleView(row)"
-            >{{ $t("View") }}</el-button>
+            <el-button type="primary" size="mini" plain @click="handleView(row)">{{ $t("View") }}</el-button>
             <el-button
               type="danger"
               size="mini"
@@ -105,6 +100,7 @@ export default {
         });
     },
     handleShow() {
+      this.getList();
       this.show = true;
     },
     handleView(data) {
@@ -130,11 +126,5 @@ export default {
 .el-pagination {
   text-align: center;
   margin: 20px auto;
-}
-
-.message {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
 }
 </style>

@@ -19,12 +19,12 @@ type CarouselController struct {
 
 // BeforeActivation will register routes for controllers
 func (c *CarouselController) BeforeActivation(app mvc.BeforeActivation) {
-	app.Handle("GET", "/", "GetCarouselsList")
-	app.Handle("GET", "/{id: string}", "GetCarousel")
+	app.Handle(iris.MethodGet, "/", "GetCarouselsList")
+	app.Handle(iris.MethodGet, "/{id: string}", "GetCarousel")
 	app.Router().Use(middlewares.CheckToken, middlewares.CheckUserRole([]string{configs.RoleAdminUser}))
-	app.Handle("POST", "/", "CreateCarousel")
-	app.Handle("PUT", "/{id: string}", "UpdateCarousel")
-	app.Handle("DELETE", "/{id: string}", "DeleteCarousel")
+	app.Handle(iris.MethodPost, "/", "CreateCarousel")
+	app.Handle(iris.MethodPut, "/{id: string}", "UpdateCarousel")
+	app.Handle(iris.MethodDelete, "/{id: string}", "DeleteCarousel")
 }
 
 // GetCarouselsList GET

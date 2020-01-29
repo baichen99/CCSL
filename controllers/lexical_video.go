@@ -21,12 +21,12 @@ type VideoController struct {
 // BeforeActivation will register routes for controllers
 func (c *VideoController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Router().Use(middlewares.CheckToken)
-	app.Handle("GET", "/", "GetVideosList", middlewares.CheckRateLimit(3))
-	app.Handle("GET", "/{id: string}", "GetVideo", middlewares.CheckRateLimit(3))
+	app.Handle(iris.MethodGet, "/", "GetVideosList", middlewares.CheckRateLimit(3))
+	app.Handle(iris.MethodGet, "/{id: string}", "GetVideo", middlewares.CheckRateLimit(3))
 	app.Router().Use(middlewares.CheckUserRole([]string{configs.RoleAdminUser}))
-	app.Handle("POST", "/", "CreateVideo")
-	app.Handle("PUT", "/{id: string}", "UpdateVideo")
-	app.Handle("DELETE", "/{id: string}", "DeleteVideo")
+	app.Handle(iris.MethodPost, "/", "CreateVideo")
+	app.Handle(iris.MethodPut, "/{id: string}", "UpdateVideo")
+	app.Handle(iris.MethodDelete, "/{id: string}", "DeleteVideo")
 }
 
 // GetVideosList GET /lexical/videos

@@ -35,6 +35,12 @@ html {
   border-radius: 2px;
 }
 
+.hide-overflow {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 #app {
   height: 100%;
 }

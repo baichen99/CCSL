@@ -22,15 +22,15 @@ type SystemController struct {
 
 // BeforeActivation register routes
 func (c *SystemController) BeforeActivation(app mvc.BeforeActivation) {
-	app.Handle("POST", "/error", "JsErrorLogger")
-	app.Handle("GET", "/cities", "GetCitiesList")
-	app.Handle("GET", "/info/{key: string}", "GetAppInfo")
+	app.Handle(iris.MethodPost, "/error", "JsErrorLogger")
+	app.Handle(iris.MethodGet, "/cities", "GetCitiesList")
+	app.Handle(iris.MethodGet, "/info/{key: string}", "GetAppInfo")
 	app.Router().Use(middlewares.CheckToken, middlewares.CheckUserRole([]string{configs.RoleAdminUser}))
-	app.Handle("PUT", "/info/{key: string}", "UpdateAppInfo")
+	app.Handle(iris.MethodPut, "/info/{key: string}", "UpdateAppInfo")
 	app.Router().Use(middlewares.CheckUserRole([]string{configs.RoleSuperUser}))
-	app.Handle("GET", "/error", "GetJsErrorList")
-	app.Handle("GET", "/login", "GetLoginHistoryList")
-	app.Handle("GET", "/dump", "DumpDatabase")
+	app.Handle(iris.MethodGet, "/error", "GetJsErrorList")
+	app.Handle(iris.MethodGet, "/login", "GetLoginHistoryList")
+	app.Handle(iris.MethodGet, "/dump", "DumpDatabase")
 }
 
 // GetAppInfo GET /systems/info/xxx

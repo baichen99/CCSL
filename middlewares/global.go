@@ -26,6 +26,7 @@ var (
 	CorsConf = cors.Options{
 		AllowedOrigins:   configs.Conf.App.CORS,
 		AllowCredentials: configs.Conf.App.AllowCookie,
+		AllowedMethods:   []string{iris.MethodOptions, iris.MethodGet, iris.MethodPost, iris.MethodPut, iris.MethodDelete},
 	}
 )
 

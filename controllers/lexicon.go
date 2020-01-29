@@ -19,12 +19,12 @@ type LexiconController struct {
 // BeforeActivation will register routes for controllers
 func (c *LexiconController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Router().Use(middlewares.CheckToken)
-	app.Handle("GET", "/", "GetWordsList")
-	app.Handle("GET", "/{id: string}", "GetWord")
+	app.Handle(iris.MethodGet, "/", "GetWordsList")
+	app.Handle(iris.MethodGet, "/{id: string}", "GetWord")
 	app.Router().Use(middlewares.CheckUserRole([]string{configs.RoleAdminUser}))
-	app.Handle("POST", "/", "CreateWord")
-	app.Handle("PUT", "/{id: string}", "UpdateWord")
-	app.Handle("DELETE", "/{id: string}", "DeleteWord")
+	app.Handle(iris.MethodPost, "/", "CreateWord")
+	app.Handle(iris.MethodPut, "/{id: string}", "UpdateWord")
+	app.Handle(iris.MethodDelete, "/{id: string}", "DeleteWord")
 }
 
 // GetWordsList GET /lexicon

@@ -19,12 +19,12 @@ type PerformerController struct {
 // BeforeActivation will register routes for controllers
 func (c *PerformerController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Router().Use(middlewares.CheckToken)
-	app.Handle("GET", "/", "GetPerformersList")
-	app.Handle("GET", "/{id: string}", "GetPerformer")
+	app.Handle(iris.MethodGet, "/", "GetPerformersList")
+	app.Handle(iris.MethodGet, "/{id: string}", "GetPerformer")
 	app.Router().Use(middlewares.CheckUserRole([]string{configs.RoleAdminUser}))
-	app.Handle("POST", "/", "CreatePerformer")
-	app.Handle("PUT", "/{id: string}", "UpdatePerformer")
-	app.Handle("DELETE", "/{id: string}", "DeletePerformer")
+	app.Handle(iris.MethodPost, "/", "CreatePerformer")
+	app.Handle(iris.MethodPut, "/{id: string}", "UpdatePerformer")
+	app.Handle(iris.MethodDelete, "/{id: string}", "DeletePerformer")
 }
 
 // GetPerformersList GET /performers
