@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"ccsl/configs"
 	"ccsl/middlewares"
 	"ccsl/services"
 	"ccsl/utils"
@@ -20,7 +21,7 @@ type CarouselController struct {
 func (c *CarouselController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Handle("GET", "/", "GetCarouselsList")
 	app.Handle("GET", "/{id: string}", "GetCarousel")
-	app.Router().Use(middlewares.CheckJWTToken, middlewares.CheckAdmin)
+	app.Router().Use(middlewares.CheckToken, middlewares.CheckUserRole([]string{configs.RoleAdminUser}))
 	app.Handle("POST", "/", "CreateCarousel")
 	app.Handle("PUT", "/{id: string}", "UpdateCarousel")
 	app.Handle("DELETE", "/{id: string}", "DeleteCarousel")

@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"ccsl/configs"
 	"ccsl/middlewares"
 	"ccsl/services"
 	"ccsl/utils"
@@ -19,7 +20,7 @@ type MemberController struct {
 func (c *MemberController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Handle("GET", "/", "GetMemberList")
 	app.Handle("GET", "/{id: string}", "GetMember")
-	app.Router().Use(middlewares.CheckJWTToken, middlewares.CheckAdmin)
+	app.Router().Use(middlewares.CheckToken, middlewares.CheckUserRole([]string{configs.RoleAdminUser}))
 	app.Handle("POST", "/", "CreateMember")
 	app.Handle("PUT", "/{id: string}", "UpdateMember")
 	app.Handle("DELETE", "/{id: string}", "DeleteMember")

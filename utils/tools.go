@@ -14,6 +14,19 @@ import (
 	"github.com/kataras/iris/v12"
 )
 
+// StringsContains check if string array contains a value
+// If contains, return the first index, else return -1
+func StringsContains(array []string, val string) (index int) {
+	index = -1
+	for i := 0; i < len(array); i++ {
+		if array[i] == val {
+			index = i
+			return
+		}
+	}
+	return
+}
+
 // LogInfo logs information about what is happening on the server
 func LogInfo(context iris.Context, info string) {
 	_, fileName, lineNumber, ok := runtime.Caller(1)

@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"ccsl/configs"
 	"ccsl/middlewares"
 	"ccsl/services"
 	"ccsl/utils"
@@ -17,10 +18,10 @@ type LexiconController struct {
 
 // BeforeActivation will register routes for controllers
 func (c *LexiconController) BeforeActivation(app mvc.BeforeActivation) {
-	app.Router().Use(middlewares.CheckJWTToken)
+	app.Router().Use(middlewares.CheckToken)
 	app.Handle("GET", "/", "GetWordsList")
 	app.Handle("GET", "/{id: string}", "GetWord")
-	app.Router().Use(middlewares.CheckAdmin)
+	app.Router().Use(middlewares.CheckUserRole([]string{configs.RoleAdminUser}))
 	app.Handle("POST", "/", "CreateWord")
 	app.Handle("PUT", "/{id: string}", "UpdateWord")
 	app.Handle("DELETE", "/{id: string}", "DeleteWord")

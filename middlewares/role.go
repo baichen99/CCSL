@@ -11,7 +11,7 @@ import (
 )
 
 type roleConfig struct {
-	Role string
+	Roles []string
 }
 
 // RoleMiddleware middleware used to check the JWT's role
@@ -33,7 +33,8 @@ func NewRoleMiddleware(cfg ...roleConfig) *RoleMiddleware {
 // CheckUserRole will check the user role
 func (m *RoleMiddleware) CheckUserRole(ctx context.Context) (err error) {
 	_, role := GetJWTParams(ctx)
-	if role != configs.RoleSuperUser && role != m.roleConfig.Role {
+	// If user role is not super user and not defined in role config
+	if role != configs.RoleSuperUser && utils.StringsContains(m.roleConfig.Roles, role) == -1 {
 		err = fmt.Errorf("role '%s' does not have sufficient permissions", role)
 		utils.SetError(ctx, iris.StatusForbidden, err.Error(), errors.New("RoleError"))
 		return

@@ -20,7 +20,7 @@ type NotificationController struct {
 
 // BeforeActivation will register routes for controllers
 func (c *NotificationController) BeforeActivation(app mvc.BeforeActivation) {
-	app.Router().Use(middlewares.CheckJWTToken)
+	app.Router().Use(middlewares.CheckToken)
 	app.Handle("GET", "/", "GetNotificationList")
 	app.Handle("GET", "/{id: string}", "GetNotification")
 	app.Handle("DELETE", "/{id: string}", "DeleteNotification")

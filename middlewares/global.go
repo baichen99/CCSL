@@ -6,6 +6,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/iris-contrib/middleware/cors"
 	"github.com/kataras/iris/v12"
+	"github.com/kataras/iris/v12/context"
 	uuid "github.com/satori/go.uuid"
 )
 
@@ -28,21 +29,18 @@ var (
 	}
 )
 
-// CheckJWTToken is a user authorization middleware
-var CheckJWTToken = NewJwtMiddleware(JwtConf).Serve
+// CheckToken is a user authorization middleware, checks jwt token
+var CheckToken = NewJwtMiddleware(JwtConf).Serve
 
 // GetJWTParams returns JSON web token payload
 var GetJWTParams = NewJwtMiddleware(JwtConf).Get
 
-//CheckAdmin checks if user is admin or super
-var CheckAdmin = NewRoleMiddleware(roleConfig{
-	Role: configs.RoleAdminUser,
-}).Serve
-
-//CheckSuper checks if user is super
-var CheckSuper = NewRoleMiddleware(roleConfig{
-	Role: configs.RoleSuperUser,
-}).Serve
+// CheckUserRole checks user role with multiple role values
+func CheckUserRole(roles []string) func(ctx context.Context) {
+	return NewRoleMiddleware(roleConfig{
+		Roles: roles,
+	}).Serve
+}
 
 // BeforeHandleRequest is a global middleware before handle a request
 func BeforeHandleRequest(ctx iris.Context) {
@@ -56,5 +54,5 @@ func BeforeHandleRequest(ctx iris.Context) {
 func AfterHandleRequest(ctx iris.Context) {
 	defer ctx.Next()
 	requestID := ctx.Values().Get("RequestID").(string)
-	ctx.Application().Logger().Infof("=====================REQUEST " + requestID + " END====================")
+	ctx.Application().Logger().Infof("=====================REQUEST " + requestID + " END======================")
 }

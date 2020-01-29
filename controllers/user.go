@@ -23,12 +23,13 @@ type UserController struct {
 
 // BeforeActivation will register routes for controllers
 func (c *UserController) BeforeActivation(app mvc.BeforeActivation) {
-	app.Handle("POST", "/login", "UserLogin", middlewares.CheckRateLimit(2))
-	app.Router().Use(middlewares.CheckJWTToken)
-	app.Handle("GET", "/refresh", "RefreshToken", middlewares.CheckRateLimit(2))
+	app.Router().Use(middlewares.CheckRateLimit(2))
+	app.Handle("POST", "/login", "UserLogin")
+	app.Router().Use(middlewares.CheckToken)
+	app.Handle("GET", "/refresh", "RefreshToken")
 	app.Handle("GET", "/{id: string}", "GetUser")
 	app.Handle("PUT", "/{id: string}", "UpdateUser")
-	app.Router().Use(middlewares.CheckSuper)
+	app.Router().Use(middlewares.CheckUserRole([]string{configs.RoleSuperUser}))
 	app.Handle("GET", "/", "GetUsersList")
 	app.Handle("POST", "/", "CreateUser")
 	app.Handle("DELETE", "/{id: string}", "DeleteUser")

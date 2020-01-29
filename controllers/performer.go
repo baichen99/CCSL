@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"ccsl/configs"
 	"ccsl/middlewares"
 	"ccsl/services"
 	"ccsl/utils"
@@ -17,10 +18,10 @@ type PerformerController struct {
 
 // BeforeActivation will register routes for controllers
 func (c *PerformerController) BeforeActivation(app mvc.BeforeActivation) {
-	app.Router().Use(middlewares.CheckJWTToken)
+	app.Router().Use(middlewares.CheckToken)
 	app.Handle("GET", "/", "GetPerformersList")
 	app.Handle("GET", "/{id: string}", "GetPerformer")
-	app.Router().Use(middlewares.CheckAdmin)
+	app.Router().Use(middlewares.CheckUserRole([]string{configs.RoleAdminUser}))
 	app.Handle("POST", "/", "CreatePerformer")
 	app.Handle("PUT", "/{id: string}", "UpdatePerformer")
 	app.Handle("DELETE", "/{id: string}", "DeletePerformer")

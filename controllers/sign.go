@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"ccsl/configs"
 	"ccsl/middlewares"
 	"ccsl/services"
 	"ccsl/utils"
@@ -17,10 +18,10 @@ type SignController struct {
 
 // BeforeActivation register routes
 func (c *SignController) BeforeActivation(app mvc.BeforeActivation) {
-	app.Router().Use(middlewares.CheckJWTToken)
+	app.Router().Use(middlewares.CheckToken)
 	app.Handle("GET", "/", "GetSignsList")
 	app.Handle("GET", "/{id: string}", "GetSign")
-	app.Router().Use(middlewares.CheckAdmin)
+	app.Router().Use(middlewares.CheckUserRole([]string{configs.RoleAdminUser}))
 	app.Handle("POST", "/", "CreateSign")
 	app.Handle("PUT", "/{id: string}", "UpdateSign")
 	app.Handle("DELETE", "/{id: string}", "DeleteSign")

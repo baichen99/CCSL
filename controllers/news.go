@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"ccsl/configs"
 	"ccsl/middlewares"
 	"ccsl/services"
 	"ccsl/utils"
@@ -20,7 +21,7 @@ type NewsController struct {
 func (c *NewsController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Handle("GET", "/", "GetNewsList")
 	app.Handle("GET", "/{id: string}", "GetNews")
-	app.Router().Use(middlewares.CheckJWTToken, middlewares.CheckAdmin)
+	app.Router().Use(middlewares.CheckToken, middlewares.CheckUserRole([]string{configs.RoleAdminUser}))
 	app.Handle("POST", "/", "CreateNews")
 	app.Handle("PUT", "/{id: string}", "UpdateNews")
 	app.Handle("DELETE", "/{id: string}", "DeleteNews")

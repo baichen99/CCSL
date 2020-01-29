@@ -26,10 +26,9 @@ const maxSize = 5 << 20 // 5MB
 
 // BeforeActivation will register routes for controllers
 func (c *FileController) BeforeActivation(app mvc.BeforeActivation) {
-	app.Router().Use(middlewares.CheckJWTToken, iris.LimitRequestBodySize(maxSize+1<<20))
+	app.Router().Use(middlewares.CheckToken, iris.LimitRequestBodySize(maxSize+1<<20))
 	app.Handle("POST", "/", "UploadFile")
 	// app.Handle("POST", "/replace", "ResizeAndReplaceScreen", middlewares.CheckJWTToken, iris.LimitRequestBodySize(maxSize+1<<20))
-
 }
 
 // UploadFile saves file and returns file name
