@@ -405,8 +405,8 @@
                             "learner"
                         ],
                         "type": "string",
-                        "description": "filter type of user",
-                        "name": "userType",
+                        "description": "filter role of user",
+                        "name": "role",
                         "in": "query"
                     },
                     {
@@ -695,8 +695,8 @@
             "type": "object",
             "required": [
                 "name",
+                "roles",
                 "state",
-                "userType",
                 "username"
             ],
             "properties": {
@@ -712,6 +712,21 @@
                     "type": "string",
                     "example": "p@ssw0rd"
                 },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "enum": [
+                            "super",
+                            "admin",
+                            "user",
+                            "learner"
+                        ]
+                    },
+                    "example": [
+                        "admin"
+                    ]
+                },
                 "state": {
                     "type": "string",
                     "enum": [
@@ -719,16 +734,6 @@
                         "inactive"
                     ],
                     "example": "active"
-                },
-                "userType": {
-                    "type": "string",
-                    "enum": [
-                        "super",
-                        "admin",
-                        "user",
-                        "learner"
-                    ],
-                    "example": "admin"
                 },
                 "username": {
                     "type": "string",
@@ -747,6 +752,21 @@
                     "type": "string",
                     "example": "Adrian Duan"
                 },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "enum": [
+                            "super",
+                            "admin",
+                            "user",
+                            "learner"
+                        ]
+                    },
+                    "example": [
+                        "admin"
+                    ]
+                },
                 "state": {
                     "type": "string",
                     "enum": [
@@ -754,16 +774,6 @@
                         "inactive"
                     ],
                     "example": "active"
-                },
-                "userType": {
-                    "type": "string",
-                    "enum": [
-                        "super",
-                        "admin",
-                        "user",
-                        "learner"
-                    ],
-                    "example": "admin"
                 },
                 "username": {
                     "type": "string",
@@ -890,9 +900,19 @@
                     "example": "550e8400-e29b-41d4-a716-446655440000"
                 },
                 "name": {
-                    "description": "姓名",
+                    "description": "姓名                                                                                     // 用户角色",
                     "type": "string",
                     "example": "Adrian Duan"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "super",
+                        "admin"
+                    ]
                 },
                 "state": {
                     "description": "状态",
@@ -902,11 +922,6 @@
                 "updatedAt": {
                     "type": "string",
                     "example": "2019-10-21T09:20:39.943618Z"
-                },
-                "userType": {
-                    "description": "用户角色",
-                    "type": "string",
-                    "example": "admin"
                 },
                 "username": {
                     "description": "账号（一卡通或者邮箱）",

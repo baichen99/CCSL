@@ -48,10 +48,10 @@ func (c *UserController) BeforeActivation(app mvc.BeforeActivation) {
 // @Param limit 	query int    false  "limit number" 				mininum(0)
 // @Param order 	query string false	"order by field"
 // @Param orderBy 	query string false	"order by asc or desc" 		enums(asc, desc)
-// @Param userType 	query string false	"filter type of user"		enums(super, admin, user, learner)
+// @Param role	 	query string false	"filter role of user"		 enums(super, admin, user, learner)
 // @Param name 		query string false 	"search name of user"
 // @Param username 	query string false 	"search username of user"
-// @Param state 	query string false 	"filter state of user" 		enums(active, inactive)
+// @Param state 	query string false 	"filter state of user" 		 enums(active, inactive)
 // @Success 200 {object} controllers.GetUsersListResponse
 // @Failure 400 {object} controllers.ErrorResponse
 // @Failure 401 {object} controllers.ErrorResponse
@@ -64,16 +64,16 @@ func (c *UserController) GetUsersList() {
 		utils.SetError(c.Context, iris.StatusBadRequest, "UserController::GetUsersList", errParams)
 		return
 	}
-	userType := c.Context.URLParamDefault("userType", "")
+	role := c.Context.URLParamDefault("role", "")
 	name := c.Context.URLParamDefault("name", "")
 	username := c.Context.URLParamDefault("username", "")
 	state := c.Context.URLParamDefault("state", "")
 	listParameters := utils.GetUserListParameters{
 		GetListParameters: listParams,
-		UserType:          userType,
 		Username:          username,
 		Name:              name,
 		State:             state,
+		Role:              role,
 	}
 	users, count, err := c.UserService.GetUsersList(listParameters)
 	if err != nil {
@@ -150,7 +150,7 @@ func (c *UserController) GetUser() {
 	// Only super admin and user
 	tokenUser, tokenRole := middlewares.GetJWTParams(c.Context)
 
-	if !(tokenRole == configs.RoleSuperUser || tokenUser == userID) {
+	if !(middlewares.HasPermisson(tokenRole, configs.RoleSuperUser) || tokenUser == userID) {
 		utils.SetError(c.Context, iris.StatusForbidden, "UserController::GetUser", errRole)
 		return
 	}
@@ -201,7 +201,13 @@ func (c *UserController) UpdateUser() {
 
 	// Only super admin and user
 	tokenUser, tokenRole := middlewares.GetJWTParams(c.Context)
-	if tokenRole != configs.RoleSuperUser && tokenUser != userID {
+	if !(middlewares.HasPermisson(tokenRole, configs.RoleSuperUser) || tokenUser == userID) {
+		utils.SetError(c.Context, iris.StatusForbidden, "UserController::UpdateUser", errRole)
+		return
+	}
+
+	// Only super user can change user role
+	if form.Roles != nil && !middlewares.HasPermisson(tokenRole, configs.RoleSuperUser) {
 		utils.SetError(c.Context, iris.StatusForbidden, "UserController::UpdateUser", errRole)
 		return
 	}
@@ -278,7 +284,7 @@ func (c *UserController) UserLogin() {
 			return
 		}
 	}
-	token, err := middlewares.SignJWTToken(user.ID, user.UserType)
+	token, err := middlewares.SignJWTToken(user.ID, user.Roles)
 	if err != nil {
 		utils.SetError(c.Context, iris.StatusUnauthorized, "UserController::UserLogin::SignToken", errAuth)
 		return
@@ -324,7 +330,7 @@ func (c *UserController) UpdateLoginHistory(userID uuid.UUID) {
 		lastLogin := loginHistories[0]
 		lastLoginTime := lastLogin.CreatedAt.Local().Format("2006-01-02 15:04")
 		lastLoginAddress := fmt.Sprintf("%s - %s - %s", lastLogin.Country, lastLogin.RegionName, lastLogin.City)
-		notice := fmt.Sprintf("您的账号上次于 %s 在 %s 登录，IP地址为%s。如果不是您本人登录，请立即修改您的登录账号及密码。", lastLoginTime, lastLoginAddress, info.IP)
+		notice := fmt.Sprintf("您的账号上次于 %s 在 %s 登录，IP地址为 %s。如果不是您本人登录，请立即修改您的登录账号及密码。", lastLoginTime, lastLoginAddress, info.IP)
 		message := models.Notification{
 			UserID:  userID,
 			Title:   "登录通知",

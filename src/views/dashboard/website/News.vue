@@ -42,11 +42,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('Publisher')" align="center" width="100px">
-          <template slot-scope="{row}">
-            <span>{{ row.creator.name }}</span>
-          </template>
-        </el-table-column>
+        <el-table-column :label="$t('Publisher')" align="center" width="100px" prop="creator.name" />
 
         <el-table-column
           column-key="column"
@@ -66,11 +62,13 @@
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('Title')" align="center" min-width="300px">
-          <template slot-scope="{row}">
-            <span class="hide-overflow">{{ row.title }}</span>
-          </template>
-        </el-table-column>
+        <el-table-column
+          :label="$t('Title')"
+          align="center"
+          min-width="300px"
+          prop="title"
+          show-overflow-tooltip
+        />
 
         <el-table-column
           column-key="type"

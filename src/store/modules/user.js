@@ -30,8 +30,8 @@ const mutations = {
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar;
   },
-  SET_ROLES: (state, role) => {
-    state.roles = role;
+  SET_ROLES: (state, roles) => {
+    state.roles = roles;
   },
   SET_USERNAME: (state, username) => {
     state.username = username;
@@ -56,7 +56,7 @@ const actions = {
               }
               commit(SET_ID, data.id);
               commit(SET_NAME, data.name);
-              commit(SET_ROLES, [data.userType]);
+              commit(SET_ROLES, data.roles);
               commit(SET_USERNAME, data.username);
               commit(SET_AVATAR, data.avatar);
               resolve(data);
@@ -92,7 +92,7 @@ const actions = {
           const { data } = res;
           commit(SET_ID, data.id);
           commit(SET_NAME, data.name);
-          commit(SET_ROLES, [data.userType]);
+          commit(SET_ROLES, data.roles);
           commit(SET_USERNAME, data.username);
           commit(SET_AVATAR, data.avatar);
           resolve(res.data);

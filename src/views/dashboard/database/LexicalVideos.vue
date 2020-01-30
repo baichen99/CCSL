@@ -67,7 +67,12 @@
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('Chinese')" align="center" min-width="150px">
+        <el-table-column
+          :label="$t('Chinese')"
+          align="center"
+          min-width="150px"
+          show-overflow-tooltip
+        >
           <template slot-scope="{row}">
             <span
               class="word-sup"
@@ -93,7 +98,12 @@
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('Morpheme')" align="center" min-width="160px">
+        <el-table-column
+          :label="$t('Morpheme')"
+          align="center"
+          min-width="200px"
+          show-overflow-tooltip
+        >
           <template slot-scope="{row}">
             <div v-if="row.morpheme.length > 0">
               <el-tag
@@ -175,9 +185,9 @@
 import lodash from "lodash";
 import { mapGetters } from "vuex";
 import LexicalVideoForm from "@/views/dashboard/form/LexicalVideoForm";
-import CitySelector from "@/components/form/CitySelector.vue";
-import SignSelector from "@/components/form/SignSelector.vue";
-import MorphemesInput from "@/components/form/MorphemesInput.vue";
+import CitySelector from "@/components/form/CitySelector";
+import SignSelector from "@/components/form/SignSelector";
+import MorphemesInput from "@/components/form/MorphemesInput";
 import listMixin from "@/views/dashboard/listMixin";
 import {
   GetLexicalVideosList,

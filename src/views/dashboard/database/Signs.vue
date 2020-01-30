@@ -33,11 +33,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('SignName')" align="center">
-          <template slot-scope="{row}">
-            <span>{{ row.name }}</span>
-          </template>
-        </el-table-column>
+        <el-table-column :label="$t('SignName')" align="center" prop="name" />
 
         <el-table-column :label="$t('SignImage')" align="center">
           <template slot-scope="{row}">

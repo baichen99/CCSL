@@ -1,14 +1,29 @@
 <template>
   <div @click="handleShow">
     <svg-icon icon-class="message" />
+    <el-badge v-if="unread>0" :value="unread" />
+
     <el-dialog
       :title="$t('Notifications')"
       :append-to-body="true"
       :center="true"
       :visible.sync="show"
     >
-      <el-table v-loading="loading" :data="list" border>
-        <el-table-column fixed :label="$t('CreatedAt')" align="center" width="200px">
+      <el-table v-loading="loading" :data="list" @expand-change="handleView">
+        <el-table-column type="expand">
+          <template slot-scope="{row}">
+            <el-form label-position="left" inline class="demo-table-expand">
+              <el-form-item :label="$t('Title')">
+                <span>{{ row.title }}</span>
+              </el-form-item>
+              <el-form-item :label="$t('MessageContent')">
+                <span>{{ row.message }}</span>
+              </el-form-item>
+            </el-form>
+          </template>
+        </el-table-column>
+
+        <el-table-column :label="$t('CreatedAt')" align="center" width="200px">
           <template slot-scope="{row}">
             <span>{{ $d(new Date(row.createdAt), 'long') }}</span>
           </template>
@@ -34,9 +49,8 @@
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('Action')" align="center" width="200px" fixed="right">
+        <el-table-column :label="$t('Action')" align="center" width="100px" fixed="right">
           <template slot-scope="{row}">
-            <el-button type="primary" size="mini" plain @click="handleView(row)">{{ $t("View") }}</el-button>
             <el-button
               type="danger"
               size="mini"
@@ -76,6 +90,11 @@ export default {
     },
     total: 0
   }),
+  computed: {
+    unread() {
+      return this.list.filter(item => item.readAt === null).length;
+    }
+  },
   watch: {
     "params.page"() {
       this.getList();
@@ -105,7 +124,6 @@ export default {
     },
     handleView(data) {
       data.readAt = new Date().toISOString();
-      this.$alert(data.message, data.title);
       GetNotification(data.id);
     },
     handleDelete(id) {
@@ -126,5 +144,12 @@ export default {
 .el-pagination {
   text-align: center;
   margin: 20px auto;
+}
+
+.el-badge {
+  float: right;
+  position: relative;
+  top: -5px;
+  right: 5px;
 }
 </style>

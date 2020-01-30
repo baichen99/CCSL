@@ -22,23 +22,19 @@
 
     <div class="table-content">
       <el-table v-loading="loading" :data="list" stripe border @filter-change="handleFilter">
-        <el-table-column :label="$t('CreatedAt')" align="center">
+        <el-table-column :label="$t('CreatedAt')" align="center" width="200px">
           <template slot-scope="{row}">
             <span>{{ $d(new Date(row.createdAt), 'long') }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('UpdatedAt')" align="center">
+        <el-table-column :label="$t('UpdatedAt')" align="center" width="200px">
           <template slot-scope="{row}">
             <span>{{ $d(new Date(row.updatedAt), 'long') }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('Name')" align="center">
-          <template slot-scope="{row}">
-            <span>{{ row.name }}</span>
-          </template>
-        </el-table-column>
+        <el-table-column :label="$t('Name')" align="center" prop="name" />
 
         <el-table-column
           column-key="gender"
@@ -56,9 +52,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('Region')" align="center">
+        <el-table-column :label="$t('Region')" align="center" min-width="200px">
           <template slot-scope="{row}">
-            <span>{{ row.regionID | getRegionName }}</span>
+            <span class="hide-overflow">{{ row.regionID | getRegionName }}</span>
           </template>
         </el-table-column>
 

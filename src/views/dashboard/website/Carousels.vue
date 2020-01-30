@@ -29,12 +29,6 @@
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('Importance')" align="center" width="150px">
-          <template slot-scope="{row}">
-            <el-rate v-model="row.importance" disabled />
-          </template>
-        </el-table-column>
-
         <el-table-column
           column-key="state"
           :filters="[
@@ -55,19 +49,20 @@
         </el-table-column>
 
         <el-table-column
-          v-if="$i18n.locale==='en-US'"
           :label="$t('Title')"
           align="center"
           min-width="300px"
+          show-overflow-tooltip
         >
           <template slot-scope="{row}">
-            <span>{{ row.titleEn }}</span>
+            <span v-if="$i18n.locale==='en-US'">{{ row.titleEn }}</span>
+            <span v-else>{{ row.titleZh }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column v-else :label="$t('Title')" align="center" min-width="300px">
+        <el-table-column :label="$t('Importance')" align="center" width="150px">
           <template slot-scope="{row}">
-            <span>{{ row.titleZh }}</span>
+            <el-rate v-model="row.importance" disabled />
           </template>
         </el-table-column>
 

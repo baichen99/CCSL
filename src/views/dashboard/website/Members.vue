@@ -28,7 +28,12 @@
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('Employer')" align="center" min-width="300px">
+        <el-table-column
+          :label="$t('Employer')"
+          align="center"
+          min-width="300px"
+          show-overflow-tooltip
+        >
           <template slot-scope="{row}">
             <span v-if="$i18n.locale==='en-US'">{{ row.employerEn }}</span>
             <span v-else>{{ row.employerZh }}</span>

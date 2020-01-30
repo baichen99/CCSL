@@ -33,17 +33,27 @@ type JwtMiddleware struct {
 	jwtConfig jwtConfig
 }
 
+const (
+	TokenIssuer     = "iss"
+	TokenIssuedAt   = "iat"
+	TokenNotBefore  = "nbf"
+	TokenID         = "jti"
+	TokenExpiration = "exp"
+	TokenUser       = "user"
+	TokenRole       = "role"
+)
+
 // SignJWTToken is used for sign a JWT Token for clients
-func SignJWTToken(userID uuid.UUID, role string) (string, error) {
+func SignJWTToken(userID uuid.UUID, roles []string) (string, error) {
 	tokenID := uuid.NewV4()
 	payload := jwt.NewWithClaims(jwt.SigningMethodES512, jwt.MapClaims{
-		"iss":  configs.Conf.App.Name,                                                          // Issuer
-		"iat":  time.Now().Unix(),                                                              // Issued At
-		"nbf":  time.Now().Unix(),                                                              // Not Before
-		"jti":  tokenID,                                                                        // JWT Token ID
-		"exp":  time.Now().Add(time.Hour * time.Duration(configs.Conf.JWT.ExpireHours)).Unix(), // Expiration Time
-		"user": userID.String(),                                                                // UserID
-		"role": role,                                                                           // Role of User: Admin/User/etc...
+		TokenIssuer:     configs.Conf.App.Name,
+		TokenIssuedAt:   time.Now().Unix(),
+		TokenNotBefore:  time.Now().Unix(),
+		TokenID:         tokenID,
+		TokenExpiration: time.Now().Add(time.Hour * time.Duration(configs.Conf.JWT.ExpireHours)).Unix(),
+		TokenUser:       userID.String(),
+		TokenRole:       roles,
 	})
 	key, _ := jwt.ParseECPrivateKeyFromPEM([]byte(configs.Conf.JWT.PrivateKey))
 	token, err := payload.SignedString(key)
@@ -73,15 +83,15 @@ func NewJwtMiddleware(cfg ...jwtConfig) *JwtMiddleware {
 	return &JwtMiddleware{jwtConfig: c}
 }
 
-func (m *JwtMiddleware) Get(ctx context.Context) (user string, role string) {
+func (m *JwtMiddleware) Get(ctx context.Context) (user string, role []string) {
 	headers := ctx.Values().Get(m.jwtConfig.ContextKey)
 	if headers == nil {
 		ctx.StopExecution()
 	} else {
 		payload, _ := headers.(*jwt.Token)
 		params, _ := payload.Claims.(jwt.MapClaims)
-		user = params["user"].(string)
-		role = params["role"].(string)
+		user, _ = params["user"].(string)
+		role, _ = params["role"].([]string)
 	}
 	return
 }

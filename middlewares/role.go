@@ -34,7 +34,7 @@ func NewRoleMiddleware(cfg ...roleConfig) *RoleMiddleware {
 func (m *RoleMiddleware) CheckUserRole(ctx context.Context) (err error) {
 	_, role := GetJWTParams(ctx)
 	// If user role is not super user and not defined in role config
-	if role != configs.RoleSuperUser && utils.StringsContains(m.roleConfig.Roles, role) == -1 {
+	if utils.StringsContains(role, configs.RoleSuperUser) == -1 && !utils.StringsUnion(m.roleConfig.Roles, role) {
 		err = fmt.Errorf("role '%s' does not have sufficient permissions", role)
 		utils.SetError(ctx, iris.StatusForbidden, err.Error(), errors.New("RoleError"))
 		return
@@ -49,4 +49,9 @@ func (m *RoleMiddleware) Serve(ctx context.Context) {
 		return
 	}
 	ctx.Next()
+}
+
+// HasPermisson checks if user has role
+func HasPermisson(userRoles []string, checkRole string) bool {
+	return utils.StringsContains(userRoles, checkRole) != -1
 }

@@ -135,10 +135,10 @@ type GetListParameters struct {
 // GetUserListParameters parameters for get users list queries
 type GetUserListParameters struct {
 	GetListParameters
-	UserType string
 	Username string
 	Name     string
 	State    string
+	Role     string
 }
 
 // GetLexiconListParameters parameters for get word list queries

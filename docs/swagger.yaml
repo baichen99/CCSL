@@ -91,27 +91,30 @@ definitions:
       password:
         example: p@ssw0rd
         type: string
+      roles:
+        example:
+        - admin
+        items:
+          enum:
+          - super
+          - admin
+          - user
+          - learner
+          type: string
+        type: array
       state:
         enum:
         - active
         - inactive
         example: active
         type: string
-      userType:
-        enum:
-        - super
-        - admin
-        - user
-        - learner
-        example: admin
-        type: string
       username:
         example: adrianduan@icloud.com
         type: string
     required:
     - name
+    - roles
     - state
-    - userType
     - username
     type: object
   controllers.UserUpdateForm:
@@ -122,19 +125,22 @@ definitions:
       name:
         example: Adrian Duan
         type: string
+      roles:
+        example:
+        - admin
+        items:
+          enum:
+          - super
+          - admin
+          - user
+          - learner
+          type: string
+        type: array
       state:
         enum:
         - active
         - inactive
         example: active
-        type: string
-      userType:
-        enum:
-        - super
-        - admin
-        - user
-        - learner
-        example: admin
         type: string
       username:
         example: adrianduan@icloud.com
@@ -229,19 +235,23 @@ definitions:
         format: uuid
         type: string
       name:
-        description: 姓名
+        description: 姓名                                                                                     //
+          用户角色
         example: Adrian Duan
         type: string
+      roles:
+        example:
+        - super
+        - admin
+        items:
+          type: string
+        type: array
       state:
         description: 状态
         example: active
         type: string
       updatedAt:
         example: "2019-10-21T09:20:39.943618Z"
-        type: string
-      userType:
-        description: 用户角色
-        example: admin
         type: string
       username:
         description: 账号（一卡通或者邮箱）
@@ -514,14 +524,14 @@ paths:
         in: query
         name: orderBy
         type: string
-      - description: filter type of user
+      - description: filter role of user
         enum:
         - super
         - admin
         - user
         - learner
         in: query
-        name: userType
+        name: role
         type: string
       - description: search name of user
         in: query

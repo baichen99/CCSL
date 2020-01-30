@@ -27,6 +27,20 @@ func StringsContains(array []string, val string) (index int) {
 	return
 }
 
+// StringsUnion check if string array a and string array b has union
+func StringsUnion(a []string, b []string) (hasUnion bool) {
+	hasUnion = false
+	for i := 0; i < len(a); i++ {
+		for j := 0; j < len(b); j++ {
+			if a[i] == b[j] {
+				hasUnion = true
+				return
+			}
+		}
+	}
+	return
+}
+
 // LogInfo logs information about what is happening on the server
 func LogInfo(context iris.Context, info string) {
 	_, fileName, lineNumber, ok := runtime.Caller(1)

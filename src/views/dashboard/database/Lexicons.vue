@@ -36,23 +36,27 @@
           :label="$t('Initial')"
           align="center"
           width="80px"
-        >
-          <template slot-scope="{row}">
-            <span>{{ row.initial }}</span>
-          </template>
-        </el-table-column>
+          prop="initial"
+        />
 
-        <el-table-column :label="$t('Chinese')" align="center" min-width="150px">
+        <el-table-column
+          :label="$t('Chinese')"
+          align="center"
+          min-width="150px"
+          show-overflow-tooltip
+        >
           <template slot-scope="{row}">
             <span class="word-sup" v-html="$options.filters.addNumberSup(row.chinese) " />
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('English')" align="center" min-width="150px">
-          <template slot-scope="{row}">
-            <span>{{ row.english }}</span>
-          </template>
-        </el-table-column>
+        <el-table-column
+          :label="$t('English')"
+          align="center"
+          min-width="150px"
+          prop="english"
+          show-overflow-tooltip
+        />
 
         <el-table-column :label="$t('PoS')" align="center" min-width="200px">
           <template slot-scope="{row}">
