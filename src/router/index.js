@@ -79,7 +79,7 @@ router.afterEach(() => {
 function hasPermission(allowRoles, userRoles) {
   for (let i in allowRoles) {
     for (let j in userRoles) {
-      if (i === j) {
+      if (allowRoles[i] === userRoles[j]) {
         return true;
       }
     }
