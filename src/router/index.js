@@ -42,9 +42,9 @@ router.beforeEach(async (to, from, next) => {
       if (hasRoles) {
         // 如果指定了用户权限，那么检查用户权限
         if (accessibleRoles) {
-          const userRole = store.getters.roles[0];
+          const userRole = store.getters.roles;
           const allowRole = to.meta.roles;
-          if (allowRole.includes(userRole)) {
+          if (hasPermission(allowRole, userRole)) {
             next();
           } else {
             next({ replace: true, name: "401Error" });
@@ -75,5 +75,16 @@ router.beforeEach(async (to, from, next) => {
 router.afterEach(() => {
   NProgress.done();
 });
+
+function hasPermission(allowRoles, userRoles) {
+  for (let i in allowRoles) {
+    for (let j in userRoles) {
+      if (i === j) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
 
 export default router;

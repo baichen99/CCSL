@@ -52,8 +52,9 @@
           :filters="[
             { text: $t('SuperAdmin'), value: 'super'}, 
             { text: $t('Admin'), value: 'admin'},
-            { text: $t('Learner'), value: 'learner'},
-            { text: $t('User'), value: 'user'},
+            { text: $t('Student'), value: 'student'},
+            { text: $t('Teacher'), value: 'teacher'},
+            { text: $t('DatabaseUser'), value: 'dbuser'},
           ]"
           :filter-multiple="false"
           :label="$t('UserRole')"
@@ -71,13 +72,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('Account')" align="center" min-width="200px">
-          <template slot-scope="{row}">
-            <span>{{ row.username }}</span>
-          </template>
-        </el-table-column>
+        <el-table-column :label="$t('Account')" align="center" min-width="100px" prop="username" />
 
-        <el-table-column :label="$t('Name')" align="center" min-width="100px" prop="name" />
+        <el-table-column :label="$t('Name')" align="center" min-width="80px" prop="name" />
 
         <el-table-column :label="$t('Action')" align="center" width="250px" fixed="right">
           <template slot-scope="{row}">
