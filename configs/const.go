@@ -5,14 +5,14 @@ const AppConf string = "./configs/iris.yml"
 
 // EnvName is the environment variable name
 const (
-	EnvName                     = "CCSL_ENV"
-	EnvDevelopment              = "dev"
-	EnvProduction               = "prod"
-	RoleSuperUser               = "super"
-	RoleAdminUser               = "admin"
-	RoleDatabaseUser            = "user"
-	RoleLearningPlatformStudent = "learner"
-	RoleLearningPlatformTeacher = "teacher"
+	EnvName          = "CCSL_ENV"
+	EnvDevelopment   = "dev"
+	EnvProduction    = "prod"
+	RoleSuperUser    = "super"
+	RoleAdminUser    = "admin"
+	RoleDatabaseUser = "dbuser"
+	RoleStudent      = "student"
+	RoleTeacher      = "teacher"
 )
 
 var c Config

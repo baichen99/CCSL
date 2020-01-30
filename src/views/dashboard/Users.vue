@@ -48,7 +48,7 @@
         </el-table-column>
 
         <el-table-column
-          column-key="userType"
+          column-key="roles"
           :filters="[
             { text: $t('SuperAdmin'), value: 'super'}, 
             { text: $t('Admin'), value: 'admin'},
@@ -58,13 +58,16 @@
           :filter-multiple="false"
           :label="$t('UserRole')"
           align="center"
-          width="120px"
+          min-width="150px"
         >
           <template slot-scope="{row}">
             <el-tag
+              v-for="item in row.roles"
+              :key="item"
+              :disable-transitions="true"
               size="small"
-              :type="userTypes[row.userType].color"
-            >{{ $t(userTypes[row.userType].name) }}</el-tag>
+              :type="userRoles[item].color"
+            >{{ $t(userRoles[item].name) }}</el-tag>
           </template>
         </el-table-column>
 
@@ -74,11 +77,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('Name')" align="center" min-width="200px">
-          <template slot-scope="{row}">
-            <span>{{ row.name }}</span>
-          </template>
-        </el-table-column>
+        <el-table-column :label="$t('Name')" align="center" min-width="100px" prop="name" />
 
         <el-table-column :label="$t('Action')" align="center" width="250px" fixed="right">
           <template slot-scope="{row}">
@@ -180,13 +179,13 @@ export default {
       params: {
         username: "",
         name: "",
-        userType: "",
+        roles: "",
         state: ""
       }
     };
   },
   computed: {
-    ...mapGetters(["userTypes", "userState"])
+    ...mapGetters(["userRoles", "userState"])
   },
   created() {
     this.$nextTick(() => {
@@ -249,8 +248,15 @@ export default {
       this.handleUpdate(id, updateData);
     },
     isSuperUser(row) {
-      return row.userType === "super";
+      return row.roles.indexOf("super") !== -1;
     }
   }
 };
 </script>
+
+
+<style lang="scss" scoped>
+.el-tag {
+  margin: 3px;
+}
+</style>

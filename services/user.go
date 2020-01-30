@@ -39,7 +39,7 @@ func (s *UserService) GetUsersList(parameters utils.GetUserListParameters) (user
 			utils.FilterByColumn("users.state", parameters.State),
 			utils.SearchByColumn("users.username", parameters.Username),
 			utils.SearchByColumn("users.name", parameters.Name),
-			utils.FilterInList("users.roles", parameters.Role),
+			utils.FilterInList("users.roles", parameters.Roles),
 		)
 
 	// Fetching the total number of rows based on the conditions provided.

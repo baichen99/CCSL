@@ -56,7 +56,7 @@ router.beforeEach(async (to, from, next) => {
       } else {
         try {
           const data = await store.dispatch("user/getUserInfo");
-          store.commit("user/SET_ROLES", data.userType);
+          store.commit("user/SET_ROLES", data.roles);
           next({ ...to, replace: true });
         } catch (error) {
           await store.dispatch("user/logout");

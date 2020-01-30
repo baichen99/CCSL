@@ -10,10 +10,7 @@
       </div>
       <el-menu :default-active="activeMenu" mode="horizontal" router active-text-color="#2363C3">
         <el-menu-item index="/">{{ $t("HomeMenu") }}</el-menu-item>
-        <el-menu-item
-          v-permission="['admin','super','learner']"
-          index="/learning-platform"
-        >{{ $t("LearnMenu") }}</el-menu-item>
+        <el-menu-item v-permission="['learner']" index="/learning-platform">{{ $t("LearnMenu") }}</el-menu-item>
         <el-submenu index="/research">
           <template slot="title">{{ $t("ResearchMenu") }}</template>
           <el-menu-item
@@ -22,9 +19,13 @@
             :index="item.url"
           >{{ $t(item.title) }}</el-menu-item>
         </el-submenu>
-        <el-submenu v-permission="['admin','super','user']" index="/database">
+        <el-submenu v-permission="['user']" index="/database">
           <template slot="title">{{ $t("DatabaseMenu") }}</template>
-          <el-menu-item v-for="item in databases" :key="item.url" :index="item.url">{{ $t(item.title) }}</el-menu-item>
+          <el-menu-item
+            v-for="item in databases"
+            :key="item.url"
+            :index="item.url"
+          >{{ $t(item.title) }}</el-menu-item>
         </el-submenu>
         <el-submenu index="/about">
           <template slot="title">{{ $t("AboutMenu") }}</template>

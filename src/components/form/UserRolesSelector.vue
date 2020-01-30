@@ -1,6 +1,6 @@
 <template>
-  <el-select v-model="data" :placeholder="$t('tip')" clearable @clear="$emit('clear')">
-    <el-option v-for="(item, key) in userTypes" :key="key" :label="$t(item.name)" :value="key" />
+  <el-select v-model="data" :placeholder="$t('tip')" clearable multiple @clear="$emit('clear')">
+    <el-option v-for="(item, key) in userRoles" :key="key" :label="$t(item.name)" :value="key" />
   </el-select>
 </template>
 
@@ -18,19 +18,19 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
-  name: "UserTypeSelector",
+  name: "UserRolesSelector",
   model: {
     prop: "value",
     event: "update"
   },
   props: {
     value: {
-      type: String,
-      default: () => ""
+      type: Array,
+      default: () => []
     }
   },
   computed: {
-    ...mapGetters(["userTypes"]),
+    ...mapGetters(["userRoles"]),
     data: {
       get() {
         return this.value;

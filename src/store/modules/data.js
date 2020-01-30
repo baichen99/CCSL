@@ -55,11 +55,12 @@ const state = {
     compound: { name: "CompoundWord" },
     simple: { name: "SimpleWord" }
   },
-  userTypes: {
+  userRoles: {
     super: { name: "SuperAdmin", color: "danger" },
     admin: { name: "Admin", color: "warning" },
-    learner: { name: "Learner", color: "info" },
-    user: { name: "User", color: "" }
+    student: { name: "Student", color: "info" },
+    dbuser: { name: "DatabaseUser", color: "" },
+    teacher: { name: "Teacher", color: "success" }
   },
   userState: {
     active: { name: "Active", color: "success" },

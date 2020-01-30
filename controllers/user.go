@@ -64,7 +64,7 @@ func (c *UserController) GetUsersList() {
 		utils.SetError(c.Context, iris.StatusBadRequest, "UserController::GetUsersList", errParams)
 		return
 	}
-	role := c.Context.URLParamDefault("role", "")
+	roles := c.Context.URLParamDefault("roles", "")
 	name := c.Context.URLParamDefault("name", "")
 	username := c.Context.URLParamDefault("username", "")
 	state := c.Context.URLParamDefault("state", "")
@@ -73,7 +73,7 @@ func (c *UserController) GetUsersList() {
 		Username:          username,
 		Name:              name,
 		State:             state,
-		Role:              role,
+		Roles:             roles,
 	}
 	users, count, err := c.UserService.GetUsersList(listParameters)
 	if err != nil {

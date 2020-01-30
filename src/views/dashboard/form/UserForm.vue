@@ -4,8 +4,8 @@
       <el-input v-model="formData.name" :placeholder="$t('tipName')" />
     </el-form-item>
 
-    <el-form-item :label="$t('UserRole')" prop="userType">
-      <user-type-selector v-model="formData.userType" />
+    <el-form-item :label="$t('UserRole')" prop="roles">
+      <user-roles-selector v-model="formData.roles" />
     </el-form-item>
 
     <el-form-item :label="$t('Account')" prop="username">
@@ -32,13 +32,13 @@
 </i18n>
 
 <script>
-import UserTypeSelector from "@/components/form/UserTypeSelector";
+import UserRolesSelector from "@/components/form/UserRolesSelector";
 import UserStateSelector from "@/components/form/UserStateSelector";
 import formMixin from "./formMixin";
 export default {
   name: "UserForm",
   components: {
-    UserTypeSelector,
+    UserRolesSelector,
     UserStateSelector
   },
   mixins: [formMixin],
@@ -46,10 +46,7 @@ export default {
     return {
       rules: {
         name: [{ required: true, message: "请输入用户姓名", trigger: "blur" }],
-        userType: [
-          { required: true, message: "请选择用户角色", trigger: "blur" },
-          { type: "enum", enum: ["super", "admin", "user", "learner"] }
-        ],
+        roles: [{ required: true, message: "请选择用户角色", trigger: "blur" }],
         username: [
           {
             required: true,

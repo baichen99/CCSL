@@ -38,7 +38,7 @@ const routes = [
         name: "LexicalDatabase",
         component: () => import("@/views/database/LexicalDatabase"),
         meta: {
-          roles: [superUser, adminUser, user],
+          roles: [user],
           auth: true
         }
       },
@@ -71,7 +71,7 @@ const routes = [
         name: "LearningPlatform",
         component: () => import("@/views/learning/LearningPlatform"),
         meta: {
-          roles: [superUser, adminUser, learner],
+          roles: [learner],
           auth: true,
           activeMenu: "/learning-platform"
         }

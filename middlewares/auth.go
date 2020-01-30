@@ -53,7 +53,7 @@ func SignJWTToken(userID uuid.UUID, roles []string) (string, error) {
 		TokenID:         tokenID,
 		TokenExpiration: time.Now().Add(time.Hour * time.Duration(configs.Conf.JWT.ExpireHours)).Unix(),
 		TokenUser:       userID.String(),
-		TokenRole:       roles,
+		TokenRole:       strings.Join(roles, ","),
 	})
 	key, _ := jwt.ParseECPrivateKeyFromPEM([]byte(configs.Conf.JWT.PrivateKey))
 	token, err := payload.SignedString(key)
@@ -83,15 +83,16 @@ func NewJwtMiddleware(cfg ...jwtConfig) *JwtMiddleware {
 	return &JwtMiddleware{jwtConfig: c}
 }
 
-func (m *JwtMiddleware) Get(ctx context.Context) (user string, role []string) {
+func (m *JwtMiddleware) Get(ctx context.Context) (user string, roles []string) {
 	headers := ctx.Values().Get(m.jwtConfig.ContextKey)
 	if headers == nil {
 		ctx.StopExecution()
 	} else {
 		payload, _ := headers.(*jwt.Token)
 		params, _ := payload.Claims.(jwt.MapClaims)
-		user, _ = params["user"].(string)
-		role, _ = params["role"].([]string)
+		user, _ = params[TokenUser].(string)
+		rolesJoin, _ := params[TokenRole].(string)
+		roles = strings.Split(rolesJoin, ",")
 	}
 	return
 }

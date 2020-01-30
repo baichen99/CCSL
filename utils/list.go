@@ -138,7 +138,7 @@ type GetUserListParameters struct {
 	Username string
 	Name     string
 	State    string
-	Role     string
+	Roles    string
 }
 
 // GetLexiconListParameters parameters for get word list queries
