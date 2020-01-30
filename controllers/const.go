@@ -176,7 +176,7 @@ type UserCreateForm struct {
 	Username string   `json:"username" validate:"required,numeric|email" example:"adrianduan@icloud.com"`
 	Password string   `json:"password" validate:"omitempty" example:"p@ssw0rd"`
 	State    string   `json:"state" validate:"required,oneof=active inactive" example:"active" enums:"active,inactive"`
-	Roles    []string `json:"roles" validate:"required,dive,oneof=super admin user learner" swaggertype:"array,string" example:"admin" enums:"super,admin,user,learner"`
+	Roles    []string `json:"roles" validate:"required,dive,oneof=super admin dbuser student teacher" swaggertype:"array,string" example:"admin" enums:"super,admin,dbuser,student,teacher"`
 }
 
 // ConvertToModel convert form to model
@@ -198,7 +198,7 @@ type UserUpdateForm struct {
 	Name     *string   `json:"name" validate:"omitempty" example:"Adrian Duan"`
 	Username *string   `json:"username" validate:"omitempty,numeric|email" example:"adrianduan@icloud.com"`
 	State    *string   `json:"state" validate:"omitempty,oneof=active inactive" example:"active" enums:"active,inactive"`
-	Roles    *[]string `json:"roles"  validate:"omitempty,dive,oneof=super admin user learner" swaggertype:"array,string" example:"admin" enums:"super,admin,user,learner"`
+	Roles    *[]string `json:"roles"  validate:"omitempty,dive,oneof=super admin dbuser student teacher" swaggertype:"array,string" example:"admin" enums:"super,admin,dbuser,student,teacher"`
 }
 
 type userLoginForm struct {

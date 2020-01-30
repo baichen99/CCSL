@@ -10,7 +10,7 @@
       </div>
       <el-menu :default-active="activeMenu" mode="horizontal" router active-text-color="#2363C3">
         <el-menu-item index="/">{{ $t("HomeMenu") }}</el-menu-item>
-        <el-menu-item v-permission="['learner']" index="/learning-platform">{{ $t("LearnMenu") }}</el-menu-item>
+        <el-menu-item v-permission="[StudentUser]" index="/learning-platform">{{ $t("LearnMenu") }}</el-menu-item>
         <el-submenu index="/research">
           <template slot="title">{{ $t("ResearchMenu") }}</template>
           <el-menu-item
@@ -19,7 +19,7 @@
             :index="item.url"
           >{{ $t(item.title) }}</el-menu-item>
         </el-submenu>
-        <el-submenu v-permission="['user']" index="/database">
+        <el-submenu v-permission="[DatabaseUser]" index="/database">
           <template slot="title">{{ $t("DatabaseMenu") }}</template>
           <el-menu-item
             v-for="item in databases"
@@ -50,6 +50,7 @@
 </template>
 
 <script>
+import { DatabaseUser, StudentUser } from "@/router/routes";
 export default {
   name: "Header",
   data: () => ({
@@ -75,7 +76,9 @@ export default {
     languages: {
       "zh-CN": { name: "简体中文" },
       "en-US": { name: "English(US)" }
-    }
+    },
+    DatabaseUser,
+    StudentUser
   }),
   computed: {
     activeMenu() {

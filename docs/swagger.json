@@ -719,8 +719,9 @@
                         "enum": [
                             "super",
                             "admin",
-                            "user",
-                            "learner"
+                            "dbuser",
+                            "student",
+                            "teacher"
                         ]
                     },
                     "example": [
@@ -759,8 +760,9 @@
                         "enum": [
                             "super",
                             "admin",
-                            "user",
-                            "learner"
+                            "dbuser",
+                            "student",
+                            "teacher"
                         ]
                     },
                     "example": [

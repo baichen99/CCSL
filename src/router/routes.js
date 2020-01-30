@@ -1,10 +1,11 @@
 import IndexLayout from "@/layout/IndexLayout.vue"; // Normal Layout
 import AdminLayout from "@/layout/AdminLayout.vue"; // Admin Layout
 
-const superUser = "super";
-const adminUser = "admin";
-const learner = "learner";
-const user = "user";
+export const SuperUser = "super";
+export const AdminUser = "admin";
+export const DatabaseUser = "dbuser";
+export const StudentUser = "student";
+export const TeacherUser = "teacher";
 
 const routes = [
   {
@@ -38,7 +39,7 @@ const routes = [
         name: "LexicalDatabase",
         component: () => import("@/views/database/LexicalDatabase"),
         meta: {
-          roles: [user],
+          roles: [DatabaseUser],
           auth: true
         }
       },
@@ -71,7 +72,7 @@ const routes = [
         name: "LearningPlatform",
         component: () => import("@/views/learning/LearningPlatform"),
         meta: {
-          roles: [learner],
+          roles: [StudentUser],
           auth: true,
           activeMenu: "/learning-platform"
         }
@@ -112,7 +113,7 @@ const routes = [
           title: "UserManagement",
           icon: "user",
           auth: true,
-          roles: [superUser]
+          roles: [SuperUser]
         }
       }
     ]
@@ -126,7 +127,7 @@ const routes = [
     meta: {
       title: "WebsiteManagement",
       icon: "website",
-      roles: [superUser, adminUser]
+      roles: [SuperUser, AdminUser]
     },
     children: [
       {
@@ -177,7 +178,7 @@ const routes = [
           title: "LoginHistory",
           icon: "history",
           auth: true,
-          roles: [superUser]
+          roles: [SuperUser]
         }
       },
       {
@@ -188,7 +189,7 @@ const routes = [
           title: "SystemManagement",
           icon: "maintain",
           auth: true,
-          roles: [superUser]
+          roles: [SuperUser]
         }
       }
     ]
@@ -201,7 +202,7 @@ const routes = [
     meta: {
       title: "DatabaseManagement",
       icon: "contrast",
-      roles: [superUser, adminUser]
+      roles: [SuperUser, AdminUser]
     },
     children: [
       {

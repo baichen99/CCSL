@@ -98,8 +98,9 @@ definitions:
           enum:
           - super
           - admin
-          - user
-          - learner
+          - dbuser
+          - student
+          - teacher
           type: string
         type: array
       state:
@@ -132,8 +133,9 @@ definitions:
           enum:
           - super
           - admin
-          - user
-          - learner
+          - dbuser
+          - student
+          - teacher
           type: string
         type: array
       state:

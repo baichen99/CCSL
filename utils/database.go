@@ -64,7 +64,7 @@ func InitTestUser(pg *gorm.DB) {
 			Username: "learner@ccsl.shu.edu.cn",
 			Name:     "Learner",
 			Password: password,
-			Roles:    []string{configs.RoleLearningPlatformStudent},
+			Roles:    []string{configs.RoleStudent},
 			State:    "active",
 		},
 		models.User{
