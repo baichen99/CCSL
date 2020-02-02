@@ -1,10 +1,14 @@
 <template>
-  <el-form ref="form" label-position="left" label-width="100px" :model="formData" :rules="rules">
-    <el-form-item label="手形名称" prop="name">
+  <el-form ref="form" label-position="left" label-width="150px" :model="formData" :rules="rules">
+    <el-form-item :label="$t('SignName')" prop="name">
       <el-input v-model="formData.name" placeholder="请输入手形名称" />
     </el-form-item>
 
-    <el-form-item label="手形图片（SVG）" prop="image">
+    <el-form-item :label="$t('SignGlyph')" prop="glyph">
+      <el-input v-model="formData.glyph" maxlength="1" placeholder="请输入手形字体符号" />
+    </el-form-item>
+
+    <el-form-item :label="$t('SignImage')+'（SVG）'" prop="image">
       <image-uploader v-model="formData.image" type="svg" dir="signs" height="300px" />
     </el-form-item>
   </el-form>
@@ -24,7 +28,8 @@ export default {
     return {
       rules: {
         name: [{ required: true, message: "请输入手形名称" }],
-        image: [{ required: true, message: "请上传手形图片" }]
+        image: [{ required: true, message: "请上传手形图片" }],
+        glyph: [{ required: true, message: "请输入手形字体符号" }]
       }
     };
   }

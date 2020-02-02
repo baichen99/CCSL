@@ -98,6 +98,7 @@ export default {
   Name: "Name",
   SignName: "Sign Name",
   SignImage: "Sign Image",
+  SignGlyph: "Sign Glyph",
   LeftSign: "Left Hand Sign",
   RightSign: "Right Hand Sign",
   Chinese: "Chinese",

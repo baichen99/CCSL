@@ -240,12 +240,14 @@ type performerUpdateForm struct {
 type signCreateForm struct {
 	Name  string `json:"name" validate:"required"`
 	Image string `json:"image" validate:"required"`
+	Glyph string `json:"glyph" validate:"required"`
 }
 
 func (f signCreateForm) ConvertToModel() (user models.Sign) {
 	user = models.Sign{
 		Name:  f.Name,
 		Image: f.Image,
+		Glyph: f.Glyph,
 	}
 	return
 }
@@ -253,6 +255,7 @@ func (f signCreateForm) ConvertToModel() (user models.Sign) {
 type signUpdateForm struct {
 	Name  *string `json:"name" validate:"omitempty"`
 	Image *string `json:"image" validate:"omitempty"`
+	Glyph *string `json:"glyph" validate:"omitempty"`
 }
 
 // >>> LEXICON <<<

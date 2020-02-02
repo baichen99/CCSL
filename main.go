@@ -171,6 +171,9 @@ func initDB(app *iris.Application) *gorm.DB {
 		"CREATE UNIQUE INDEX signs_name_key ON signs(name) WHERE deleted_at IS NULL",
 	)
 	pg.Exec(
+		"CREATE UNIQUE INDEX signs_glyph_key ON signs(glyph) WHERE deleted_at IS NULL",
+	)
+	pg.Exec(
 		"CREATE UNIQUE INDEX lexicons_chinese_key ON lexicons(chinese) WHERE deleted_at IS NULL",
 	)
 

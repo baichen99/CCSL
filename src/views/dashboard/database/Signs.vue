@@ -35,6 +35,8 @@
 
         <el-table-column :label="$t('SignName')" align="center" prop="name" />
 
+        <el-table-column :label="$t('SignGlyph')" align="center" prop="glyph" />
+
         <el-table-column :label="$t('SignImage')" align="center">
           <template slot-scope="{row}">
             <img :src="settings.publicURL + row.image" alt="sign" style="width:80px" />
@@ -187,7 +189,8 @@ export default {
           return {
             [this.$t("CreatedAt")]: new Date(item.createdAt),
             [this.$t("UpdatedAt")]: new Date(item.updatedAt),
-            [this.$t("SignName")]: item.name
+            [this.$t("SignName")]: item.name,
+            [this.$t("SignGlyph")]: item.glyph
           };
         });
         this.handleDownloadSheet(sheetData, "sign");

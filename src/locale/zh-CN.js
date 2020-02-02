@@ -98,6 +98,7 @@ export default {
   Name: "姓名",
   SignName: "手形名称",
   SignImage: "手形图像",
+  SignGlyph: "手形字体符号",
   LeftSign: "左手手形",
   RightSign: "右手手形",
   Chinese: "中文",
