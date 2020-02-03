@@ -10,10 +10,10 @@ import (
 // NotificationInterface struct
 type NotificationInterface interface {
 	GetNotificationList(parameters utils.GetNotificationListParameters) (notifications []models.Notification, count int, err error)
-	GetNotification(notificationID string) (notification models.Notification, err error)
+	GetNotification(id string) (notification models.Notification, err error)
 	CreateNotification(notification models.Notification) (err error)
-	UpdateNotification(notificationID string, updateData map[string]interface{}) (err error)
-	DeleteNotification(notificationID string) (err error)
+	UpdateNotification(id string, updateData map[string]interface{}) (err error)
+	DeleteNotification(id string) (err error)
 }
 
 // NotificationService implements Notification interface
@@ -55,9 +55,9 @@ func (s *NotificationService) GetNotificationList(parameters utils.GetNotificati
 }
 
 // GetNotification returns Notification with given id
-func (s *NotificationService) GetNotification(notificationID string) (notification models.Notification, err error) {
+func (s *NotificationService) GetNotification(id string) (notification models.Notification, err error) {
 	err = s.PG.
-		Where("id = ?", notificationID).
+		Where("id = ?", id).
 		Take(&notification).
 		Error
 	return
@@ -72,21 +72,20 @@ func (s *NotificationService) CreateNotification(notification models.Notificatio
 }
 
 // UpdateNotification updates Notification with given id
-func (s *NotificationService) UpdateNotification(notificationID string, updatedData map[string]interface{}) (err error) {
-	var notification models.Notification
+func (s *NotificationService) UpdateNotification(id string, updatedData map[string]interface{}) (err error) {
 	err = s.PG.
-		Where("id = ?", notificationID).
-		Take(&notification).
+		Model(&models.Notification{}).
+		Where("id = ?", id).
 		Updates(updatedData).
 		Error
 	return
 }
 
 // DeleteNotification soft deletes a Notification with given id
-func (s *NotificationService) DeleteNotification(notificationID string) (err error) {
+func (s *NotificationService) DeleteNotification(id string) (err error) {
 	var notification models.Notification
 	err = s.PG.
-		Where("id = ?", notificationID).
+		Where("id = ?", id).
 		Delete(&notification).
 		Error
 	return

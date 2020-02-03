@@ -12,24 +12,24 @@ import (
 	"github.com/kataras/iris/v12/mvc"
 )
 
-// VideoController is for video CRUD
-type VideoController struct {
-	Context      iris.Context
-	VideoService services.LexicalVideoInterface
+// LexicalVideoController is for video CRUD
+type LexicalVideoController struct {
+	Context             iris.Context
+	LexicalVideoService services.LexicalVideoInterface
 }
 
 // BeforeActivation will register routes for controllers
-func (c *VideoController) BeforeActivation(app mvc.BeforeActivation) {
+func (c *LexicalVideoController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Router().Use(middlewares.CheckToken)
-	app.Handle(iris.MethodGet, "/", "GetVideosList", middlewares.CheckRateLimit(3))
-	app.Handle(iris.MethodGet, "/{id: string}", "GetVideo", middlewares.CheckRateLimit(3))
+	app.Handle(iris.MethodGet, "/", "GetLexicalVideosList", middlewares.CheckRateLimit(3))
+	app.Handle(iris.MethodGet, "/{id: string}", "GetLexicalVideo", middlewares.CheckRateLimit(3))
 	app.Router().Use(middlewares.CheckUserRole([]string{configs.RoleAdminUser}))
-	app.Handle(iris.MethodPost, "/", "CreateVideo")
-	app.Handle(iris.MethodPut, "/{id: string}", "UpdateVideo")
-	app.Handle(iris.MethodDelete, "/{id: string}", "DeleteVideo")
+	app.Handle(iris.MethodPost, "/", "CreateLexicalVideo")
+	app.Handle(iris.MethodPut, "/{id: string}", "UpdateLexicalVideo")
+	app.Handle(iris.MethodDelete, "/{id: string}", "DeleteLexicalVideo")
 }
 
-// GetVideosList GET /lexical/videos
+// GetLexicalVideosList GET /lexical/videos
 // >>>>> DOCS  <<<<<
 // =================
 // @Tags Lexical Videos
@@ -38,33 +38,33 @@ func (c *VideoController) BeforeActivation(app mvc.BeforeActivation) {
 // @Accept  json
 // @Produce json
 // @Router /lexical/videos [GET]
-// @Param page 		    query int    false "select from page" 			mininum(1)
-// @Param limit 	    query int    false "limit number" 				mininum(0)
-// @Param order		    query string false "order by field"
-// @Param orderBy 	    query string false "order by asc or desc" 		enums(asc, desc)
-// @Param lexiconID     query string false "filter by lexicon ID"
-// @Param initial 	    query string false "filter initial"
-// @Param chinese 	    query string false "search by Chinese"
-// @Param english 	    query string false "search by English"
-// @Param pos	 	    query string false "filter by part of speech"
-// @Param regionID	    query int	 false "filter by region ID"
-// @Param gender	    query string false "filter by gender" 			enums(M, F)
-// @Param leftSignID    query string false "filter by left sign ID"
-// @Param rightSignID   query string false "filter by right sign ID"
-// @Param signID	    query string false "filter by sign ID"
-// @Param morpheme 	    query string false "search by morpheme"
-// @Param wordFormation query string false "filter by word formation" 	enums(simple, compound)
-// @Param performerID	query string false "filter by performer ID"
+// @Param page 		        query int    false "select from page" 			mininum(1)
+// @Param limit 	        query int    false "limit number" 				mininum(0)
+// @Param order		        query string false "order by field"
+// @Param orderBy 	        query string false "order by asc or desc" 		enums(asc, desc)
+// @Param lexiconID         query string false "filter by lexicon ID"
+// @Param initial 	        query string false "filter initial"
+// @Param chinese 	        query string false "search by Chinese"
+// @Param english 	        query string false "search by English"
+// @Param pos	 	        query string false "filter by part of speech"
+// @Param regionID	        query int	 false "filter by region ID"
+// @Param gender	        query string false "filter by gender" 			enums(M, F)
+// @Param leftHandshapeID   query string false "filter by left handshape ID"
+// @Param rightHandshapeID  query string false "filter by right handshape ID"
+// @Param handshapeID	    query string false "filter by handshape ID"
+// @Param morpheme 	        query string false "search by morpheme"
+// @Param wordFormation     query string false "filter by word formation" 	enums(simple, compound)
+// @Param performerID	    query string false "filter by performer ID"
 // @Success 200 {object} controllers.GetVideosListResponse
 // @Failure 400 {object} controllers.ErrorResponse
 // @Failure 401 {object} controllers.ErrorResponse
 // @Failure 422 {object} controllers.ErrorResponse
 // =================
-func (c *VideoController) GetVideosList() {
+func (c *LexicalVideoController) GetLexicalVideosList() {
 	defer c.Context.Next()
 	listParams, err := utils.GetListParamsFromContext(c.Context, "lexicons.initial, lexicons.id, performers.region_id, performers.gender")
 	if err != nil {
-		utils.SetError(c.Context, iris.StatusBadRequest, "VideoController::GetVideosList", errors.New("ParamsError"))
+		utils.SetError(c.Context, iris.StatusBadRequest, "LexicalVideoController::GetLexicalVideosList", errors.New("ParamsError"))
 		return
 	}
 	lexiconID := c.Context.URLParamDefault("lexiconID", "")
@@ -74,13 +74,13 @@ func (c *VideoController) GetVideosList() {
 	pos := c.Context.URLParamDefault("pos", "")
 	regionID := c.Context.URLParamDefault("regionID", "")
 	gender := c.Context.URLParamDefault("gender", "")
-	leftSignID := c.Context.URLParamDefault("leftSignID", "")
-	rightSignID := c.Context.URLParamDefault("rightSignID", "")
-	signID := c.Context.URLParamDefault("signID", "")
+	leftHandshapeID := c.Context.URLParamDefault("leftHandshapeID", "")
+	rightHandshapeID := c.Context.URLParamDefault("rightHandshapeID", "")
+	handshapeID := c.Context.URLParamDefault("handshapeID", "")
 	morpheme := c.Context.URLParamDefault("morpheme", "")
 	wordFormation := c.Context.URLParamDefault("wordFormation", "")
 	performerID := c.Context.URLParamDefault("performerID", "")
-	listParameters := utils.GetVideoListParameters{
+	listParameters := utils.GetLexicalVideoListParameters{
 		GetListParameters: listParams,
 		LexiconID:         lexiconID,
 		Initial:           initial,
@@ -89,16 +89,16 @@ func (c *VideoController) GetVideosList() {
 		Pos:               pos,
 		RegionID:          regionID,
 		Gender:            gender,
-		LeftSignID:        leftSignID,
-		RightSignID:       rightSignID,
-		SignID:            signID,
+		LeftHandshapeID:   leftHandshapeID,
+		RightHandshapeID:  rightHandshapeID,
+		HandshapeID:       handshapeID,
 		WordFormation:     wordFormation,
 		Morpheme:          morpheme,
 		PerformerID:       performerID,
 	}
-	videos, count, err := c.VideoService.GetVideosList(listParameters)
+	videos, count, err := c.LexicalVideoService.GetLexicalVideosList(listParameters)
 	if err != nil {
-		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "VideoService::GetVideosList", errors.New("SqlError"))
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "LexicalVideoService::GetLexicalVideosList", errors.New("SqlError"))
 		return
 	}
 
@@ -111,26 +111,26 @@ func (c *VideoController) GetVideosList() {
 	})
 }
 
-// GetVideosListResponse Response for GetVideosList
+// GetVideosListResponse Response for GetLexicalVideosList
 type GetVideosListResponse struct {
 	GetListResponse
 	Data []models.LexicalVideo `json:"data"`
 }
 
-// CreateVideo POST /lexical/videos
-func (c *VideoController) CreateVideo() {
+// CreateLexicalVideo POST /lexical/videos
+func (c *LexicalVideoController) CreateLexicalVideo() {
 	defer c.Context.Next()
 	var form lexicalVideoCreateForm
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetError(c.Context, iris.StatusBadRequest, "VideoController::CreateVideo", errParams)
+		utils.SetError(c.Context, iris.StatusBadRequest, "LexicalVideoController::CreateLexicalVideo", errParams)
 		return
 	}
 	// PSQL - Create video in database.
 	video := form.ConvertToModel()
 
-	if err := c.VideoService.CreateVideo(video); err != nil {
-		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "VideoService::CreateVideo", errSQL)
+	if err := c.LexicalVideoService.CreateLexicalVideo(video); err != nil {
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "LexicalVideoService::CreateLexicalVideo", errSQL)
 		return
 	}
 	// Return 201 Created
@@ -141,13 +141,13 @@ func (c *VideoController) CreateVideo() {
 
 }
 
-// GetVideo GET /lexical/videos/{id:string}
-func (c *VideoController) GetVideo() {
+// GetLexicalVideo GET /lexical/videos/{id:string}
+func (c *LexicalVideoController) GetLexicalVideo() {
 	defer c.Context.Next()
 	videoID := c.Context.Params().Get("id")
-	video, err := c.VideoService.GetVideo(videoID)
+	video, err := c.LexicalVideoService.GetLexicalVideo(videoID)
 	if err != nil {
-		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "VideoService::GetVideo", errSQL)
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "LexicalVideoService::GetLexicalVideo", errSQL)
 	}
 	c.Context.JSON(iris.Map{
 		message: success,
@@ -155,8 +155,8 @@ func (c *VideoController) GetVideo() {
 	})
 }
 
-// UpdateVideo PUT /lexical/videos/{id:string}
-func (c *VideoController) UpdateVideo() {
+// UpdateLexicalVideo PUT /lexical/videos/{id:string}
+func (c *LexicalVideoController) UpdateLexicalVideo() {
 	defer c.Context.Next()
 
 	// Getting ID from parameters in the URL
@@ -165,15 +165,15 @@ func (c *VideoController) UpdateVideo() {
 
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetError(c.Context, iris.StatusBadRequest, "VideoController::UpdateVideo", errParams)
+		utils.SetError(c.Context, iris.StatusBadRequest, "LexicalVideoController::UpdateLexicalVideo", errParams)
 		return
 	}
 
 	updateData := utils.MakeUpdateData(form)
 
 	// PSQL - Update of the given ID
-	if err := c.VideoService.UpdateVideo(videoID, updateData); err != nil {
-		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "VideoService::UpdateVideo", errSQL)
+	if err := c.LexicalVideoService.UpdateLexicalVideo(videoID, updateData); err != nil {
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "LexicalVideoService::UpdateLexicalVideo", errSQL)
 		return
 	}
 
@@ -181,14 +181,14 @@ func (c *VideoController) UpdateVideo() {
 	c.Context.StatusCode(iris.StatusNoContent)
 }
 
-// DeleteVideo DELETE /lexical/videos/{id:string}
-func (c *VideoController) DeleteVideo() {
+// DeleteLexicalVideo DELETE /lexical/videos/{id:string}
+func (c *LexicalVideoController) DeleteLexicalVideo() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
 	videoID := c.Context.Params().Get("id")
 
 	// PSQL - Soft delete of the given ID
-	if err := c.VideoService.DeleteVideo(videoID); err != nil {
+	if err := c.LexicalVideoService.DeleteLexicalVideo(videoID); err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "WordService::DeleteWord", errSQL)
 		return
 	}

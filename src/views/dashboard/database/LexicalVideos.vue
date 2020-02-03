@@ -10,9 +10,17 @@
         @change="handleSearch"
       />
       <city-selector v-model="params.regionID" @update="handleSearch" />
-      <sign-selector v-model="params.signID" @update="handleSearch" />
-      <sign-selector v-model="params.leftSignID" orientation="left" @update="handleSearch" />
-      <sign-selector v-model="params.rightSignID" orientation="right" @update="handleSearch" />
+      <handshape-selector v-model="params.handshapeID" @update="handleSearch" />
+      <handshape-selector
+        v-model="params.leftHandshapeID"
+        orientation="left"
+        @update="handleSearch"
+      />
+      <handshape-selector
+        v-model="params.rightHandshapeID"
+        orientation="right"
+        @update="handleSearch"
+      />
       <morphemes-input v-model="params.morpheme" @update="handleSearch" @enter="handleSearch" />
       <el-button type="primary" plain @click="handleNew">
         {{ $t("New") }}
@@ -186,7 +194,7 @@ import lodash from "lodash";
 import { mapGetters } from "vuex";
 import LexicalVideoForm from "@/views/dashboard/form/LexicalVideoForm";
 import CitySelector from "@/components/form/CitySelector";
-import SignSelector from "@/components/form/SignSelector";
+import HandshapeSelector from "@/components/form/HandshapeSelector";
 import MorphemesInput from "@/components/form/MorphemesInput";
 import listMixin from "@/views/dashboard/listMixin";
 import {
@@ -200,7 +208,7 @@ export default {
   components: {
     LexicalVideoForm,
     CitySelector,
-    SignSelector,
+    HandshapeSelector,
     MorphemesInput
   },
   mixins: [listMixin],
@@ -211,9 +219,9 @@ export default {
         chinese: "",
         regionID: undefined,
         gender: "",
-        signID: "",
-        leftSignID: "",
-        rightSignID: "",
+        handshapeID: "",
+        leftHandshapeID: "",
+        rightHandshapeID: "",
         wordFormation: "",
         morpheme: ""
       },
@@ -227,14 +235,14 @@ export default {
       "wordInitial",
       "performers",
       "lexicons",
-      "signs"
+      "handshapes"
     ])
   },
   created() {
     this.$nextTick(async () => {
       await this.$store.dispatch("data/getPerformers");
       await this.$store.dispatch("data/getLexicons");
-      await this.$store.dispatch("data/getSigns");
+      await this.$store.dispatch("data/getHandshapes");
       await this.getList();
       this.wordInitial.map(item => {
         this.initialFilters.push({
@@ -300,15 +308,15 @@ export default {
       params.limit = 0;
       GetLexicalVideosList(params, true).then(res => {
         const sheetData = res.data.map(item => {
-          const leftSigns = [];
-          const rightSigns = [];
-          item.leftSignsID.map(signID => {
-            const sign = this.signs[signID];
-            leftSigns.push(sign.name);
+          const leftHandshapes = [];
+          const rightHandshapes = [];
+          item.leftHandshapesID.map(id => {
+            const handshape = this.handshapes[id];
+            leftHandshapes.push(handshape.name);
           });
-          item.rightSignsID.map(signID => {
-            const sign = this.signs[signID];
-            rightSigns.push(sign.name);
+          item.rightHandshapesID.map(id => {
+            const handshape = this.handshapes[id];
+            rightHandshapes.push(handshape.name);
           });
           return {
             [this.$t("CreatedAt")]: new Date(item.createdAt),
@@ -321,8 +329,8 @@ export default {
               ? this.$t(this.wordFormations[item.wordFormation].name)
               : this.$t("NoData"),
             [this.$t("Morpheme")]: item.morpheme.join(","),
-            [this.$t("LeftSign")]: leftSigns.join(","),
-            [this.$t("RightSign")]: rightSigns.join(","),
+            [this.$t("LeftHandshape")]: leftHandshapes.join(","),
+            [this.$t("RightHandshape")]: rightHandshape.join(","),
             [this.$t("Name")]: this.performers[item.performerID].name,
             [this.$t("Gender")]: this.$t(
               this.genderTypes[this.performers[item.performerID].gender].name

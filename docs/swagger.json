@@ -100,20 +100,20 @@
                     },
                     {
                         "type": "string",
-                        "description": "filter by left sign ID",
-                        "name": "leftSignID",
+                        "description": "filter by left handshape ID",
+                        "name": "leftHandshapeID",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "filter by right sign ID",
-                        "name": "rightSignID",
+                        "description": "filter by right handshape ID",
+                        "name": "rightHandshapeID",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "filter by sign ID",
-                        "name": "signID",
+                        "description": "filter by handshape ID",
+                        "name": "handshapeID",
                         "in": "query"
                     },
                     {
@@ -795,7 +795,7 @@
                     "format": "uuid",
                     "example": "550e8400-e29b-41d4-a716-446655440000"
                 },
-                "leftSignsID": {
+                "leftHandshapesID": {
                     "description": "左手手形ID",
                     "type": "array",
                     "format": "uuid",
@@ -827,7 +827,7 @@
                     "type": "string",
                     "example": "550e8400-e29b-41d4-a716-446655440000"
                 },
-                "rightSignsID": {
+                "rightHandshapesID": {
                     "description": "右手手形ID",
                     "type": "array",
                     "format": "uuid",

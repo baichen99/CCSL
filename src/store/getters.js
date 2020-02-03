@@ -21,7 +21,7 @@ const getters = {
   memberTypes: state => state.data.memberTypes,
   memberDegrees: state => state.data.memberDegrees,
   partOfSpeech: state => state.data.partOfSpeech,
-  signs: state => state.data.signs,
+  handshapes: state => state.data.handshapes,
   lexicons: state => state.data.lexicons,
   performers: state => state.data.performers
 };

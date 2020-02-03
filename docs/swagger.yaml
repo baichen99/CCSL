@@ -157,7 +157,7 @@ definitions:
         example: 550e8400-e29b-41d4-a716-446655440000
         format: uuid
         type: string
-      leftSignsID:
+      leftHandshapesID:
         description: 左手手形ID
         example:
         - 550e8400-e29b-41d4-a716-446655440000
@@ -181,7 +181,7 @@ definitions:
         description: 被试ID
         example: 550e8400-e29b-41d4-a716-446655440000
         type: string
-      rightSignsID:
+      rightHandshapesID:
         description: 右手手形ID
         example:
         - 550e8400-e29b-41d4-a716-446655440000
@@ -325,17 +325,17 @@ paths:
         in: query
         name: gender
         type: string
-      - description: filter by left sign ID
+      - description: filter by left handshape ID
         in: query
-        name: leftSignID
+        name: leftHandshapeID
         type: string
-      - description: filter by right sign ID
+      - description: filter by right handshape ID
         in: query
-        name: rightSignID
+        name: rightHandshapeID
         type: string
-      - description: filter by sign ID
+      - description: filter by handshape ID
         in: query
-        name: signID
+        name: handshapeID
         type: string
       - description: search by morpheme
         in: query

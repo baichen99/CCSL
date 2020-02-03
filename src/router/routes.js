@@ -216,12 +216,12 @@ const routes = [
         }
       },
       {
-        path: "signs",
-        name: "Signs",
-        component: () => import("@/views/dashboard/database/Signs"),
+        path: "handshapes",
+        name: "Handshapes",
+        component: () => import("@/views/dashboard/database/Handshapes"),
         meta: {
-          title: "SignManagement",
-          icon: "sign",
+          title: "HandshapeManagement",
+          icon: "handshape",
           auth: true
         }
       },

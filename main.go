@@ -53,9 +53,9 @@ func main() {
 		app.Register(services.NewUserService(pg), services.NewNotificationService(pg))
 		app.Handle(new(controllers.UserController))
 	})
-	mvc.Configure(app.Party("/signs"), func(app *mvc.Application) {
-		app.Register(services.NewSignService(pg))
-		app.Handle(new(controllers.SignController))
+	mvc.Configure(app.Party("/handshapes"), func(app *mvc.Application) {
+		app.Register(services.NewHandshapeService(pg))
+		app.Handle(new(controllers.HandshapeController))
 	})
 	mvc.Configure(app.Party("/performers"), func(app *mvc.Application) {
 		app.Register(services.NewPerformerService(pg))
@@ -72,7 +72,7 @@ func main() {
 	// Lexical Database for Chinese National Sign Language
 	mvc.Configure(app.Party("/lexical/videos"), func(app *mvc.Application) {
 		app.Register(services.NewLexicalVideoService(pg))
-		app.Handle(new(controllers.VideoController))
+		app.Handle(new(controllers.LexicalVideoController))
 	})
 	// // Corpus for Shanghai Sign Language Verb
 	// mvc.Configure(app.Party("/verbs"), func(app *mvc.Application) {
@@ -148,7 +148,7 @@ func initDB(app *iris.Application) *gorm.DB {
 		&models.User{},
 		&models.Lexicon{},
 		&models.LexicalVideo{},
-		&models.Sign{},
+		&models.Handshape{},
 		&models.Performer{},
 		&models.Carousel{},
 		&models.News{},
@@ -168,10 +168,10 @@ func initDB(app *iris.Application) *gorm.DB {
 		"CREATE UNIQUE INDEX users_username_key ON users(username) WHERE deleted_at IS NULL",
 	)
 	pg.Exec(
-		"CREATE UNIQUE INDEX signs_name_key ON signs(name) WHERE deleted_at IS NULL",
+		"CREATE UNIQUE INDEX handshapes_name_key ON handshapes(name) WHERE deleted_at IS NULL",
 	)
 	pg.Exec(
-		"CREATE UNIQUE INDEX signs_glyph_key ON signs(glyph) WHERE deleted_at IS NULL",
+		"CREATE UNIQUE INDEX handshapes_glyph_key ON handshapes(glyph) WHERE deleted_at IS NULL",
 	)
 	pg.Exec(
 		"CREATE UNIQUE INDEX lexicons_chinese_key ON lexicons(chinese) WHERE deleted_at IS NULL",

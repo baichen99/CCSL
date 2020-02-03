@@ -1,11 +1,11 @@
 import lodash from "lodash";
 import { GetWordsList } from "@/api/lexicons";
 import { GetPerformersList } from "@/api/performers";
-import { GetSignsList } from "@/api/signs";
+import { GetHandshapesList } from "@/api/handshapes";
 
 const SET_LEXICON = "SET_LEXICON";
 const SET_PERFORMER = "SET_PERFORMER";
-const SET_SIGN = "SET_SIGN";
+const SET_HANDSHAPE = "SET_HANDSHAPE";
 
 const state = {
   wordPosTypes: [
@@ -126,7 +126,7 @@ const state = {
     adverb: { name: "Adverb" },
     prepositions: { name: "Prepositions" }
   },
-  signs: {},
+  handshapes: {},
   lexicons: {},
   performers: {}
 };
@@ -137,9 +137,9 @@ const mutations = {
       state.lexicons[item.id] = item;
     });
   },
-  SET_SIGN: (state, data) => {
+  SET_HANDSHAPE: (state, data) => {
     data.map(item => {
-      state.signs[item.id] = item;
+      state.handshapes[item.id] = item;
     });
   },
   SET_PERFORMER: (state, data) => {
@@ -186,13 +186,13 @@ const actions = {
     });
   },
 
-  getSigns({ commit, state }, force) {
+  getHandshapes({ commit, state }, force) {
     return new Promise((resolve, reject) => {
-      if (force || lodash.isEmpty(state.signs)) {
-        GetSignsList({ limit: 0 })
+      if (force || lodash.isEmpty(state.handshapes)) {
+        GetHandshapesList({ limit: 0 })
           .then(res => {
             const { data } = res;
-            commit(SET_SIGN, data);
+            commit(SET_HANDSHAPE, data);
             resolve();
           })
           .catch(err => {

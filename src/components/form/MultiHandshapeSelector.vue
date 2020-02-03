@@ -24,7 +24,7 @@
     "tip": "请输入手形名称"
   },
   "en-US": {
-    "tip": "Input sign name"
+    "tip": "Input handshape name"
   }
 }
 </i18n>
@@ -33,7 +33,7 @@
 import Sortable from "sortablejs";
 import { mapGetters } from "vuex";
 export default {
-  name: "MultiSignSelector",
+  name: "MultiHandshapeSelector",
   model: {
     prop: "value",
     event: "update"
@@ -63,8 +63,8 @@ export default {
   },
   created() {
     this.$nextTick(async () => {
-      await this.$store.dispatch("data/getSigns");
-      const data = this.$store.state.data.signs;
+      await this.$store.dispatch("data/getHandshapes");
+      const data = this.$store.state.data.handshapes;
       this.options = Object.values(data);
     });
   },

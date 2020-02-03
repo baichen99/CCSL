@@ -9,10 +9,10 @@ import (
 
 type NewsInterface interface {
 	GetNewsList(parameters utils.GetNewsListParameters) (news []models.News, count int, err error)
-	GetNews(newsID string) (news models.News, err error)
+	GetNews(id string) (news models.News, err error)
 	CreateNews(news models.News) (err error)
-	UpdateNews(newsID string, updatedData map[string]interface{}) (err error)
-	DeleteNews(newsID string) (err error)
+	UpdateNews(id string, updatedData map[string]interface{}) (err error)
+	DeleteNews(id string) (err error)
 }
 
 type NewsService struct {
@@ -55,10 +55,10 @@ func (s *NewsService) GetNewsList(parameters utils.GetNewsListParameters) (news 
 	return
 }
 
-func (s *NewsService) GetNews(newsID string) (news models.News, err error) {
+func (s *NewsService) GetNews(id string) (news models.News, err error) {
 	err = s.PG.
 		Preload("Creator").
-		Where("id = ?", newsID).
+		Where("id = ?", id).
 		Take(&news).
 		Error
 	return
@@ -71,20 +71,19 @@ func (s *NewsService) CreateNews(news models.News) (err error) {
 	return
 }
 
-func (s *NewsService) UpdateNews(newsID string, updatedData map[string]interface{}) (err error) {
-	var news models.News
+func (s *NewsService) UpdateNews(id string, updatedData map[string]interface{}) (err error) {
 	err = s.PG.
-		Where("id = ?", newsID).
-		Take(&news).
+		Model(&models.News{}).
+		Where("id = ?", id).
 		Updates(updatedData).
 		Error
 	return
 }
 
-func (s *NewsService) DeleteNews(newsID string) (err error) {
+func (s *NewsService) DeleteNews(id string) (err error) {
 	var news models.News
 	err = s.PG.
-		Where("id = ?", newsID).
+		Where("id = ?", id).
 		Delete(&news).
 		Error
 	return

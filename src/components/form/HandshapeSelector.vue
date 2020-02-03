@@ -12,12 +12,12 @@
   "zh-CN": {
     "left": "请选择左手手形",
     "right": "请选择右手手形",
-    "sign": "请选择手形"
+    "handshape": "请选择手形"
   },
   "en-US": {
-    "left": "Select left hand sign",
-    "right": "Select right hand sign",
-    "sign": "Select sign"
+    "left": "Select left handshape",
+    "right": "Select right handshape",
+    "handshape": "Select handshape"
   }
 }
 </i18n>
@@ -25,7 +25,7 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
-  name: "SignSelector",
+  name: "HandshapeSelector",
   model: {
     prop: "value",
     event: "update"
@@ -58,13 +58,13 @@ export default {
     tip() {
       if (this.orientation === "left") return this.$t("left");
       else if (this.orientation === "right") return this.$t("right");
-      else return this.$t("sign");
+      else return this.$t("handshape");
     }
   },
   created() {
     this.$nextTick(async () => {
-      await this.$store.dispatch("data/getSigns");
-      const data = this.$store.state.data.signs;
+      await this.$store.dispatch("data/getHandshapes");
+      const data = this.$store.state.data.handshapes;
       this.options = Object.values(data);
     });
   }

@@ -33,13 +33,13 @@
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('SignName')" align="center" prop="name" />
+        <el-table-column :label="$t('HandshapeName')" align="center" prop="name" />
 
-        <el-table-column :label="$t('SignGlyph')" align="center" prop="glyph" />
+        <el-table-column :label="$t('HandshapeGlyph')" align="center" prop="glyph" />
 
-        <el-table-column :label="$t('SignImage')" align="center">
+        <el-table-column :label="$t('HandshapeImage')" align="center">
           <template slot-scope="{row}">
-            <img :src="settings.publicURL + row.image" alt="sign" style="width:80px" />
+            <img :src="settings.publicURL + row.image" alt="handshape" style="width:80px" />
           </template>
         </el-table-column>
 
@@ -76,7 +76,7 @@
       direction="rtl"
     >
       <div class="form-drawer__content">
-        <sign-form ref="form" :data="data" :mode="mode" />
+        <handshape-form ref="form" :data="data" :mode="mode" />
         <div class="form-drawer__footer">
           <el-button @click="handleClose">{{ $t("Cancel") }}</el-button>
           <el-button
@@ -105,14 +105,19 @@
 <script>
 import lodash from "lodash";
 import { mapGetters } from "vuex";
-import SignForm from "@/views/dashboard/form/SignForm";
+import HandshapeForm from "@/views/dashboard/form/HandshapeForm";
 import listMixin from "@/views/dashboard/listMixin";
-import { GetSignsList, DeleteSign, CreateSign, UpdateSign } from "@/api/signs";
+import {
+  GetHandshapesList,
+  DeleteHandshape,
+  CreateHandshape,
+  UpdateHandshape
+} from "@/api/handshapes";
 
 export default {
-  name: "Signs",
+  name: "Handshapes",
   components: {
-    SignForm
+    HandshapeForm
   },
   mixins: [listMixin],
   data() {
@@ -133,7 +138,7 @@ export default {
   methods: {
     getList() {
       this.loading = true;
-      GetSignsList(this.params)
+      GetHandshapesList(this.params)
         .then(res => {
           this.list = res.data;
           this.total = res.total;
@@ -144,18 +149,18 @@ export default {
         });
     },
     handleCreate(data) {
-      CreateSign(data)
+      CreateHandshape(data)
         .then(() => {
-          this.handleModify("data/getSigns");
+          this.handleModify("data/getHandshapes");
         })
         .catch(() => {
           this.loading = false;
         });
     },
     handleUpdate(id, updateData) {
-      UpdateSign(id, updateData)
+      UpdateHandshape(id, updateData)
         .then(() => {
-          this.handleModify("data/getSigns");
+          this.handleModify("data/getHandshapes");
         })
         .catch(() => {
           this.loading = false;
@@ -173,8 +178,8 @@ export default {
         }
       )
         .then(() => {
-          DeleteSign(id).then(() => {
-            this.handleModify("data/getSigns");
+          DeleteHandshape(id).then(() => {
+            this.handleModify("data/getHandshapes");
           });
         })
         .catch(() => {
@@ -184,16 +189,16 @@ export default {
     handleExport() {
       const params = lodash.cloneDeep(this.params);
       params.limit = 0;
-      GetSignsList(params, true).then(res => {
+      GetHandshapesList(params, true).then(res => {
         const sheetData = res.data.map(item => {
           return {
             [this.$t("CreatedAt")]: new Date(item.createdAt),
             [this.$t("UpdatedAt")]: new Date(item.updatedAt),
-            [this.$t("SignName")]: item.name,
-            [this.$t("SignGlyph")]: item.glyph
+            [this.$t("HandshapeName")]: item.name,
+            [this.$t("HandshapeGlyph")]: item.glyph
           };
         });
-        this.handleDownloadSheet(sheetData, "sign");
+        this.handleDownloadSheet(sheetData, "handshape");
       });
     }
   }

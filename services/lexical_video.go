@@ -9,11 +9,11 @@ import (
 
 // LexicalVideoInterface struct
 type LexicalVideoInterface interface {
-	GetVideosList(parameters utils.GetVideoListParameters) (videos []models.LexicalVideo, count int, err error)
-	CreateVideo(video models.LexicalVideo) (err error)
-	GetVideo(videoID string) (video models.LexicalVideo, err error)
-	UpdateVideo(videoID string, updatedData map[string]interface{}) (err error)
-	DeleteVideo(videoID string) (err error)
+	GetLexicalVideosList(parameters utils.GetLexicalVideoListParameters) (videos []models.LexicalVideo, count int, err error)
+	CreateLexicalVideo(video models.LexicalVideo) (err error)
+	GetLexicalVideo(id string) (video models.LexicalVideo, err error)
+	UpdateLexicalVideo(id string, updatedData map[string]interface{}) (err error)
+	DeleteLexicalVideo(id string) (err error)
 }
 
 // LexicalVideoService implements Video interface
@@ -28,8 +28,8 @@ func NewLexicalVideoService(pg *gorm.DB) LexicalVideoInterface {
 	}
 }
 
-// GetVideosList returns video list
-func (s *LexicalVideoService) GetVideosList(parameters utils.GetVideoListParameters) (videos []models.LexicalVideo, count int, err error) {
+// GetLexicalVideosList returns video list
+func (s *LexicalVideoService) GetLexicalVideosList(parameters utils.GetLexicalVideoListParameters) (videos []models.LexicalVideo, count int, err error) {
 	// Adding custom scopes to the query based on get list parameters.
 	db := s.PG.
 		Scopes(
@@ -43,9 +43,9 @@ func (s *LexicalVideoService) GetVideosList(parameters utils.GetVideoListParamet
 			utils.FilterByColumn("performers.id", parameters.PerformerID),
 			utils.FilterByColumn("lexical_videos.word_formation", parameters.WordFormation),
 			utils.SearchInList("lexical_videos.morpheme", parameters.Morpheme),
-			utils.FilterInList("lexical_videos.left_signs_id", parameters.LeftSignID),
-			utils.FilterInList("lexical_videos.right_signs_id", parameters.RightSignID),
-			utils.FilterInList("lexical_videos.left_signs_id || lexical_videos.right_signs_id", parameters.SignID),
+			utils.FilterInList("lexical_videos.left_handshapes_id", parameters.LeftHandshapeID),
+			utils.FilterInList("lexical_videos.right_handshapes_id", parameters.RightHandshapeID),
+			utils.FilterInList("lexical_videos.left_handshapes_id || lexical_videos.right_handshapes_id", parameters.HandshapeID),
 		)
 
 	query := db.Joins("JOIN performers ON performers.id = lexical_videos.performer_id").
@@ -67,36 +67,35 @@ func (s *LexicalVideoService) GetVideosList(parameters utils.GetVideoListParamet
 	return
 }
 
-// CreateVideo creates a new video
-func (s *LexicalVideoService) CreateVideo(video models.LexicalVideo) (err error) {
+// CreateLexicalVideo creates a new video
+func (s *LexicalVideoService) CreateLexicalVideo(video models.LexicalVideo) (err error) {
 	err = s.PG.
 		Create(&video).Error
 	return
 }
 
-// GetVideo returns video with given id
-func (s *LexicalVideoService) GetVideo(videoID string) (video models.LexicalVideo, err error) {
+// GetLexicalVideo returns video with given id
+func (s *LexicalVideoService) GetLexicalVideo(id string) (video models.LexicalVideo, err error) {
 	err = s.PG.
-		Where("id = ?", videoID).
+		Where("id = ?", id).
 		Take(&video).Error
 	return
 }
 
-// UpdateVideo returns video with given id
-func (s *LexicalVideoService) UpdateVideo(videoID string, updatedData map[string]interface{}) (err error) {
-	var video models.LexicalVideo
+// UpdateLexicalVideo returns video with given id
+func (s *LexicalVideoService) UpdateLexicalVideo(id string, updatedData map[string]interface{}) (err error) {
 	err = s.PG.
-		Where("id = ?", videoID).
-		Take(&video).
+		Model(&models.LexicalVideo{}).
+		Where("id = ?", id).
 		Updates(updatedData).Error
 	return
 }
 
-// DeleteVideo soft deletes a video
-func (s *LexicalVideoService) DeleteVideo(videoID string) (err error) {
+// DeleteLexicalVideo soft deletes a video
+func (s *LexicalVideoService) DeleteLexicalVideo(id string) (err error) {
 	var video models.LexicalVideo
 	err = s.PG.
-		Where("id = ?", videoID).
+		Where("id = ?", id).
 		Delete(&video).
 		Error
 	return

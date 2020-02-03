@@ -1,6 +1,6 @@
 <template>
   <div class="lexical-database">
-    <sign-search @sign-selected="searchBySign" />
+    <handshape-search @handshape-selected="searchByHandshape" />
 
     <div class="search">
       <h2>{{ $t("LexicalDatabase") }}</h2>
@@ -28,7 +28,7 @@
 import VideoSearchInput from "@/components/video/VideoSearchInput.vue";
 import VideoSearchResult from "@/components/video/VideoSearchResult.vue";
 import WordSearch from "@/components/form/WordSearch.vue";
-import SignSearch from "@/components/form/SignSearch.vue";
+import HandshapeSearch from "@/components/form/HandshapeSearch.vue";
 
 import { GetLexicalVideosList } from "@/api/videos";
 
@@ -38,7 +38,7 @@ export default {
     VideoSearchResult,
     VideoSearchInput,
     WordSearch,
-    SignSearch
+    HandshapeSearch
   },
   data() {
     return {
@@ -53,9 +53,9 @@ export default {
         english: "",
         gender: "",
         regionID: undefined,
-        leftSignID: "", // 左手手形
-        rightSignID: "", // 右手手形
-        signID: "", // 任意手形
+        leftHandshapeID: "", // 左手手形
+        rightHandshapeID: "", // 右手手形
+        handshapeID: "", // 任意手形
         pos: "", // 词性
         initial: "",
         wordFormation: "",
@@ -68,9 +68,9 @@ export default {
       this.params.lexiconID = "";
       this.params.gender = "";
       this.params.regionID = undefined;
-      this.params.leftSignID = "";
-      this.params.rightSignID = "";
-      this.params.signID = "";
+      this.params.leftHandshapeID = "";
+      this.params.rightHandshapeID = "";
+      this.params.handshapeID = "";
       this.params.pos = "";
       this.params.chinese = "";
       this.params.english = "";
@@ -103,7 +103,7 @@ export default {
     },
     searchByButton() {
       this.params.lexiconID = "";
-      this.params.signID = "";
+      this.params.handshapeID = "";
       this.params.page = 1;
       this.getData();
     },
@@ -113,9 +113,9 @@ export default {
       this.params.page = 1;
       this.getData();
     },
-    searchBySign(signID) {
+    searchByHandshape(handshapeID) {
       this.clearParams();
-      this.params.signID = signID;
+      this.params.handshapeID = handshapeID;
       this.params.page = 1;
       this.getData();
     }

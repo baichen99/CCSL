@@ -12,8 +12,8 @@ import (
 
 // HandshapeController is for word CRUD
 type HandshapeController struct {
-	Context     iris.Context
-	SignService services.HandshapeInterface
+	Context          iris.Context
+	HandshapeService services.HandshapeInterface
 }
 
 // BeforeActivation register routes
@@ -40,7 +40,7 @@ func (c *HandshapeController) GetHandshapesList() {
 		GetListParameters: listParams,
 		Name:              name,
 	}
-	handshapes, count, err := c.SignService.GetHandshapesList(listParameters)
+	handshapes, count, err := c.HandshapeService.GetHandshapesList(listParameters)
 	if err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "HandshapeService::GetHandshapesList", errSQL)
 		return
@@ -63,8 +63,8 @@ func (c *HandshapeController) CreateHandshape() {
 		utils.SetError(c.Context, iris.StatusBadRequest, "HandshapeController::CreateHandshape", errParams)
 		return
 	}
-	sign := form.ConvertToModel()
-	if err := c.SignService.CreateHandshape(sign); err != nil {
+	handshape:= form.ConvertToModel()
+	if err := c.HandshapeService.CreateHandshape(handshape); err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "WordService::CreateHandshape", errSQL)
 		return
 	}
@@ -78,8 +78,8 @@ func (c *HandshapeController) CreateHandshape() {
 // GetHandshape GET  /handshapes/{id:string}
 func (c *HandshapeController) GetHandshape() {
 	defer c.Context.Next()
-	signID := c.Context.Params().Get("id")
-	sign, err := c.SignService.GetHandshape(signID)
+	handshapeID := c.Context.Params().Get("id")
+	handshape, err := c.HandshapeService.GetHandshape(handshapeID)
 	if err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "HandshapeService::GetHandshape", errSQL)
 		return
@@ -87,7 +87,7 @@ func (c *HandshapeController) GetHandshape() {
 	// Returning word information in data key.
 	c.Context.JSON(iris.Map{
 		message: success,
-		data:    sign,
+		data:    handshape,
 	})
 }
 
@@ -95,12 +95,12 @@ func (c *HandshapeController) GetHandshape() {
 func (c *HandshapeController) UpdateHandshape() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
-	signID := c.Context.Params().Get("id")
+	handshapeID := c.Context.Params().Get("id")
 	var form handshapeUpdateForm
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
 		utils.SetError(c.Context, iris.StatusBadRequest, "HandshapeController::UpdateHandshape", errParams)
 	}
-	if err := c.SignService.UpdateHandshape(signID, utils.MakeUpdateData(form)); err != nil {
+	if err := c.HandshapeService.UpdateHandshape(handshapeID, utils.MakeUpdateData(form)); err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "HandshapeService::UpdateHandshape", errSQL)
 		return
 	}
@@ -113,10 +113,10 @@ func (c *HandshapeController) UpdateHandshape() {
 func (c *HandshapeController) DeleteHandshape() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
-	signID := c.Context.Params().Get("id")
+	handshapeID := c.Context.Params().Get("id")
 
 	// PSQL - Soft delete of the given ID
-	if err := c.SignService.DeleteHandshape(signID); err != nil {
+	if err := c.HandshapeService.DeleteHandshape(handshapeID); err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "HandshapeService::DeleteHandshape", errSQL)
 		return
 	}

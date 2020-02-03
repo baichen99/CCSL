@@ -32,8 +32,8 @@
       <el-card v-show="advancedSearch && showAdvance" shadow="never" class="advance">
         <div class="search-options">
           <gender-selector v-model="searchParams.gender" />
-          <sign-selector v-model="searchParams.leftSignID" orientation="left" />
-          <sign-selector v-model="searchParams.rightSignID" orientation="right" />
+          <handshape-selector v-model="searchParams.leftHandshapeID" orientation="left" />
+          <handshape-selector v-model="searchParams.rightHandshapeID" orientation="right" />
           <pos-selector v-model="searchParams.pos" />
           <city-selector v-model="searchParams.regionID" />
           <word-formation-selector v-model="searchParams.wordFormation" />
@@ -57,7 +57,7 @@
 
 
 <script>
-import SignSelector from "@/components/form/SignSelector.vue";
+import HandshapeSelector from "@/components/form/HandshapeSelector.vue";
 import CitySelector from "@/components/form/CitySelector.vue";
 import GenderSelector from "@/components/form/GenderSelector.vue";
 import PosSelector from "@/components/form/PosSelector.vue";
@@ -68,7 +68,7 @@ export default {
   name: "VideoSearchInput",
   components: {
     CitySelector,
-    SignSelector,
+    HandshapeSelector,
     GenderSelector,
     PosSelector,
     WordFormationSelector,
@@ -112,7 +112,7 @@ export default {
     search() {
       // Reset side panel search parameters
       this.searchParams.word = "";
-      this.searchParams.sign = "";
+      this.searchParams.handshape = "";
       this.searchParams.chinese = "";
       this.searchParams.english = "";
       if (this.keywordType === "en-US") {

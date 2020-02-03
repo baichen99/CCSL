@@ -1,8 +1,8 @@
 import request from "@/utils/request";
 
-const baseURL = "/signs";
+const baseURL = "/handshapes";
 
-export function GetSignsList(params, loading) {
+export function GetHandshapesList(params, loading) {
   return request({
     url: baseURL,
     method: "get",
@@ -11,7 +11,7 @@ export function GetSignsList(params, loading) {
   });
 }
 
-export function CreateSign(data) {
+export function CreateHandshape(data) {
   return request({
     url: baseURL,
     method: "post",
@@ -19,14 +19,14 @@ export function CreateSign(data) {
   });
 }
 
-export function GetSign(id) {
+export function GetHandshape(id) {
   return request({
     url: `${baseURL}/${id}`,
     method: "get"
   });
 }
 
-export function UpdateSign(id, data) {
+export function UpdateHandshape(id, data) {
   return request({
     url: `${baseURL}/${id}`,
     method: "put",
@@ -34,7 +34,7 @@ export function UpdateSign(id, data) {
   });
 }
 
-export function DeleteSign(id) {
+export function DeleteHandshape(id) {
   return request({
     url: `${baseURL}/${id}`,
     method: "delete"

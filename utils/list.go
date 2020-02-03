@@ -51,7 +51,7 @@ func FilterInSubQuery(columnName string, subQuery string) func(db *gorm.DB) *gor
 // SearchInList generate function to search value from array
 func SearchInList(listName string, value string) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
-		// SQL select in array: SELCET * FROM table WHERE array_to_string(listName, ',') LIKE value
+		// SQL select in array: SELECT * FROM table WHERE array_to_string(listName, ',') LIKE value
 		if value != "" {
 			value := "%" + value + "%"
 			query := fmt.Sprintf("array_to_string(%s,',') LIKE ?", listName)
@@ -64,7 +64,7 @@ func SearchInList(listName string, value string) func(db *gorm.DB) *gorm.DB {
 // FilterInList generate function to filter value from array
 func FilterInList(columnName string, value string) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
-		// SQL select in array: SELCET * FROM table WHERE value = ANY(query)
+		// SQL select in array: SELECT * FROM table WHERE value = ANY(query)
 		if value != "" {
 			query := fmt.Sprintf("? = ANY(%s)", columnName)
 			return db.Where(query, value)
@@ -75,7 +75,7 @@ func FilterInList(columnName string, value string) func(db *gorm.DB) *gorm.DB {
 
 // FilterMultiInList generate function to filter multiple value from array
 func FilterMultiInList(columnName string, value pq.StringArray) func(db *gorm.DB) *gorm.DB {
-	// SQL select multiple value in array: SELCET * FROM table WHERE [element_1, element_2] <@ columnName
+	// SQL select multiple value in array: SELECT * FROM table WHERE [element_1, element_2] <@ columnName
 	return func(db *gorm.DB) *gorm.DB {
 		if len(value) != 0 {
 			query := fmt.Sprintf("? <@ %s", columnName)
@@ -88,7 +88,7 @@ func FilterMultiInList(columnName string, value pq.StringArray) func(db *gorm.DB
 // FilterByArray generate function to search value from a comma escaped string
 func FilterByArray(columnName string, value string, escape string) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
-		// SQL select in array: SELCET * FROM table WHERE value = ANY(string_to_array(query,','))
+		// SQL select in array: SELECT * FROM table WHERE value = ANY(string_to_array(query,','))
 		if value != "" {
 			query := fmt.Sprintf("? = ANY(string_to_array(%s,'%s'))", columnName, escape)
 			return db.Where(query, value)
@@ -158,22 +158,22 @@ type GetPerformerListParameters struct {
 	Gender   string
 }
 
-// GetVideoListParameters parameters for get videos list queries
-type GetVideoListParameters struct {
+// GetLexicalVideoListParameters parameters for get videos list queries
+type GetLexicalVideoListParameters struct {
 	GetListParameters
-	LexiconID     string
-	Initial       string
-	Chinese       string
-	English       string
-	Pos           string
-	RegionID      string
-	Gender        string
-	LeftSignID    string
-	RightSignID   string
-	SignID        string
-	WordFormation string
-	Morpheme      string
-	PerformerID   string
+	LexiconID        string
+	Initial          string
+	Chinese          string
+	English          string
+	Pos              string
+	RegionID         string
+	Gender           string
+	LeftHandshapeID  string
+	RightHandshapeID string
+	HandshapeID      string
+	WordFormation    string
+	Morpheme         string
+	PerformerID      string
 }
 
 // GetNewsListParameters parameters for get list queries
@@ -187,14 +187,14 @@ type GetNewsListParameters struct {
 	State    string
 }
 
-// GetMemberListParameters parameters for get members list queris
+// GetMemberListParameters parameters for get members list queries
 type GetMemberListParameters struct {
 	GetListParameters
 	NameZh string
 	NameEn string
 }
 
-// GetCarouselListParameters parameters for get carousel list queris
+// GetCarouselListParameters parameters for get carousel list queries
 type GetCarouselListParameters struct {
 	GetListParameters
 	TitleZh string
@@ -202,8 +202,8 @@ type GetCarouselListParameters struct {
 	State   string
 }
 
-// GetSignListParameters parameters for get sign list queries
-type GetSignListParameters struct {
+// GetHandshapeListParameters parameters for get handshape list queries
+type GetHandshapeListParameters struct {
 	GetListParameters
 	Name string
 }

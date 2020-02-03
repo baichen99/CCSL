@@ -92,7 +92,7 @@ export default {
     this.$nextTick(() => {
       this.$store.dispatch("data/getPerformers");
       this.$store.dispatch("data/getLexicons");
-      this.$store.dispatch("data/getSigns");
+      this.$store.dispatch("data/getHandshapes");
     });
   },
   methods: {

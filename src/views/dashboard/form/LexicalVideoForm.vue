@@ -22,12 +22,12 @@
       <morphemes-picker v-model="formData.morpheme" />
     </el-form-item>
 
-    <el-form-item :label="$t('LeftSign')" prop="leftSignsID">
-      <multi-sign-selector v-model="formData.leftSignsID" />
+    <el-form-item :label="$t('LeftHandshape')" prop="leftHandshapesID">
+      <multi-handshape-selector v-model="formData.leftHandshapesID" />
     </el-form-item>
 
-    <el-form-item :label="$t('RightSign')" prop="rightSignsID">
-      <multi-sign-selector v-model="formData.rightSignsID" />
+    <el-form-item :label="$t('RightHandshape')" prop="rightHandshapesID">
+      <multi-handshape-selector v-model="formData.rightHandshapesID" />
     </el-form-item>
   </el-form>
 </template>
@@ -39,7 +39,7 @@ import WordFormationSelector from "@/components/form/WordFormationSelector";
 import MorphemesPicker from "@/components/form/MorphemesPicker";
 import PerformerSelector from "@/components/form/PerformerSelector";
 import WordSelector from "@/components/form/WordSelector";
-import MultiSignSelector from "@/components/form/MultiSignSelector";
+import MultiHandshapeSelector from "@/components/form/MultiHandshapeSelector";
 import formMixin from "./formMixin";
 export default {
   name: "LexicalVideoForm",
@@ -48,7 +48,7 @@ export default {
     MorphemesPicker,
     PerformerSelector,
     WordSelector,
-    MultiSignSelector,
+    MultiHandshapeSelector,
     VideoUploader
   },
   mixins: [formMixin],

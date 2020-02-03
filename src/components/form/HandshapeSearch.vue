@@ -1,17 +1,17 @@
 <template>
-  <el-card class="sign-search" shadow="hover">
+  <el-card class="handshape-search" shadow="hover">
     <h3 class="title">{{ $t("title") }}</h3>
-    <div class="sign">
-      <div v-for="item in signs" :key="item.id" class="sign-box">
+    <div class="handshape">
+      <div v-for="item in handshapes" :key="item.id" class="handshape-box">
         <el-popover trigger="hover" placement="top">
-          <div class="sign-name-popover" style>{{ item.name }}</div>
+          <div class="handshape-name-popover" style>{{ item.name }}</div>
           <img width="200px" :src="settings.publicURL + item.image" :alt="item.name" />
           <img
             slot="reference"
             style="width:100%"
             :src="settings.publicURL + item.image"
             :alt="item.name"
-            @click="onSignSelected(item.id)"
+            @click="onHandshapeSelected(item.id)"
           />
         </el-popover>
       </div>
@@ -25,7 +25,7 @@
     "title": "手形检索"
   },
   "en-US": {
-    "title": "Search by Sign"
+    "title": "Search by Handshape"
   }
 }
 </i18n>
@@ -33,10 +33,10 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
-  name: "SignSearch",
+  name: "HandshapeSearch",
   data() {
     return {
-      signs: []
+      handshapes: []
     };
   },
   computed: {
@@ -44,21 +44,21 @@ export default {
   },
   created() {
     this.$nextTick(async () => {
-      await this.$store.dispatch("data/getSigns");
-      const data = this.$store.state.data.signs;
-      this.signs = Object.values(data);
+      await this.$store.dispatch("data/getHandshapes");
+      const data = this.$store.state.data.handshapes;
+      this.handshapes = Object.values(data);
     });
   },
   methods: {
-    onSignSelected(sign) {
-      this.$emit("sign-selected", sign);
+    onHandshapeSelected(handshape) {
+      this.$emit("handshape-selected", handshape);
     }
   }
 };
 </script>
 
 <style lang="scss">
-.sign-name-popover {
+.handshape-name-popover {
   text-align: center;
   font-size: 20px;
   font-weight: bold;
@@ -67,7 +67,7 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-.sign-search {
+.handshape-search {
   width: 18%;
   min-height: 600px;
   max-height: 80vh;
@@ -81,12 +81,12 @@ export default {
   -ms-overflow-style: none;
   overflow: -moz-scrollbars-none;
 
-  .sign {
+  .handshape {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    .sign-box {
+    .handshape-box {
       width: 33%;
       padding: 5px;
       img {

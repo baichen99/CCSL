@@ -13,7 +13,7 @@ type Handshape struct {
 	Glyph string `json:"glyph"`                  // 字形
 }
 
-// Handshapes is alias for []Sign
+// Handshapes is alias for []Handshape
 type Handshapes []Handshape
 
 // Len returns length

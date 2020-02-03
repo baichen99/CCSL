@@ -10,10 +10,10 @@ import (
 // CarouselInterface struct
 type CarouselInterface interface {
 	GetCarouselList(parameters utils.GetCarouselListParameters) (carousels []models.Carousel, count int, err error)
-	GetCarousel(carouselID string) (carousel models.Carousel, err error)
+	GetCarousel(id string) (carousel models.Carousel, err error)
 	CreateCarousel(carousel models.Carousel) (err error)
-	UpdateCarousel(carouselID string, updatedData map[string]interface{}) (err error)
-	DeleteCarousel(carouselID string) (err error)
+	UpdateCarousel(id string, updatedData map[string]interface{}) (err error)
+	DeleteCarousel(id string) (err error)
 }
 
 // CarouselService implements CarouselInterface
@@ -55,10 +55,10 @@ func (s *CarouselService) GetCarouselList(parameters utils.GetCarouselListParame
 }
 
 // GetCarousel returns carousel with given id
-func (s *CarouselService) GetCarousel(carouselID string) (carousel models.Carousel, err error) {
+func (s *CarouselService) GetCarousel(id string) (carousel models.Carousel, err error) {
 	err = s.PG.
 		Preload("Creator").
-		Where("id = ?", carouselID).
+		Where("id = ?", id).
 		Take(&carousel).
 		Error
 	return
@@ -73,21 +73,20 @@ func (s *CarouselService) CreateCarousel(carousel models.Carousel) (err error) {
 }
 
 // UpdateCarousel updates carousel with given id
-func (s *CarouselService) UpdateCarousel(carouselID string, updatedData map[string]interface{}) (err error) {
-	var carousel models.Carousel
+func (s *CarouselService) UpdateCarousel(id string, updatedData map[string]interface{}) (err error) {
 	err = s.PG.
-		Where("id = ?", carouselID).
-		Take(&carousel).
+		Model(&models.Carousel{}).
+		Where("id = ?", id).
 		Updates(updatedData).
 		Error
 	return
 }
 
 // DeleteCarousel soft deletes a carousel with given id
-func (s *CarouselService) DeleteCarousel(carouselID string) (err error) {
+func (s *CarouselService) DeleteCarousel(id string) (err error) {
 	var carousel models.Carousel
 	err = s.PG.
-		Where("id = ?", carouselID).
+		Where("id = ?", id).
 		Delete(&carousel).
 		Error
 	return

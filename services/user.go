@@ -13,8 +13,8 @@ type UserInterface interface {
 	GetUsersList(parameters utils.GetUserListParameters) (users []models.User, count int, err error)
 	CreateUser(user models.User) (err error)
 	GetUser(key string, value string) (user models.User, err error)
-	UpdateUser(userID string, updatedData map[string]interface{}) (err error)
-	DeleteUser(userID string) (err error)
+	UpdateUser(id string, updatedData map[string]interface{}) (err error)
+	DeleteUser(id string) (err error)
 	GetLoginHistoryList(parameters utils.GetUserLoginListParameters) (list []models.LoginHistory, count int, err error)
 	CreateLoginHistory(info models.LoginHistory) (err error)
 }
@@ -121,27 +121,26 @@ func (s *UserService) GetUser(key string, value string) (user models.User, err e
 	case "username":
 		err = db.Where("username = ?", value).Take(&user).Error
 	default:
-		err = errors.New("Unsupported key")
+		err = errors.New("unsupported key")
 	}
 	return
 }
 
 // UpdateUser updates user model
-func (s *UserService) UpdateUser(userID string, updatedData map[string]interface{}) (err error) {
-	var user models.User
+func (s *UserService) UpdateUser(id string, updatedData map[string]interface{}) (err error) {
 	err = s.PG.
-		Where("id = ?", userID).
-		Take(&user).
+		Model(&models.User{}).
+		Where("id = ?", id).
 		Updates(updatedData).
 		Error
 	return
 }
 
 // DeleteUser soft deletes a user model
-func (s *UserService) DeleteUser(userID string) (err error) {
+func (s *UserService) DeleteUser(id string) (err error) {
 	var user models.User
 	err = s.PG.
-		Where("id = ?", userID).
+		Where("id = ?", id).
 		Delete(&user).
 		Error
 	return

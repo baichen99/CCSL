@@ -48,29 +48,29 @@
           <el-tag type="info">{{ $t("NoData") }}</el-tag>
         </span>
       </div>
-      <div v-if="video.leftSignsID.length !== 0" class="tags">
-        <span class="tag-label">{{ $t("LeftSign") }}</span>
+      <div v-if="video.leftHandshapesID.length !== 0" class="tags">
+        <span class="tag-label">{{ $t("LeftHandshape") }}</span>
         <span class="tag-value" style="width:85%">
-          <span v-for="item in video.leftSignsID" :key="item">
-            <el-tooltip effect="dark" :content="signs[item].name" placement="top">
+          <span v-for="item in video.leftHandshapesID" :key="item">
+            <el-tooltip effect="dark" :content="handshapes[item].name" placement="top">
               <img
                 style="width:150px"
-                :src="settings.publicURL + signs[item].image"
-                :alt="signs[item].name"
+                :src="settings.publicURL + handshapes[item].image"
+                :alt="handshapes[item].name"
               />
             </el-tooltip>
           </span>
         </span>
       </div>
-      <div v-if="video.rightSignsID.length !== 0" class="tags">
-        <span class="tag-label">{{ $t("RightSign") }}</span>
+      <div v-if="video.rightHandshapesID.length !== 0" class="tags">
+        <span class="tag-label">{{ $t("RightHandshape") }}</span>
         <span class="tag-value" style="width:85%">
-          <span v-for="item in video.rightSignsID" :key="item">
-            <el-tooltip effect="dark" :content="signs[item].name" placement="top">
+          <span v-for="item in video.rightHandshapesID" :key="item">
+            <el-tooltip effect="dark" :content="handshapes[item].name" placement="top">
               <img
                 style="width:150px"
-                :src="settings.publicURL + signs[item].image"
-                :alt="signs[item].name"
+                :src="settings.publicURL + handshapes[item].image"
+                :alt="handshapes[item].name"
               />
             </el-tooltip>
           </span>
@@ -102,7 +102,7 @@ export default {
       "settings",
       "lexicons",
       "performers",
-      "signs"
+      "handshapes"
     ])
   }
 };

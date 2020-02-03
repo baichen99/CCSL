@@ -11,9 +11,9 @@ import (
 type LexiconInterface interface {
 	GetWordsList(parameters utils.GetLexiconListParameters) (words []models.Lexicon, count int, err error)
 	CreateWord(word models.Lexicon) (err error)
-	GetWord(wordID string) (word models.Lexicon, err error)
-	UpdateWord(wordID string, updatedData map[string]interface{}) (err error)
-	DeleteWord(wordID string) (err error)
+	GetWord(id string) (word models.Lexicon, err error)
+	UpdateWord(id string, updatedData map[string]interface{}) (err error)
+	DeleteWord(id string) (err error)
 }
 
 // LexiconService implements lexicon interface
@@ -60,9 +60,9 @@ func (s *LexiconService) GetWordsList(parameters utils.GetLexiconListParameters)
 }
 
 // GetWord returns word with given id
-func (s *LexiconService) GetWord(wordID string) (word models.Lexicon, err error) {
+func (s *LexiconService) GetWord(id string) (word models.Lexicon, err error) {
 	err = s.PG.
-		Where("id = ?", wordID).
+		Where("id = ?", id).
 		Take(&word).
 		Error
 	return
@@ -77,21 +77,20 @@ func (s *LexiconService) CreateWord(word models.Lexicon) (err error) {
 }
 
 // UpdateWord updates word with given id
-func (s *LexiconService) UpdateWord(wordID string, updatedData map[string]interface{}) (err error) {
-	var word models.Lexicon
+func (s *LexiconService) UpdateWord(id string, updatedData map[string]interface{}) (err error) {
 	err = s.PG.
-		Where("id = ?", wordID).
-		Take(&word).
+		Model(&models.Lexicon{}).
+		Where("id = ?", id).
 		Updates(updatedData).
 		Error
 	return
 }
 
 // DeleteWord soft deletes a word with given id
-func (s *LexiconService) DeleteWord(wordID string) (err error) {
+func (s *LexiconService) DeleteWord(id string) (err error) {
 	var word models.Lexicon
 	err = s.PG.
-		Where("id = ?", wordID).
+		Where("id = ?", id).
 		Delete(&word).
 		Error
 	return

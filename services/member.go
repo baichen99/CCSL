@@ -10,10 +10,10 @@ import (
 // MemberInterface struct
 type MemberInterface interface {
 	GetMemberList(parameters utils.GetMemberListParameters) (members []models.Member, count int, err error)
-	GetMember(memberID string) (member models.Member, err error)
+	GetMember(id string) (member models.Member, err error)
 	CreateMember(member models.Member) (err error)
-	UpdateMember(memberID string, updateData map[string]interface{}) (err error)
-	DeleteMember(memberID string) (err error)
+	UpdateMember(id string, updateData map[string]interface{}) (err error)
+	DeleteMember(id string) (err error)
 }
 
 // MemberService implements member interface
@@ -57,9 +57,9 @@ func (s *MemberService) GetMemberList(parameters utils.GetMemberListParameters) 
 }
 
 // GetMember returns member with given id
-func (s *MemberService) GetMember(memberID string) (member models.Member, err error) {
+func (s *MemberService) GetMember(id string) (member models.Member, err error) {
 	err = s.PG.
-		Where("id = ?", memberID).
+		Where("id = ?", id).
 		Take(&member).
 		Error
 	return
@@ -74,21 +74,20 @@ func (s *MemberService) CreateMember(member models.Member) (err error) {
 }
 
 // UpdateMember updates member with given id
-func (s *MemberService) UpdateMember(memberID string, updateData map[string]interface{}) (err error) {
-	var member models.Member
+func (s *MemberService) UpdateMember(id string, updateData map[string]interface{}) (err error) {
 	err = s.PG.
-		Where("id = ?", memberID).
-		Take(&member).
+		Model(&models.Member{}).
+		Where("id = ?", id).
 		Updates(updateData).
 		Error
 	return
 }
 
 // DeleteMember soft deletes a member with given id
-func (s *MemberService) DeleteMember(memberID string) (err error) {
+func (s *MemberService) DeleteMember(id string) (err error) {
 	var member models.Member
 	err = s.PG.
-		Where("id = ?", memberID).
+		Where("id = ?", id).
 		Delete(&member).
 		Error
 	return

@@ -36,10 +36,9 @@ func (s *SystemService) GetAppInfo(key string) (data models.Info, err error) {
 }
 
 func (s *SystemService) UpdateAppInfo(key string, updatedData map[string]interface{}) (err error) {
-	var info models.Info
 	err = s.PG.
+		Model(&models.Info{}).
 		Where("key = ?", key).
-		Take(&info).
 		Updates(updatedData).
 		Error
 	return

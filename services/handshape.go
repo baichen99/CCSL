@@ -7,31 +7,31 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// SignInterface struct
-type SignInterface interface {
-	GetSignList(parameters utils.GetSignListParameters) (signs []models.Handshape, count int, err error)
-	CreateSign(sign models.Handshape) (err error)
-	GetSign(signID string) (sign models.Handshape, err error)
-	UpdateSign(signID string, updatedData map[string]interface{}) (err error)
-	DeleteSign(signID string) (err error)
+// HandshapeInterface struct
+type HandshapeInterface interface {
+	GetHandshapesList(parameters utils.GetHandshapeListParameters) (handshapes []models.Handshape, count int, err error)
+	CreateHandshape(handshape models.Handshape) (err error)
+	GetHandshape(id string) (handshape models.Handshape, err error)
+	UpdateHandshape(id string, updatedData map[string]interface{}) (err error)
+	DeleteHandshape(id string) (err error)
 }
 
-// SignService implements user interface
-type SignService struct {
+// HandshapeService implements user interface
+type HandshapeService struct {
 	PG *gorm.DB
 }
 
-// NewSignService return a new SignService
-func NewSignService(pg *gorm.DB) SignInterface {
-	return &SignService{
+// NewHandshapeService return a new HandshapeService
+func NewHandshapeService(pg *gorm.DB) HandshapeInterface {
+	return &HandshapeService{
 		PG: pg,
 	}
 }
 
-func (s *SignService) GetSignList(parameters utils.GetSignListParameters) (signs []models.Handshape, count int, err error) {
+func (s *HandshapeService) GetHandshapesList(parameters utils.GetHandshapeListParameters) (handshapes []models.Handshape, count int, err error) {
 	db := s.PG.
 		Scopes(
-			utils.SearchByColumn("signs.name", parameters.Name),
+			utils.SearchByColumn("handshapes.name", parameters.Name),
 		)
 
 	err = db.
@@ -43,65 +43,64 @@ func (s *SignService) GetSignList(parameters utils.GetSignListParameters) (signs
 		return
 	}
 
-	// nameOrder is used to sort signs list by checking its contained number through a string typed value
-	// If we don't do like this, signs order would be 1, 10, 11, ..., 2, 20, ..., ZH
-	// This regular expression can help sort signs as we expected: 1, 2, 3, ..., 11, ..., ZH
-	const nameOrder = `cast(substring(signs.name, '^\d+') as int) asc`
+	// nameOrder is used to sort handshapes list by checking its contained number through a string typed value
+	// If we don't do like this, handshapes order would be 1, 10, 11, ..., 2, 20, ..., ZH
+	// This regular expression can help sort handshapes as we expected: 1, 2, 3, ..., 11, ..., ZH
+	const nameOrder = `cast(substring(handshapes.name, '^\d+') as int) asc`
 
 	err = db.
 		Order(nameOrder).
 		Scopes(utils.FilterByListParameters(parameters.GetListParameters)).
-		Find(&signs).Error
+		Find(&handshapes).Error
 
 	return
 }
 
-func (s *SignService) CreateSign(sign models.Handshape) (err error) {
+func (s *HandshapeService) CreateHandshape(handshape models.Handshape) (err error) {
 	err = s.PG.
-		Create(&sign).
+		Create(&handshape).
 		Error
 	return
 }
 
-func (s *SignService) GetSign(signID string) (sign models.Handshape, err error) {
+func (s *HandshapeService) GetHandshape(id string) (handshape models.Handshape, err error) {
 	err = s.PG.
-		Where("id = ?", signID).
-		Take(&sign).
+		Where("id = ?", id).
+		Take(&handshape).
 		Error
 	return
 }
 
-func (s *SignService) UpdateSign(signID string, updatedData map[string]interface{}) (err error) {
-	var sign models.Handshape
+func (s *HandshapeService) UpdateHandshape(id string, updatedData map[string]interface{}) (err error) {
 	err = s.PG.
-		Where("id = ?", signID).
-		Take(&sign).
+		Model(&models.Handshape{}).
+		Where("id = ?", id).
 		Updates(updatedData).
 		Error
 	return
 }
 
-func (s *SignService) DeleteSign(signID string) (err error) {
-	var sign models.Handshape
+func (s *HandshapeService) DeleteHandshape(id string) (err error) {
+	var handshape models.Handshape
 	tx := s.PG.Begin()
 	err = tx.
-		Where("id = ?", signID).
-		Delete(&sign).
+		Where("id = ?", id).
+		Delete(&handshape).
 		Error
 	if err != nil {
 		tx.Rollback()
 		return
 	}
 
-	// Delete all the video associations related to this sign
+	// Delete all the video associations related to this handshape
 	err = tx.Table("lexical_videos").
 		UpdateColumn(
-			"left_signs_id",
-			gorm.Expr("array_remove(left_signs_id, ? )", signID),
+			"left_handshapes_id",
+			gorm.Expr("array_remove(left_handshapes_id, ? )", id),
 		).
 		UpdateColumn(
-			"right_signs_id",
-			gorm.Expr("array_remove(right_signs_id, ? )", signID),
+			"right_handshapes_id",
+			gorm.Expr("array_remove(right_handshapes_id, ? )", id),
 		).
 		Error
 	if err != nil {

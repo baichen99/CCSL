@@ -11,9 +11,9 @@ import (
 type PerformerInterface interface {
 	GetPerformersList(parameters utils.GetPerformerListParameters) (performers []models.Performer, count int, err error)
 	CreatePerformer(performer models.Performer) (err error)
-	GetPerformer(performerID string) (performer models.Performer, err error)
-	UpdatePerformer(performerID string, updatedData map[string]interface{}) (err error)
-	DeletePerformer(performerID string) (err error)
+	GetPerformer(id string) (performer models.Performer, err error)
+	UpdatePerformer(id string, updatedData map[string]interface{}) (err error)
+	DeletePerformer(id string) (err error)
 }
 
 // PerformerService implements performer interface
@@ -60,9 +60,9 @@ func (s *PerformerService) GetPerformersList(parameters utils.GetPerformerListPa
 }
 
 // GetPerformer get performer by id
-func (s *PerformerService) GetPerformer(performerID string) (performer models.Performer, err error) {
+func (s *PerformerService) GetPerformer(id string) (performer models.Performer, err error) {
 	err = s.PG.
-		Where("id = ?", performerID).
+		Where("id = ?", id).
 		Take(&performer).
 		Error
 	return
@@ -77,21 +77,20 @@ func (s *PerformerService) CreatePerformer(performer models.Performer) (err erro
 }
 
 // UpdatePerformer updates performer with given id
-func (s *PerformerService) UpdatePerformer(performerID string, updatedData map[string]interface{}) (err error) {
-	var performer models.Performer
+func (s *PerformerService) UpdatePerformer(id string, updatedData map[string]interface{}) (err error) {
 	err = s.PG.
-		Where("id = ?", performerID).
-		Take(&performer).
+		Model(&models.Performer{}).
+		Where("id = ?", id).
 		Updates(updatedData).
 		Error
 	return
 }
 
 // DeletePerformer delete performer by id
-func (s *PerformerService) DeletePerformer(performerID string) (err error) {
+func (s *PerformerService) DeletePerformer(id string) (err error) {
 	var performer models.Performer
 	err = s.PG.
-		Where("id = ?", performerID).
+		Where("id = ?", id).
 		Delete(&performer).
 		Error
 	return
