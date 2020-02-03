@@ -9,9 +9,9 @@ import (
 
 // SignInterface struct
 type SignInterface interface {
-	GetSignList(parameters utils.GetSignListParameters) (signs []models.Sign, count int, err error)
-	CreateSign(sign models.Sign) (err error)
-	GetSign(signID string) (sign models.Sign, err error)
+	GetSignList(parameters utils.GetSignListParameters) (signs []models.Handshape, count int, err error)
+	CreateSign(sign models.Handshape) (err error)
+	GetSign(signID string) (sign models.Handshape, err error)
 	UpdateSign(signID string, updatedData map[string]interface{}) (err error)
 	DeleteSign(signID string) (err error)
 }
@@ -28,14 +28,14 @@ func NewSignService(pg *gorm.DB) SignInterface {
 	}
 }
 
-func (s *SignService) GetSignList(parameters utils.GetSignListParameters) (signs []models.Sign, count int, err error) {
+func (s *SignService) GetSignList(parameters utils.GetSignListParameters) (signs []models.Handshape, count int, err error) {
 	db := s.PG.
 		Scopes(
 			utils.SearchByColumn("signs.name", parameters.Name),
 		)
 
 	err = db.
-		Model(&models.Sign{}).
+		Model(&models.Handshape{}).
 		Count(&count).
 		Error
 
@@ -56,14 +56,14 @@ func (s *SignService) GetSignList(parameters utils.GetSignListParameters) (signs
 	return
 }
 
-func (s *SignService) CreateSign(sign models.Sign) (err error) {
+func (s *SignService) CreateSign(sign models.Handshape) (err error) {
 	err = s.PG.
 		Create(&sign).
 		Error
 	return
 }
 
-func (s *SignService) GetSign(signID string) (sign models.Sign, err error) {
+func (s *SignService) GetSign(signID string) (sign models.Handshape, err error) {
 	err = s.PG.
 		Where("id = ?", signID).
 		Take(&sign).
@@ -72,7 +72,7 @@ func (s *SignService) GetSign(signID string) (sign models.Sign, err error) {
 }
 
 func (s *SignService) UpdateSign(signID string, updatedData map[string]interface{}) (err error) {
-	var sign models.Sign
+	var sign models.Handshape
 	err = s.PG.
 		Where("id = ?", signID).
 		Take(&sign).
@@ -82,7 +82,7 @@ func (s *SignService) UpdateSign(signID string, updatedData map[string]interface
 }
 
 func (s *SignService) DeleteSign(signID string) (err error) {
-	var sign models.Sign
+	var sign models.Handshape
 	tx := s.PG.Begin()
 	err = tx.
 		Where("id = ?", signID).

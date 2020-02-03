@@ -5,29 +5,29 @@ import (
 	"strconv"
 )
 
-// Sign model 手形
-type Sign struct {
+// Handshape model 手形
+type Handshape struct {
 	Base
 	Name  string `gorm:"INDEX:name" json:"name"` // 手形名称
 	Image string `json:"image"`                  // 手形图片路径
 	Glyph string `json:"glyph"`                  // 字形
 }
 
-// Signs is alias for []Sign
-type Signs []Sign
+// Handshapes is alias for []Sign
+type Handshapes []Handshape
 
 // Len returns length
-func (s Signs) Len() int {
+func (s Handshapes) Len() int {
 	return len(s)
 }
 
 // Swap changes the position of element
-func (s Signs) Swap(i, j int) {
+func (s Handshapes) Swap(i, j int) {
 	s[i], s[j] = s[j], s[i]
 }
 
 // Less returns if e[i] is less than e[j]
-func (s Signs) Less(i, j int) bool {
+func (s Handshapes) Less(i, j int) bool {
 	nameI := s[i].Name
 	nameJ := s[j].Name
 	intI := 0
