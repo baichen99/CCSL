@@ -14,6 +14,7 @@ require (
 	github.com/go-playground/universal-translator v0.17.0 // indirect
 	github.com/google/go-querystring v1.0.0 // indirect
 	github.com/imkira/go-interpol v1.1.0 // indirect
+	github.com/iris-contrib/go.uuid v2.0.0+incompatible
 	github.com/iris-contrib/middleware/cors v0.0.0-20191219204441-78279b78a367
 	github.com/iris-contrib/swagger/v12 v12.0.0
 	github.com/jinzhu/gorm v1.9.12
