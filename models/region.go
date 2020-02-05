@@ -2,23 +2,23 @@ package models
 
 // District model
 type District struct {
-	Code         int    `gorm:"PRIMARY_KEY" json:"code"`
-	Name         string `gorm:"NOT NULL" json:"name"`
-	CityCode     int    `gorm:"NOT NULL" json:"cityCode"`
-	ProvinceCode int    `gorm:"NOT NULL" json:"provinceCode"`
+	Code         int    `gorm:"primary_key" json:"code"`
+	Name         string `gorm:"not null" json:"name"`
+	CityCode     int    `gorm:"not null" json:"cityCode"`
+	ProvinceCode int    `gorm:"not null" json:"provinceCode"`
 }
 
 // City model
 type City struct {
-	Code         int    `gorm:"PRIMARY_KEY" json:"code"`
-	Name         string `gorm:"NOT NULL" json:"name"`
-	ProvinceCode int    `gorm:"NOT NULL" json:"provinceCode"`
+	Code         int    `gorm:"primary_key" json:"code"`
+	Name         string `gorm:"not null" json:"name"`
+	ProvinceCode int    `gorm:"not null" json:"provinceCode"`
 }
 
 // Province model
 type Province struct {
-	Code int    `gorm:"PRIMARY_KEY" json:"code"`
-	Name string `gorm:"NOT NULL" json:"name"`
+	Code int    `gorm:"primary_key" json:"code"`
+	Name string `gorm:"not null" json:"name"`
 }
 
 type JSONDistrict struct {

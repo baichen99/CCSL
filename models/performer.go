@@ -3,7 +3,7 @@ package models
 // Performer data model
 type Performer struct {
 	Base
-	RegionID int    `gorm:"DEFAULT:NULL" json:"regionID"`
-	Name     string `gorm:"DEFAULT:NULL" json:"name"`
-	Gender   string `gorm:"DEFAULT:NULL" json:"gender"`
+	RegionID int    `json:"regionID"`
+	Name     string `json:"name"`
+	Gender   string `json:"gender"`
 }

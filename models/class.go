@@ -1,11 +1,12 @@
 package models
 
-import "github.com/lib/pq"
-
+// Class model
 type Class struct {
-    Base
-    Name     string         `json:"name"`
-    Teachers pq.StringArray `gorm:"uuid[];NOT NULL;DEFAULT:array[]::uuid[]" json:"teachers"`
-    Students pq.StringArray `gorm:"uuid[];NOT NULL;DEFAULT:array[]::uuid[]" json:"students"`
-    Details  string         `json:"details"`
+	Base
+	Name     string   `json:"name"`
+	Teachers []User   `gorm:"many2many:class_teachers" json:"teachers"`
+	Students []User   `gorm:"many2many:class_students" json:"students"`
+	Details  string   `json:"details"`
+	Resource string   `json:"resource"`
+	Courses  []Course `json:"courses"`
 }

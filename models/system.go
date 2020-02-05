@@ -21,21 +21,21 @@ type LoginHistory struct {
 	UserID       uuid.UUID `json:"userID"`
 	Status       string    `json:"status"`
 	IP           string    `json:"ip"`
-	Country      string    `gorm:"DEFAULT:NULL" json:"country"`
-	CountryCode  string    `gorm:"DEFAULT:NULL" json:"countryCode"`
-	Region       string    `gorm:"DEFAULT:NULL" json:"region"`
-	RegionName   string    `gorm:"DEFAULT:NULL" json:"regionName"`
-	City         string    `gorm:"DEFAULT:NULL" json:"city"`
-	District     string    `gorm:"DEFAULT:NULL" json:"district"`
-	Longitude    float64   `gorm:"DEFAULT:NULL" json:"lon"`
-	Latitude     float64   `gorm:"DEFAULT:NULL" json:"lat"`
-	Timezone     string    `gorm:"DEFAULT:NULL" json:"timezone"`
-	ISP          string    `gorm:"DEFAULT:NULL" json:"isp"`
-	Organization string    `gorm:"DEFAULT:NULL" json:"org"`
+	Country      string    `json:"country"`
+	CountryCode  string    `json:"countryCode"`
+	Region       string    `json:"region"`
+	RegionName   string    `json:"regionName"`
+	City         string    `json:"city"`
+	District     string    `json:"district"`
+	Longitude    float64   `json:"lon"`
+	Latitude     float64   `json:"lat"`
+	Timezone     string    `json:"timezone"`
+	ISP          string    `json:"isp"`
+	Organization string    `json:"org"`
 }
 
 // Info model
 type Info struct {
-	Key  string         `gorm:"PRIMARY_KEY" json:"key"`
-	Data postgres.Jsonb `gorm:"DEFAULT:NULL" json:"data"`
+	Key  string         `gorm:"primary_key" json:"key"`
+	Data postgres.Jsonb `json:"data"`
 }

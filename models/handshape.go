@@ -8,9 +8,9 @@ import (
 // Handshape model 手形
 type Handshape struct {
 	Base
-	Name  string `gorm:"INDEX:name" json:"name"` // 手形名称
-	Image string `json:"image"`                  // 手形图片路径
-	Glyph string `json:"glyph"`                  // 字形
+	Name  string `gorm:"index:name" json:"name"` // Name of handshape
+	Image string `json:"image"`                  // Image path of handshape
+	Glyph string `json:"glyph"`                  // Font glyph of handshape
 }
 
 // Handshapes is alias for []Handshape
