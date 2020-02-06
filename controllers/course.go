@@ -3,7 +3,8 @@ package controllers
 import (
     "ccsl/configs"
     "ccsl/middlewares"
-	"ccsl/services"
+    "ccsl/models"
+    "ccsl/services"
 	"ccsl/utils"
 
 	"github.com/kataras/iris/v12"
@@ -26,7 +27,27 @@ func (c *CourseController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Handle(iris.MethodDelete, "/{id: string}", "DeleteCourse")
 }
 
-// GetCourseList returns course list
+// GetCourseList GET /course
+// >>>>> DOCS  <<<<<
+// =================
+// @Tags Course
+// @Summary List course
+// @Description get course list
+// @Accept  json
+// @Produce json
+// @Router /course [GET]
+// @Param page 		query int    false  "select from page" 			    mininum(1)
+// @Param limit 	query int    false  "limit number" 				    mininum(0)
+// @Param order 	query string false	"order by field"
+// @Param orderBy 	query string false	"order by asc or desc" 		    enums(asc, desc)
+// @Param calss_id  query string false 	"filter class_id of course"
+// @Param detail   	query string false 	"search detail name of course"
+// @Param name      query string false 	"search name of course"
+// @Success 200 {object} controllers.GetCourseListResponse
+// @Failure 400 {object} controllers.ErrorResponse
+// @Failure 401 {object} controllers.ErrorResponse
+// @Failure 422 {object} controllers.ErrorResponse
+// =================
 func (c *CourseController) GetCourseList() {
 	defer c.Context.Next()
 	listParams, err := utils.GetListParamsFromContext(c.Context, "courses.name")
@@ -57,7 +78,27 @@ func (c *CourseController) GetCourseList() {
 	})
 }
 
+// GetCourseListResponse Response for GetCourseList
+type GetCourseListResponse struct {
+	GetListResponse
+	Data []models.Course `json:"data"`
+}
+
 // CreateCourse POST /course
+// >>>>> DOCS  <<<<<
+// =================
+// @Tags Course
+// @Summary Create course
+// @Description create a new course
+// @Accept  json
+// @Produce json
+// @Router 	/class 	[POST]
+// @Param 	user 	body	 controllers.courseCreateForm	  true	"create course"
+// @Success 201		{object} controllers.SuccessResponse
+// @Failure 400 	{object} controllers.ErrorResponse
+// @Failure 401 	{object} controllers.ErrorResponse
+// @Failure 422 	{object} controllers.ErrorResponse
+// =================
 func (c *CourseController) CreateCourse() {
 	defer c.Context.Next()
 	var form courseCreateForm
@@ -81,6 +122,21 @@ func (c *CourseController) CreateCourse() {
 }
 
 // GetCourse GET /course/{id:string}
+// >>>>> DOCS  <<<<<
+// =================
+// @Tags Course
+// @Summary Get course
+// @Description Get a course by id
+// @Accept  json
+// @Produce json
+// @Router 	/class/{id} [GET]
+// @Param 	id 		path	 string	    true	"course id" format(uuid)
+// @Success 200 	{object} controllers.GetCourseResponse
+// @Failure 400 	{object} controllers.ErrorResponse
+// @Failure 401 	{object} controllers.ErrorResponse
+// @Failure 403 	{object} controllers.ErrorResponse
+// @Failure 422 	{object} controllers.ErrorResponse
+// =================
 func (c *CourseController) GetCourse() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
@@ -99,7 +155,29 @@ func (c *CourseController) GetCourse() {
 	})
 }
 
+// GetCourseResponse Response for get course
+type GetCourseResponse struct {
+	SuccessResponse
+	Data models.Class `json:"data"`
+}
+
 // UpdateCourse PUT /course/{id:string}
+// >>>>> DOCS  <<<<<
+// =================
+// @Tags Course
+// @Summary Update course
+// @Description update a class by id
+// @Accept  json
+// @Produce json
+// @Router 	/course/{id} [PUT]
+// @Param 	id 		path	 string						  true	"course id" format(uuid)
+// @Param 	course 	body	 controllers.classUpdateForm	  true	"updated course"
+// @Success	204
+// @Failure 400 	{object} controllers.ErrorResponse
+// @Failure 401 	{object} controllers.ErrorResponse
+// @Failure 403 	{object} controllers.ErrorResponse
+// @Failure 422 	{object} controllers.ErrorResponse
+// =================
 func (c *CourseController) UpdateCourse() {
 	defer c.Context.Next()
 
@@ -125,6 +203,21 @@ func (c *CourseController) UpdateCourse() {
 }
 
 // DeleteCourse DELETE /course/{id:string}
+// >>>>> DOCS  <<<<<
+// =================
+// @Tags Course
+// @Summary Delete course
+// @Description delete a course by id
+// @Accept  json
+// @Produce json
+// @Router 	/course/{id} [DELETE]
+// @Param 	id 		path	 string						  true	"course id" format(uuid)
+// @Success 204
+// @Failure 400 	{object} controllers.ErrorResponse
+// @Failure 401 	{object} controllers.ErrorResponse
+// @Failure 403 	{object} controllers.ErrorResponse
+// @Failure 422 	{object} controllers.ErrorResponse
+// =================
 func (c *CourseController) DeleteCourse() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL

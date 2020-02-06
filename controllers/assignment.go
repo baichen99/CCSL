@@ -3,7 +3,8 @@ package controllers
 import (
 	"ccsl/configs"
 	"ccsl/middlewares"
-	"ccsl/services"
+    "ccsl/models"
+    "ccsl/services"
 	"ccsl/utils"
 
 	"github.com/kataras/iris/v12"
@@ -26,7 +27,28 @@ func (c *AssignmentController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Handle(iris.MethodDelete, "/{id: string}", "DeleteAssignment")
 }
 
-// GetAssignmentList returns assignment list
+// GetAssignmentList GET /assignment
+// >>>>> DOCS  <<<<<
+// =================
+// @Tags Assignment
+// @Summary List assignment
+// @Description get assignment list
+// @Accept  json
+// @Produce json
+// @Router /assignment [GET]
+// @Param page 		query int    false  "select from page" 			    mininum(1)
+// @Param limit 	query int    false  "limit number" 				    mininum(0)
+// @Param order 	query string false	"order by field"
+// @Param orderBy 	query string false	"order by asc or desc" 		    enums(asc, desc)
+// @Param course_id query string false 	"filter course_id of assignment"
+// @Param type   	query string false 	"filter type of assignment"
+// @Param title     query string false 	"search title of assignment"
+// @Param content   query string false 	"search content of assignment"
+// @Success 200 {object} controllers.GetAssignmentListResponse
+// @Failure 400 {object} controllers.ErrorResponse
+// @Failure 401 {object} controllers.ErrorResponse
+// @Failure 422 {object} controllers.ErrorResponse
+// =================
 func (c *AssignmentController) GetAssignmentList() {
 	defer c.Context.Next()
 	listParams, err := utils.GetListParamsFromContext(c.Context, "assignments.title")
@@ -59,7 +81,27 @@ func (c *AssignmentController) GetAssignmentList() {
 	})
 }
 
+// GetAssignmentListResponse Response for GetAssignmentList
+type GetAssignmentListResponse struct {
+	GetListResponse
+	Data []models.Assignment `json:"data"`
+}
+
 // CreateAssignment POST /assignment
+// >>>>> DOCS  <<<<<
+// =================
+// @Tags Assignment
+// @Summary Create assignment
+// @Description create a new assignment
+// @Accept  json
+// @Produce json
+// @Router 	/assignment 	[POST]
+// @Param 	assignment 	body	 controllers.assignmentCreateForm	  true	"create assignment"
+// @Success 201		{object} controllers.SuccessResponse
+// @Failure 400 	{object} controllers.ErrorResponse
+// @Failure 401 	{object} controllers.ErrorResponse
+// @Failure 422 	{object} controllers.ErrorResponse
+// =================
 func (c *AssignmentController) CreateAssignment() {
 	defer c.Context.Next()
 	var form assignmentCreateForm
@@ -83,6 +125,21 @@ func (c *AssignmentController) CreateAssignment() {
 }
 
 // GetAssignment GET /assignment/{id:string}
+// >>>>> DOCS  <<<<<
+// =================
+// @Tags Assignment
+// @Summary Get assignment
+// @Description Get a assignment by id
+// @Accept  json
+// @Produce json
+// @Router 	/assignment/{id} [GET]
+// @Param 	id 		path	 string	    true	"assignment id" format(uuid)
+// @Success 200 	{object} controllers.GetAssignmentResponse
+// @Failure 400 	{object} controllers.ErrorResponse
+// @Failure 401 	{object} controllers.ErrorResponse
+// @Failure 403 	{object} controllers.ErrorResponse
+// @Failure 422 	{object} controllers.ErrorResponse
+// =================
 func (c *AssignmentController) GetAssignment() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
@@ -101,7 +158,29 @@ func (c *AssignmentController) GetAssignment() {
 	})
 }
 
+// GetAssignmentResponse Response for get assignment
+type GetAssignmentResponse struct {
+	SuccessResponse
+	Data models.Assignment `json:"data"`
+}
+
 // UpdateAssignment PUT /assignment/{id:string}
+// >>>>> DOCS  <<<<<
+// =================
+// @Tags Assignment
+// @Summary Update assignment
+// @Description update a assignment by id
+// @Accept  json
+// @Produce json
+// @Router 	/users/{id} [PUT]
+// @Param 	id 		path	 string						  true	"assignment id" format(uuid)
+// @Param 	user 	body	 controllers.assignmentUpdateForm	  true	"updated assignment"
+// @Success	204
+// @Failure 400 	{object} controllers.ErrorResponse
+// @Failure 401 	{object} controllers.ErrorResponse
+// @Failure 403 	{object} controllers.ErrorResponse
+// @Failure 422 	{object} controllers.ErrorResponse
+// =================
 func (c *AssignmentController) UpdateAssignment() {
 	defer c.Context.Next()
 
@@ -127,6 +206,21 @@ func (c *AssignmentController) UpdateAssignment() {
 }
 
 // DeleteAssignment DELETE /assignment/{id:string}
+// >>>>> DOCS  <<<<<
+// =================
+// @Tags Assignment
+// @Summary Delete assignment
+// @Description delete a assignment by id
+// @Accept  json
+// @Produce json
+// @Router 	/assignment/{id} [DELETE]
+// @Param 	id 		path	 string						  true	"assignment id" format(uuid)
+// @Success 204
+// @Failure 400 	{object} controllers.ErrorResponse
+// @Failure 401 	{object} controllers.ErrorResponse
+// @Failure 403 	{object} controllers.ErrorResponse
+// @Failure 422 	{object} controllers.ErrorResponse
+// =================
 func (c *AssignmentController) DeleteAssignment() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL

@@ -3,7 +3,8 @@ package controllers
 import (
 	"ccsl/configs"
 	"ccsl/middlewares"
-	"ccsl/services"
+    "ccsl/models"
+    "ccsl/services"
 	"ccsl/utils"
 
 	"github.com/kataras/iris/v12"
@@ -26,7 +27,27 @@ func (c *ClassController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Handle(iris.MethodDelete, "/{id: string}", "DeleteClass")
 }
 
-// GetClassList returns class list
+// GetClassList GET /class
+// >>>>> DOCS  <<<<<
+// =================
+// @Tags Class
+// @Summary List classs
+// @Description get classs list
+// @Accept  json
+// @Produce json
+// @Router /class [GET]
+// @Param page 		query int    false  "select from page" 			    mininum(1)
+// @Param limit 	query int    false  "limit number" 				    mininum(0)
+// @Param order 	query string false	"order by field"
+// @Param orderBy 	query string false	"order by asc or desc" 		    enums(asc, desc)
+// @Param name   	query string false 	"search name of class"
+// @Param detail   	query string false 	"search detail name of class"
+// @Param resource  query string false 	"search resource name of class"
+// @Success 200 {object} controllers.GetClassListResponse
+// @Failure 400 {object} controllers.ErrorResponse
+// @Failure 401 {object} controllers.ErrorResponse
+// @Failure 422 {object} controllers.ErrorResponse
+// =================
 func (c *ClassController) GetClassList() {
 	defer c.Context.Next()
 	listParams, err := utils.GetListParamsFromContext(c.Context, "classes.name")
@@ -57,7 +78,27 @@ func (c *ClassController) GetClassList() {
 	})
 }
 
+// GetClassListResponse Response for GetClassList
+type GetClassListResponse struct {
+	GetListResponse
+	Data []models.Class `json:"data"`
+}
+
 // CreateClass POST /class
+// >>>>> DOCS  <<<<<
+// =================
+// @Tags Class
+// @Summary Create class
+// @Description create a new class
+// @Accept  json
+// @Produce json
+// @Router 	/class 	[POST]
+// @Param 	user 	body	 controllers.classCreateForm	  true	"create user"
+// @Success 201		{object} controllers.SuccessResponse
+// @Failure 400 	{object} controllers.ErrorResponse
+// @Failure 401 	{object} controllers.ErrorResponse
+// @Failure 422 	{object} controllers.ErrorResponse
+// =================
 func (c *ClassController) CreateClass() {
 	defer c.Context.Next()
 	var form classCreateForm
@@ -79,7 +120,22 @@ func (c *ClassController) CreateClass() {
 	})
 }
 
-// GetClass GET /class/{id:string}
+// GetClass GET /classs/{id:string}
+// >>>>> DOCS  <<<<<
+// =================
+// @Tags Class
+// @Summary Get class
+// @Description Get a class by id
+// @Accept  json
+// @Produce json
+// @Router 	/class/{id} [GET]
+// @Param 	id 		path	 string	    true	"class id" format(uuid)
+// @Success 200 	{object} controllers.GetClassResponse
+// @Failure 400 	{object} controllers.ErrorResponse
+// @Failure 401 	{object} controllers.ErrorResponse
+// @Failure 403 	{object} controllers.ErrorResponse
+// @Failure 422 	{object} controllers.ErrorResponse
+// =================
 func (c *ClassController) GetClass() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
@@ -98,7 +154,29 @@ func (c *ClassController) GetClass() {
 	})
 }
 
+// GetClassResponse Response for get class
+type GetClassResponse struct {
+	SuccessResponse
+	Data models.Class `json:"data"`
+}
+
 // UpdateClass PUT /class/{id:string}
+// >>>>> DOCS  <<<<<
+// =================
+// @Tags Class
+// @Summary Update class
+// @Description update a class by id
+// @Accept  json
+// @Produce json
+// @Router 	/users/{id} [PUT]
+// @Param 	id 		path	 string						  true	"class id" format(uuid)
+// @Param 	user 	body	 controllers.classUpdateForm	  true	"updated class"
+// @Success	204
+// @Failure 400 	{object} controllers.ErrorResponse
+// @Failure 401 	{object} controllers.ErrorResponse
+// @Failure 403 	{object} controllers.ErrorResponse
+// @Failure 422 	{object} controllers.ErrorResponse
+// =================
 func (c *ClassController) UpdateClass() {
 	defer c.Context.Next()
 
@@ -124,6 +202,21 @@ func (c *ClassController) UpdateClass() {
 }
 
 // DeleteClass DELETE /class/{id:string}
+// >>>>> DOCS  <<<<<
+// =================
+// @Tags Class
+// @Summary Delete class
+// @Description delete a class by id
+// @Accept  json
+// @Produce json
+// @Router 	/class/{id} [DELETE]
+// @Param 	id 		path	 string						  true	"class id" format(uuid)
+// @Success 204
+// @Failure 400 	{object} controllers.ErrorResponse
+// @Failure 401 	{object} controllers.ErrorResponse
+// @Failure 403 	{object} controllers.ErrorResponse
+// @Failure 422 	{object} controllers.ErrorResponse
+// =================
 func (c *ClassController) DeleteClass() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL

@@ -71,7 +71,7 @@ func (c *NotificationController) GetNotificationList() {
 	})
 }
 
-// GetNotificationsListResponse Response for GetUsersList
+// GetNotificationsListResponse Response for GetNotificationList
 type GetNotificationsListResponse struct {
 	GetListResponse
 	Data []models.Notification `json:"data"`

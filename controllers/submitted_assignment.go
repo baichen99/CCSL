@@ -3,7 +3,8 @@ package controllers
 import (
 	"ccsl/configs"
 	"ccsl/middlewares"
-	"ccsl/services"
+    "ccsl/models"
+    "ccsl/services"
 	"ccsl/utils"
 
 	"github.com/kataras/iris/v12"
@@ -28,7 +29,29 @@ func (c *SubmittedAssignmentController) BeforeActivation(app mvc.BeforeActivatio
 
 }
 
-// GetSubmittedAssignmentList returns submitted_assignment list
+// GetAssignmentList GET /submitted_assignment
+// >>>>> DOCS  <<<<<
+// =================
+// @Tags SubmittedAssignment
+// @Summary List submitted_assignment
+// @Description get submitted_assignment list
+// @Accept  json
+// @Produce json
+// @Router /submitted_assignment [GET]
+// @Param page 		    query int    false  "select from page" 			    mininum(1)
+// @Param limit 	    query int    false  "limit number" 				    mininum(0)
+// @Param order 	    query string false	"order by field"
+// @Param orderBy 	    query string false	"order by asc or desc" 		    enums(asc, desc)
+// @Param creator_id    query string false 	"filter creator_id of submitted_assignment"
+// @Param assignment_id query string false 	"filter assignment_id of submitted_assignment"
+// @Param grader_id     query string false 	"filter grader_id of submitted_assignment"
+// @Param answer        query string false 	"search answer of submitted_assignment"
+// @Param comment       query string false 	"search comment of submitted_assignment"
+// @Success 200 {object} controllers.GetSubmmitedAssignmentListResponse
+// @Failure 400 {object} controllers.ErrorResponse
+// @Failure 401 {object} controllers.ErrorResponse
+// @Failure 422 {object} controllers.ErrorResponse
+// =================
 func (c *SubmittedAssignmentController) GetSubmittedAssignmentList() {
 	defer c.Context.Next()
 	listParams, err := utils.GetListParamsFromContext(c.Context, "submitted_assignments.assignment_id")
@@ -63,7 +86,27 @@ func (c *SubmittedAssignmentController) GetSubmittedAssignmentList() {
 	})
 }
 
+// GetSubmmitedAssignmentListResponse Response for GetSubmmitedAssignmentList
+type GetSubmmitedAssignmentListResponse struct {
+	GetListResponse
+	Data []models.Assignment `json:"data"`
+}
+
 // CreateSubmittedAssignment POST /submitted_assignment
+// >>>>> DOCS  <<<<<
+// =================
+// @Tags SubmmitedAssignment
+// @Summary Create submmitedAssignment
+// @Description create a new submmitedAssignment
+// @Accept  json
+// @Produce json
+// @Router 	/submmited_assignment 	[POST]
+// @Param 	assignment 	body	 controllers.submmittedAssignmentCreateForm	  true	"create submmited_assignment"
+// @Success 201		{object} controllers.SuccessResponse
+// @Failure 400 	{object} controllers.ErrorResponse
+// @Failure 401 	{object} controllers.ErrorResponse
+// @Failure 422 	{object} controllers.ErrorResponse
+// =================
 func (c *SubmittedAssignmentController) CreateSubmittedAssignment() {
 	defer c.Context.Next()
 	var form submmittedAssignmentCreateForm
@@ -94,6 +137,21 @@ func (c *SubmittedAssignmentController) CreateSubmittedAssignment() {
 }
 
 // GetSubmittedAssignment GET /submitted_assignment/{id:string}
+// >>>>> DOCS  <<<<<
+// =================
+// @Tags SubmittedAssignment
+// @Summary Get submitted_assignment
+// @Description Get a submitted_assignment by id
+// @Accept  json
+// @Produce json
+// @Router 	/submitted_assignment/{id} [GET]
+// @Param 	id 		path	 string	    true	"submitted_assignment id" format(uuid)
+// @Success 200 	{object} controllers.GetSubmittedAssignmentResponse
+// @Failure 400 	{object} controllers.ErrorResponse
+// @Failure 401 	{object} controllers.ErrorResponse
+// @Failure 403 	{object} controllers.ErrorResponse
+// @Failure 422 	{object} controllers.ErrorResponse
+// =================
 func (c *SubmittedAssignmentController) GetSubmittedAssignment() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
@@ -112,7 +170,29 @@ func (c *SubmittedAssignmentController) GetSubmittedAssignment() {
 	})
 }
 
+// GetSubmittedAssignmentResponse Response for get submitted_assignment
+type GetSubmittedAssignmentResponse struct {
+	SuccessResponse
+	Data models.SubmittedAssignments `json:"data"`
+}
+
 // UpdateSubmittedAssignment PUT /submitted_assignment/{id:string}
+// >>>>> DOCS  <<<<<
+// =================
+// @Tags SubmittedAssignment
+// @Summary Update submitted_assignment
+// @Description update a submitted_assignment by id
+// @Accept  json
+// @Produce json
+// @Router 	/users/{id} [PUT]
+// @Param 	id 		path	 string						  true	"submitted_assignment id" format(uuid)
+// @Param 	user 	body	 controllers.submmittedAssignmentUpdateForm	  true	"updated submitted_assignment"
+// @Success	204
+// @Failure 400 	{object} controllers.ErrorResponse
+// @Failure 401 	{object} controllers.ErrorResponse
+// @Failure 403 	{object} controllers.ErrorResponse
+// @Failure 422 	{object} controllers.ErrorResponse
+// =================
 func (c *SubmittedAssignmentController) UpdateSubmittedAssignment() {
 	defer c.Context.Next()
 
@@ -138,6 +218,21 @@ func (c *SubmittedAssignmentController) UpdateSubmittedAssignment() {
 }
 
 // DeleteSubmittedAssignment DELETE /submitted_assignment/{id:string}
+// >>>>> DOCS  <<<<<
+// =================
+// @Tags SubmittedAssignment
+// @Summary Delete submitted_assignment
+// @Description delete a submitted_assignment by id
+// @Accept  json
+// @Produce json
+// @Router 	/submitted_assignment/{id} [DELETE]
+// @Param 	id 		path	 string						  true	"submitted_assignment id" format(uuid)
+// @Success 204
+// @Failure 400 	{object} controllers.ErrorResponse
+// @Failure 401 	{object} controllers.ErrorResponse
+// @Failure 403 	{object} controllers.ErrorResponse
+// @Failure 422 	{object} controllers.ErrorResponse
+// =================
 func (c *SubmittedAssignmentController) DeleteSubmittedAssignment() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
