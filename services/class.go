@@ -33,8 +33,8 @@ func (s *ClassService) GetClassesList(parameters utils.GetClassListParameters) (
 	db := s.PG.
 		Scopes(
 			utils.SearchByColumn("classes.name", parameters.Name),
-			utils.SearchByColumn("classes.detail", parameters.Detail),
-			utils.SearchByColumn("classes.resource", parameters.Resource),
+			utils.SearchByColumn("classes.detail", parameters.Details),
+			utils.SearchByColumn("classes.resource", parameters.Resources),
 		)
 
 	err = db.
@@ -47,7 +47,6 @@ func (s *ClassService) GetClassesList(parameters utils.GetClassListParameters) (
 	}
 
 	err = db.
-		Order("name asc").
 		Scopes(utils.FilterByListParameters(parameters.GetListParameters)).
 		Find(&classes).Error
 
@@ -65,6 +64,9 @@ func (s *ClassService) CreateClass(class models.Class) (err error) {
 // GetClass get a class by id
 func (s *ClassService) GetClass(id string) (class models.Class, err error) {
 	err = s.PG.
+		Preload("Teachers").
+		Preload("Students").
+		Preload("Courses").
 		Where("id = ?", id).
 		Take(&class).
 		Error

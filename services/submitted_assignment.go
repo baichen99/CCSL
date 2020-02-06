@@ -33,7 +33,8 @@ func (s *SubmittedAssignmentService) GetSubmittedAssignmentsList(parameters util
 	db := s.PG.
 		Scopes(
 			utils.FilterByColumn("submittedAssignments.assignment_id", parameters.AssignmentID),
-			utils.FilterByColumn("submittedAssignments.grade_id", parameters.GradeID),
+            utils.FilterByColumn("submittedAssignments.creator_id", parameters.CreatorID),
+			utils.FilterByColumn("submittedAssignments.grade_id", parameters.GraderID),
 			utils.SearchByColumn("submittedAssignmentes.answer", parameters.Answer),
 			utils.SearchByColumn("submittedAssignmentes.comment", parameters.Comment),
 		)
@@ -48,7 +49,6 @@ func (s *SubmittedAssignmentService) GetSubmittedAssignmentsList(parameters util
 	}
 
 	err = db.
-		Order("name asc").
 		Scopes(utils.FilterByListParameters(parameters.GetListParameters)).
 		Find(&submittedAssignmentes).Error
 

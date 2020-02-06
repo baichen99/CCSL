@@ -47,7 +47,6 @@ func (s *CourseService) GetCoursesList(parameters utils.GetCourseListParameters)
 	}
 
 	err = db.
-		Order("name asc").
 		Scopes(utils.FilterByListParameters(parameters.GetListParameters)).
 		Find(&coursees).Error
 
@@ -65,6 +64,7 @@ func (s *CourseService) CreateCourse(course models.Course) (err error) {
 // GetCourse get a course by id
 func (s *CourseService) GetCourse(id string) (course models.Course, err error) {
 	err = s.PG.
+		Preload("Assignments").
 		Where("id = ?", id).
 		Take(&course).
 		Error

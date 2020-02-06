@@ -9,7 +9,7 @@ import (
 
 // AssignmentInterface struct
 type AssignmentInterface interface {
-	GetAssignmentsList(parameters utils.GetAssignmentListParameters) (assignment []models.Assignment, count int, err error)
+	GetAssignmentsList(parameters utils.GetAssignmentListParameters) (assignments []models.Assignment, count int, err error)
 	CreateAssignment(assignment models.Assignment) (err error)
 	GetAssignment(id string) (assignment models.Assignment, err error)
 	UpdateAssignment(id string, updatedData map[string]interface{}) (err error)
@@ -33,9 +33,9 @@ func (s *AssignmentService) GetAssignmentsList(parameters utils.GetAssignmentLis
 	db := s.PG.
 		Scopes(
 			utils.FilterByColumn("assignments.course_id", parameters.CourseID),
-			utils.FilterByColumn("assignments.type", parameters.Type),
-			utils.SearchByColumn("assignments.title", parameters.Title),
-			utils.SearchByColumn("assignments.content", parameters.Content),
+			utils.FilterByColumn("assignmentes.type", parameters.Type),
+			utils.SearchByColumn("assignmentes.title", parameters.Title),
+			utils.SearchByColumn("assignmentes.content", parameters.Content),
 		)
 
 	err = db.
@@ -48,7 +48,6 @@ func (s *AssignmentService) GetAssignmentsList(parameters utils.GetAssignmentLis
 	}
 
 	err = db.
-		Order("name asc").
 		Scopes(utils.FilterByListParameters(parameters.GetListParameters)).
 		Find(&assignments).Error
 
