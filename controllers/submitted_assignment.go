@@ -3,33 +3,36 @@ package controllers
 import (
 	"ccsl/configs"
 	"ccsl/middlewares"
-    "ccsl/models"
-    "ccsl/services"
+	"ccsl/models"
+	"ccsl/services"
 	"ccsl/utils"
+	"time"
 
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
+	uuid "github.com/satori/go.uuid"
 )
 
 // SubmittedAssignmentController is for submitted_assignment CRUD
 type SubmittedAssignmentController struct {
 	Context                    iris.Context
 	SubmittedAssignmentService services.SubmittedAssignmentInterface
+	AssignmentService          services.AssignmentInterface
+	CourseService              services.CourseInterface
+	ClassService               services.ClassInterface
 }
 
 // BeforeActivation will register routes for controllers
 func (c *SubmittedAssignmentController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Handle(iris.MethodGet, "/", "GetSubmittedAssignmentList")
 	app.Handle(iris.MethodGet, "/{id: string}", "GetSubmittedAssignment")
-	app.Router().Use(middlewares.CheckToken, middlewares.CheckUserRole([]string{configs.RoleStudent}))
-	app.Handle(iris.MethodPost, "/", "CreateSubmittedAssignment")
-	app.Handle(iris.MethodDelete, "/{id: string}", "DeleteSubmittedAssignment")
-	app.Router().Use(middlewares.CheckToken, middlewares.CheckUserRole([]string{configs.RoleTeacher, configs.RoleAdminUser}))
-	app.Handle(iris.MethodPut, "/{id: string}", "UpdateSubmittedAssignment")
-
+	app.Router().Use(middlewares.CheckToken)
+	app.Handle(iris.MethodPost, "/", "CreateSubmittedAssignment", middlewares.CheckUserRole([]string{configs.RoleStudent}))
+	app.Handle(iris.MethodDelete, "/{id: string}", "DeleteSubmittedAssignment", middlewares.CheckUserRole([]string{configs.RoleTeacher}))
+	app.Handle(iris.MethodPut, "/{id: string}", "UpdateSubmittedAssignment", middlewares.CheckUserRole([]string{configs.RoleStudent}))
 }
 
-// GetAssignmentList GET /submitted_assignment
+// GetSubmittedAssignmentList GET /submitted_assignment
 // >>>>> DOCS  <<<<<
 // =================
 // @Tags SubmittedAssignment
@@ -42,9 +45,9 @@ func (c *SubmittedAssignmentController) BeforeActivation(app mvc.BeforeActivatio
 // @Param limit 	    query int    false  "limit number" 				    mininum(0)
 // @Param order 	    query string false	"order by field"
 // @Param orderBy 	    query string false	"order by asc or desc" 		    enums(asc, desc)
-// @Param creator_id    query string false 	"filter creator_id of submitted_assignment"
-// @Param assignment_id query string false 	"filter assignment_id of submitted_assignment"
-// @Param grader_id     query string false 	"filter grader_id of submitted_assignment"
+// @Param creatorID    query string false 	"filter creatorid of submitted_assignment"
+// @Param assignmentid query string false 	"filter assignmentid of submitted_assignment"
+// @Param graderid     query string false 	"filter graderid of submitted_assignment"
 // @Param answer        query string false 	"search answer of submitted_assignment"
 // @Param comment       query string false 	"search comment of submitted_assignment"
 // @Success 200 {object} controllers.GetSubmmitedAssignmentListResponse
@@ -60,8 +63,8 @@ func (c *SubmittedAssignmentController) GetSubmittedAssignmentList() {
 		return
 	}
 	tokenUser, _ := middlewares.GetJWTParams(c.Context)
-	assignmentID := c.Context.URLParamDefault("assignment_id", "")
-	graderID := c.Context.URLParamDefault("grader_id", "")
+	assignmentID := c.Context.URLParamDefault("assignmentID", "")
+	graderID := c.Context.URLParamDefault("graderID", "")
 	answer := c.Context.URLParamDefault("answer", "")
 	comment := c.Context.URLParamDefault("comment", "")
 	listParameters := utils.GetSubmittedAssignmentsListParameters{
@@ -115,15 +118,51 @@ func (c *SubmittedAssignmentController) CreateSubmittedAssignment() {
 		utils.SetError(c.Context, iris.StatusBadRequest, "SubmittedAssignmentController::CreateSubmittedAssignment", errParams)
 		return
 	}
+
+	// Check if out of date
+	assginment, err := c.AssignmentService.GetAssignment(form.AssignmentID)
+	if err != nil {
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SubmittedAssignmentService::UpdateSubmittedAssignment", errSQL)
+		return
+	}
+	if time.Now().After(*assginment.Deadline) {
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SubmittedAssignmentService::UpdateSubmittedAssignment", errOutdated)
+		return
+	}
+
 	// PSQL - Create submitted_assignment in database.
 	submittedAssignment := form.ConvertToModel()
 
 	// Check if current student select the course
 	tokenUser, _ := middlewares.GetJWTParams(c.Context)
-	if tokenUser != submittedAssignment.CreatorID.String() {
+	assignment, err := c.AssignmentService.GetAssignment(submittedAssignment.AssignmentID.String())
+	if err != nil {
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SubmittedAssignmentService::CreateSubmittedAssignment", errSQL)
+		return
+	}
+	course, err := c.CourseService.GetCourse(assignment.CourseID.String())
+	if err != nil {
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SubmittedAssignmentService::CreateSubmittedAssignment", errSQL)
+		return
+	}
+	class, err := c.ClassService.GetClass(course.ClassID.String())
+	if err != nil {
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SubmittedAssignmentService::CreateSubmittedAssignment", errSQL)
+		return
+	}
+	var flag int
+	for _, student := range class.Students {
+		if student.ID.String() == tokenUser {
+			flag = 1
+		}
+	}
+
+	if flag == 1 {
+		submittedAssignment.CreatorID, _ = uuid.FromString(tokenUser)
+	} else {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SubmittedAssignmentService::CreateSubmittedAssignment", errRole)
 		return
-    }
+	}
 
 	if err := c.SubmittedAssignmentService.CreateSubmittedAssignment(submittedAssignment); err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SubmittedAssignmentService::CreateSubmittedAssignment", errSQL)
@@ -206,6 +245,30 @@ func (c *SubmittedAssignmentController) UpdateSubmittedAssignment() {
 		return
 	}
 	updateData := utils.MakeUpdateData(form)
+	// Check if out of date
+	submittedAssignment, err := c.SubmittedAssignmentService.GetSubmittedAssignment(submittedAssignmentID)
+	if err != nil {
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SubmittedAssignmentService::UpdateSubmittedAssignment", errSQL)
+		return
+	}
+	assginment, err := c.AssignmentService.GetAssignment(submittedAssignment.AssignmentID.String())
+	if err != nil {
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SubmittedAssignmentService::UpdateSubmittedAssignment", errSQL)
+		return
+	}
+	if time.Now().After(*assginment.Deadline) {
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SubmittedAssignmentService::UpdateSubmittedAssignment", errOutdated)
+		return
+	}
+
+	// Check role, only teacher can update grade
+	if form.Grade != nil {
+		_, roles := middlewares.GetJWTParams(c.Context)
+		if utils.StringsContains(roles, configs.RoleStudent) != -1 {
+			utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SubmittedAssignmentService::UpdateSubmittedAssignment", errRole)
+			return
+		}
+	}
 
 	// PSQL - Update of the given ID
 	if err := c.SubmittedAssignmentService.UpdateSubmittedAssignment(submittedAssignmentID, updateData); err != nil {

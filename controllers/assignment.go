@@ -3,8 +3,8 @@ package controllers
 import (
 	"ccsl/configs"
 	"ccsl/middlewares"
-    "ccsl/models"
-    "ccsl/services"
+	"ccsl/models"
+	"ccsl/services"
 	"ccsl/utils"
 
 	"github.com/kataras/iris/v12"
@@ -56,7 +56,7 @@ func (c *AssignmentController) GetAssignmentList() {
 		utils.SetError(c.Context, iris.StatusBadRequest, "AssignmentController::GetAssignmentList", errParams)
 		return
 	}
-	courseID := c.Context.URLParamDefault("course_id", "")
+	courseID := c.Context.URLParamDefault("courseID", "")
 	title := c.Context.URLParamDefault("title", "")
 	atype := c.Context.URLParamDefault("type", "")
 	content := c.Context.URLParamDefault("content", "")

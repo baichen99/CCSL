@@ -32,11 +32,11 @@ func NewSubmittedAssignmentService(pg *gorm.DB) SubmittedAssignmentInterface {
 func (s *SubmittedAssignmentService) GetSubmittedAssignmentsList(parameters utils.GetSubmittedAssignmentsListParameters) (submittedAssignmentes []models.SubmittedAssignments, count int, err error) {
 	db := s.PG.
 		Scopes(
-			utils.FilterByColumn("submittedAssignments.assignment_id", parameters.AssignmentID),
-            utils.FilterByColumn("submittedAssignments.creator_id", parameters.CreatorID),
-			utils.FilterByColumn("submittedAssignments.grade_id", parameters.GraderID),
-			utils.SearchByColumn("submittedAssignmentes.answer", parameters.Answer),
-			utils.SearchByColumn("submittedAssignmentes.comment", parameters.Comment),
+			utils.FilterByColumn("submitted_assignments.assignment_id", parameters.AssignmentID),
+			utils.FilterByColumn("submitted_assignments.creator_id", parameters.CreatorID),
+			utils.FilterByColumn("submitted_assignments.grader_id", parameters.GraderID),
+			utils.SearchByColumn("submitted_assignments.answer", parameters.Answer),
+			utils.SearchByColumn("submitted_assignments.comment", parameters.Comment),
 		)
 
 	err = db.

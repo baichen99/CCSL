@@ -23,10 +23,11 @@ const (
 )
 
 var (
-	errParams error = errors.New("ParamsError")
-	errSQL    error = errors.New("SqlError")
-	errAuth   error = errors.New("AuthFailed")
-	errRole   error = errors.New("RoleError")
+	errParams   error = errors.New("ParamsError")
+	errSQL      error = errors.New("SqlError")
+	errAuth     error = errors.New("AuthFailed")
+	errRole     error = errors.New("RoleError")
+	errOutdated error = errors.New("Outdated")
 )
 
 // ErrorResponse Response for error request
@@ -350,7 +351,7 @@ type classUpdateForm struct {
 // >>> COURSE <<<
 // ============
 type courseCreateForm struct {
-	ClassID string `json:"class_id" validate:"omitempty,uuid4"`
+	ClassID string `json:"classID" validate:"required,uuid4"`
 	Name    string `json:"name" validate:"required"`
 	Content string `json:"content" validate:"required"`
 }
@@ -366,7 +367,7 @@ func (f courseCreateForm) ConvertToModel() (course models.Course) {
 }
 
 type courseUpdateForm struct {
-	ClassID *string `json:"class_id" validate:"omitempty"`
+	ClassID *string `json:"classID" validate:"omitempty"`
 	Name    *string `json:"name"  validate:"omitempty"`
 	Content *string `json:"content"  validate:"omitempty"`
 }
@@ -374,7 +375,7 @@ type courseUpdateForm struct {
 // >>> ASSIGNMENT <<<
 // ============
 type assignmentCreateForm struct {
-	CourseID string    `json:"course_id" validate:"omitempty,uuid4"`
+	CourseID string    `json:"courseID" validate:"required,uuid4"`
 	Title    string    `json:"title" validate:"required"`
 	Type     string    `json:"type" validate:"required"`
 	Content  string    `json:"content" validate:"required"`
@@ -394,19 +395,19 @@ func (f assignmentCreateForm) ConvertToModel() (assignment models.Assignment) {
 }
 
 type assignmentUpdateForm struct {
-	CourseID *string    `json:"course_id" validate:"omitempty,uuid4"`
+	CourseID *string    `json:"courseID" validate:"omitempty,uuid4"`
 	Title    *string    `json:"title"  validate:"omitempty"`
 	Type     *string    `json:"type"  validate:"omitempty"`
 	Content  *string    `json:"content"  validate:"omitempty"`
-	Deadline *time.Time `json:"deadline" validate:"required"`
+	Deadline *time.Time `json:"deadline" validate:"omitempty"`
 }
 
 // >>> SUBMITTED ASSIGNMENT <<<
 // ============
 type submmittedAssignmentCreateForm struct {
-    CreatorID    string `json:"creator_id" validate:"required,uuid4"`
-	AssignmentID string `json:"assignment_id" validate:"required,uuid4"`
-	GraderID     string `json:"grader_id" validate:"required,uuid4"`
+	CreatorID    string `json:"creatorID" validate:"required,uuid4"`
+	AssignmentID string `json:"assignmentID" validate:"required,uuid4"`
+	GraderID     string `json:"graderID" validate:"required,uuid4"`
 	Answer       string `json:"answer" validate:"required"`
 	Comment      string `json:"comment" validate:"required"`
 }
@@ -424,7 +425,7 @@ func (f submmittedAssignmentCreateForm) ConvertToModel() (assignment models.Subm
 }
 
 type submmittedAssignmentUpdateForm struct {
-	AssignmentID *string `json:"assignment_id" validate:"omitempty,uuid4"`
+	AssignmentID *string `json:"assignmentID" validate:"omitempty,uuid4"`
 	Answer       *string `json:"answer"  validate:"omitempty"`
 	Grade        *int    `json:"grade"  validate:"omitempty"`
 	Comment      *string `json:"comment"  validate:"omitempty"`

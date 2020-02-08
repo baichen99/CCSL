@@ -109,6 +109,9 @@ func main() {
 	})
 	mvc.Configure(app.Party("/submitted_assignment"), func(app *mvc.Application) {
 		app.Register(services.NewSubmittedAssignmentService(pg))
+		app.Register(services.NewAssignmentService(pg))
+		app.Register(services.NewCourseService(pg))
+		app.Register(services.NewClassService(pg))
 		app.Handle(new(controllers.SubmittedAssignmentController))
 	})
 	host := fmt.Sprintf("%s:%d", configs.Conf.Listener.Server, configs.Conf.Listener.Port)

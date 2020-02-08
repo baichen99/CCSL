@@ -1,10 +1,10 @@
 package controllers
 
 import (
-    "ccsl/configs"
-    "ccsl/middlewares"
-    "ccsl/models"
-    "ccsl/services"
+	"ccsl/configs"
+	"ccsl/middlewares"
+	"ccsl/models"
+	"ccsl/services"
 	"ccsl/utils"
 
 	"github.com/kataras/iris/v12"
@@ -40,7 +40,7 @@ func (c *CourseController) BeforeActivation(app mvc.BeforeActivation) {
 // @Param limit 	query int    false  "limit number" 				    mininum(0)
 // @Param order 	query string false	"order by field"
 // @Param orderBy 	query string false	"order by asc or desc" 		    enums(asc, desc)
-// @Param calss_id  query string false 	"filter class_id of course"
+// @Param calssID  query string false 	"filter classID of course"
 // @Param detail   	query string false 	"search detail name of course"
 // @Param name      query string false 	"search name of course"
 // @Success 200 {object} controllers.GetCourseListResponse
@@ -57,7 +57,7 @@ func (c *CourseController) GetCourseList() {
 	}
 	name := c.Context.URLParamDefault("name", "")
 	content := c.Context.URLParamDefault("content", "")
-	classID := c.Context.URLParamDefault("class_id", "")
+	classID := c.Context.URLParamDefault("classID", "")
 	listParameters := utils.GetCourseListParameters{
 		GetListParameters: listParams,
 		Name:              name,
