@@ -108,7 +108,7 @@ const routes = [
       {
         path: "/users-management",
         name: "Users",
-        component: () => import("@/views/dashboard/Users"),
+        component: () => import("@/views/dashboard/list/UsersList"),
         meta: {
           title: "UserManagement",
           icon: "user",
@@ -133,7 +133,7 @@ const routes = [
       {
         path: "introduction",
         name: "IntroductionManagement",
-        component: () => import("@/views/dashboard/website/Introduction"),
+        component: () => import("@/views/dashboard/CenterIntroduction"),
         meta: {
           title: "IntroductionManagement",
           icon: "introduction",
@@ -143,7 +143,7 @@ const routes = [
       {
         path: "carousels",
         name: "Carousels",
-        component: () => import("@/views/dashboard/website/Carousels"),
+        component: () => import("@/views/dashboard/list/CarouselsList"),
         meta: {
           title: "CarouselManagement",
           icon: "pictures",
@@ -153,7 +153,7 @@ const routes = [
       {
         path: "news",
         name: "News",
-        component: () => import("@/views/dashboard/website/News"),
+        component: () => import("@/views/dashboard/list/NewsList"),
         meta: {
           title: "NewsManagement",
           icon: "news",
@@ -163,7 +163,7 @@ const routes = [
       {
         path: "members",
         name: "Members",
-        component: () => import("@/views/dashboard/website/Members"),
+        component: () => import("@/views/dashboard/list/MembersList"),
         meta: {
           title: "MemberManagement",
           icon: "member",
@@ -173,7 +173,7 @@ const routes = [
       {
         path: "login-history",
         name: "LoginHistory",
-        component: () => import("@/views/dashboard/website/LoginHistory"),
+        component: () => import("@/views/dashboard/list/LoginList"),
         meta: {
           title: "LoginHistory",
           icon: "history",
@@ -184,7 +184,7 @@ const routes = [
       {
         path: "systems",
         name: "Systems",
-        component: () => import("@/views/dashboard/website/Systems"),
+        component: () => import("@/views/dashboard/list/SystemsList"),
         meta: {
           title: "SystemManagement",
           icon: "maintain",
@@ -208,7 +208,7 @@ const routes = [
       {
         path: "performers",
         name: "Performers",
-        component: () => import("@/views/dashboard/database/Performers"),
+        component: () => import("@/views/dashboard/list/PerformersList"),
         meta: {
           title: "PerformerManagement",
           icon: "peoples",
@@ -218,7 +218,7 @@ const routes = [
       {
         path: "handshapes",
         name: "Handshapes",
-        component: () => import("@/views/dashboard/database/Handshapes"),
+        component: () => import("@/views/dashboard/list/HandshapesList"),
         meta: {
           title: "HandshapeManagement",
           icon: "handshape",
@@ -228,7 +228,7 @@ const routes = [
       {
         path: "lexicon",
         name: "Lexicon",
-        component: () => import("@/views/dashboard/database/Lexicons"),
+        component: () => import("@/views/dashboard/list/LexiconsList"),
         meta: {
           title: "LexiconManagement",
           icon: "words",
@@ -238,7 +238,7 @@ const routes = [
       {
         path: "videos",
         name: "LexicalVideos",
-        component: () => import("@/views/dashboard/database/LexicalVideos"),
+        component: () => import("@/views/dashboard/list/LexicalVideosList"),
         meta: {
           title: "LexicalVideoManagement",
           icon: "video",
