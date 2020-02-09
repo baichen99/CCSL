@@ -407,17 +407,14 @@ type assignmentUpdateForm struct {
 type submmittedAssignmentCreateForm struct {
 	CreatorID    string `json:"creatorID" validate:"required,uuid4"`
 	AssignmentID string `json:"assignmentID" validate:"required,uuid4"`
-	GraderID     string `json:"graderID" validate:"required,uuid4"`
 	Answer       string `json:"answer" validate:"required"`
 	Comment      string `json:"comment" validate:"required"`
 }
 
 func (f submmittedAssignmentCreateForm) ConvertToModel() (assignment models.SubmittedAssignments) {
 	assignmentID, _ := uuid.FromString(f.AssignmentID)
-	graderID, _ := uuid.FromString(f.GraderID)
 	assignment = models.SubmittedAssignments{
 		AssignmentID: assignmentID,
-		GraderID:     graderID,
 		Answer:       f.Answer,
 		Comment:      f.Comment,
 	}
@@ -426,6 +423,7 @@ func (f submmittedAssignmentCreateForm) ConvertToModel() (assignment models.Subm
 
 type submmittedAssignmentUpdateForm struct {
 	AssignmentID *string `json:"assignmentID" validate:"omitempty,uuid4"`
+	GraderID     *string `json:"graderID"`
 	Answer       *string `json:"answer"  validate:"omitempty"`
 	Grade        *int    `json:"grade"  validate:"omitempty"`
 	Comment      *string `json:"comment"  validate:"omitempty"`

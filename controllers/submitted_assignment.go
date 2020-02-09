@@ -29,7 +29,7 @@ func (c *SubmittedAssignmentController) BeforeActivation(app mvc.BeforeActivatio
 	app.Router().Use(middlewares.CheckToken)
 	app.Handle(iris.MethodPost, "/", "CreateSubmittedAssignment", middlewares.CheckUserRole([]string{configs.RoleStudent}))
 	app.Handle(iris.MethodDelete, "/{id: string}", "DeleteSubmittedAssignment", middlewares.CheckUserRole([]string{configs.RoleTeacher}))
-	app.Handle(iris.MethodPut, "/{id: string}", "UpdateSubmittedAssignment", middlewares.CheckUserRole([]string{configs.RoleStudent}))
+	app.Handle(iris.MethodPut, "/{id: string}", "UpdateSubmittedAssignment", middlewares.CheckUserRole([]string{configs.RoleStudent, configs.RoleTeacher}))
 }
 
 // GetSubmittedAssignmentList GET /submitted_assignment
@@ -244,7 +244,6 @@ func (c *SubmittedAssignmentController) UpdateSubmittedAssignment() {
 		utils.SetError(c.Context, iris.StatusBadRequest, "SubmittedAssignmentController::UpdateSubmittedAssignment", errParams)
 		return
 	}
-	updateData := utils.MakeUpdateData(form)
 	// Check if out of date
 	submittedAssignment, err := c.SubmittedAssignmentService.GetSubmittedAssignment(submittedAssignmentID)
 	if err != nil {
@@ -256,19 +255,23 @@ func (c *SubmittedAssignmentController) UpdateSubmittedAssignment() {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SubmittedAssignmentService::UpdateSubmittedAssignment", errSQL)
 		return
 	}
-	if time.Now().After(*assginment.Deadline) {
-		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SubmittedAssignmentService::UpdateSubmittedAssignment", errOutdated)
-		return
-	}
 
 	// Check role, only teacher can update grade
+	tokenUser, roles := middlewares.GetJWTParams(c.Context)
 	if form.Grade != nil {
-		_, roles := middlewares.GetJWTParams(c.Context)
 		if utils.StringsContains(roles, configs.RoleStudent) != -1 {
 			utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SubmittedAssignmentService::UpdateSubmittedAssignment", errRole)
 			return
 		}
+		form.GraderID = &tokenUser
 	}
+	// After deadline, only teacher can update data
+	if time.Now().After(*assginment.Deadline) && utils.StringsContains(roles, configs.RoleStudent) != -1 {
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SubmittedAssignmentService::UpdateSubmittedAssignment", errOutdated)
+		return
+	}
+
+	updateData := utils.MakeUpdateData(form)
 
 	// PSQL - Update of the given ID
 	if err := c.SubmittedAssignmentService.UpdateSubmittedAssignment(submittedAssignmentID, updateData); err != nil {
