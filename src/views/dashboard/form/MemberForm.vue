@@ -33,7 +33,7 @@
     </el-form-item>
 
     <el-form-item :label="$t('DescriptionEn')" prop="descriptionEn">
-      <rich-text-editor v-model="formData.descriptionEn" />
+      <rich-text-editor v-if="formData.descriptionEn!==null" v-model="formData.descriptionEn" />
     </el-form-item>
   </el-form>
 </template>

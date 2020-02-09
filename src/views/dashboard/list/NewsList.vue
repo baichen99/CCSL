@@ -108,7 +108,7 @@ export default {
           prop: "title",
           label: this.$t("Title"),
           width: "300px",
-          hiddeOverflow: true
+          hideOverflow: true
         },
         {
           prop: "type",

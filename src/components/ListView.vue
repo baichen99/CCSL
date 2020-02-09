@@ -77,12 +77,18 @@
       :size="formDrawerSize"
       :before-close="handleCloseDrawer"
       :show-close="false"
-      :destroy-on-close="true"
       :visible.sync="openFormDrawer"
+      :append-to-body="true"
       direction="rtl"
     >
       <div class="form-drawer__content">
-        <component :is="listFormComponent" ref="form" :data="itemData" :mode="mode" />
+        <component
+          :is="listFormComponent"
+          v-if="openFormDrawer"
+          ref="form"
+          :data="itemData"
+          :mode="mode"
+        />
         <div class="form-drawer__footer">
           <el-button @click="handleCloseDrawer">{{ $t("Cancel") }}</el-button>
           <el-button
@@ -138,7 +144,7 @@ export default {
     },
     formDrawerSize: {
       type: String,
-      default: "50%"
+      default: "70%"
     },
     ignoredProperties: {
       type: Array,

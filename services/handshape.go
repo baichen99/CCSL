@@ -81,11 +81,10 @@ func (s *HandshapeService) UpdateHandshape(id string, updatedData map[string]int
 }
 
 func (s *HandshapeService) DeleteHandshape(id string) (err error) {
-	var handshape models.Handshape
 	tx := s.PG.Begin()
 	err = tx.
 		Where("id = ?", id).
-		Delete(&handshape).
+		Delete(&models.Handshape{}).
 		Error
 	if err != nil {
 		tx.Rollback()

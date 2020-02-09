@@ -9,7 +9,7 @@ import (
 
 // NotificationInterface struct
 type NotificationInterface interface {
-	GetNotificationList(parameters utils.GetNotificationListParameters) (notifications []models.Notification, count int, err error)
+	GetNotificationList(parameters utils.GetNotificationListParameters) (notifications []models.Notification, count int, unreadCount int, err error)
 	GetNotification(id string) (notification models.Notification, err error)
 	CreateNotification(notification models.Notification) (err error)
 	UpdateNotification(id string, updateData map[string]interface{}) (err error)
@@ -29,7 +29,7 @@ func NewNotificationService(pg *gorm.DB) NotificationInterface {
 }
 
 // GetNotificationList returns Notifications list
-func (s *NotificationService) GetNotificationList(parameters utils.GetNotificationListParameters) (notifications []models.Notification, count int, err error) {
+func (s *NotificationService) GetNotificationList(parameters utils.GetNotificationListParameters) (notifications []models.Notification, count int, unreadCount int, err error) {
 	db := s.PG.
 		Scopes(
 			utils.FilterByColumn("notifications.user_id", parameters.UserID),
@@ -37,12 +37,16 @@ func (s *NotificationService) GetNotificationList(parameters utils.GetNotificati
 			utils.SearchByColumn("notifications.message", parameters.Message),
 		)
 
-	err = db.
-		Model(&models.Notification{}).
+	if err = db.Model(&models.Notification{}).
 		Count(&count).
-		Error
+		Error; err != nil {
+		return
+	}
 
-	if err != nil {
+	if err = db.Model(&models.Notification{}).
+		Where("notifications.read_at IS NULL").
+		Count(&unreadCount).
+		Error; err != nil {
 		return
 	}
 
@@ -83,10 +87,9 @@ func (s *NotificationService) UpdateNotification(id string, updatedData map[stri
 
 // DeleteNotification soft deletes a Notification with given id
 func (s *NotificationService) DeleteNotification(id string) (err error) {
-	var notification models.Notification
 	err = s.PG.
 		Where("id = ?", id).
-		Delete(&notification).
+		Delete(&models.Notification{}).
 		Error
 	return
 }

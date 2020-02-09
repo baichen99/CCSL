@@ -35,6 +35,8 @@ definitions:
       total:
         example: 100
         type: integer
+      unread:
+        type: integer
     type: object
   controllers.GetUsersListResponse:
     properties:
@@ -239,7 +241,7 @@ definitions:
       name:
         description: 姓名                                                                                     //
           用户角色
-        example: Adrian Duan
+        example: Adrian
         type: string
       roles:
         example:

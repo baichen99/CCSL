@@ -81,10 +81,9 @@ func (s *NewsService) UpdateNews(id string, updatedData map[string]interface{}) 
 }
 
 func (s *NewsService) DeleteNews(id string) (err error) {
-	var news models.News
 	err = s.PG.
 		Where("id = ?", id).
-		Delete(&news).
+		Delete(&models.News{}).
 		Error
 	return
 }

@@ -625,6 +625,9 @@
                 "total": {
                     "type": "integer",
                     "example": 100
+                },
+                "unread": {
+                    "type": "integer"
                 }
             }
         },
@@ -904,7 +907,7 @@
                 "name": {
                     "description": "姓名                                                                                     // 用户角色",
                     "type": "string",
-                    "example": "Adrian Duan"
+                    "example": "Adrian"
                 },
                 "roles": {
                     "type": "array",

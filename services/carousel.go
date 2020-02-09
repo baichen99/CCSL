@@ -84,10 +84,9 @@ func (s *CarouselService) UpdateCarousel(id string, updatedData map[string]inter
 
 // DeleteCarousel soft deletes a carousel with given id
 func (s *CarouselService) DeleteCarousel(id string) (err error) {
-	var carousel models.Carousel
 	err = s.PG.
 		Where("id = ?", id).
-		Delete(&carousel).
+		Delete(&models.Carousel{}).
 		Error
 	return
 }

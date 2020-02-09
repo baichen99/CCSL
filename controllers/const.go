@@ -17,6 +17,7 @@ const (
 	page      string = "page"
 	total     string = "total"
 	limit     string = "limit"
+	unread    string = "unread"
 	language  string = "language"
 	version   string = "version"
 	ipAddress string = "ip"
@@ -291,9 +292,9 @@ type lexiconUpdateForm struct {
 type lexicalVideoCreateForm struct {
 	PerformerID       string   `json:"performerID"  validate:"required,uuid4" `
 	LexiconID         string   `json:"lexiconID" validate:"required,uuid4"`
-	VideoPath         string   `json:"videoPath" validate:"required"`                // 视频文件路径
-	WordFormation     string   `json:"wordFormation" validate:"required"`            // 构词方式
-	Morpheme          []string `json:"morpheme" validate:"omitempty"`                // 构词词语
+	VideoPath         string   `json:"videoPath" validate:"required"`                     // 视频文件路径
+	WordFormation     string   `json:"wordFormation" validate:"required"`                 // 构词方式
+	Morpheme          []string `json:"morpheme" validate:"omitempty"`                     // 构词词语
 	LeftHandshapesID  []string `json:"leftHandshapesID" validate:"omitempty,dive,uuid4"`  // 左手手势
 	RightHandshapesID []string `json:"rightHandshapesID" validate:"omitempty,dive,uuid4"` // 右手手势
 }
@@ -316,9 +317,9 @@ func (f lexicalVideoCreateForm) ConvertToModel() (video models.LexicalVideo) {
 type lexicalVideoUpdateForm struct {
 	PerformerID       *string   `json:"performerID" validate:"omitempty,uuid4"`
 	LexiconID         *string   `json:"lexiconID" validate:"omitempty,uuid4"`
-	VideoPath         *string   `json:"videoPath" validate:"omitempty"`               // 视频文件路径
-	WordFormation     *string   `json:"wordFormation" validate:"omitempty"`           // 构词方式
-	Morpheme          *[]string `json:"morpheme" validate:"omitempty"`                // 构词词语
+	VideoPath         *string   `json:"videoPath" validate:"omitempty"`                    // 视频文件路径
+	WordFormation     *string   `json:"wordFormation" validate:"omitempty"`                // 构词方式
+	Morpheme          *[]string `json:"morpheme" validate:"omitempty"`                     // 构词词语
 	LeftHandshapesID  *[]string `json:"leftHandshapesID" validate:"omitempty,dive,uuid4"`  // 左手手势
 	RightHandshapesID *[]string `json:"rightHandshapesID" validate:"omitempty,dive,uuid4"` // 右手手势
 }

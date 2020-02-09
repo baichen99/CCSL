@@ -111,7 +111,8 @@ export default {
           label: this.$t("Title"),
           width: "300px",
           formatter: row =>
-            this.$i18n.locale === "en-US" ? row.titleEn : row.titleZh
+            this.$i18n.locale === "en-US" ? row.titleEn : row.titleZh,
+          hideOverflow: true
         },
         {
           slot: "importance",
