@@ -405,7 +405,6 @@ type assignmentUpdateForm struct {
 // >>> SUBMITTED ASSIGNMENT <<<
 // ============
 type submmittedAssignmentCreateForm struct {
-	CreatorID    string `json:"creatorID" validate:"required,uuid4"`
 	AssignmentID string `json:"assignmentID" validate:"required,uuid4"`
 	Answer       string `json:"answer" validate:"required"`
 	Comment      string `json:"comment" validate:"required"`
@@ -423,7 +422,6 @@ func (f submmittedAssignmentCreateForm) ConvertToModel() (assignment models.Subm
 
 type submmittedAssignmentUpdateForm struct {
 	AssignmentID *string `json:"assignmentID" validate:"omitempty,uuid4"`
-	GraderID     *string `json:"graderID"`
 	Answer       *string `json:"answer"  validate:"omitempty"`
 	Grade        *int    `json:"grade"  validate:"omitempty"`
 	Comment      *string `json:"comment"  validate:"omitempty"`

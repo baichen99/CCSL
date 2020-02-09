@@ -263,7 +263,6 @@ func (c *SubmittedAssignmentController) UpdateSubmittedAssignment() {
 			utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SubmittedAssignmentService::UpdateSubmittedAssignment", errRole)
 			return
 		}
-		form.GraderID = &tokenUser
 	}
 	// After deadline, only teacher can update data
 	if time.Now().After(*assginment.Deadline) && utils.StringsContains(roles, configs.RoleStudent) != -1 {
@@ -272,6 +271,7 @@ func (c *SubmittedAssignmentController) UpdateSubmittedAssignment() {
 	}
 
 	updateData := utils.MakeUpdateData(form)
+	updateData["grader_id"] = tokenUser
 
 	// PSQL - Update of the given ID
 	if err := c.SubmittedAssignmentService.UpdateSubmittedAssignment(submittedAssignmentID, updateData); err != nil {

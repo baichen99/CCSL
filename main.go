@@ -230,8 +230,7 @@ func initDB(app *iris.Application) *gorm.DB {
 		Model(&models.Assignment{}).
 		AddForeignKey("course_id", "courses(id)", "RESTRICT", "CASCADE").
 		Model(&models.SubmittedAssignments{}).
-		AddForeignKey("assignment_id", "assignments(id)", "RESTRICT", "CASCADE").
-		AddForeignKey("grader_id", "users(id)", "RESTRICT", "CASCADE")
+		AddForeignKey("assignment_id", "assignments(id)", "RESTRICT", "CASCADE")
 
 	// Create test users for development environment
 	if os.Getenv(configs.EnvName) == configs.EnvDevelopment {
