@@ -37,29 +37,28 @@ export default {
       return this[lang] !== this[`original-${lang}`];
     }
   },
-  mounted() {
-    this.initData();
+  created() {
+    this.$nextTick(() => {
+      this.initData();
+    });
   },
   methods: {
-    initData() {
-      GetAppInfo("introduction-zh-CN").then(res => {
-        this["zh-CN"] = res.data;
-        this["original-zh-CN"] = res.data;
-      });
-      GetAppInfo("introduction-en-US").then(res => {
-        this["en-US"] = res.data;
-        this["original-en-US"] = res.data;
-      });
+    async initData() {
+      const resZh = await GetAppInfo("introduction-zh-CN");
+      this["zh-CN"] = resZh.data;
+      this["original-zh-CN"] = resZh.data;
+      const resEn = await GetAppInfo("introduction-en-US");
+      this["en-US"] = resEn.data;
+      this["original-en-US"] = resEn.data;
     },
-    handleSave() {
+    async handleSave() {
       const lang = this.activeTab;
-      UpdateAppInfo(`introduction-${lang}`, this[lang]).then(() => {
-        this.$notify({
-          type: "success",
-          title: this.$t("SuccessfulOperation")
-        });
-        this.initData();
+      await UpdateAppInfo(`introduction-${lang}`, this[lang]);
+      this.$notify({
+        type: "success",
+        title: this.$t("SuccessfulOperation")
       });
+      this.initData();
     }
   }
 };

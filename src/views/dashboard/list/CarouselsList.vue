@@ -6,6 +6,7 @@
     :delete-item-method="DeleteCarousel"
     :list-form-component="CarouselForm"
     :columns="columns"
+    order="desc"
   >
     <template #toolbar="{params, handleSearch}">
       <el-input

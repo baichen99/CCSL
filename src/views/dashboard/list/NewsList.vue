@@ -6,6 +6,7 @@
     :delete-item-method="DeleteNews"
     :list-form-component="NewsForm"
     :columns="columns"
+    order="desc"
   >
     <template #state="{row}">
       <el-tag size="small" :type="newsState[row.state].color">{{ $t(newsState[row.state].name) }}</el-tag>
