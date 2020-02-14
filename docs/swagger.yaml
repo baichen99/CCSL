@@ -266,7 +266,7 @@ definitions:
     properties:
       content:
         type: string
-      course_id:
+      courseID:
         type: string
       deadline:
         type: string
@@ -276,6 +276,7 @@ definitions:
         type: string
     required:
     - content
+    - courseID
     - deadline
     - title
     - type
@@ -284,7 +285,7 @@ definitions:
     properties:
       content:
         type: string
-      course_id:
+      courseID:
         type: string
       deadline:
         type: string
@@ -292,8 +293,6 @@ definitions:
         type: string
       type:
         type: string
-    required:
-    - deadline
     type: object
   controllers.classCreateForm:
     properties:
@@ -319,13 +318,14 @@ definitions:
     type: object
   controllers.courseCreateForm:
     properties:
-      class_id:
+      classID:
         type: string
       content:
         type: string
       name:
         type: string
     required:
+    - classID
     - content
     - name
     type: object
@@ -333,26 +333,20 @@ definitions:
     properties:
       answer:
         type: string
-      assignment_id:
+      assignmentID:
         type: string
       comment:
         type: string
-      creator_id:
-        type: string
-      grader_id:
-        type: string
     required:
     - answer
-    - assignment_id
+    - assignmentID
     - comment
-    - creator_id
-    - grader_id
     type: object
   controllers.submmittedAssignmentUpdateForm:
     properties:
       answer:
         type: string
-      assignment_id:
+      assignmentID:
         type: string
       comment:
         type: string
@@ -656,6 +650,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/controllers.assignmentCreateForm'
+          type: object
       produces:
       - application/json
       responses:
@@ -814,14 +809,15 @@ paths:
     post:
       consumes:
       - application/json
-      description: create a new course
+      description: create a new class
       parameters:
-      - description: create course
+      - description: create user
         in: body
         name: user
         required: true
         schema:
-          $ref: '#/definitions/controllers.courseCreateForm'
+          $ref: '#/definitions/controllers.classCreateForm'
+          type: object
       produces:
       - application/json
       responses:
@@ -841,9 +837,9 @@ paths:
           description: Unprocessable Entity
           schema:
             $ref: '#/definitions/controllers.ErrorResponse'
-      summary: Create course
+      summary: Create class
       tags:
-      - Course
+      - Class
   /class/{id}:
     delete:
       consumes:
@@ -882,9 +878,9 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get a course by id
+      description: Get a class by id
       parameters:
-      - description: course id
+      - description: class id
         format: uuid
         in: path
         name: id
@@ -896,7 +892,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controllers.GetCourseResponse'
+            $ref: '#/definitions/controllers.GetClassResponse'
         "400":
           description: Bad Request
           schema:
@@ -913,9 +909,9 @@ paths:
           description: Unprocessable Entity
           schema:
             $ref: '#/definitions/controllers.ErrorResponse'
-      summary: Get course
+      summary: Get class
       tags:
-      - Course
+      - Class
   /course:
     get:
       consumes:
@@ -943,9 +939,9 @@ paths:
         in: query
         name: orderBy
         type: string
-      - description: filter class_id of course
+      - description: filter classID of course
         in: query
-        name: calss_id
+        name: calssID
         type: string
       - description: search detail name of course
         in: query
@@ -1029,6 +1025,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/controllers.classUpdateForm'
+          type: object
       produces:
       - application/json
       responses:
@@ -1311,17 +1308,17 @@ paths:
         in: query
         name: orderBy
         type: string
-      - description: filter creator_id of submitted_assignment
+      - description: filter creatorid of submitted_assignment
         in: query
-        name: creator_id
+        name: creatorID
         type: string
-      - description: filter assignment_id of submitted_assignment
+      - description: filter assignmentid of submitted_assignment
         in: query
-        name: assignment_id
+        name: assignmentid
         type: string
-      - description: filter grader_id of submitted_assignment
+      - description: filter graderid of submitted_assignment
         in: query
-        name: grader_id
+        name: graderid
         type: string
       - description: search answer of submitted_assignment
         in: query
@@ -1437,6 +1434,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/controllers.submmittedAssignmentCreateForm'
+          type: object
       produces:
       - application/json
       responses:
@@ -1543,6 +1541,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/controllers.UserCreateForm'
+          type: object
       produces:
       - application/json
       responses:
@@ -1569,20 +1568,21 @@ paths:
     put:
       consumes:
       - application/json
-      description: update a submitted_assignment by id
+      description: update a assignment by id
       parameters:
-      - description: submitted_assignment id
+      - description: assignment id
         format: uuid
         in: path
         name: id
         required: true
         type: string
-      - description: updated submitted_assignment
+      - description: updated assignment
         in: body
         name: user
         required: true
         schema:
-          $ref: '#/definitions/controllers.submmittedAssignmentUpdateForm'
+          $ref: '#/definitions/controllers.assignmentUpdateForm'
+          type: object
       produces:
       - application/json
       responses:
@@ -1603,7 +1603,7 @@ paths:
           description: Unprocessable Entity
           schema:
             $ref: '#/definitions/controllers.ErrorResponse'
-      summary: Update submitted_assignment
+      summary: Update assignment
       tags:
-      - SubmittedAssignment
+      - Assignment
 swagger: "2.0"

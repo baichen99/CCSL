@@ -123,6 +123,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
+                            "type": "object",
                             "$ref": "#/definitions/controllers.assignmentCreateForm"
                         }
                     }
@@ -353,7 +354,7 @@
                 }
             },
             "post": {
-                "description": "create a new course",
+                "description": "create a new class",
                 "consumes": [
                     "application/json"
                 ],
@@ -361,17 +362,18 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Course"
+                    "Class"
                 ],
-                "summary": "Create course",
+                "summary": "Create class",
                 "parameters": [
                     {
-                        "description": "create course",
+                        "description": "create user",
                         "name": "user",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllers.courseCreateForm"
+                            "type": "object",
+                            "$ref": "#/definitions/controllers.classCreateForm"
                         }
                     }
                 ],
@@ -405,7 +407,7 @@
         },
         "/class/{id}": {
             "get": {
-                "description": "Get a course by id",
+                "description": "Get a class by id",
                 "consumes": [
                     "application/json"
                 ],
@@ -413,14 +415,14 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Course"
+                    "Class"
                 ],
-                "summary": "Get course",
+                "summary": "Get class",
                 "parameters": [
                     {
                         "type": "string",
                         "format": "uuid",
-                        "description": "course id",
+                        "description": "class id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -430,7 +432,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controllers.GetCourseResponse"
+                            "$ref": "#/definitions/controllers.GetClassResponse"
                         }
                     },
                     "400": {
@@ -556,8 +558,8 @@
                     },
                     {
                         "type": "string",
-                        "description": "filter class_id of course",
-                        "name": "calss_id",
+                        "description": "filter classID of course",
+                        "name": "calssID",
                         "in": "query"
                     },
                     {
@@ -629,6 +631,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
+                            "type": "object",
                             "$ref": "#/definitions/controllers.classUpdateForm"
                         }
                     }
@@ -1103,20 +1106,20 @@
                     },
                     {
                         "type": "string",
-                        "description": "filter creator_id of submitted_assignment",
-                        "name": "creator_id",
+                        "description": "filter creatorid of submitted_assignment",
+                        "name": "creatorID",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "filter assignment_id of submitted_assignment",
-                        "name": "assignment_id",
+                        "description": "filter assignmentid of submitted_assignment",
+                        "name": "assignmentid",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "filter grader_id of submitted_assignment",
-                        "name": "grader_id",
+                        "description": "filter graderid of submitted_assignment",
+                        "name": "graderid",
                         "in": "query"
                     },
                     {
@@ -1287,6 +1290,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
+                            "type": "object",
                             "$ref": "#/definitions/controllers.submmittedAssignmentCreateForm"
                         }
                     }
@@ -1444,6 +1448,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
+                            "type": "object",
                             "$ref": "#/definitions/controllers.UserCreateForm"
                         }
                     }
@@ -1478,7 +1483,7 @@
         },
         "/users/{id}": {
             "put": {
-                "description": "update a submitted_assignment by id",
+                "description": "update a assignment by id",
                 "consumes": [
                     "application/json"
                 ],
@@ -1486,25 +1491,26 @@
                     "application/json"
                 ],
                 "tags": [
-                    "SubmittedAssignment"
+                    "Assignment"
                 ],
-                "summary": "Update submitted_assignment",
+                "summary": "Update assignment",
                 "parameters": [
                     {
                         "type": "string",
                         "format": "uuid",
-                        "description": "submitted_assignment id",
+                        "description": "assignment id",
                         "name": "id",
                         "in": "path",
                         "required": true
                     },
                     {
-                        "description": "updated submitted_assignment",
+                        "description": "updated assignment",
                         "name": "user",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllers.submmittedAssignmentUpdateForm"
+                            "type": "object",
+                            "$ref": "#/definitions/controllers.assignmentUpdateForm"
                         }
                     }
                 ],
@@ -1914,6 +1920,7 @@
             "type": "object",
             "required": [
                 "content",
+                "courseID",
                 "deadline",
                 "title",
                 "type"
@@ -1922,7 +1929,7 @@
                 "content": {
                     "type": "string"
                 },
-                "course_id": {
+                "courseID": {
                     "type": "string"
                 },
                 "deadline": {
@@ -1938,14 +1945,11 @@
         },
         "controllers.assignmentUpdateForm": {
             "type": "object",
-            "required": [
-                "deadline"
-            ],
             "properties": {
                 "content": {
                     "type": "string"
                 },
-                "course_id": {
+                "courseID": {
                     "type": "string"
                 },
                 "deadline": {
@@ -1995,11 +1999,12 @@
         "controllers.courseCreateForm": {
             "type": "object",
             "required": [
+                "classID",
                 "content",
                 "name"
             ],
             "properties": {
-                "class_id": {
+                "classID": {
                     "type": "string"
                 },
                 "content": {
@@ -2014,25 +2019,17 @@
             "type": "object",
             "required": [
                 "answer",
-                "assignment_id",
-                "comment",
-                "creator_id",
-                "grader_id"
+                "assignmentID",
+                "comment"
             ],
             "properties": {
                 "answer": {
                     "type": "string"
                 },
-                "assignment_id": {
+                "assignmentID": {
                     "type": "string"
                 },
                 "comment": {
-                    "type": "string"
-                },
-                "creator_id": {
-                    "type": "string"
-                },
-                "grader_id": {
                     "type": "string"
                 }
             }
@@ -2043,7 +2040,7 @@
                 "answer": {
                     "type": "string"
                 },
-                "assignment_id": {
+                "assignmentID": {
                     "type": "string"
                 },
                 "comment": {
