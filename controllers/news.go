@@ -35,20 +35,14 @@ func (c *NewsController) GetNewsList() {
 		utils.SetError(c.Context, iris.StatusBadRequest, "NewsController::GetNewsList", errParams)
 		return
 	}
-	column := c.Context.URLParamDefault("column", "")
-	title := c.Context.URLParamDefault("title", "")
-	newsType := c.Context.URLParamDefault("type", "")
-	text := c.Context.URLParamDefault("text", "")
-	language := c.Context.URLParamDefault("language", "")
-	state := c.Context.URLParamDefault("state", "")
 	listParameters := utils.GetNewsListParameters{
 		GetListParameters: listParams,
-		Column:            column,
-		Title:             title,
-		Type:              newsType,
-		Text:              text,
-		Language:          language,
-		State:             state,
+		Column:            c.Context.URLParamDefault("column", ""),
+		Title:             c.Context.URLParamDefault("title", ""),
+		Type:              c.Context.URLParamDefault("type", ""),
+		Text:              c.Context.URLParamDefault("text", ""),
+		Language:          c.Context.URLParamDefault("language", ""),
+		State:             c.Context.URLParamDefault("state", ""),
 	}
 	news, count, err := c.NewsService.GetNewsList(listParameters)
 	if err != nil {
@@ -67,7 +61,7 @@ func (c *NewsController) GetNewsList() {
 // CreateNews POST /news
 func (c *NewsController) CreateNews() {
 	defer c.Context.Next()
-	var form newsCreateForm
+	var form NewsCreateForm
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
 		utils.SetError(c.Context, iris.StatusBadRequest, "NewsController::CreateNews", errParams)
@@ -115,7 +109,7 @@ func (c *NewsController) UpdateNews() {
 
 	// Getting ID from parameters in the URL
 	newsID := c.Context.Params().Get("id")
-	var form newsUpdateForm
+	var form NewsUpdateForm
 
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {

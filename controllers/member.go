@@ -33,12 +33,10 @@ func (c *MemberController) GetMemberList() {
 	if err != nil {
 		utils.SetError(c.Context, iris.StatusBadRequest, "MemberController::GetMemberList", errParams)
 	}
-	nameZh := c.Context.URLParamDefault("nameZh", "")
-	nameEn := c.Context.URLParamDefault("nameEn", "")
 	listParameters := utils.GetMemberListParameters{
 		GetListParameters: listParams,
-		NameZh:            nameZh,
-		NameEn:            nameEn,
+		NameZh:            c.Context.URLParamDefault("nameZh", ""),
+		NameEn:            c.Context.URLParamDefault("nameEn", ""),
 	}
 	members, count, err := c.MemberService.GetMemberList(listParameters)
 	c.Context.JSON(iris.Map{
@@ -53,7 +51,7 @@ func (c *MemberController) GetMemberList() {
 // CreateMember POST /members
 func (c *MemberController) CreateMember() {
 	defer c.Context.Next()
-	var form memberCreateForm
+	var form MemberCreateForm
 	//   Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
 		utils.SetError(c.Context, iris.StatusBadRequest, "MemberService::CreateMember", errParams)
@@ -99,7 +97,7 @@ func (c *MemberController) UpdateMember() {
 
 	// Getting ID from parameters in the URL
 	memberID := c.Context.Params().Get("id")
-	var form memberUpdateForm
+	var form MemberUpdateForm
 
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {

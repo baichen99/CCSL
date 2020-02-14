@@ -52,7 +52,7 @@ func (c *SystemController) GetAppInfo() {
 func (c *SystemController) UpdateAppInfo() {
 	defer c.Context.Next()
 	key := c.Context.Params().Get("key")
-	var form infoUpdateForm
+	var form InfoUpdateForm
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
 		utils.SetError(c.Context, iris.StatusBadRequest, "SystemController::UpdateAppInfo", errParams)
 		return

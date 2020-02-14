@@ -35,16 +35,12 @@ func (c *LexiconController) GetWordsList() {
 		utils.SetError(c.Context, iris.StatusBadRequest, "LexiconController::GetWordsList", errParams)
 		return
 	}
-	pos := c.Context.URLParamDefault("pos", "")
-	initial := c.Context.URLParamDefault("initial", "")
-	searchChinese := c.Context.URLParamDefault("chinese", "")
-	searchEnglish := c.Context.URLParamDefault("english", "")
 	listParameters := utils.GetLexiconListParameters{
 		GetListParameters: listParams,
-		Pos:               pos,
-		Initial:           initial,
-		Chinese:           searchChinese,
-		English:           searchEnglish,
+		Pos:               c.Context.URLParamDefault("pos", ""),
+		Initial:           c.Context.URLParamDefault("initial", ""),
+		Chinese:           c.Context.URLParamDefault("chinese", ""),
+		English:           c.Context.URLParamDefault("english", ""),
 	}
 	words, count, err := c.LexiconService.GetWordsList(listParameters)
 	if err != nil {
@@ -63,7 +59,7 @@ func (c *LexiconController) GetWordsList() {
 // CreateWord POST /lexicon
 func (c *LexiconController) CreateWord() {
 	defer c.Context.Next()
-	var form lexiconCreateForm
+	var form LexiconCreateForm
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
 		utils.SetError(c.Context, iris.StatusBadRequest, "LexiconController::CreateWord", errParams)
@@ -108,7 +104,7 @@ func (c *LexiconController) UpdateWord() {
 
 	// Getting ID from parameters in the URL
 	wordID := c.Context.Params().Get("id")
-	var form lexiconUpdateForm
+	var form LexiconUpdateForm
 
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {

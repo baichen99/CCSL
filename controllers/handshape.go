@@ -35,10 +35,9 @@ func (c *HandshapeController) GetHandshapesList() {
 		utils.SetError(c.Context, iris.StatusBadRequest, "HandshapeController::GetHandshapesList", errParams)
 		return
 	}
-	name := c.Context.URLParamDefault("name", "")
 	listParameters := utils.GetHandshapeListParameters{
 		GetListParameters: listParams,
-		Name:              name,
+		Name:              c.Context.URLParamDefault("name", ""),
 	}
 	handshapes, count, err := c.HandshapeService.GetHandshapesList(listParameters)
 	if err != nil {
@@ -57,13 +56,13 @@ func (c *HandshapeController) GetHandshapesList() {
 // CreateHandshape POST /handshapes
 func (c *HandshapeController) CreateHandshape() {
 	defer c.Context.Next()
-	var form handshapeCreateForm
+	var form HandshapeCreateForm
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
 		utils.SetError(c.Context, iris.StatusBadRequest, "HandshapeController::CreateHandshape", errParams)
 		return
 	}
-	handshape:= form.ConvertToModel()
+	handshape := form.ConvertToModel()
 	if err := c.HandshapeService.CreateHandshape(handshape); err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "WordService::CreateHandshape", errSQL)
 		return
@@ -96,7 +95,7 @@ func (c *HandshapeController) UpdateHandshape() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
 	handshapeID := c.Context.Params().Get("id")
-	var form handshapeUpdateForm
+	var form HandshapeUpdateForm
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
 		utils.SetError(c.Context, iris.StatusBadRequest, "HandshapeController::UpdateHandshape", errParams)
 	}

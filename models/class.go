@@ -36,10 +36,10 @@ type Assignment struct {
 	Deadline *time.Time `json:"deadline"`
 }
 
-// SubmittedAssignments model 学生提交的作业
-type SubmittedAssignments struct {
+// SubmittedAssignment model 学生提交的作业
+type SubmittedAssignment struct {
 	Base
-	CreatorID    uuid.UUID `gorm:"type:uuid" json:"creator_id"`
+	CreatorID    uuid.UUID `gorm:"type:uuid" json:"creatorID"`
 	AssignmentID uuid.UUID `gorm:"type:uuid" json:"assignmentID"`
 	Answer       string    `json:"answer"`
 	Grade        *int      `json:"grade"`

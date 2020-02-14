@@ -53,14 +53,14 @@ type GetListResponse struct {
 // >>> INFO <<<
 // ============
 
-type infoUpdateForm struct {
+type InfoUpdateForm struct {
 	Data *postgres.Jsonb `json:"data" validate:"required"`
 }
 
 // >>> CAROUSEL <<<
 // ============
 
-type carouselCreateForm struct {
+type CarouselCreateForm struct {
 	TitleZh    string `json:"titleZh" validate:"required"`
 	TitleEn    string `json:"titleEn" validate:"required"`
 	Image      string `json:"image" validate:"required"`
@@ -68,7 +68,7 @@ type carouselCreateForm struct {
 	Importance int    `json:"importance" validate:"omitempty,max=5,min=0" `
 }
 
-func (f carouselCreateForm) ConvertToModel() (carousel models.Carousel) {
+func (f CarouselCreateForm) ConvertToModel() (carousel models.Carousel) {
 	carousel = models.Carousel{
 		TitleZh:    f.TitleZh,
 		TitleEn:    f.TitleEn,
@@ -79,7 +79,7 @@ func (f carouselCreateForm) ConvertToModel() (carousel models.Carousel) {
 	return
 }
 
-type carouselUpdateForm struct {
+type CarouselUpdateForm struct {
 	TitleZh    *string `json:"titleZh" validate:"omitempty"`
 	TitleEn    *string `json:"titleEn" validate:"omitempty"`
 	Image      *string `json:"image" validate:"omitempty"`
@@ -90,7 +90,7 @@ type carouselUpdateForm struct {
 // >>> NEWS <<<
 // ============
 
-type newsCreateForm struct {
+type NewsCreateForm struct {
 	Column     string    `json:"column" validate:"required"`
 	Date       time.Time `json:"date" validate:"required"`
 	Title      string    `json:"title" validate:"required"`
@@ -101,7 +101,7 @@ type newsCreateForm struct {
 	State      string    `json:"state" validate:"omitempty,oneof=draft published"`
 }
 
-func (f newsCreateForm) ConvertToModel() (news models.News) {
+func (f NewsCreateForm) ConvertToModel() (news models.News) {
 	news = models.News{
 		Column:     f.Column,
 		Date:       f.Date,
@@ -115,7 +115,7 @@ func (f newsCreateForm) ConvertToModel() (news models.News) {
 	return
 }
 
-type newsUpdateForm struct {
+type NewsUpdateForm struct {
 	Column     *string    `json:"column"  validate:"omitempty"`
 	Date       *time.Time `json:"date"  validate:"omitempty"` // RFC3339 - example: 2000-12-30T00:00:00Z
 	Title      *string    `json:"title"  validate:"omitempty"`
@@ -128,7 +128,7 @@ type newsUpdateForm struct {
 
 // >> MEMBER <<
 // ============
-type memberCreateForm struct {
+type MemberCreateForm struct {
 	Profile       string `json:"profile" validate:"required"`
 	Type          string `json:"type" validate:"required"`
 	NameZh        string `json:"nameZh" validate:"required"`
@@ -140,7 +140,7 @@ type memberCreateForm struct {
 	DescriptionEn string `json:"descriptionEn" validate:"omitempty"`
 }
 
-func (f memberCreateForm) ConvertToModel() (member models.Member) {
+func (f MemberCreateForm) ConvertToModel() (member models.Member) {
 	member = models.Member{
 		Profile:       f.Profile,
 		Type:          f.Type,
@@ -155,7 +155,7 @@ func (f memberCreateForm) ConvertToModel() (member models.Member) {
 	return
 }
 
-type memberUpdateForm struct {
+type MemberUpdateForm struct {
 	Profile       *string `json:"profile" validate:"omitempty"`
 	Type          *string `json:"type" validate:"omitempty"`
 	Text          *string `json:"text" validate:"omitempty"`
@@ -203,25 +203,25 @@ type UserUpdateForm struct {
 	Roles    *[]string `json:"roles"  validate:"omitempty,dive,oneof=super admin dbuser student teacher" swaggertype:"array,string" example:"admin" enums:"super,admin,dbuser,student,teacher"`
 }
 
-type userLoginForm struct {
+type UserLoginForm struct {
 	Username string `json:"username" validate:"required,numeric|email"`
 	Password string `json:"password" validate:"required"`
 }
 
-type resetPasswordForm struct {
+type ResetPasswordForm struct {
 	Email string `json:"email" validate:"required"`
 }
 
 // >>> PERFORMER <<<
 // ============
 
-type performerCreateForm struct {
+type PerformerCreateForm struct {
 	Name     string `json:"name" validate:"required"`
 	RegionID int    `json:"regionID" validate:"required,numeric,min=100000"`
 	Gender   string `json:"gender" validate:"required"`
 }
 
-func (f performerCreateForm) ConvertToModel() (performer models.Performer) {
+func (f PerformerCreateForm) ConvertToModel() (performer models.Performer) {
 	performer = models.Performer{
 		Name:     f.Name,
 		RegionID: f.RegionID,
@@ -230,7 +230,7 @@ func (f performerCreateForm) ConvertToModel() (performer models.Performer) {
 	return
 }
 
-type performerUpdateForm struct {
+type PerformerUpdateForm struct {
 	Name     *string `json:"name" validate:"omitempty"`
 	RegionID *int    `json:"regionID" validate:"omitempty,min=100000"`
 	Gender   *string `json:"gender" validate:"omitempty"`
@@ -239,13 +239,13 @@ type performerUpdateForm struct {
 // >>> HANDSHAPE <<<
 // ============
 
-type handshapeCreateForm struct {
+type HandshapeCreateForm struct {
 	Name  string `json:"name" validate:"required"`
 	Image string `json:"image" validate:"required"`
 	Glyph string `json:"glyph" validate:"required"`
 }
 
-func (f handshapeCreateForm) ConvertToModel() (user models.Handshape) {
+func (f HandshapeCreateForm) ConvertToModel() (user models.Handshape) {
 	user = models.Handshape{
 		Name:  f.Name,
 		Image: f.Image,
@@ -254,7 +254,7 @@ func (f handshapeCreateForm) ConvertToModel() (user models.Handshape) {
 	return
 }
 
-type handshapeUpdateForm struct {
+type HandshapeUpdateForm struct {
 	Name  *string `json:"name" validate:"omitempty"`
 	Image *string `json:"image" validate:"omitempty"`
 	Glyph *string `json:"glyph" validate:"omitempty"`
@@ -263,14 +263,14 @@ type handshapeUpdateForm struct {
 // >>> LEXICON <<<
 // ============
 
-type lexiconCreateForm struct {
+type LexiconCreateForm struct {
 	Initial string   `json:"initial" validate:"required"`
 	Chinese string   `json:"chinese" validate:"required"`
 	English string   `json:"english" validate:"required"`
 	Pos     []string `json:"pos" validate:"required"`
 }
 
-func (f lexiconCreateForm) ConvertToModel() (word models.Lexicon) {
+func (f LexiconCreateForm) ConvertToModel() (word models.Lexicon) {
 	word = models.Lexicon{
 		Initial: f.Initial,
 		Chinese: f.Chinese,
@@ -280,7 +280,7 @@ func (f lexiconCreateForm) ConvertToModel() (word models.Lexicon) {
 	return
 }
 
-type lexiconUpdateForm struct {
+type LexiconUpdateForm struct {
 	Initial *string   `json:"initial" validate:"omitempty"`
 	Chinese *string   `json:"chinese" validate:"omitempty"`
 	English *string   `json:"english" validate:"omitempty"`
@@ -290,7 +290,7 @@ type lexiconUpdateForm struct {
 // >>> LEXICAL_VIDEO <<<
 // ============
 
-type lexicalVideoCreateForm struct {
+type LexicalVideoCreateForm struct {
 	PerformerID       string   `json:"performerID"  validate:"required,uuid4" `
 	LexiconID         string   `json:"lexiconID" validate:"required,uuid4"`
 	VideoPath         string   `json:"videoPath" validate:"required"`                     // 视频文件路径
@@ -300,7 +300,7 @@ type lexicalVideoCreateForm struct {
 	RightHandshapesID []string `json:"rightHandshapesID" validate:"omitempty,dive,uuid4"` // 右手手势
 }
 
-func (f lexicalVideoCreateForm) ConvertToModel() (video models.LexicalVideo) {
+func (f LexicalVideoCreateForm) ConvertToModel() (video models.LexicalVideo) {
 	performerID, _ := uuid.FromString(f.PerformerID)
 	lexiconID, _ := uuid.FromString(f.LexiconID)
 	video = models.LexicalVideo{
@@ -315,7 +315,7 @@ func (f lexicalVideoCreateForm) ConvertToModel() (video models.LexicalVideo) {
 	return
 }
 
-type lexicalVideoUpdateForm struct {
+type LexicalVideoUpdateForm struct {
 	PerformerID       *string   `json:"performerID" validate:"omitempty,uuid4"`
 	LexiconID         *string   `json:"lexiconID" validate:"omitempty,uuid4"`
 	VideoPath         *string   `json:"videoPath" validate:"omitempty"`                    // 视频文件路径
@@ -328,13 +328,13 @@ type lexicalVideoUpdateForm struct {
 // >>> CLASS <<<
 // ============
 
-type classCreateForm struct {
+type ClassCreateForm struct {
 	Name      string `json:"name" validate:"required"`
 	Details   string `json:"details" validate:"required"`
 	Resources string `json:"resources" validate:"required"`
 }
 
-func (f classCreateForm) ConvertToModel() (class models.Class) {
+func (f ClassCreateForm) ConvertToModel() (class models.Class) {
 	class = models.Class{
 		Name:      f.Name,
 		Details:   f.Details,
@@ -343,7 +343,7 @@ func (f classCreateForm) ConvertToModel() (class models.Class) {
 	return
 }
 
-type classUpdateForm struct {
+type ClassUpdateForm struct {
 	Name      *string `json:"name"  validate:"omitempty"`
 	Details   *string `json:"details"  validate:"omitempty"`
 	Resources *string `json:"resources"  validate:"omitempty"`
@@ -351,13 +351,13 @@ type classUpdateForm struct {
 
 // >>> COURSE <<<
 // ============
-type courseCreateForm struct {
+type CourseCreateForm struct {
 	ClassID string `json:"classID" validate:"required,uuid4"`
 	Name    string `json:"name" validate:"required"`
 	Content string `json:"content" validate:"required"`
 }
 
-func (f courseCreateForm) ConvertToModel() (course models.Course) {
+func (f CourseCreateForm) ConvertToModel() (course models.Course) {
 	classID, _ := uuid.FromString(f.ClassID)
 	course = models.Course{
 		ClassID: classID,
@@ -367,7 +367,7 @@ func (f courseCreateForm) ConvertToModel() (course models.Course) {
 	return
 }
 
-type courseUpdateForm struct {
+type CourseUpdateForm struct {
 	ClassID *string `json:"classID" validate:"omitempty"`
 	Name    *string `json:"name"  validate:"omitempty"`
 	Content *string `json:"content"  validate:"omitempty"`
@@ -375,7 +375,7 @@ type courseUpdateForm struct {
 
 // >>> ASSIGNMENT <<<
 // ============
-type assignmentCreateForm struct {
+type AssignmentCreateForm struct {
 	CourseID string    `json:"courseID" validate:"required,uuid4"`
 	Title    string    `json:"title" validate:"required"`
 	Type     string    `json:"type" validate:"required"`
@@ -383,7 +383,7 @@ type assignmentCreateForm struct {
 	Deadline time.Time `json:"deadline" validate:"required"`
 }
 
-func (f assignmentCreateForm) ConvertToModel() (assignment models.Assignment) {
+func (f AssignmentCreateForm) ConvertToModel() (assignment models.Assignment) {
 	courseID, _ := uuid.FromString(f.CourseID)
 	assignment = models.Assignment{
 		CourseID: courseID,
@@ -395,7 +395,7 @@ func (f assignmentCreateForm) ConvertToModel() (assignment models.Assignment) {
 	return
 }
 
-type assignmentUpdateForm struct {
+type AssignmentUpdateForm struct {
 	CourseID *string    `json:"courseID" validate:"omitempty,uuid4"`
 	Title    *string    `json:"title"  validate:"omitempty"`
 	Type     *string    `json:"type"  validate:"omitempty"`
@@ -405,23 +405,21 @@ type assignmentUpdateForm struct {
 
 // >>> SUBMITTED ASSIGNMENT <<<
 // ============
-type submmittedAssignmentCreateForm struct {
+type SubmittedAssignmentCreateForm struct {
 	AssignmentID string `json:"assignmentID" validate:"required,uuid4"`
 	Answer       string `json:"answer" validate:"required"`
-	Comment      string `json:"comment" validate:"required"`
 }
 
-func (f submmittedAssignmentCreateForm) ConvertToModel() (assignment models.SubmittedAssignments) {
+func (f SubmittedAssignmentCreateForm) ConvertToModel() (assignment models.SubmittedAssignment) {
 	assignmentID, _ := uuid.FromString(f.AssignmentID)
-	assignment = models.SubmittedAssignments{
+	assignment = models.SubmittedAssignment{
 		AssignmentID: assignmentID,
 		Answer:       f.Answer,
-		Comment:      f.Comment,
 	}
 	return
 }
 
-type submmittedAssignmentUpdateForm struct {
+type SubmittedAssignmentUpdateForm struct {
 	AssignmentID *string `json:"assignmentID" validate:"omitempty,uuid4"`
 	Answer       *string `json:"answer"  validate:"omitempty"`
 	Grade        *int    `json:"grade"  validate:"omitempty"`

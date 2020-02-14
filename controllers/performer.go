@@ -35,14 +35,11 @@ func (c *PerformerController) GetPerformersList() {
 		utils.SetError(c.Context, iris.StatusBadRequest, "PerformerController::GetPerformersList", errParams)
 		return
 	}
-	name := c.Context.URLParamDefault("name", "")
-	regionID := c.Context.URLParamDefault("regionID", "")
-	gender := c.Context.URLParamDefault("gender", "")
 	listParameters := utils.GetPerformerListParameters{
 		GetListParameters: listParams,
-		Name:              name,
-		RegionID:          regionID,
-		Gender:            gender,
+		Name:              c.Context.URLParamDefault("name", ""),
+		RegionID:          c.Context.URLParamDefault("regionID", ""),
+		Gender:            c.Context.URLParamDefault("gender", ""),
 	}
 	performers, count, err := c.PerformerService.GetPerformersList(listParameters)
 	if err != nil {
@@ -61,7 +58,7 @@ func (c *PerformerController) GetPerformersList() {
 // CreatePerformer POST /performers
 func (c *PerformerController) CreatePerformer() {
 	defer c.Context.Next()
-	var form performerCreateForm
+	var form PerformerCreateForm
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
 		utils.SetError(c.Context, iris.StatusBadRequest, "PerformerController::CreatePerformer", errParams)
@@ -105,7 +102,7 @@ func (c *PerformerController) UpdatePerformer() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
 	performerID := c.Context.Params().Get("id")
-	var form performerUpdateForm
+	var form PerformerUpdateForm
 
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {

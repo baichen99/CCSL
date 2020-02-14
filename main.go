@@ -95,24 +95,19 @@ func main() {
 	// 	// TODO
 	// })
 
-	mvc.Configure(app.Party("/class"), func(app *mvc.Application) {
+	mvc.Configure(app.Party("/classes"), func(app *mvc.Application) {
 		app.Register(services.NewClassService(pg))
 		app.Handle(new(controllers.ClassController))
 	})
-	mvc.Configure(app.Party("/course"), func(app *mvc.Application) {
+	mvc.Configure(app.Party("/courses"), func(app *mvc.Application) {
 		app.Register(services.NewCourseService(pg))
 		app.Handle(new(controllers.CourseController))
 	})
-	mvc.Configure(app.Party("/assignment"), func(app *mvc.Application) {
-		app.Register(services.NewAssignmentService(pg))
-		app.Handle(new(controllers.AssignmentController))
-	})
-	mvc.Configure(app.Party("/assignment/submitted"), func(app *mvc.Application) {
-		app.Register(services.NewSubmittedAssignmentService(pg))
+	mvc.Configure(app.Party("/assignments"), func(app *mvc.Application) {
 		app.Register(services.NewAssignmentService(pg))
 		app.Register(services.NewCourseService(pg))
 		app.Register(services.NewClassService(pg))
-		app.Handle(new(controllers.SubmittedAssignmentController))
+		app.Handle(new(controllers.AssignmentController))
 	})
 	host := fmt.Sprintf("%s:%d", configs.Conf.Listener.Server, configs.Conf.Listener.Port)
 	app.Run(iris.Addr(host), iris.WithOptimizations, iris.WithoutStartupLog)
@@ -183,7 +178,7 @@ func initDB(app *iris.Application) *gorm.DB {
 		&models.Class{},
 		&models.Course{},
 		&models.Assignment{},
-		&models.SubmittedAssignments{},
+		&models.SubmittedAssignment{},
 	)
 
 	// Don't use UNIQUE to declare gorm models because you can't create a already deleted object with the same value, manually Add UNIQUE key for table columns
@@ -229,9 +224,10 @@ func initDB(app *iris.Application) *gorm.DB {
 		AddForeignKey("class_id", "classes(id)", "RESTRICT", "CASCADE").
 		Model(&models.Assignment{}).
 		AddForeignKey("course_id", "courses(id)", "RESTRICT", "CASCADE").
-		Model(&models.SubmittedAssignments{}).
+		Model(&models.SubmittedAssignment{}).
 		AddForeignKey("assignment_id", "assignments(id)", "RESTRICT", "CASCADE").
-		AddForeignKey("grader_id", "users(id)", "RESTRICT", "CASCADE")
+		AddForeignKey("grader_id", "users(id)", "RESTRICT", "CASCADE").
+		AddForeignKey("creator_id", "users(id)", "RESTRICT", "CASCADE")
 
 	// Create test users for development environment
 	if os.Getenv(configs.EnvName) == configs.EnvDevelopment {

@@ -35,14 +35,11 @@ func (c *CarouselController) GetCarouselsList() {
 		utils.SetError(c.Context, iris.StatusBadRequest, "CarouselController::GetCarouselsList", errParams)
 		return
 	}
-	titleZh := c.Context.URLParamDefault("titleZh", "")
-	titleEn := c.Context.URLParamDefault("titleEn", "")
-	state := c.Context.URLParamDefault("state", "")
 	listParameters := utils.GetCarouselListParameters{
 		GetListParameters: listParams,
-		TitleZh:           titleZh,
-		TitleEn:           titleEn,
-		State:             state,
+		TitleZh:           c.Context.URLParamDefault("titleZh", ""),
+		TitleEn:           c.Context.URLParamDefault("titleEn", ""),
+		State:             c.Context.URLParamDefault("state", ""),
 	}
 	carousels, count, err := c.CarouselService.GetCarouselList(listParameters)
 	if err != nil {
@@ -61,7 +58,7 @@ func (c *CarouselController) GetCarouselsList() {
 // CreateCarousel POST /carousels
 func (c *CarouselController) CreateCarousel() {
 	defer c.Context.Next()
-	var form carouselCreateForm
+	var form CarouselCreateForm
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
 		utils.SetError(c.Context, iris.StatusBadRequest, "CarouselCroller::CreateCarousel", errParams)
@@ -105,7 +102,7 @@ func (c *CarouselController) UpdateCarousel() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
 	carouselID := c.Context.Params().Get("id")
-	var form carouselUpdateForm
+	var form CarouselUpdateForm
 
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {

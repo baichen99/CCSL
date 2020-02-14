@@ -8,7 +8,7 @@
     },
     "host": "localhost:8888",
     "paths": {
-        "/assignment": {
+        "/assignments": {
             "get": {
                 "description": "get assignment list",
                 "consumes": [
@@ -18,9 +18,9 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Assignment"
+                    "Assignments"
                 ],
-                "summary": "List assignment",
+                "summary": "List assignments",
                 "parameters": [
                     {
                         "minimum": 1,
@@ -55,7 +55,7 @@
                     {
                         "type": "string",
                         "description": "filter course_id of assignment",
-                        "name": "course_id",
+                        "name": "courseID",
                         "in": "query"
                     },
                     {
@@ -113,7 +113,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Assignment"
+                    "Assignments"
                 ],
                 "summary": "Create assignment",
                 "parameters": [
@@ -124,7 +124,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/controllers.assignmentCreateForm"
+                            "$ref": "#/definitions/controllers.AssignmentCreateForm"
                         }
                     }
                 ],
@@ -156,7 +156,330 @@
                 }
             }
         },
-        "/assignment/{id}": {
+        "/assignments/submitted": {
+            "get": {
+                "description": "get submitted assignments list",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Assignments"
+                ],
+                "summary": "List submitted assignments",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "select from page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "minimum": 0,
+                        "type": "integer",
+                        "description": "limit number",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "order by field",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "asc",
+                            "desc"
+                        ],
+                        "type": "string",
+                        "description": "order by asc or desc",
+                        "name": "orderBy",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "filter creatorid of submitted assignment",
+                        "name": "creatorID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "filter assignmentid of submitted assignment",
+                        "name": "assignmentID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "filter graderid of submitted assignment",
+                        "name": "graderid",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search answer of submitted assignment",
+                        "name": "answer",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search comment of submitted assignment",
+                        "name": "comment",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.GetSubmmitedAssignmentListResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "create a new submmitedAssignment",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Assignments"
+                ],
+                "summary": "Create submmited assignment",
+                "parameters": [
+                    {
+                        "description": "create submmited assignment",
+                        "name": "assignment",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/controllers.SubmittedAssignmentCreateForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/assignments/submitted/{id}": {
+            "put": {
+                "description": "update a submitted assignment by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Assignments"
+                ],
+                "summary": "Update submitted assignment",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "submitted assignment id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "updated submitted_assignment",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/controllers.SubmittedAssignmentUpdateForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {},
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "delete a submitted assignment by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Assignments"
+                ],
+                "summary": "Delete submitted assignment",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "submitted assignment id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {},
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/assignments/submitted{id}": {
+            "get": {
+                "description": "Get a submitted assignment by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Assignments"
+                ],
+                "summary": "Get submitted assignment",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "submitted assignment id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.GetSubmittedAssignmentResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/assignments/{id}": {
             "get": {
                 "description": "Get a assignment by id",
                 "consumes": [
@@ -166,7 +489,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Assignment"
+                    "Assignments"
                 ],
                 "summary": "Get assignment",
                 "parameters": [
@@ -212,6 +535,66 @@
                     }
                 }
             },
+            "put": {
+                "description": "update a assignment by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Assignments"
+                ],
+                "summary": "Update assignment",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "assignment id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "updated assignment",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/controllers.AssignmentUpdateForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {},
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "description": "delete a assignment by id",
                 "consumes": [
@@ -221,7 +604,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Assignment"
+                    "Assignments"
                 ],
                 "summary": "Delete assignment",
                 "parameters": [
@@ -263,9 +646,9 @@
                 }
             }
         },
-        "/class": {
+        "/classes": {
             "get": {
-                "description": "get classs list",
+                "description": "get classes list",
                 "consumes": [
                     "application/json"
                 ],
@@ -273,9 +656,9 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Class"
+                    "Classes"
                 ],
-                "summary": "List classs",
+                "summary": "List classes",
                 "parameters": [
                     {
                         "minimum": 1,
@@ -312,18 +695,6 @@
                         "description": "search name of class",
                         "name": "name",
                         "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "search detail name of class",
-                        "name": "detail",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "search resource name of class",
-                        "name": "resource",
-                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -354,7 +725,7 @@
                 }
             },
             "post": {
-                "description": "create a new course",
+                "description": "create a new class",
                 "consumes": [
                     "application/json"
                 ],
@@ -362,18 +733,18 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Course"
+                    "Classes"
                 ],
-                "summary": "Create course",
+                "summary": "Create class",
                 "parameters": [
                     {
-                        "description": "create course",
+                        "description": "create user",
                         "name": "user",
                         "in": "body",
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/controllers.courseCreateForm"
+                            "$ref": "#/definitions/controllers.ClassCreateForm"
                         }
                     }
                 ],
@@ -405,9 +776,9 @@
                 }
             }
         },
-        "/class/{id}": {
+        "/classes/{id}": {
             "get": {
-                "description": "Get a course by id",
+                "description": "Get a class by id",
                 "consumes": [
                     "application/json"
                 ],
@@ -415,14 +786,14 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Course"
+                    "Classes"
                 ],
-                "summary": "Get course",
+                "summary": "Get a class",
                 "parameters": [
                     {
                         "type": "string",
                         "format": "uuid",
-                        "description": "course id",
+                        "description": "class id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -432,9 +803,69 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controllers.GetCourseResponse"
+                            "$ref": "#/definitions/controllers.GetClassResponse"
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "update a class by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Classes"
+                ],
+                "summary": "Update class",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "class id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "updated class",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/controllers.ClassUpdateForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {},
                     "400": {
                         "description": "Bad Request",
                         "schema": {
@@ -470,7 +901,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Class"
+                    "Classes"
                 ],
                 "summary": "Delete class",
                 "parameters": [
@@ -512,7 +943,7 @@
                 }
             }
         },
-        "/course": {
+        "/courses": {
             "get": {
                 "description": "get course list",
                 "consumes": [
@@ -522,9 +953,9 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Course"
+                    "Courses"
                 ],
-                "summary": "List course",
+                "summary": "List courses",
                 "parameters": [
                     {
                         "minimum": 1,
@@ -601,9 +1032,115 @@
                         }
                     }
                 }
+            },
+            "post": {
+                "description": "create a new course",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Courses"
+                ],
+                "summary": "Create course",
+                "parameters": [
+                    {
+                        "description": "create course",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/controllers.CourseCreateForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
             }
         },
-        "/course/{id}": {
+        "/courses/{id}": {
+            "get": {
+                "description": "Get a course by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Courses"
+                ],
+                "summary": "Get course",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "course id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.GetCourseResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            },
             "put": {
                 "description": "update a class by id",
                 "consumes": [
@@ -613,7 +1150,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Course"
+                    "Courses"
                 ],
                 "summary": "Update course",
                 "parameters": [
@@ -632,7 +1169,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/controllers.classUpdateForm"
+                            "$ref": "#/definitions/controllers.CourseUpdateForm"
                         }
                     }
                 ],
@@ -673,7 +1210,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Course"
+                    "Courses"
                 ],
                 "summary": "Delete course",
                 "parameters": [
@@ -1060,269 +1597,6 @@
                 }
             }
         },
-        "/submitted_assignment": {
-            "get": {
-                "description": "get submitted_assignment list",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "SubmittedAssignment"
-                ],
-                "summary": "List submitted_assignment",
-                "parameters": [
-                    {
-                        "minimum": 1,
-                        "type": "integer",
-                        "description": "select from page",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "minimum": 0,
-                        "type": "integer",
-                        "description": "limit number",
-                        "name": "limit",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "order by field",
-                        "name": "order",
-                        "in": "query"
-                    },
-                    {
-                        "enum": [
-                            "asc",
-                            "desc"
-                        ],
-                        "type": "string",
-                        "description": "order by asc or desc",
-                        "name": "orderBy",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "filter creatorid of submitted_assignment",
-                        "name": "creatorID",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "filter assignmentid of submitted_assignment",
-                        "name": "assignmentid",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "filter graderid of submitted_assignment",
-                        "name": "graderid",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "search answer of submitted_assignment",
-                        "name": "answer",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "search comment of submitted_assignment",
-                        "name": "comment",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/controllers.GetSubmmitedAssignmentListResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/controllers.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/controllers.ErrorResponse"
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "schema": {
-                            "$ref": "#/definitions/controllers.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/submitted_assignment/{id}": {
-            "get": {
-                "description": "Get a submitted_assignment by id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "SubmittedAssignment"
-                ],
-                "summary": "Get submitted_assignment",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "format": "uuid",
-                        "description": "submitted_assignment id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/controllers.GetSubmittedAssignmentResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/controllers.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/controllers.ErrorResponse"
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": {
-                            "$ref": "#/definitions/controllers.ErrorResponse"
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "schema": {
-                            "$ref": "#/definitions/controllers.ErrorResponse"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "delete a submitted_assignment by id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "SubmittedAssignment"
-                ],
-                "summary": "Delete submitted_assignment",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "format": "uuid",
-                        "description": "submitted_assignment id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "204": {},
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/controllers.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/controllers.ErrorResponse"
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": {
-                            "$ref": "#/definitions/controllers.ErrorResponse"
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "schema": {
-                            "$ref": "#/definitions/controllers.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/submmited_assignment": {
-            "post": {
-                "description": "create a new submmitedAssignment",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "SubmmitedAssignment"
-                ],
-                "summary": "Create submmitedAssignment",
-                "parameters": [
-                    {
-                        "description": "create submmited_assignment",
-                        "name": "assignment",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/controllers.submmittedAssignmentCreateForm"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/controllers.SuccessResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/controllers.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/controllers.ErrorResponse"
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "schema": {
-                            "$ref": "#/definitions/controllers.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/users": {
             "get": {
                 "description": "get users list",
@@ -1545,6 +1819,119 @@
         }
     },
     "definitions": {
+        "controllers.AssignmentCreateForm": {
+            "type": "object",
+            "required": [
+                "content",
+                "courseID",
+                "deadline",
+                "title",
+                "type"
+            ],
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "courseID": {
+                    "type": "string"
+                },
+                "deadline": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "controllers.AssignmentUpdateForm": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "courseID": {
+                    "type": "string"
+                },
+                "deadline": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "controllers.ClassCreateForm": {
+            "type": "object",
+            "required": [
+                "details",
+                "name",
+                "resources"
+            ],
+            "properties": {
+                "details": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "resources": {
+                    "type": "string"
+                }
+            }
+        },
+        "controllers.ClassUpdateForm": {
+            "type": "object",
+            "properties": {
+                "details": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "resources": {
+                    "type": "string"
+                }
+            }
+        },
+        "controllers.CourseCreateForm": {
+            "type": "object",
+            "required": [
+                "classID",
+                "content",
+                "name"
+            ],
+            "properties": {
+                "classID": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "controllers.CourseUpdateForm": {
+            "type": "object",
+            "properties": {
+                "classID": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "controllers.ErrorResponse": {
             "type": "object",
             "properties": {
@@ -1726,7 +2113,7 @@
             "properties": {
                 "data": {
                     "type": "object",
-                    "$ref": "#/definitions/models.SubmittedAssignments"
+                    "$ref": "#/definitions/models.SubmittedAssignment"
                 },
                 "message": {
                     "type": "string",
@@ -1812,6 +2199,38 @@
                 "total": {
                     "type": "integer",
                     "example": 100
+                }
+            }
+        },
+        "controllers.SubmittedAssignmentCreateForm": {
+            "type": "object",
+            "required": [
+                "answer",
+                "assignmentID"
+            ],
+            "properties": {
+                "answer": {
+                    "type": "string"
+                },
+                "assignmentID": {
+                    "type": "string"
+                }
+            }
+        },
+        "controllers.SubmittedAssignmentUpdateForm": {
+            "type": "object",
+            "properties": {
+                "answer": {
+                    "type": "string"
+                },
+                "assignmentID": {
+                    "type": "string"
+                },
+                "comment": {
+                    "type": "string"
+                },
+                "grade": {
+                    "type": "integer"
                 }
             }
         },
@@ -1913,141 +2332,6 @@
                 "username": {
                     "type": "string",
                     "example": "adrianduan@icloud.com"
-                }
-            }
-        },
-        "controllers.assignmentCreateForm": {
-            "type": "object",
-            "required": [
-                "content",
-                "courseID",
-                "deadline",
-                "title",
-                "type"
-            ],
-            "properties": {
-                "content": {
-                    "type": "string"
-                },
-                "courseID": {
-                    "type": "string"
-                },
-                "deadline": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                },
-                "type": {
-                    "type": "string"
-                }
-            }
-        },
-        "controllers.assignmentUpdateForm": {
-            "type": "object",
-            "properties": {
-                "content": {
-                    "type": "string"
-                },
-                "courseID": {
-                    "type": "string"
-                },
-                "deadline": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                },
-                "type": {
-                    "type": "string"
-                }
-            }
-        },
-        "controllers.classCreateForm": {
-            "type": "object",
-            "required": [
-                "details",
-                "name",
-                "resources"
-            ],
-            "properties": {
-                "details": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "resources": {
-                    "type": "string"
-                }
-            }
-        },
-        "controllers.classUpdateForm": {
-            "type": "object",
-            "properties": {
-                "details": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "resources": {
-                    "type": "string"
-                }
-            }
-        },
-        "controllers.courseCreateForm": {
-            "type": "object",
-            "required": [
-                "classID",
-                "content",
-                "name"
-            ],
-            "properties": {
-                "classID": {
-                    "type": "string"
-                },
-                "content": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "controllers.submmittedAssignmentCreateForm": {
-            "type": "object",
-            "required": [
-                "answer",
-                "assignmentID",
-                "comment"
-            ],
-            "properties": {
-                "answer": {
-                    "type": "string"
-                },
-                "assignmentID": {
-                    "type": "string"
-                },
-                "comment": {
-                    "type": "string"
-                }
-            }
-        },
-        "controllers.submmittedAssignmentUpdateForm": {
-            "type": "object",
-            "properties": {
-                "answer": {
-                    "type": "string"
-                },
-                "assignmentID": {
-                    "type": "string"
-                },
-                "comment": {
-                    "type": "string"
-                },
-                "grade": {
-                    "type": "integer"
                 }
             }
         },
@@ -2263,7 +2547,7 @@
                 }
             }
         },
-        "models.SubmittedAssignments": {
+        "models.SubmittedAssignment": {
             "type": "object",
             "properties": {
                 "answer": {
@@ -2279,7 +2563,7 @@
                     "type": "string",
                     "example": "2019-10-21T09:20:39.943618Z"
                 },
-                "creator_id": {
+                "creatorID": {
                     "type": "string"
                 },
                 "grade": {
@@ -2317,18 +2601,19 @@
                     "example": "550e8400-e29b-41d4-a716-446655440000"
                 },
                 "name": {
-                    "description": "姓名                                                                                     // 用户角色",
+                    "description": "姓名",
                     "type": "string",
                     "example": "Adrian"
                 },
                 "roles": {
+                    "description": "用户角色",
                     "type": "array",
                     "items": {
                         "type": "string"
                     },
                     "example": [
                         "super",
-                        "admin"
+                        " admin"
                     ]
                 },
                 "state": {

@@ -3,8 +3,8 @@ package controllers
 import (
 	"ccsl/configs"
 	"ccsl/middlewares"
-    "ccsl/models"
-    "ccsl/services"
+	"ccsl/models"
+	"ccsl/services"
 	"ccsl/utils"
 
 	"github.com/kataras/iris/v12"
@@ -21,28 +21,26 @@ type ClassController struct {
 func (c *ClassController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Handle(iris.MethodGet, "/", "GetClassList")
 	app.Handle(iris.MethodGet, "/{id: string}", "GetClass")
-	app.Router().Use(middlewares.CheckToken, middlewares.CheckUserRole([]string{configs.RoleSuperUser, configs.RoleAdminUser}))
+	app.Router().Use(middlewares.CheckToken, middlewares.CheckUserRole([]string{configs.RoleTeacher}))
 	app.Handle(iris.MethodPost, "/", "CreateClass")
 	app.Handle(iris.MethodPut, "/{id: string}", "UpdateClass")
 	app.Handle(iris.MethodDelete, "/{id: string}", "DeleteClass")
 }
 
-// GetClassList GET /class
+// GetClassList GET /classes
 // >>>>> DOCS  <<<<<
 // =================
-// @Tags Class
-// @Summary List classs
-// @Description get classs list
+// @Tags Classes
+// @Summary List classes
+// @Description get classes list
 // @Accept  json
 // @Produce json
-// @Router /class [GET]
+// @Router /classes [GET]
 // @Param page 		query int    false  "select from page" 			    mininum(1)
 // @Param limit 	query int    false  "limit number" 				    mininum(0)
 // @Param order 	query string false	"order by field"
 // @Param orderBy 	query string false	"order by asc or desc" 		    enums(asc, desc)
 // @Param name   	query string false 	"search name of class"
-// @Param detail   	query string false 	"search detail name of class"
-// @Param resource  query string false 	"search resource name of class"
 // @Success 200 {object} controllers.GetClassListResponse
 // @Failure 400 {object} controllers.ErrorResponse
 // @Failure 401 {object} controllers.ErrorResponse
@@ -50,19 +48,14 @@ func (c *ClassController) BeforeActivation(app mvc.BeforeActivation) {
 // =================
 func (c *ClassController) GetClassList() {
 	defer c.Context.Next()
-	listParams, err := utils.GetListParamsFromContext(c.Context, "classes.name")
+	listParams, err := utils.GetListParamsFromContext(c.Context, "classes.created_at")
 	if err != nil {
 		utils.SetError(c.Context, iris.StatusBadRequest, "ClassController::GetClassList", errParams)
 		return
 	}
-	name := c.Context.URLParamDefault("name", "")
-	detail := c.Context.URLParamDefault("detail", "")
-	resource := c.Context.URLParamDefault("resource", "")
 	listParameters := utils.GetClassListParameters{
 		GetListParameters: listParams,
-		Name:              name,
-		Details:           detail,
-		Resources:         resource,
+		Name:              c.Context.URLParamDefault("name", ""),
 	}
 	class, count, err := c.ClassService.GetClassesList(listParameters)
 	if err != nil {
@@ -84,51 +77,15 @@ type GetClassListResponse struct {
 	Data []models.Class `json:"data"`
 }
 
-// CreateClass POST /class
+// GetClass GET /classes/{id:string}
 // >>>>> DOCS  <<<<<
 // =================
-// @Tags Class
-// @Summary Create class
-// @Description create a new class
-// @Accept  json
-// @Produce json
-// @Router 	/class 	[POST]
-// @Param 	user 	body	 controllers.classCreateForm	  true	"create user"
-// @Success 201		{object} controllers.SuccessResponse
-// @Failure 400 	{object} controllers.ErrorResponse
-// @Failure 401 	{object} controllers.ErrorResponse
-// @Failure 422 	{object} controllers.ErrorResponse
-// =================
-func (c *ClassController) CreateClass() {
-	defer c.Context.Next()
-	var form classCreateForm
-	// Read JSON from request and validate request
-	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetError(c.Context, iris.StatusBadRequest, "ClassController::CreateClass", errParams)
-		return
-	}
-	// PSQL - Create class in database.
-	class := form.ConvertToModel()
-	if err := c.ClassService.CreateClass(class); err != nil {
-		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "ClassService::CreateClass", errSQL)
-		return
-	}
-	// Return 201 Created
-	c.Context.StatusCode(iris.StatusCreated)
-	c.Context.JSON(iris.Map{
-		message: success,
-	})
-}
-
-// GetClass GET /classs/{id:string}
-// >>>>> DOCS  <<<<<
-// =================
-// @Tags Class
-// @Summary Get class
+// @Tags Classes
+// @Summary Get a class
 // @Description Get a class by id
 // @Accept  json
 // @Produce json
-// @Router 	/class/{id} [GET]
+// @Router 	/classes/{id} [GET]
 // @Param 	id 		path	 string	    true	"class id" format(uuid)
 // @Success 200 	{object} controllers.GetClassResponse
 // @Failure 400 	{object} controllers.ErrorResponse
@@ -160,17 +117,53 @@ type GetClassResponse struct {
 	Data models.Class `json:"data"`
 }
 
-// UpdateClass PUT /class/{id:string}
+// CreateClass POST /classes
 // >>>>> DOCS  <<<<<
 // =================
-// @Tags Class
+// @Tags Classes
+// @Summary Create class
+// @Description create a new class
+// @Accept  json
+// @Produce json
+// @Router 	/classes 	[POST]
+// @Param 	user 	body	 controllers.ClassCreateForm	  true	"create user"
+// @Success 201		{object} controllers.SuccessResponse
+// @Failure 400 	{object} controllers.ErrorResponse
+// @Failure 401 	{object} controllers.ErrorResponse
+// @Failure 422 	{object} controllers.ErrorResponse
+// =================
+func (c *ClassController) CreateClass() {
+	defer c.Context.Next()
+	var form ClassCreateForm
+	// Read JSON from request and validate request
+	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
+		utils.SetError(c.Context, iris.StatusBadRequest, "ClassController::CreateClass", errParams)
+		return
+	}
+	// PSQL - Create class in database.
+	class := form.ConvertToModel()
+	if err := c.ClassService.CreateClass(class); err != nil {
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "ClassService::CreateClass", errSQL)
+		return
+	}
+	// Return 201 Created
+	c.Context.StatusCode(iris.StatusCreated)
+	c.Context.JSON(iris.Map{
+		message: success,
+	})
+}
+
+// UpdateClass PUT /classes/{id:string}
+// >>>>> DOCS  <<<<<
+// =================
+// @Tags Classes
 // @Summary Update class
 // @Description update a class by id
 // @Accept  json
 // @Produce json
-// @Router 	/users/{id} [PUT]
-// @Param 	id 		path	 string						  true	"class id" format(uuid)
-// @Param 	user 	body	 controllers.classUpdateForm	  true	"updated class"
+// @Router 	/classes/{id} [PUT]
+// @Param 	id 		path	 string							  true	"class id" format(uuid)
+// @Param 	user 	body	 controllers.ClassUpdateForm	  true	"updated class"
 // @Success	204
 // @Failure 400 	{object} controllers.ErrorResponse
 // @Failure 401 	{object} controllers.ErrorResponse
@@ -182,7 +175,7 @@ func (c *ClassController) UpdateClass() {
 
 	// Getting ID from parameters in the URL
 	classID := c.Context.Params().Get("id")
-	var form classUpdateForm
+	var form ClassUpdateForm
 
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
@@ -201,15 +194,15 @@ func (c *ClassController) UpdateClass() {
 	c.Context.StatusCode(iris.StatusNoContent)
 }
 
-// DeleteClass DELETE /class/{id:string}
+// DeleteClass DELETE /classes/{id:string}
 // >>>>> DOCS  <<<<<
 // =================
-// @Tags Class
+// @Tags Classes
 // @Summary Delete class
 // @Description delete a class by id
 // @Accept  json
 // @Produce json
-// @Router 	/class/{id} [DELETE]
+// @Router 	/classes/{id} [DELETE]
 // @Param 	id 		path	 string						  true	"class id" format(uuid)
 // @Success 204
 // @Failure 400 	{object} controllers.ErrorResponse

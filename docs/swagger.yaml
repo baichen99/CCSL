@@ -1,4 +1,80 @@
 definitions:
+  controllers.AssignmentCreateForm:
+    properties:
+      content:
+        type: string
+      courseID:
+        type: string
+      deadline:
+        type: string
+      title:
+        type: string
+      type:
+        type: string
+    required:
+    - content
+    - courseID
+    - deadline
+    - title
+    - type
+    type: object
+  controllers.AssignmentUpdateForm:
+    properties:
+      content:
+        type: string
+      courseID:
+        type: string
+      deadline:
+        type: string
+      title:
+        type: string
+      type:
+        type: string
+    type: object
+  controllers.ClassCreateForm:
+    properties:
+      details:
+        type: string
+      name:
+        type: string
+      resources:
+        type: string
+    required:
+    - details
+    - name
+    - resources
+    type: object
+  controllers.ClassUpdateForm:
+    properties:
+      details:
+        type: string
+      name:
+        type: string
+      resources:
+        type: string
+    type: object
+  controllers.CourseCreateForm:
+    properties:
+      classID:
+        type: string
+      content:
+        type: string
+      name:
+        type: string
+    required:
+    - classID
+    - content
+    - name
+    type: object
+  controllers.CourseUpdateForm:
+    properties:
+      classID:
+        type: string
+      content:
+        type: string
+      name:
+        type: string
+    type: object
   controllers.ErrorResponse:
     properties:
       error:
@@ -125,7 +201,7 @@ definitions:
   controllers.GetSubmittedAssignmentResponse:
     properties:
       data:
-        $ref: '#/definitions/models.SubmittedAssignments'
+        $ref: '#/definitions/models.SubmittedAssignment'
         type: object
       message:
         example: success
@@ -186,6 +262,27 @@ definitions:
         type: integer
       total:
         example: 100
+        type: integer
+    type: object
+  controllers.SubmittedAssignmentCreateForm:
+    properties:
+      answer:
+        type: string
+      assignmentID:
+        type: string
+    required:
+    - answer
+    - assignmentID
+    type: object
+  controllers.SubmittedAssignmentUpdateForm:
+    properties:
+      answer:
+        type: string
+      assignmentID:
+        type: string
+      comment:
+        type: string
+      grade:
         type: integer
     type: object
   controllers.SuccessResponse:
@@ -261,97 +358,6 @@ definitions:
       username:
         example: adrianduan@icloud.com
         type: string
-    type: object
-  controllers.assignmentCreateForm:
-    properties:
-      content:
-        type: string
-      courseID:
-        type: string
-      deadline:
-        type: string
-      title:
-        type: string
-      type:
-        type: string
-    required:
-    - content
-    - courseID
-    - deadline
-    - title
-    - type
-    type: object
-  controllers.assignmentUpdateForm:
-    properties:
-      content:
-        type: string
-      courseID:
-        type: string
-      deadline:
-        type: string
-      title:
-        type: string
-      type:
-        type: string
-    type: object
-  controllers.classCreateForm:
-    properties:
-      details:
-        type: string
-      name:
-        type: string
-      resources:
-        type: string
-    required:
-    - details
-    - name
-    - resources
-    type: object
-  controllers.classUpdateForm:
-    properties:
-      details:
-        type: string
-      name:
-        type: string
-      resources:
-        type: string
-    type: object
-  controllers.courseCreateForm:
-    properties:
-      classID:
-        type: string
-      content:
-        type: string
-      name:
-        type: string
-    required:
-    - classID
-    - content
-    - name
-    type: object
-  controllers.submmittedAssignmentCreateForm:
-    properties:
-      answer:
-        type: string
-      assignmentID:
-        type: string
-      comment:
-        type: string
-    required:
-    - answer
-    - assignmentID
-    - comment
-    type: object
-  controllers.submmittedAssignmentUpdateForm:
-    properties:
-      answer:
-        type: string
-      assignmentID:
-        type: string
-      comment:
-        type: string
-      grade:
-        type: integer
     type: object
   models.Assignment:
     properties:
@@ -505,7 +511,7 @@ definitions:
         example: "2019-10-21T09:20:39.943618Z"
         type: string
     type: object
-  models.SubmittedAssignments:
+  models.SubmittedAssignment:
     properties:
       answer:
         type: string
@@ -516,7 +522,7 @@ definitions:
       createdAt:
         example: "2019-10-21T09:20:39.943618Z"
         type: string
-      creator_id:
+      creatorID:
         type: string
       grade:
         type: integer
@@ -544,14 +550,14 @@ definitions:
         format: uuid
         type: string
       name:
-        description: 姓名                                                                                     //
-          用户角色
+        description: 姓名
         example: Adrian
         type: string
       roles:
+        description: 用户角色
         example:
         - super
-        - admin
+        - ' admin'
         items:
           type: string
         type: array
@@ -574,7 +580,7 @@ info:
   title: CCSL API
   version: "1.0"
 paths:
-  /assignment:
+  /assignments:
     get:
       consumes:
       - application/json
@@ -603,7 +609,7 @@ paths:
         type: string
       - description: filter course_id of assignment
         in: query
-        name: course_id
+        name: courseID
         type: string
       - description: filter type of assignment
         in: query
@@ -636,9 +642,9 @@ paths:
           description: Unprocessable Entity
           schema:
             $ref: '#/definitions/controllers.ErrorResponse'
-      summary: List assignment
+      summary: List assignments
       tags:
-      - Assignment
+      - Assignments
     post:
       consumes:
       - application/json
@@ -649,7 +655,7 @@ paths:
         name: assignment
         required: true
         schema:
-          $ref: '#/definitions/controllers.assignmentCreateForm'
+          $ref: '#/definitions/controllers.AssignmentCreateForm'
           type: object
       produces:
       - application/json
@@ -672,8 +678,8 @@ paths:
             $ref: '#/definitions/controllers.ErrorResponse'
       summary: Create assignment
       tags:
-      - Assignment
-  /assignment/{id}:
+      - Assignments
+  /assignments/{id}:
     delete:
       consumes:
       - application/json
@@ -707,7 +713,7 @@ paths:
             $ref: '#/definitions/controllers.ErrorResponse'
       summary: Delete assignment
       tags:
-      - Assignment
+      - Assignments
     get:
       consumes:
       - application/json
@@ -744,12 +750,270 @@ paths:
             $ref: '#/definitions/controllers.ErrorResponse'
       summary: Get assignment
       tags:
-      - Assignment
-  /class:
+      - Assignments
+    put:
+      consumes:
+      - application/json
+      description: update a assignment by id
+      parameters:
+      - description: assignment id
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: updated assignment
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.AssignmentUpdateForm'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "204": {}
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Update assignment
+      tags:
+      - Assignments
+  /assignments/submitted:
     get:
       consumes:
       - application/json
-      description: get classs list
+      description: get submitted assignments list
+      parameters:
+      - description: select from page
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      - description: limit number
+        in: query
+        minimum: 0
+        name: limit
+        type: integer
+      - description: order by field
+        in: query
+        name: order
+        type: string
+      - description: order by asc or desc
+        enum:
+        - asc
+        - desc
+        in: query
+        name: orderBy
+        type: string
+      - description: filter creatorid of submitted assignment
+        in: query
+        name: creatorID
+        type: string
+      - description: filter assignmentid of submitted assignment
+        in: query
+        name: assignmentID
+        type: string
+      - description: filter graderid of submitted assignment
+        in: query
+        name: graderid
+        type: string
+      - description: search answer of submitted assignment
+        in: query
+        name: answer
+        type: string
+      - description: search comment of submitted assignment
+        in: query
+        name: comment
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.GetSubmmitedAssignmentListResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: List submitted assignments
+      tags:
+      - Assignments
+    post:
+      consumes:
+      - application/json
+      description: create a new submmitedAssignment
+      parameters:
+      - description: create submmited assignment
+        in: body
+        name: assignment
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.SubmittedAssignmentCreateForm'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/controllers.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Create submmited assignment
+      tags:
+      - Assignments
+  /assignments/submitted/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete a submitted assignment by id
+      parameters:
+      - description: submitted assignment id
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204": {}
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Delete submitted assignment
+      tags:
+      - Assignments
+    put:
+      consumes:
+      - application/json
+      description: update a submitted assignment by id
+      parameters:
+      - description: submitted assignment id
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: updated submitted_assignment
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.SubmittedAssignmentUpdateForm'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "204": {}
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Update submitted assignment
+      tags:
+      - Assignments
+  /assignments/submitted{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get a submitted assignment by id
+      parameters:
+      - description: submitted assignment id
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.GetSubmittedAssignmentResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Get submitted assignment
+      tags:
+      - Assignments
+  /classes:
+    get:
+      consumes:
+      - application/json
+      description: get classes list
       parameters:
       - description: select from page
         in: query
@@ -776,14 +1040,6 @@ paths:
         in: query
         name: name
         type: string
-      - description: search detail name of class
-        in: query
-        name: detail
-        type: string
-      - description: search resource name of class
-        in: query
-        name: resource
-        type: string
       produces:
       - application/json
       responses:
@@ -803,20 +1059,20 @@ paths:
           description: Unprocessable Entity
           schema:
             $ref: '#/definitions/controllers.ErrorResponse'
-      summary: List classs
+      summary: List classes
       tags:
-      - Class
+      - Classes
     post:
       consumes:
       - application/json
-      description: create a new course
+      description: create a new class
       parameters:
-      - description: create course
+      - description: create user
         in: body
         name: user
         required: true
         schema:
-          $ref: '#/definitions/controllers.courseCreateForm'
+          $ref: '#/definitions/controllers.ClassCreateForm'
           type: object
       produces:
       - application/json
@@ -837,10 +1093,10 @@ paths:
           description: Unprocessable Entity
           schema:
             $ref: '#/definitions/controllers.ErrorResponse'
-      summary: Create course
+      summary: Create class
       tags:
-      - Course
-  /class/{id}:
+      - Classes
+  /classes/{id}:
     delete:
       consumes:
       - application/json
@@ -874,13 +1130,13 @@ paths:
             $ref: '#/definitions/controllers.ErrorResponse'
       summary: Delete class
       tags:
-      - Class
+      - Classes
     get:
       consumes:
       - application/json
-      description: Get a course by id
+      description: Get a class by id
       parameters:
-      - description: course id
+      - description: class id
         format: uuid
         in: path
         name: id
@@ -892,7 +1148,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controllers.GetCourseResponse'
+            $ref: '#/definitions/controllers.GetClassResponse'
         "400":
           description: Bad Request
           schema:
@@ -909,10 +1165,51 @@ paths:
           description: Unprocessable Entity
           schema:
             $ref: '#/definitions/controllers.ErrorResponse'
-      summary: Get course
+      summary: Get a class
       tags:
-      - Course
-  /course:
+      - Classes
+    put:
+      consumes:
+      - application/json
+      description: update a class by id
+      parameters:
+      - description: class id
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: updated class
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.ClassUpdateForm'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "204": {}
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Update class
+      tags:
+      - Classes
+  /courses:
     get:
       consumes:
       - application/json
@@ -970,10 +1267,44 @@ paths:
           description: Unprocessable Entity
           schema:
             $ref: '#/definitions/controllers.ErrorResponse'
-      summary: List course
+      summary: List courses
       tags:
-      - Course
-  /course/{id}:
+      - Courses
+    post:
+      consumes:
+      - application/json
+      description: create a new course
+      parameters:
+      - description: create course
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.CourseCreateForm'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/controllers.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Create course
+      tags:
+      - Courses
+  /courses/{id}:
     delete:
       consumes:
       - application/json
@@ -1007,7 +1338,44 @@ paths:
             $ref: '#/definitions/controllers.ErrorResponse'
       summary: Delete course
       tags:
-      - Course
+      - Courses
+    get:
+      consumes:
+      - application/json
+      description: Get a course by id
+      parameters:
+      - description: course id
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.GetCourseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Get course
+      tags:
+      - Courses
     put:
       consumes:
       - application/json
@@ -1024,7 +1392,7 @@ paths:
         name: course
         required: true
         schema:
-          $ref: '#/definitions/controllers.classUpdateForm'
+          $ref: '#/definitions/controllers.CourseUpdateForm'
           type: object
       produces:
       - application/json
@@ -1048,7 +1416,7 @@ paths:
             $ref: '#/definitions/controllers.ErrorResponse'
       summary: Update course
       tags:
-      - Course
+      - Courses
   /lexical/videos:
     get:
       consumes:
@@ -1281,182 +1649,6 @@ paths:
       summary: Get notification
       tags:
       - Notifications
-  /submitted_assignment:
-    get:
-      consumes:
-      - application/json
-      description: get submitted_assignment list
-      parameters:
-      - description: select from page
-        in: query
-        minimum: 1
-        name: page
-        type: integer
-      - description: limit number
-        in: query
-        minimum: 0
-        name: limit
-        type: integer
-      - description: order by field
-        in: query
-        name: order
-        type: string
-      - description: order by asc or desc
-        enum:
-        - asc
-        - desc
-        in: query
-        name: orderBy
-        type: string
-      - description: filter creatorid of submitted_assignment
-        in: query
-        name: creatorID
-        type: string
-      - description: filter assignmentid of submitted_assignment
-        in: query
-        name: assignmentid
-        type: string
-      - description: filter graderid of submitted_assignment
-        in: query
-        name: graderid
-        type: string
-      - description: search answer of submitted_assignment
-        in: query
-        name: answer
-        type: string
-      - description: search comment of submitted_assignment
-        in: query
-        name: comment
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/controllers.GetSubmmitedAssignmentListResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/controllers.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/controllers.ErrorResponse'
-        "422":
-          description: Unprocessable Entity
-          schema:
-            $ref: '#/definitions/controllers.ErrorResponse'
-      summary: List submitted_assignment
-      tags:
-      - SubmittedAssignment
-  /submitted_assignment/{id}:
-    delete:
-      consumes:
-      - application/json
-      description: delete a submitted_assignment by id
-      parameters:
-      - description: submitted_assignment id
-        format: uuid
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "204": {}
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/controllers.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/controllers.ErrorResponse'
-        "403":
-          description: Forbidden
-          schema:
-            $ref: '#/definitions/controllers.ErrorResponse'
-        "422":
-          description: Unprocessable Entity
-          schema:
-            $ref: '#/definitions/controllers.ErrorResponse'
-      summary: Delete submitted_assignment
-      tags:
-      - SubmittedAssignment
-    get:
-      consumes:
-      - application/json
-      description: Get a submitted_assignment by id
-      parameters:
-      - description: submitted_assignment id
-        format: uuid
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/controllers.GetSubmittedAssignmentResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/controllers.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/controllers.ErrorResponse'
-        "403":
-          description: Forbidden
-          schema:
-            $ref: '#/definitions/controllers.ErrorResponse'
-        "422":
-          description: Unprocessable Entity
-          schema:
-            $ref: '#/definitions/controllers.ErrorResponse'
-      summary: Get submitted_assignment
-      tags:
-      - SubmittedAssignment
-  /submmited_assignment:
-    post:
-      consumes:
-      - application/json
-      description: create a new submmitedAssignment
-      parameters:
-      - description: create submmited_assignment
-        in: body
-        name: assignment
-        required: true
-        schema:
-          $ref: '#/definitions/controllers.submmittedAssignmentCreateForm'
-          type: object
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/controllers.SuccessResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/controllers.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/controllers.ErrorResponse'
-        "422":
-          description: Unprocessable Entity
-          schema:
-            $ref: '#/definitions/controllers.ErrorResponse'
-      summary: Create submmitedAssignment
-      tags:
-      - SubmmitedAssignment
   /users:
     get:
       consumes:

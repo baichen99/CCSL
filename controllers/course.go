@@ -21,26 +21,26 @@ type CourseController struct {
 func (c *CourseController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Handle(iris.MethodGet, "/", "GetCourseList")
 	app.Handle(iris.MethodGet, "/{id: string}", "GetCourse")
-	app.Router().Use(middlewares.CheckToken, middlewares.CheckUserRole([]string{configs.RoleSuperUser, configs.RoleAdminUser}))
+	app.Router().Use(middlewares.CheckToken, middlewares.CheckUserRole([]string{configs.RoleTeacher}))
 	app.Handle(iris.MethodPost, "/", "CreateCourse")
 	app.Handle(iris.MethodPut, "/{id: string}", "UpdateCourse")
 	app.Handle(iris.MethodDelete, "/{id: string}", "DeleteCourse")
 }
 
-// GetCourseList GET /course
+// GetCourseList GET /courses
 // >>>>> DOCS  <<<<<
 // =================
-// @Tags Course
-// @Summary List course
+// @Tags Courses
+// @Summary List courses
 // @Description get course list
 // @Accept  json
 // @Produce json
-// @Router /course [GET]
+// @Router /courses [GET]
 // @Param page 		query int    false  "select from page" 			    mininum(1)
 // @Param limit 	query int    false  "limit number" 				    mininum(0)
 // @Param order 	query string false	"order by field"
 // @Param orderBy 	query string false	"order by asc or desc" 		    enums(asc, desc)
-// @Param calssID  query string false 	"filter classID of course"
+// @Param calssID  	query string false 	"filter classID of course"
 // @Param detail   	query string false 	"search detail name of course"
 // @Param name      query string false 	"search name of course"
 // @Success 200 {object} controllers.GetCourseListResponse
@@ -55,14 +55,11 @@ func (c *CourseController) GetCourseList() {
 		utils.SetError(c.Context, iris.StatusBadRequest, "CourseController::GetCourseList", errParams)
 		return
 	}
-	name := c.Context.URLParamDefault("name", "")
-	content := c.Context.URLParamDefault("content", "")
-	classID := c.Context.URLParamDefault("classID", "")
 	listParameters := utils.GetCourseListParameters{
 		GetListParameters: listParams,
-		Name:              name,
-		Content:           content,
-		ClassID:           classID,
+		Name:              c.Context.URLParamDefault("name", ""),
+		Content:           c.Context.URLParamDefault("content", ""),
+		ClassID:           c.Context.URLParamDefault("classID", ""),
 	}
 	course, count, err := c.CourseService.GetCoursesList(listParameters)
 	if err != nil {
@@ -84,52 +81,15 @@ type GetCourseListResponse struct {
 	Data []models.Course `json:"data"`
 }
 
-// CreateCourse POST /course
+// GetCourse GET /courses/{id:string}
 // >>>>> DOCS  <<<<<
 // =================
-// @Tags Course
-// @Summary Create course
-// @Description create a new course
-// @Accept  json
-// @Produce json
-// @Router 	/class 	[POST]
-// @Param 	user 	body	 controllers.courseCreateForm	  true	"create course"
-// @Success 201		{object} controllers.SuccessResponse
-// @Failure 400 	{object} controllers.ErrorResponse
-// @Failure 401 	{object} controllers.ErrorResponse
-// @Failure 422 	{object} controllers.ErrorResponse
-// =================
-func (c *CourseController) CreateCourse() {
-	defer c.Context.Next()
-	var form courseCreateForm
-	// Read JSON from request and validate request
-	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
-		utils.SetError(c.Context, iris.StatusBadRequest, "CourseController::CreateCourse", errParams)
-		return
-	}
-	// PSQL - Create course in database.
-	course := form.ConvertToModel()
-
-	if err := c.CourseService.CreateCourse(course); err != nil {
-		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "CourseService::CreateCourse", errSQL)
-		return
-	}
-	// Return 201 Created
-	c.Context.StatusCode(iris.StatusCreated)
-	c.Context.JSON(iris.Map{
-		message: success,
-	})
-}
-
-// GetCourse GET /course/{id:string}
-// >>>>> DOCS  <<<<<
-// =================
-// @Tags Course
+// @Tags Courses
 // @Summary Get course
 // @Description Get a course by id
 // @Accept  json
 // @Produce json
-// @Router 	/class/{id} [GET]
+// @Router 	/courses/{id} [GET]
 // @Param 	id 		path	 string	    true	"course id" format(uuid)
 // @Success 200 	{object} controllers.GetCourseResponse
 // @Failure 400 	{object} controllers.ErrorResponse
@@ -161,17 +121,54 @@ type GetCourseResponse struct {
 	Data models.Class `json:"data"`
 }
 
+// CreateCourse POST /courses
+// >>>>> DOCS  <<<<<
+// =================
+// @Tags Courses
+// @Summary Create course
+// @Description create a new course
+// @Accept  json
+// @Produce json
+// @Router 	/courses 	[POST]
+// @Param 	user 	body	 controllers.CourseCreateForm	  true	"create course"
+// @Success 201		{object} controllers.SuccessResponse
+// @Failure 400 	{object} controllers.ErrorResponse
+// @Failure 401 	{object} controllers.ErrorResponse
+// @Failure 422 	{object} controllers.ErrorResponse
+// =================
+func (c *CourseController) CreateCourse() {
+	defer c.Context.Next()
+	var form CourseCreateForm
+	// Read JSON from request and validate request
+	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
+		utils.SetError(c.Context, iris.StatusBadRequest, "CourseController::CreateCourse", errParams)
+		return
+	}
+	// PSQL - Create course in database.
+	course := form.ConvertToModel()
+
+	if err := c.CourseService.CreateCourse(course); err != nil {
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "CourseService::CreateCourse", errSQL)
+		return
+	}
+	// Return 201 Created
+	c.Context.StatusCode(iris.StatusCreated)
+	c.Context.JSON(iris.Map{
+		message: success,
+	})
+}
+
 // UpdateCourse PUT /course/{id:string}
 // >>>>> DOCS  <<<<<
 // =================
-// @Tags Course
+// @Tags Courses
 // @Summary Update course
 // @Description update a class by id
 // @Accept  json
 // @Produce json
-// @Router 	/course/{id} [PUT]
-// @Param 	id 		path	 string						  true	"course id" format(uuid)
-// @Param 	course 	body	 controllers.classUpdateForm	  true	"updated course"
+// @Router 	/courses/{id} [PUT]
+// @Param 	id 		path	 string							  true	"course id" format(uuid)
+// @Param 	course 	body	 controllers.CourseUpdateForm	  true	"updated course"
 // @Success	204
 // @Failure 400 	{object} controllers.ErrorResponse
 // @Failure 401 	{object} controllers.ErrorResponse
@@ -183,7 +180,7 @@ func (c *CourseController) UpdateCourse() {
 
 	// Getting ID from parameters in the URL
 	courseID := c.Context.Params().Get("id")
-	var form courseUpdateForm
+	var form CourseUpdateForm
 
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
@@ -205,13 +202,13 @@ func (c *CourseController) UpdateCourse() {
 // DeleteCourse DELETE /course/{id:string}
 // >>>>> DOCS  <<<<<
 // =================
-// @Tags Course
+// @Tags Courses
 // @Summary Delete course
 // @Description delete a course by id
 // @Accept  json
 // @Produce json
-// @Router 	/course/{id} [DELETE]
-// @Param 	id 		path	 string						  true	"course id" format(uuid)
+// @Router 	/courses/{id} [DELETE]
+// @Param 	id 		path	 string		  true	"course id" format(uuid)
 // @Success 204
 // @Failure 400 	{object} controllers.ErrorResponse
 // @Failure 401 	{object} controllers.ErrorResponse

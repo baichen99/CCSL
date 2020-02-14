@@ -33,8 +33,6 @@ func (s *ClassService) GetClassesList(parameters utils.GetClassListParameters) (
 	db := s.PG.
 		Scopes(
 			utils.SearchByColumn("classes.name", parameters.Name),
-			utils.SearchByColumn("classes.detail", parameters.Details),
-			utils.SearchByColumn("classes.resource", parameters.Resources),
 		)
 
 	err = db.

@@ -64,16 +64,12 @@ func (c *UserController) GetUsersList() {
 		utils.SetError(c.Context, iris.StatusBadRequest, "UserController::GetUsersList", errParams)
 		return
 	}
-	roles := c.Context.URLParamDefault("roles", "")
-	name := c.Context.URLParamDefault("name", "")
-	username := c.Context.URLParamDefault("username", "")
-	state := c.Context.URLParamDefault("state", "")
 	listParameters := utils.GetUserListParameters{
 		GetListParameters: listParams,
-		Username:          username,
-		Name:              name,
-		State:             state,
-		Roles:             roles,
+		Username:          c.Context.URLParamDefault("username", ""),
+		Name:              c.Context.URLParamDefault("name", ""),
+		State:             c.Context.URLParamDefault("state", ""),
+		Roles:             c.Context.URLParamDefault("roles", ""),
 	}
 	users, count, err := c.UserService.GetUsersList(listParameters)
 	if err != nil {
@@ -243,7 +239,7 @@ func (c *UserController) DeleteUser() {
 // UserLogin POST /users/login
 func (c *UserController) UserLogin() {
 	defer c.Context.Next()
-	var form userLoginForm
+	var form UserLoginForm
 
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {

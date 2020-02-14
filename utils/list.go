@@ -232,9 +232,7 @@ type GetNotificationListParameters struct {
 // GetClassListParameters parameters for get notification list queries
 type GetClassListParameters struct {
 	GetListParameters
-	Name      string
-	Details   string
-	Resources string
+	Name string
 }
 
 // GetCourseListParameters parameters for get notification list queries

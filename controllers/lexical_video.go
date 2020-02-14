@@ -67,34 +67,21 @@ func (c *LexicalVideoController) GetLexicalVideosList() {
 		utils.SetError(c.Context, iris.StatusBadRequest, "LexicalVideoController::GetLexicalVideosList", errors.New("ParamsError"))
 		return
 	}
-	lexiconID := c.Context.URLParamDefault("lexiconID", "")
-	initial := c.Context.URLParamDefault("initial", "")
-	chinese := c.Context.URLParamDefault("chinese", "")
-	english := c.Context.URLParamDefault("english", "")
-	pos := c.Context.URLParamDefault("pos", "")
-	regionID := c.Context.URLParamDefault("regionID", "")
-	gender := c.Context.URLParamDefault("gender", "")
-	leftHandshapeID := c.Context.URLParamDefault("leftHandshapeID", "")
-	rightHandshapeID := c.Context.URLParamDefault("rightHandshapeID", "")
-	handshapeID := c.Context.URLParamDefault("handshapeID", "")
-	morpheme := c.Context.URLParamDefault("morpheme", "")
-	wordFormation := c.Context.URLParamDefault("wordFormation", "")
-	performerID := c.Context.URLParamDefault("performerID", "")
 	listParameters := utils.GetLexicalVideoListParameters{
 		GetListParameters: listParams,
-		LexiconID:         lexiconID,
-		Initial:           initial,
-		Chinese:           chinese,
-		English:           english,
-		Pos:               pos,
-		RegionID:          regionID,
-		Gender:            gender,
-		LeftHandshapeID:   leftHandshapeID,
-		RightHandshapeID:  rightHandshapeID,
-		HandshapeID:       handshapeID,
-		WordFormation:     wordFormation,
-		Morpheme:          morpheme,
-		PerformerID:       performerID,
+		LexiconID:         c.Context.URLParamDefault("lexiconID", ""),
+		Initial:           c.Context.URLParamDefault("initial", ""),
+		Chinese:           c.Context.URLParamDefault("chinese", ""),
+		English:           c.Context.URLParamDefault("english", ""),
+		Pos:               c.Context.URLParamDefault("pos", ""),
+		RegionID:          c.Context.URLParamDefault("regionID", ""),
+		Gender:            c.Context.URLParamDefault("gender", ""),
+		LeftHandshapeID:   c.Context.URLParamDefault("leftHandshapeID", ""),
+		RightHandshapeID:  c.Context.URLParamDefault("rightHandshapeID", ""),
+		HandshapeID:       c.Context.URLParamDefault("handshapeID", ""),
+		WordFormation:     c.Context.URLParamDefault("wordFormation", ""),
+		Morpheme:          c.Context.URLParamDefault("morpheme", ""),
+		PerformerID:       c.Context.URLParamDefault("performerID", ""),
 	}
 	videos, count, err := c.LexicalVideoService.GetLexicalVideosList(listParameters)
 	if err != nil {
@@ -120,7 +107,7 @@ type GetVideosListResponse struct {
 // CreateLexicalVideo POST /lexical/videos
 func (c *LexicalVideoController) CreateLexicalVideo() {
 	defer c.Context.Next()
-	var form lexicalVideoCreateForm
+	var form LexicalVideoCreateForm
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
 		utils.SetError(c.Context, iris.StatusBadRequest, "LexicalVideoController::CreateLexicalVideo", errParams)
@@ -161,7 +148,7 @@ func (c *LexicalVideoController) UpdateLexicalVideo() {
 
 	// Getting ID from parameters in the URL
 	videoID := c.Context.Params().Get("id")
-	var form lexicalVideoUpdateForm
+	var form LexicalVideoUpdateForm
 
 	// Read JSON from request and validate request
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
