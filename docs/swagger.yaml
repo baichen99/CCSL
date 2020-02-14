@@ -119,6 +119,8 @@ definitions:
       total:
         example: 100
         type: integer
+      unread:
+        type: integer
     type: object
   controllers.GetSubmittedAssignmentResponse:
     properties:

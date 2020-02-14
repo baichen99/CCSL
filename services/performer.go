@@ -88,10 +88,9 @@ func (s *PerformerService) UpdatePerformer(id string, updatedData map[string]int
 
 // DeletePerformer delete performer by id
 func (s *PerformerService) DeletePerformer(id string) (err error) {
-	var performer models.Performer
 	err = s.PG.
 		Where("id = ?", id).
-		Delete(&performer).
+		Delete(&models.Performer{}).
 		Error
 	return
 }

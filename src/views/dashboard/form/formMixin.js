@@ -20,19 +20,21 @@ const formMixin = {
     }
   },
   methods: {
-    checkFields(callback) {
-      for (let key in this.formData) {
-        if (typeof this.formData[key] == "string") {
-          this.formData[key] = this.formData[key].trim();
+    checkFields() {
+      return new Promise((resolve, reject) => {
+        for (let key in this.formData) {
+          if (typeof this.formData[key] == "string") {
+            this.formData[key] = this.formData[key].trim();
+          }
         }
-      }
-      return this.$refs.form.validate(valid => {
-        if (valid) {
-          return callback(true);
-        } else {
-          return callback(false);
-        }
-      });
+        this.$refs.form.validate(valid => {
+          if (valid) {
+            resolve();
+          } else {
+            reject();
+          }
+        })
+      })
     },
     resetFields() {
       this.$refs.form.resetFields();

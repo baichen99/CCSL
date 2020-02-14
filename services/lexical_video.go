@@ -93,10 +93,9 @@ func (s *LexicalVideoService) UpdateLexicalVideo(id string, updatedData map[stri
 
 // DeleteLexicalVideo soft deletes a video
 func (s *LexicalVideoService) DeleteLexicalVideo(id string) (err error) {
-	var video models.LexicalVideo
 	err = s.PG.
 		Where("id = ?", id).
-		Delete(&video).
+		Delete(&models.LexicalVideo{}).
 		Error
 	return
 }

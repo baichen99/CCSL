@@ -18,7 +18,7 @@
 import { GetAppInfo, UpdateAppInfo } from "@/api/systems";
 import RichTextEditor from "@/components/form/RichTextEditor";
 export default {
-  name: "Introduction",
+  name: "CenterIntroduction",
   components: {
     RichTextEditor
   },

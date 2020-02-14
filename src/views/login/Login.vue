@@ -6,7 +6,6 @@
       :rules="loginRules"
       class="login-form"
       auto-complete="on"
-      label-position="left"
     >
       <div class="title-container">
         <h3 class="title">{{ $t("Login") }}</h3>
@@ -50,9 +49,7 @@
         style="width:100%;margin-bottom:30px;"
         @click.native.prevent="handleLogin"
       >{{ $t("Login") }}</el-button>
-      <div class="tips">
-        <div>{{ $t("tips") }}</div>
-      </div>
+      <div class="tips">{{ $t("tips") }}</div>
     </el-form>
   </div>
 </template>
@@ -226,11 +223,7 @@ $light_gray: #eee;
   .tips {
     font-size: 10px;
     color: $dark_gray;
-    margin-bottom: 10px;
-
-    div {
-      margin: 10px;
-    }
+    margin: 10px;
   }
 
   .svg-container {

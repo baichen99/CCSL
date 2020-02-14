@@ -85,10 +85,9 @@ func (s *MemberService) UpdateMember(id string, updateData map[string]interface{
 
 // DeleteMember soft deletes a member with given id
 func (s *MemberService) DeleteMember(id string) (err error) {
-	var member models.Member
 	err = s.PG.
 		Where("id = ?", id).
-		Delete(&member).
+		Delete(&models.Member{}).
 		Error
 	return
 }

@@ -17,6 +17,7 @@ const (
 	page      string = "page"
 	total     string = "total"
 	limit     string = "limit"
+	unread    string = "unread"
 	language  string = "language"
 	version   string = "version"
 	ipAddress string = "ip"

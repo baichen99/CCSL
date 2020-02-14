@@ -20,7 +20,7 @@ const toolbar = [
 
 const menubar = "file edit insert view format table";
 
-const tinymceCDN = "https://cdn.jsdelivr.net/npm/tinymce@5.1.2/tinymce.min.js";
+const tinymceCDN = "https://cdn.jsdelivr.net/npm/tinymce@5.1.6/tinymce.min.js";
 
 let callbacks = [];
 
@@ -45,7 +45,8 @@ export default {
     },
     value: {
       type: String,
-      default: ""
+      required: true,
+      default: () => ""
     },
     height: {
       type: [Number, String],
@@ -153,7 +154,7 @@ export default {
         selector: `#${this.tinymceId}`,
         language: this.languageTypeList[this.$i18n.locale],
         height: this.height,
-        body_class: "panel-body ",
+        body_class: "panel-body",
         object_resizing: false,
         toolbar: toolbar,
         menubar: menubar,
@@ -169,9 +170,11 @@ export default {
         language_url: "/tinymce/langs/zh_CN.js",
         nonbreaking_force_tab: true, // inserting nonbreaking space &nbsp; need Nonbreaking Space Plugin
         init_instance_callback: editor => {
+          if (_this.value) {
+            editor.setContent(_this.value);
+          }
           _this.hasInit = true;
-          editor.setContent(_this.value);
-          editor.on("Change Keyup SetContent", () => {
+          editor.on("NodeChange Change Keyup SetContent", () => {
             this.hasChange = true;
             this.$emit("update", editor.getContent());
           });
@@ -222,7 +225,7 @@ export default {
       }
     },
     setContent(value) {
-      window.tinymce.get(this.tinymceId).setContent(value || "");
+      window.tinymce.get(this.tinymceId).setContent(value);
     },
     getContent() {
       window.tinymce.get(this.tinymceId).getContent();

@@ -138,10 +138,9 @@ func (s *UserService) UpdateUser(id string, updatedData map[string]interface{}) 
 
 // DeleteUser soft deletes a user model
 func (s *UserService) DeleteUser(id string) (err error) {
-	var user models.User
 	err = s.PG.
 		Where("id = ?", id).
-		Delete(&user).
+		Delete(&models.User{}).
 		Error
 	return
 }

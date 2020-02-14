@@ -88,10 +88,9 @@ func (s *LexiconService) UpdateWord(id string, updatedData map[string]interface{
 
 // DeleteWord soft deletes a word with given id
 func (s *LexiconService) DeleteWord(id string) (err error) {
-	var word models.Lexicon
 	err = s.PG.
 		Where("id = ?", id).
-		Delete(&word).
+		Delete(&models.Lexicon{}).
 		Error
 	return
 }

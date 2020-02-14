@@ -57,7 +57,7 @@ func (c *NotificationController) GetNotificationList() {
 		GetListParameters: listParams,
 		UserID:            userID,
 	}
-	notifications, count, err := c.NotificationService.GetNotificationList(listParameters)
+	notifications, count, unreadCount, err := c.NotificationService.GetNotificationList(listParameters)
 	if err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "NotificationService::GetNotificationList", errSQL)
 		return
@@ -68,13 +68,15 @@ func (c *NotificationController) GetNotificationList() {
 		page:    listParams.Page,
 		limit:   listParams.Limit,
 		total:   count,
+		unread:  unreadCount,
 	})
 }
 
 // GetNotificationsListResponse Response for GetNotificationList
 type GetNotificationsListResponse struct {
 	GetListResponse
-	Data []models.Notification `json:"data"`
+	Unread int                   `json:"unread"`
+	Data   []models.Notification `json:"data"`
 }
 
 // GetNotification GET /notifications/{id:string}

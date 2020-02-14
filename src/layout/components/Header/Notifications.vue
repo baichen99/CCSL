@@ -8,11 +8,12 @@
       :append-to-body="true"
       :center="true"
       :visible.sync="show"
+      @close="getList"
     >
-      <el-table v-loading="loading" :data="list" @expand-change="handleView">
+      <el-table ref="table" v-loading="loading" :data="list" @row-click="handleView">
         <el-table-column type="expand">
-          <template slot-scope="{row}">
-            <el-form label-position="left" inline class="demo-table-expand">
+          <template #default="{row}">
+            <el-form label-position="left" inline>
               <el-form-item :label="$t('Title')">
                 <span>{{ row.title }}</span>
               </el-form-item>
@@ -24,13 +25,13 @@
         </el-table-column>
 
         <el-table-column :label="$t('CreatedAt')" align="center" width="200px">
-          <template slot-scope="{row}">
+          <template #default="{row}">
             <span>{{ $d(new Date(row.createdAt), 'long') }}</span>
           </template>
         </el-table-column>
 
         <el-table-column :label="$t('Title')" align="center" min-width="80px">
-          <template slot-scope="{row}">
+          <template #default="{row}">
             <span>
               <el-tag
                 v-if="!row.readAt"
@@ -43,19 +44,13 @@
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('MessageContent')" align="center" min-width="100px">
-          <template slot-scope="{row}">
-            <span class="hide-overflow">{{ row.message }}</span>
-          </template>
-        </el-table-column>
-
         <el-table-column :label="$t('Action')" align="center" width="100px" fixed="right">
-          <template slot-scope="{row}">
+          <template #default="{row}">
             <el-button
               type="danger"
               size="mini"
               plain
-              @click="handleDelete(row.id)"
+              @click.stop="handleDelete(row.id)"
             >{{ $t("Delete") }}</el-button>
           </template>
         </el-table-column>
@@ -88,53 +83,47 @@ export default {
       page: 1,
       order: "desc"
     },
-    total: 0
+    total: 0,
+    unread: 0
   }),
-  computed: {
-    unread() {
-      return this.list.filter(item => item.readAt === null).length;
-    }
-  },
   watch: {
     "params.page"() {
       this.getList();
     }
   },
   created() {
-    this.$nextTick(() => {
-      this.getList();
-    });
+    this.getList();
   },
   methods: {
-    getList() {
-      this.loading = true;
-      GetNotificationsList(this.params)
-        .then(res => {
-          this.list = res.data;
-          this.total = res.total;
-          this.loading = false;
-        })
-        .catch(() => {
-          this.loading = false;
-        });
+    async getList() {
+      try {
+        this.loading = true;
+        const res = await GetNotificationsList(this.params);
+        this.list = res.data;
+        this.total = res.total;
+        this.unread = res.unread;
+      } finally {
+        this.loading = false;
+      }
     },
     handleShow() {
-      this.getList();
       this.show = true;
+      this.getList();
     },
-    handleView(data) {
-      data.readAt = new Date().toISOString();
-      GetNotification(data.id);
+    async handleView(row) {
+      await GetNotification(row.id);
+      this.$refs.table.toggleRowExpansion(row);
+      row.readAt = new Date().toISOString();
     },
-    handleDelete(id) {
-      this.loading = true;
-      DeleteNotification(id)
-        .then(() => {
-          this.getList();
-        })
-        .catch(() => {
-          this.loading = false;
-        });
+    async handleDelete(id) {
+      console.log(id);
+      try {
+        this.loading = true;
+        await DeleteNotification(id);
+        await this.getList();
+      } finally {
+        this.loading = false;
+      }
     }
   }
 };
