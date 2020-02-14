@@ -809,14 +809,14 @@ paths:
     post:
       consumes:
       - application/json
-      description: create a new class
+      description: create a new course
       parameters:
-      - description: create user
+      - description: create course
         in: body
         name: user
         required: true
         schema:
-          $ref: '#/definitions/controllers.classCreateForm'
+          $ref: '#/definitions/controllers.courseCreateForm'
           type: object
       produces:
       - application/json
@@ -837,9 +837,9 @@ paths:
           description: Unprocessable Entity
           schema:
             $ref: '#/definitions/controllers.ErrorResponse'
-      summary: Create class
+      summary: Create course
       tags:
-      - Class
+      - Course
   /class/{id}:
     delete:
       consumes:
@@ -878,9 +878,9 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get a class by id
+      description: Get a course by id
       parameters:
-      - description: class id
+      - description: course id
         format: uuid
         in: path
         name: id
@@ -892,7 +892,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controllers.GetClassResponse'
+            $ref: '#/definitions/controllers.GetCourseResponse'
         "400":
           description: Bad Request
           schema:
@@ -909,9 +909,9 @@ paths:
           description: Unprocessable Entity
           schema:
             $ref: '#/definitions/controllers.ErrorResponse'
-      summary: Get class
+      summary: Get course
       tags:
-      - Class
+      - Course
   /course:
     get:
       consumes:
@@ -1568,20 +1568,20 @@ paths:
     put:
       consumes:
       - application/json
-      description: update a assignment by id
+      description: update a user by id
       parameters:
-      - description: assignment id
+      - description: user id
         format: uuid
         in: path
         name: id
         required: true
         type: string
-      - description: updated assignment
+      - description: updated user
         in: body
         name: user
         required: true
         schema:
-          $ref: '#/definitions/controllers.assignmentUpdateForm'
+          $ref: '#/definitions/controllers.UserUpdateForm'
           type: object
       produces:
       - application/json
@@ -1603,7 +1603,7 @@ paths:
           description: Unprocessable Entity
           schema:
             $ref: '#/definitions/controllers.ErrorResponse'
-      summary: Update assignment
+      summary: Update user
       tags:
-      - Assignment
+      - Users
 swagger: "2.0"

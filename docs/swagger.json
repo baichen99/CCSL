@@ -354,7 +354,7 @@
                 }
             },
             "post": {
-                "description": "create a new class",
+                "description": "create a new course",
                 "consumes": [
                     "application/json"
                 ],
@@ -362,18 +362,18 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Class"
+                    "Course"
                 ],
-                "summary": "Create class",
+                "summary": "Create course",
                 "parameters": [
                     {
-                        "description": "create user",
+                        "description": "create course",
                         "name": "user",
                         "in": "body",
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/controllers.classCreateForm"
+                            "$ref": "#/definitions/controllers.courseCreateForm"
                         }
                     }
                 ],
@@ -407,7 +407,7 @@
         },
         "/class/{id}": {
             "get": {
-                "description": "Get a class by id",
+                "description": "Get a course by id",
                 "consumes": [
                     "application/json"
                 ],
@@ -415,14 +415,14 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Class"
+                    "Course"
                 ],
-                "summary": "Get class",
+                "summary": "Get course",
                 "parameters": [
                     {
                         "type": "string",
                         "format": "uuid",
-                        "description": "class id",
+                        "description": "course id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -432,7 +432,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controllers.GetClassResponse"
+                            "$ref": "#/definitions/controllers.GetCourseResponse"
                         }
                     },
                     "400": {
@@ -1483,7 +1483,7 @@
         },
         "/users/{id}": {
             "put": {
-                "description": "update a assignment by id",
+                "description": "update a user by id",
                 "consumes": [
                     "application/json"
                 ],
@@ -1491,26 +1491,26 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Assignment"
+                    "Users"
                 ],
-                "summary": "Update assignment",
+                "summary": "Update user",
                 "parameters": [
                     {
                         "type": "string",
                         "format": "uuid",
-                        "description": "assignment id",
+                        "description": "user id",
                         "name": "id",
                         "in": "path",
                         "required": true
                     },
                     {
-                        "description": "updated assignment",
+                        "description": "updated user",
                         "name": "user",
                         "in": "body",
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/controllers.assignmentUpdateForm"
+                            "$ref": "#/definitions/controllers.UserUpdateForm"
                         }
                     }
                 ],
