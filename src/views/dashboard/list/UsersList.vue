@@ -143,7 +143,7 @@ export default {
           slot: "action",
           label: this.$t("Action"),
           width: "180px",
-          fixed: "right"
+          fixed: "right",
         }
       ]
     };

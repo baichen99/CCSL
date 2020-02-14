@@ -102,7 +102,8 @@ export default {
         {
           slot: "action",
           label: this.$t("Action"),
-          width: "100px"
+          width: "90px",
+          fixed: "right"
         }
       ]
     };

@@ -86,13 +86,13 @@ const routes = [
     hidden: true
   },
   {
-    path: "/profile",
+    path: "/user-profile",
     component: AdminLayout,
     children: [
       {
-        path: "/profile",
-        name: "Profile",
-        component: () => import("@/views/dashboard/Profile"),
+        path: "/user-profile",
+        name: "UserProfile",
+        component: () => import("@/views/dashboard/UserProfile"),
         meta: {
           title: "ProfileCenter",
           icon: "profile",

@@ -38,9 +38,9 @@
             <span>{{ value.name }}</span>
           </el-menu-item>
         </el-submenu>
-        <el-submenu v-if="login" index="/profile">
+        <el-submenu v-if="login" index="/user-profile">
           <template slot="title">{{ $t("MyMenu") }}</template>
-          <el-menu-item index="/profile">{{ $t("ProfileMenu") }}</el-menu-item>
+          <el-menu-item index="/user-profile">{{ $t("ProfileMenu") }}</el-menu-item>
           <el-menu-item @click="logout">{{ $t("Logout") }}</el-menu-item>
         </el-submenu>
         <el-menu-item v-else index="/login">{{ $t("Login") }}</el-menu-item>
