@@ -28,7 +28,92 @@ func main() {
 	pg := initDB(app)
 	defer pg.Close()
 	initDoc(app)
-	initRouter(app, pg)
+	// App Handler
+	mvc.New(app).Handle(new(controllers.RootController))
+	mvc.Configure(app.Party("/files"), func(app *mvc.Application) {
+		app.Handle(new(controllers.FileController))
+	})
+	mvc.Configure(app.Party("/systems"), func(app *mvc.Application) {
+		app.Register(services.NewSystemService(pg), services.NewUserService(pg))
+		app.Handle(new(controllers.SystemController))
+	})
+	mvc.Configure(app.Party("/carousels"), func(app *mvc.Application) {
+		app.Register(services.NewCarouselService(pg))
+		app.Handle(new(controllers.CarouselController))
+	})
+	mvc.Configure(app.Party("/news"), func(app *mvc.Application) {
+		app.Register(services.NewNewsService(pg))
+		app.Handle(new(controllers.NewsController))
+	})
+	mvc.Configure(app.Party("/members"), func(app *mvc.Application) {
+		app.Register(services.NewMemberService(pg))
+		app.Handle(new(controllers.MemberController))
+	})
+	mvc.Configure(app.Party("/users"), func(app *mvc.Application) {
+		app.Register(services.NewUserService(pg), services.NewNotificationService(pg))
+		app.Handle(new(controllers.UserController))
+	})
+	mvc.Configure(app.Party("/handshapes"), func(app *mvc.Application) {
+		app.Register(services.NewHandshapeService(pg))
+		app.Handle(new(controllers.HandshapeController))
+	})
+	mvc.Configure(app.Party("/performers"), func(app *mvc.Application) {
+		app.Register(services.NewPerformerService(pg))
+		app.Handle(new(controllers.PerformerController))
+	})
+	mvc.Configure(app.Party("/lexicons"), func(app *mvc.Application) {
+		app.Register(services.NewLexiconService(pg))
+		app.Handle(new(controllers.LexiconController))
+	})
+	mvc.Configure(app.Party("/notifications"), func(app *mvc.Application) {
+		app.Register(services.NewNotificationService(pg))
+		app.Handle(new(controllers.NotificationController))
+	})
+	// Lexical Database for Chinese National Sign Language
+	mvc.Configure(app.Party("/lexical/videos"), func(app *mvc.Application) {
+		app.Register(services.NewLexicalVideoService(pg))
+		app.Handle(new(controllers.LexicalVideoController))
+	})
+	// // Corpus for Shanghai Sign Language Verb
+	// mvc.Configure(app.Party("/verbs"), func(app *mvc.Application) {
+	// 	// TODO
+	// })
+	// // Corpus for Proper Nouns in CSL
+	// mvc.Configure(app.Party("/nouns"), func(app *mvc.Application) {
+	// 	// TODO
+	// })
+	// // Chinese Sign Language Corpus for Sign Texts
+	mvc.Configure(app.Party("/texts/videos"), func(app *mvc.Application) {
+		// TODO
+	})
+	// // Literature Database for Sign Language Research
+	// mvc.Configure(app.Party("/literature"), func(app *mvc.Application) {
+	// 	// TODO
+	// })
+	// // Database for Technical Terms in Sign Linguistics
+	// mvc.Configure(app.Party("/terms"), func(app *mvc.Application) {
+	// 	// TODO
+	// })
+
+	mvc.Configure(app.Party("/class"), func(app *mvc.Application) {
+		app.Register(services.NewClassService(pg))
+		app.Handle(new(controllers.ClassController))
+	})
+	mvc.Configure(app.Party("/course"), func(app *mvc.Application) {
+		app.Register(services.NewCourseService(pg))
+		app.Handle(new(controllers.CourseController))
+	})
+	mvc.Configure(app.Party("/assignment"), func(app *mvc.Application) {
+		app.Register(services.NewAssignmentService(pg))
+		app.Handle(new(controllers.AssignmentController))
+	})
+	mvc.Configure(app.Party("/assignment/submitted"), func(app *mvc.Application) {
+		app.Register(services.NewSubmittedAssignmentService(pg))
+		app.Register(services.NewAssignmentService(pg))
+		app.Register(services.NewCourseService(pg))
+		app.Register(services.NewClassService(pg))
+		app.Handle(new(controllers.SubmittedAssignmentController))
+	})
 	host := fmt.Sprintf("%s:%d", configs.Conf.Listener.Server, configs.Conf.Listener.Port)
 	app.Run(iris.Addr(host), iris.WithOptimizations, iris.WithoutStartupLog)
 }
@@ -154,75 +239,4 @@ func initDB(app *iris.Application) *gorm.DB {
 	}
 
 	return pg
-}
-
-func initRouter(app *iris.Application, pg *gorm.DB) {
-	// App Handler
-	mvc.New(app).Handle(new(controllers.RootController))
-	mvc.Configure(app.Party("/files"), func(app *mvc.Application) {
-		app.Handle(new(controllers.FileController))
-	})
-	mvc.Configure(app.Party("/systems"), func(app *mvc.Application) {
-		app.Register(services.NewSystemService(pg), services.NewUserService(pg))
-		app.Handle(new(controllers.SystemController))
-	})
-	mvc.Configure(app.Party("/users"), func(app *mvc.Application) {
-		app.Register(services.NewUserService(pg), services.NewNotificationService(pg))
-		app.Handle(new(controllers.UserController))
-	})
-
-	mvc.Configure(app.Party("/carousels"), func(app *mvc.Application) {
-		app.Register(services.NewCarouselService(pg))
-		app.Handle(new(controllers.CarouselController))
-	})
-	mvc.Configure(app.Party("/news"), func(app *mvc.Application) {
-		app.Register(services.NewNewsService(pg))
-		app.Handle(new(controllers.NewsController))
-	})
-	mvc.Configure(app.Party("/members"), func(app *mvc.Application) {
-		app.Register(services.NewMemberService(pg))
-		app.Handle(new(controllers.MemberController))
-	})
-
-	mvc.Configure(app.Party("/handshapes"), func(app *mvc.Application) {
-		app.Register(services.NewHandshapeService(pg))
-		app.Handle(new(controllers.HandshapeController))
-	})
-	mvc.Configure(app.Party("/performers"), func(app *mvc.Application) {
-		app.Register(services.NewPerformerService(pg))
-		app.Handle(new(controllers.PerformerController))
-	})
-	mvc.Configure(app.Party("/lexicons"), func(app *mvc.Application) {
-		app.Register(services.NewLexiconService(pg))
-		app.Handle(new(controllers.LexiconController))
-	})
-	mvc.Configure(app.Party("/notifications"), func(app *mvc.Application) {
-		app.Register(services.NewNotificationService(pg))
-		app.Handle(new(controllers.NotificationController))
-	})
-	// Lexical Database for Chinese National Sign Language
-	mvc.Configure(app.Party("/lexical/videos"), func(app *mvc.Application) {
-		app.Register(services.NewLexicalVideoService(pg))
-		app.Handle(new(controllers.LexicalVideoController))
-	})
-	// // Corpus for Shanghai Sign Language Verb
-	// mvc.Configure(app.Party("/verbs"), func(app *mvc.Application) {
-	// 	// TODO
-	// })
-	// // Corpus for Proper Nouns in CSL
-	// mvc.Configure(app.Party("/nouns"), func(app *mvc.Application) {
-	// 	// TODO
-	// })
-	// // Chinese Sign Language Corpus for Sign Texts
-	mvc.Configure(app.Party("/texts/videos"), func(app *mvc.Application) {
-		// TODO
-	})
-	// // Literature Database for Sign Language Research
-	// mvc.Configure(app.Party("/literature"), func(app *mvc.Application) {
-	// 	// TODO
-	// })
-	// // Database for Technical Terms in Sign Linguistics
-	// mvc.Configure(app.Party("/terms"), func(app *mvc.Application) {
-	// 	// TODO
-	// })
 }

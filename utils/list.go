@@ -228,3 +228,38 @@ type GetNotificationListParameters struct {
 	Title   string
 	Message string
 }
+
+// GetClassListParameters parameters for get notification list queries
+type GetClassListParameters struct {
+	GetListParameters
+	Name      string
+	Details   string
+	Resources string
+}
+
+// GetCourseListParameters parameters for get notification list queries
+type GetCourseListParameters struct {
+	GetListParameters
+	ClassID string
+	Name    string
+	Content string
+}
+
+// GetAssignmentListParameters parameters for get notification list queries
+type GetAssignmentListParameters struct {
+	GetListParameters
+	CourseID string
+	Title    string
+	Type     string
+	Content  string
+}
+
+// GetSubmittedAssignmentsListParameters parameters for get notification list queries
+type GetSubmittedAssignmentsListParameters struct {
+	GetListParameters
+	CreatorID    string
+	AssignmentID string
+	GraderID     string
+	Answer       string
+	Comment      string
+}
