@@ -39,6 +39,7 @@ type Assignment struct {
 // SubmittedAssignments model 学生提交的作业
 type SubmittedAssignments struct {
 	Base
+	CreatorID    uuid.UUID `gorm:"type:uuid" json:"creator_id"`
 	AssignmentID uuid.UUID `gorm:"type:uuid" json:"assignmentID"`
 	Answer       string    `json:"answer"`
 	Grade        *int      `json:"grade"`

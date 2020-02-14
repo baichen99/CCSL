@@ -24,10 +24,11 @@ const (
 )
 
 var (
-	errParams error = errors.New("ParamsError")
-	errSQL    error = errors.New("SqlError")
-	errAuth   error = errors.New("AuthFailed")
-	errRole   error = errors.New("RoleError")
+	errParams   error = errors.New("ParamsError")
+	errSQL      error = errors.New("SqlError")
+	errAuth     error = errors.New("AuthFailed")
+	errRole     error = errors.New("RoleError")
+	errOutdated error = errors.New("Outdated")
 )
 
 // ErrorResponse Response for error request
@@ -322,4 +323,107 @@ type lexicalVideoUpdateForm struct {
 	Morpheme          *[]string `json:"morpheme" validate:"omitempty"`                     // 构词词语
 	LeftHandshapesID  *[]string `json:"leftHandshapesID" validate:"omitempty,dive,uuid4"`  // 左手手势
 	RightHandshapesID *[]string `json:"rightHandshapesID" validate:"omitempty,dive,uuid4"` // 右手手势
+}
+
+// >>> CLASS <<<
+// ============
+
+type classCreateForm struct {
+	Name      string `json:"name" validate:"required"`
+	Details   string `json:"details" validate:"required"`
+	Resources string `json:"resources" validate:"required"`
+}
+
+func (f classCreateForm) ConvertToModel() (class models.Class) {
+	class = models.Class{
+		Name:      f.Name,
+		Details:   f.Details,
+		Resources: f.Resources,
+	}
+	return
+}
+
+type classUpdateForm struct {
+	Name      *string `json:"name"  validate:"omitempty"`
+	Details   *string `json:"details"  validate:"omitempty"`
+	Resources *string `json:"resources"  validate:"omitempty"`
+}
+
+// >>> COURSE <<<
+// ============
+type courseCreateForm struct {
+	ClassID string `json:"classID" validate:"required,uuid4"`
+	Name    string `json:"name" validate:"required"`
+	Content string `json:"content" validate:"required"`
+}
+
+func (f courseCreateForm) ConvertToModel() (course models.Course) {
+	classID, _ := uuid.FromString(f.ClassID)
+	course = models.Course{
+		ClassID: classID,
+		Name:    f.Name,
+		Content: f.Content,
+	}
+	return
+}
+
+type courseUpdateForm struct {
+	ClassID *string `json:"classID" validate:"omitempty"`
+	Name    *string `json:"name"  validate:"omitempty"`
+	Content *string `json:"content"  validate:"omitempty"`
+}
+
+// >>> ASSIGNMENT <<<
+// ============
+type assignmentCreateForm struct {
+	CourseID string    `json:"courseID" validate:"required,uuid4"`
+	Title    string    `json:"title" validate:"required"`
+	Type     string    `json:"type" validate:"required"`
+	Content  string    `json:"content" validate:"required"`
+	Deadline time.Time `json:"deadline" validate:"required"`
+}
+
+func (f assignmentCreateForm) ConvertToModel() (assignment models.Assignment) {
+	courseID, _ := uuid.FromString(f.CourseID)
+	assignment = models.Assignment{
+		CourseID: courseID,
+		Title:    f.Title,
+		Type:     f.Type,
+		Content:  f.Content,
+		Deadline: &f.Deadline,
+	}
+	return
+}
+
+type assignmentUpdateForm struct {
+	CourseID *string    `json:"courseID" validate:"omitempty,uuid4"`
+	Title    *string    `json:"title"  validate:"omitempty"`
+	Type     *string    `json:"type"  validate:"omitempty"`
+	Content  *string    `json:"content"  validate:"omitempty"`
+	Deadline *time.Time `json:"deadline" validate:"omitempty"`
+}
+
+// >>> SUBMITTED ASSIGNMENT <<<
+// ============
+type submmittedAssignmentCreateForm struct {
+	AssignmentID string `json:"assignmentID" validate:"required,uuid4"`
+	Answer       string `json:"answer" validate:"required"`
+	Comment      string `json:"comment" validate:"required"`
+}
+
+func (f submmittedAssignmentCreateForm) ConvertToModel() (assignment models.SubmittedAssignments) {
+	assignmentID, _ := uuid.FromString(f.AssignmentID)
+	assignment = models.SubmittedAssignments{
+		AssignmentID: assignmentID,
+		Answer:       f.Answer,
+		Comment:      f.Comment,
+	}
+	return
+}
+
+type submmittedAssignmentUpdateForm struct {
+	AssignmentID *string `json:"assignmentID" validate:"omitempty,uuid4"`
+	Answer       *string `json:"answer"  validate:"omitempty"`
+	Grade        *int    `json:"grade"  validate:"omitempty"`
+	Comment      *string `json:"comment"  validate:"omitempty"`
 }
