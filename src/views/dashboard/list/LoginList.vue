@@ -1,7 +1,6 @@
 <template>
   <list-view
     :get-list-method="GetLoginHistory"
-    :allow-create-item="false"
     :allow-detail-form="false"
     :columns="columns"
     order="desc"

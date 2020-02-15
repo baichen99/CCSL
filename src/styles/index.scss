@@ -155,36 +155,6 @@ aside {
   overflow-y: auto;
 }
 
-//main-container全局样式
-.app-container {
-  padding: 20px;
-  .table-toolbar {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    .el-button,
-    .el-input {
-      width: 200px;
-      margin: 10px;
-    }
-    .el-cascader {
-      margin: 10px;
-      .el-input {
-        width: 100%;
-      }
-    }
-  }
-  .table-content {
-    margin: 20px;
-  }
-
-  .el-pagination {
-    text-align: center;
-  }
-}
-
 .el-drawer {
   overflow: auto;
   .form-drawer__content {

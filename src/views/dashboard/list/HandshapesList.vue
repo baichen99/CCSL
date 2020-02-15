@@ -10,28 +10,12 @@
     delete-warning="删除手形会删除视频中该手形对应的所有标注，是否继续？"
     entity="handshape"
   >
-    <template #toolbar="{params,handleSearch}">
-      <el-input
-        v-model="params.name"
-        prefix-icon="el-icon-search"
-        :placeholder="$t('tip')"
-        clearable
-        @keyup.enter="handleSearch"
-        @change="handleSearch"
-      />
+    <template #toolbar-search="{params, handleSearch}">
+      <search-input v-model="params.name" :placeholder="$t('tip')" @update="handleSearch" />
     </template>
 
     <template #image="{row}">
-      <img :src="settings.publicURL + row.image" alt="handshape" style="width:80px" />
-    </template>
-
-    <template #action="{row,handleDeleteItem}">
-      <el-button
-        type="danger"
-        size="mini"
-        plain
-        @click.stop="handleDeleteItem(row.id)"
-      >{{ $t("Delete") }}</el-button>
+      <img :src="settings.publicURL + row.image" alt="handshape" style="width:40px" />
     </template>
   </list-view>
 </template>
@@ -50,6 +34,7 @@
 <script>
 import { mapGetters } from "vuex";
 import ListView from "@/components/ListView";
+import SearchInput from "@/components/form/SearchInput";
 import HandshapeForm from "@/views/dashboard/form/HandshapeForm";
 import {
   GetHandshapesList,
@@ -60,7 +45,8 @@ import {
 export default {
   name: "HandshapeList",
   components: {
-    ListView
+    ListView,
+    SearchInput
   },
   data() {
     return {
@@ -96,12 +82,6 @@ export default {
           slot: "image",
           label: this.$t("HandshapeImage"),
           width: "150px"
-        },
-        {
-          slot: "action",
-          label: this.$t("Action"),
-          width: "90px",
-          fixed: "right"
         }
       ]
     };

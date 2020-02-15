@@ -21,7 +21,7 @@ type ClassController struct {
 func (c *ClassController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Handle(iris.MethodGet, "/", "GetClassList")
 	app.Handle(iris.MethodGet, "/{id: string}", "GetClass")
-	app.Router().Use(middlewares.CheckToken, middlewares.CheckUserRole([]string{configs.RoleTeacher}))
+	app.Router().Use(middlewares.CheckToken, middlewares.CheckUserRole([]string{configs.RoleSuperUser}))
 	app.Handle(iris.MethodPost, "/", "CreateClass")
 	app.Handle(iris.MethodPut, "/{id: string}", "UpdateClass")
 	app.Handle(iris.MethodDelete, "/{id: string}", "DeleteClass")

@@ -1,5 +1,5 @@
 <template>
-  <el-select v-model="data" clearable :placeholder="tip" @clear="$emit('clear')">
+  <el-select v-model="data" clearable :size="size" :placeholder="tip" @clear="$emit('clear')">
     <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
       <span>{{ item.name }}</span>
       <img :src="settings.publicURL + item.image" :alt="item.name" />
@@ -33,9 +33,13 @@ export default {
   props: {
     value: {
       type: String,
-      default: ""
+      default: () => ""
     },
     orientation: {
+      type: String,
+      default: ""
+    },
+    size: {
       type: String,
       default: ""
     }

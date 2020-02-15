@@ -8,47 +8,33 @@
     :columns="columns"
     order="desc"
   >
-    <template #toolbar="{params, handleSearch}">
-      <el-input
-        v-model="params.titleZh"
-        prefix-icon="el-icon-search"
-        :placeholder="$t('tipTitle')"
-        clearable
-        @keyup.enter="handleSearch"
-        @change="handleSearch"
-      />
-    </template>
-    <template #state="{row}">
-      <el-tag size="small" :type="newsState[row.state].color">{{ $t(newsState[row.state].name) }}</el-tag>
-    </template>
-    <template #importance="{row}">
-      <el-rate v-model="row.importance" disabled />
-    </template>
-    <template #action="{row,handleUpdateItem,handleDeleteItem}">
+    <template #toolbar-button="{selection,handleUpdateItems}">
       <el-button
-        v-if="row.state==='draft'"
+        :disabled="!showButton(selection,'draft')"
         type="success"
         size="mini"
         plain
-        @click.stop="handleUpdateItem(row.id, {
-          state: 'published'
-        })"
+        @click="handleUpdateItems({state:'published'})"
       >{{ $t("Publish") }}</el-button>
       <el-button
-        v-if="row.state==='published'"
+        :disabled="!showButton(selection,'published')"
         type="warning"
         size="mini"
         plain
-        @click.stop="handleUpdateItem(row.id, {
-          state: 'draft'
-        })"
+        @click="handleUpdateItems({state:'draft'})"
       >{{ $t("Recall") }}</el-button>
-      <el-button
-        type="danger"
-        size="mini"
-        plain
-        @click.stop="handleDeleteItem(row.id)"
-      >{{ $t("Delete") }}</el-button>
+    </template>
+
+    <template #toolbar-search="{params, handleSearch}">
+      <search-input v-model="params.titleZh" :placeholder="$t('tipTitle')" @update="handleSearch" />
+    </template>
+
+    <template #state="{row}">
+      <el-tag size="small" :type="newsState[row.state].color">{{ $t(newsState[row.state].name) }}</el-tag>
+    </template>
+
+    <template #importance="{row}">
+      <el-rate v-model="row.importance" disabled />
     </template>
   </list-view>
 </template>
@@ -67,6 +53,7 @@
 <script>
 import { mapGetters } from "vuex";
 import ListView from "@/components/ListView";
+import SearchInput from "@/components/form/SearchInput";
 import CarouselForm from "@/views/dashboard/form/CarouselForm";
 import {
   GetCarouselsList,
@@ -77,7 +64,8 @@ import {
 export default {
   name: "CarouselsList",
   components: {
-    ListView
+    ListView,
+    SearchInput
   },
   data() {
     return {
@@ -119,18 +107,22 @@ export default {
           slot: "importance",
           label: this.$t("Importance"),
           width: "150px"
-        },
-        {
-          slot: "action",
-          label: this.$t("Action"),
-          width: "180px",
-          fixed: "right"
         }
       ]
     };
   },
   computed: {
     ...mapGetters(["newsState"])
+  },
+  methods: {
+    showButton(selection, state) {
+      if (selection.length > 0) {
+        const allowEnable = selection.filter(item => item.state === state);
+        return allowEnable.length === selection.length;
+      } else {
+        return false;
+      }
+    }
   }
 };
 </script>

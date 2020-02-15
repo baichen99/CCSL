@@ -1,62 +1,83 @@
 <template>
   <div class="app-container flex-column">
-    <div class="table-toolbar">
-      <slot name="toolbar" :params="params" :handleSearch="handleSearch"></slot>
-      <el-button v-if="allowCreateItem" type="primary" plain @click="handleNewItem">
-        {{ $t("New") }}
-        <i class="el-icon-plus el-icon--right" />
-      </el-button>
-      <el-button v-if="exportListConfig" type="primary" plain @click="handleExportList">
-        {{ $t("Export") }}
-        <i class="el-icon-download el-icon--right" />
-      </el-button>
-    </div>
     <div class="table-content">
       <el-table
         v-loading="loading"
         :data="list"
-        stripe
         @filter-change="handleFilter"
         @row-click="handleEditItem"
+        @selection-change="handleSelectItems"
       >
-        <template v-for="item in columns">
-          <el-table-column
-            v-if="item.slot"
-            #default="{row}"
-            :key="item.slot"
-            :prop="item.slot"
-            :column-key="item.slot"
-            :label="item.label"
-            :min-width="item.width"
-            :filters="item.filters"
-            :formatter="item.formatter"
-            :filter-multiple="false"
-            :fixed="item.fixed"
-            :show-overflow-tooltip="item.hideOverflow"
-            align="center"
-          >
-            <slot
-              :name="item.slot"
-              :row="row"
-              :handleDeleteItem="handleDeleteItem"
-              :handleUpdateItem="handleUpdateItem"
-            ></slot>
-          </el-table-column>
-          <el-table-column
-            v-else
-            :key="item.prop"
-            :prop="item.prop"
-            :column-key="item.prop"
-            :label="item.label"
-            :min-width="item.width"
-            :filters="item.filters"
-            :formatter="item.formatter"
-            :filter-multiple="false"
-            :fixed="item.fixed"
-            :show-overflow-tooltip="item.hideOverflow"
-            align="center"
-          ></el-table-column>
-        </template>
+        <el-table-column>
+          <template slot="header">
+            <div class="table-toolbar">
+              <span>
+                <el-button
+                  v-if="createItemMethod"
+                  size="mini"
+                  type="primary"
+                  plain
+                  @click="handleNewItem"
+                >{{ $t("New") }}</el-button>
+                <el-button
+                  v-if="exportListConfig"
+                  size="mini"
+                  type="info"
+                  plain
+                  @click="handleExportList"
+                >{{ $t("Export") }}</el-button>
+                <el-button
+                  v-if="deleteItemMethod"
+                  :disabled="!showDeleteButton"
+                  size="mini"
+                  type="danger"
+                  plain
+                  @click="handleDeleteItems"
+                >{{ $t("Delete") }}</el-button>
+                <slot
+                  name="toolbar-button"
+                  :selection="selection"
+                  :handleUpdateItems="handleUpdateItems"
+                ></slot>
+              </span>
+              <span>
+                <slot name="toolbar-search" :params="params" :handleSearch="handleSearch"></slot>
+              </span>
+            </div>
+          </template>
+          <el-table-column v-if="deleteItemMethod" type="selection" width="45" align="center" />
+          <template v-for="item in columns">
+            <el-table-column
+              v-if="item.slot"
+              #default="{row}"
+              :key="item.slot"
+              :prop="item.slot"
+              :column-key="item.slot"
+              :label="item.label"
+              :min-width="item.width"
+              :filters="item.filters"
+              :formatter="item.formatter"
+              :filter-multiple="false"
+              :show-overflow-tooltip="item.hideOverflow"
+              align="center"
+            >
+              <slot :name="item.slot" :row="row"></slot>
+            </el-table-column>
+            <el-table-column
+              v-else
+              :key="item.prop"
+              :prop="item.prop"
+              :column-key="item.prop"
+              :label="item.label"
+              :min-width="item.width"
+              :filters="item.filters"
+              :formatter="item.formatter"
+              :filter-multiple="false"
+              :show-overflow-tooltip="item.hideOverflow"
+              align="center"
+            ></el-table-column>
+          </template>
+        </el-table-column>
       </el-table>
     </div>
 
@@ -92,7 +113,7 @@
         <div class="form-drawer__footer">
           <el-button @click="handleCloseDrawer">{{ $t("Cancel") }}</el-button>
           <el-button
-            v-if="allowSave"
+            v-if="showSaveButton"
             type="primary"
             :loading="loading"
             @click="handleSaveItem"
@@ -110,10 +131,6 @@ export default {
   name: "ListView",
   props: {
     allowDetailForm: {
-      type: Boolean,
-      default: true
-    },
-    allowCreateItem: {
       type: Boolean,
       default: true
     },
@@ -176,6 +193,7 @@ export default {
       openFormDrawer: false,
       mode: "",
       list: [],
+      selection: [],
       loading: false,
       total: 0,
       params: {
@@ -189,7 +207,7 @@ export default {
     };
   },
   computed: {
-    allowSave() {
+    showSaveButton() {
       if (this.mode === "create") {
         return true;
       } else {
@@ -208,6 +226,14 @@ export default {
         }
         return false;
       }
+    },
+    showDeleteButton() {
+      if (this.deleteItemMethod) {
+        if (this.selection.length > 0) {
+          return true;
+        }
+      }
+      return false;
     }
   },
   created() {
@@ -330,15 +356,40 @@ export default {
         this.loading = false;
       }
     },
-    async handleDeleteItem(id) {
+    handleSelectItems(value) {
+      this.selection = value;
+    },
+    async handleDeleteItems() {
       this.loading = true;
       try {
-        await this.$confirm(this.deleteWarning, "警告", {
+        const itemWarning = `将删除${this.selection.length}条数据，`;
+        await this.$confirm(itemWarning + this.deleteWarning, "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "error"
         });
-        await this.deleteItemMethod(id);
+        for (const item of this.selection) {
+          await this.deleteItemMethod(item.id);
+        }
+        this.handleModifyItem();
+      } catch (_) {
+        this.showCancleNotification();
+      } finally {
+        this.loading = false;
+      }
+    },
+    async handleUpdateItems(updatedData) {
+      this.loading = true;
+      try {
+        const itemWarning = `将修改${this.selection.length}条数据，是否继续？`;
+        await this.$confirm(itemWarning, "警告", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        });
+        for (const item of this.selection) {
+          await this.updateItemMethod(item.id, updatedData);
+        }
         this.handleModifyItem();
       } catch (_) {
         this.showCancleNotification();
@@ -390,3 +441,28 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+//main-container全局样式
+.app-container {
+  padding: 20px;
+  .table-content {
+    margin: 20px;
+  }
+
+  .el-pagination {
+    text-align: center;
+  }
+
+  .table-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .el-button,
+    .el-select,
+    .el-input {
+      margin: 2px 5px;
+    }
+  }
+}
+</style>

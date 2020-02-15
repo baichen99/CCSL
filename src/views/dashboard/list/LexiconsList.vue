@@ -11,27 +11,15 @@
     entity="lexicons"
     order-by="initial,id"
   >
-    <template #toolbar="{params, handleSearch}">
-      <el-input
-        v-model="params.chinese"
-        prefix-icon="el-icon-search"
-        placeholder="请输入中文"
-        clearable
-        @keyup.enter="handleSearch"
-        @change="handleSearch"
-      />
-      <el-input
-        v-model="params.english"
-        prefix-icon="el-icon-search"
-        placeholder="请输入英文"
-        clearable
-        @change="handleSearch"
-      />
-      <pos-selector v-model="params.pos" @update="handleSearch" />
+    <template #toolbar-search="{params, handleSearch}">
+      <search-input v-model="params.chinese" :placeholder="$t('tipZh')" @update="handleSearch" />
+      <search-input v-model="params.english" :placeholder="$t('tipEn')" @update="handleSearch" />
     </template>
+
     <template #chinese="{row}">
       <span class="word-sup" v-html="$options.filters.addNumberSup(row.chinese) " />
     </template>
+
     <template #pos="{row}">
       <el-tag
         v-for="value in row.pos"
@@ -43,22 +31,26 @@
         <span>{{ $t(partOfSpeech[value].name) }}</span>
       </el-tag>
     </template>
-
-    <template #action="{row,handleDeleteItem}">
-      <el-button
-        type="danger"
-        size="mini"
-        plain
-        @click.stop="handleDeleteItem(row.id)"
-      >{{ $t("Delete") }}</el-button>
-    </template>
   </list-view>
 </template>
+
+<i18n>
+{
+  "zh-CN":{
+    "tipZh": "请输入中文",
+    "tipEn": "请输入英文"
+  },
+  "en-US":{
+    "tipZh": "Input Chinese",
+    "tipEn": "Input English"
+  }
+}
+</i18n>
 
 <script>
 import { mapGetters } from "vuex";
 import LexiconForm from "@/views/dashboard/form/LexiconForm";
-import PosSelector from "@/components/form/PosSelector";
+import SearchInput from "@/components/form/SearchInput";
 import ListView from "@/components/ListView";
 import {
   GetWordsList,
@@ -70,7 +62,7 @@ export default {
   name: "LexiconsList",
   components: {
     ListView,
-    PosSelector
+    SearchInput
   },
   data() {
     return {
@@ -101,13 +93,8 @@ export default {
         {
           slot: "pos",
           label: this.$t("PoS"),
-          width: "200px"
-        },
-        {
-          slot: "action",
-          label: this.$t("Action"),
-          width: "90px",
-          fixed: "right"
+          width: "200px",
+          filters: []
         }
       ]
     };
@@ -122,6 +109,13 @@ export default {
         value: item
       });
     });
+    for (let item in this.partOfSpeech) {
+      const data = this.partOfSpeech[item];
+      this.columns[3].filters.push({
+        text: this.$t(data.name),
+        value: item
+      });
+    }
   },
   methods: {
     exportConfig(item) {

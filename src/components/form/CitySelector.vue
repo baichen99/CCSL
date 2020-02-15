@@ -1,6 +1,7 @@
 <template>
   <el-cascader
     v-model="value"
+    :size="size"
     :options="cities"
     :placeholder="$t('tip')"
     :props="{ expandTrigger: 'hover' }"
@@ -32,6 +33,10 @@ export default {
     city: {
       type: Number,
       default: undefined
+    },
+    size: {
+      type: String,
+      default: ""
     }
   },
   data() {
@@ -72,6 +77,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-</style>

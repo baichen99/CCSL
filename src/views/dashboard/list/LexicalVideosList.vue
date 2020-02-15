@@ -10,31 +10,36 @@
     delete-warning="此操作将永久删除该视频以及其相关的标注信息，是否继续？"
     entity="lexical_database"
   >
-    <template #toolbar="{params,handleSearch}">
-      <el-input
-        v-model="params.chinese"
-        prefix-icon="el-icon-search"
-        :placeholder="$t('chineseTip')"
-        clearable
-        @keyup.enter="handleSearch"
-        @change="handleSearch"
+    <template #toolbar-search="{params,handleSearch}">
+      <search-input v-model="params.name" :placeholder="$t('tipZh')" @update="handleSearch" />
+      <city-selector
+        v-model="params.regionID"
+        class="city-selector"
+        size="mini"
+        @update="handleSearch"
       />
-      <city-selector v-model="params.regionID" @update="handleSearch" />
-      <handshape-selector v-model="params.handshapeID" @update="handleSearch" />
+      <handshape-selector v-model="params.handshapeID" size="mini" @update="handleSearch" />
       <handshape-selector
         v-model="params.leftHandshapeID"
         orientation="left"
+        size="mini"
         @update="handleSearch"
       />
       <handshape-selector
         v-model="params.rightHandshapeID"
         orientation="right"
+        size="mini"
         @update="handleSearch"
       />
-      <morphemes-input v-model="params.morpheme" @update="handleSearch" @enter="handleSearch" />
+      <search-input
+        v-model="params.morpheme"
+        :placeholder="$t('tipMorpheme')"
+        @update="handleSearch"
+      />
     </template>
     <template #chinese="{row}">
       <span
+        v-if="lexicons[row.lexiconID]"
         class="word-sup"
         v-html="$options.filters.addNumberSup(lexicons[row.lexiconID].chinese)"
       />
@@ -53,25 +58,18 @@
       </span>
       <el-tag v-else :disable-transitions="true" size="small" type="info">{{ $t("NoData") }}</el-tag>
     </template>
-
-    <template #action="{row,handleDeleteItem}">
-      <el-button
-        type="danger"
-        size="mini"
-        plain
-        @click.stop="handleDeleteItem(row.id)"
-      >{{ $t("Delete") }}</el-button>
-    </template>
   </list-view>
 </template>
 
 <i18n>
 {
   "zh-CN": {
-    "chineseTip": "请输入中文"
+    "tipZh": "请输入中文",
+    "tipMorpheme": "请输入语素"
   },
   "en-US": {
-    "chineseTip": "Input Chinese"
+    "tipZh": "Input Chinese",
+    "tipMorpheme": "Input Morpheme"
   }
 }
 </i18n>
@@ -79,6 +77,7 @@
 <script>
 import { mapGetters } from "vuex";
 import ListView from "@/components/ListView";
+import SearchInput from "@/components/form/SearchInput";
 import {
   GetLexicalVideosList,
   CreateLexicalVideo,
@@ -88,14 +87,13 @@ import {
 import LexicalVideoForm from "@/views/dashboard/form/LexicalVideoForm";
 import CitySelector from "@/components/form/CitySelector";
 import HandshapeSelector from "@/components/form/HandshapeSelector";
-import MorphemesInput from "@/components/form/MorphemesInput";
 export default {
   name: "LexicalVideoList",
   components: {
     ListView,
     CitySelector,
     HandshapeSelector,
-    MorphemesInput
+    SearchInput
   },
   data() {
     return {
@@ -110,31 +108,51 @@ export default {
           label: this.$t("Initial"),
           width: "80px",
           filters: [],
-          formatter: row => this.lexicons[row.lexiconID].initial
+          formatter: row =>
+            this.lexicons[row.lexiconID]
+              ? this.lexicons[row.lexiconID].initial
+              : ""
         },
         {
           prop: "region",
           label: this.$t("Region"),
           width: "200px",
           formatter: row =>
-            this.$options.filters.getRegionName(
-              this.performers[row.performerID].regionID
-            )
+            this.performers[row.performerID]
+              ? this.$options.filters.getRegionName(
+                  this.performers[row.performerID].regionID
+                )
+              : ""
         },
         {
           prop: "gender",
           label: this.$t("Gender"),
           width: "100px",
+          filters: [
+            {
+              text: this.$t("Male"),
+              value: "M"
+            },
+            {
+              text: this.$t("Female"),
+              value: "F"
+            }
+          ],
           formatter: row =>
-            this.$t(
-              this.genderTypes[this.performers[row.performerID].gender].name
-            )
+            this.performers[row.performerID]
+              ? this.$t(
+                  this.genderTypes[this.performers[row.performerID].gender].name
+                )
+              : ""
         },
         {
           prop: "name",
           label: this.$t("Name"),
           width: "120px",
-          formatter: row => this.performers[row.performerID].name
+          formatter: row =>
+            this.performers[row.performerID]
+              ? this.performers[row.performerID].name
+              : ""
         },
         {
           slot: "chinese",
@@ -146,6 +164,16 @@ export default {
           prop: "wordFormation",
           label: this.$t("WordFormation"),
           width: "150px",
+          filters: [
+            {
+              text: this.$t("CompoundWord"),
+              value: "compound"
+            },
+            {
+              text: this.$t("SimpleWord"),
+              value: "simple"
+            }
+          ],
           formatter: row =>
             row.wordFormation
               ? this.$t(this.wordFormations[row.wordFormation].name)
@@ -154,14 +182,8 @@ export default {
         {
           slot: "morpheme",
           label: this.$t("Morpheme"),
-          width: "200px",
+          width: "150px",
           hideOverflow: true
-        },
-        {
-          slot: "action",
-          label: this.$t("Action"),
-          width: "90px",
-          fixed: "right"
         }
       ]
     };
@@ -234,5 +256,16 @@ export default {
 <style lang="scss" scoped>
 .tags {
   margin: 3px;
+}
+
+.el-select,
+.el-input,
+.city-selector {
+  margin-right: 5px;
+  margin-top: 2px;
+}
+
+.city-selector {
+  width: 200px;
 }
 </style>

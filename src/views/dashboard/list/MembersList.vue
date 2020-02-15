@@ -7,17 +7,21 @@
     :list-form-component="MemberForm"
     :columns="columns"
   >
-    <template #action="{row,handleDeleteItem}">
-      <el-button
-        type="danger"
-        size="mini"
-        plain
-        @click.stop="handleDeleteItem(row.id)"
-      >{{ $t("Delete") }}</el-button>
+    <template #toolbar-search="{params, handleSearch}">
+      <search-input v-model="params.nameZh" :placeholder="$t('tipName')" @update="handleSearch" />
     </template>
   </list-view>
 </template>
-
+<i18n>
+{
+  "zh-CN":{
+    "tipName":"请输入姓名"
+  },
+  "en-US":{
+    "tipName":"Input name"
+  }
+}
+</i18n>
 <script>
 import { mapGetters } from "vuex";
 import {
@@ -27,11 +31,13 @@ import {
   DeleteMember
 } from "@/api/members";
 import ListView from "@/components/ListView";
+import SearchInput from "@/components/form/SearchInput";
 import MemberForm from "@/views/dashboard/form/MemberForm";
 export default {
   name: "MembersList",
   components: {
-    ListView
+    ListView,
+    SearchInput
   },
   data() {
     return {
@@ -67,12 +73,6 @@ export default {
           hideOverflow: true,
           formatter: row =>
             this.$i18n.locale === "en-US" ? row.employerEn : row.employerZh
-        },
-        {
-          slot: "action",
-          label: this.$t("Action"),
-          width: "90px",
-          fixed: "right"
         }
       ]
     };

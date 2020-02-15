@@ -1,21 +1,10 @@
 <template>
-  <el-input v-model="data" clearable :size="size" :placeholder="$t('tip')" @keyup.enter="$emit('enter')" />
+  <el-input v-model="data" :size="size" :placeholder="placeholder" clearable />
 </template>
-
-<i18n>
-{
-  "zh-CN": {
-    "tip": "请输入构词语素"
-  },
-  "en-US": {
-    "tip": "Input morpheme(Chinese)"
-  }
-}
-</i18n>
 
 <script>
 export default {
-  name: "MorphemeInput",
+  name: "SearchInput",
   model: {
     prop: "value",
     event: "update"
@@ -23,11 +12,15 @@ export default {
   props: {
     value: {
       type: String,
-      default: ""
+      default: () => ""
+    },
+    placeholder: {
+      type: String,
+      default: () => ""
     },
     size: {
       type: String,
-      default: ""
+      default: () => "mini"
     }
   },
   computed: {
@@ -43,3 +36,9 @@ export default {
 };
 </script>
 
+<style scoped>
+.el-input {
+  width: 150px;
+  margin-right: 5px;
+}
+</style>

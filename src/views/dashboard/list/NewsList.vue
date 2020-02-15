@@ -8,38 +8,33 @@
     :columns="columns"
     order="desc"
   >
-    <template #state="{row}">
-      <el-tag size="small" :type="newsState[row.state].color">{{ $t(newsState[row.state].name) }}</el-tag>
-    </template>
-    <template #importance="{row}">
-      <el-rate v-model="row.importance" disabled />
-    </template>
-
-    <template #action="{row,handleUpdateItem,handleDeleteItem}">
+    <template #toolbar-button="{selection,handleUpdateItems}">
       <el-button
-        v-if="row.state==='draft'"
+        :disabled="!showButton(selection,'draft')"
         type="success"
         size="mini"
         plain
-        @click.stop="handleUpdateItem(row.id, {
-          state: 'published'
-        })"
+        @click="handleUpdateItems({state:'published'})"
       >{{ $t("Publish") }}</el-button>
       <el-button
-        v-if="row.state==='published'"
+        :disabled="!showButton(selection,'published')"
         type="warning"
         size="mini"
         plain
-        @click.stop="handleUpdateItem(row.id, {
-          state: 'draft'
-        })"
+        @click="handleUpdateItems({state:'draft'})"
       >{{ $t("Recall") }}</el-button>
-      <el-button
-        type="danger"
-        size="mini"
-        plain
-        @click.stop="handleDeleteItem(row.id)"
-      >{{ $t("Delete") }}</el-button>
+    </template>
+
+    <template #toolbar-search="{params, handleSearch}">
+      <search-input v-model="params.titleZh" :placeholder="$t('tipTitle')" @update="handleSearch" />
+    </template>
+
+    <template #state="{row}">
+      <el-tag size="small" :type="newsState[row.state].color">{{ $t(newsState[row.state].name) }}</el-tag>
+    </template>
+
+    <template #importance="{row}">
+      <el-rate v-model="row.importance" disabled />
     </template>
   </list-view>
 </template>
@@ -58,12 +53,14 @@
 <script>
 import { mapGetters } from "vuex";
 import ListView from "@/components/ListView";
+import SearchInput from "@/components/form/SearchInput";
 import NewsForm from "@/views/dashboard/form/NewsForm";
 import { GetNewsList, CreateNews, UpdateNews, DeleteNews } from "@/api/news";
 export default {
   name: "NewsList",
   components: {
-    ListView
+    ListView,
+    SearchInput
   },
   data() {
     return {
@@ -91,12 +88,12 @@ export default {
         {
           prop: "creator.name",
           label: this.$t("Publisher"),
-          width: "100px"
+          width: "80px"
         },
         {
           prop: "column",
           label: this.$t("Column"),
-          width: "120px",
+          width: "100px",
           filters: [
             { text: this.$t("NewsColumn"), value: "news" },
             { text: this.$t("ActivityColumn"), value: "activity" },
@@ -114,7 +111,7 @@ export default {
         {
           prop: "type",
           label: this.$t("Type"),
-          width: "120px",
+          width: "100px",
           filters: [
             { text: this.$t("Link"), value: "link" },
             { text: this.$t("Document"), value: "document" }
@@ -124,7 +121,7 @@ export default {
         {
           prop: "language",
           label: this.$t("Language"),
-          width: "120px",
+          width: "100px",
           filters: [
             { text: this.$t("Chinese"), value: "zh-CN" },
             { text: this.$t("English"), value: "en-US" }
@@ -135,18 +132,22 @@ export default {
           slot: "importance",
           label: this.$t("Importance"),
           width: "150px"
-        },
-        {
-          slot: "action",
-          label: this.$t("Action"),
-          width: "180px",
-          fixed: "right"
         }
       ]
     };
   },
   computed: {
     ...mapGetters(["newsColumns", "newsTypes", "newsState", "languageTypes"])
+  },
+  methods: {
+    showButton(selection, state) {
+      if (selection.length > 0) {
+        const allowEnable = selection.filter(item => item.state === state);
+        return allowEnable.length === selection.length;
+      } else {
+        return false;
+      }
+    }
   }
 };
 </script>

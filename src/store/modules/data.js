@@ -64,7 +64,7 @@ const state = {
   },
   userState: {
     active: { name: "Active", color: "success" },
-    inactive: { name: "Inactive", color: "danger" }
+    inactive: { name: "Inactive", color: "warning" }
   },
   genderTypes: {
     M: { name: "Male" },

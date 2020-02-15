@@ -116,7 +116,6 @@ export default {
       row.readAt = new Date().toISOString();
     },
     async handleDelete(id) {
-      console.log(id);
       try {
         this.loading = true;
         await DeleteNotification(id);

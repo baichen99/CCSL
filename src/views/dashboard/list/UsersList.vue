@@ -7,22 +7,32 @@
     :list-form-component="UserForm"
     :columns="columns"
   >
-    <template #toolbar="{params,handleSearch}">
-      <el-input
+    <template #toolbar-button="{selection,handleUpdateItems}">
+      <el-button
+        :disabled="!showButton(selection,'inactive')"
+        size="mini"
+        type="success"
+        plain
+        @click="handleUpdateItems({state:'active'})"
+      >{{ $t("Enable") }}</el-button>
+      <el-button
+        :disabled="!showButton(selection,'active')"
+        size="mini"
+        type="warning"
+        plain
+        @click="handleUpdateItems({state:'inactive'})"
+      >{{ $t("Disable") }}</el-button>
+    </template>
+
+    <template #toolbar-search="{params,handleSearch}">
+      <search-input
         v-model="params.username"
         :placeholder="$t('tipAccount')"
-        clearable
-        @keyup.enter="handleSearch"
-        @change="handleSearch"
+        @update="handleSearch"
       />
-      <el-input
-        v-model="params.name"
-        :placeholder="$t('tipName')"
-        clearable
-        @keyup.enter="handleSearch"
-        @change="handleSearch"
-      />
+      <search-input v-model="params.name" :placeholder="$t('tipName')" @update="handleSearch" />
     </template>
+
     <template #state="{row}">
       <el-tag
         size="small"
@@ -38,35 +48,6 @@
         :disable-transitions="true"
         :type="userRoles[item].color"
       >{{ $t(userRoles[item].name) }}</el-tag>
-    </template>
-    <template #action="{row,handleUpdateItem, handleDeleteItem}">
-      <el-button
-        v-if="row.state==='inactive'"
-        :disabled="isSuperUser(row)"
-        type="success"
-        size="mini"
-        plain
-        @click.stop="handleUpdateItem(row.id, {
-          state: 'active'
-        })"
-      >{{ $t("Enable") }}</el-button>
-      <el-button
-        v-if="row.state==='active'"
-        :disabled="isSuperUser(row)"
-        type="warning"
-        size="mini"
-        plain
-        @click.stop="handleUpdateItem(row.id, {
-          state: 'inactive'
-        })"
-      >{{ $t("Disable") }}</el-button>
-      <el-button
-        :disabled="isSuperUser(row)"
-        type="danger"
-        size="mini"
-        plain
-        @click.stop="handleDeleteItem(row.id)"
-      >{{ $t("Delete") }}</el-button>
     </template>
   </list-view>
 </template>
@@ -87,12 +68,14 @@
 <script>
 import { mapGetters } from "vuex";
 import { GetUsersList, CreateUser, UpdateUser, DeleteUser } from "@/api/users";
+import SearchInput from "@/components/form/SearchInput";
 import UserForm from "@/views/dashboard/form/UserForm";
 import ListView from "@/components/ListView";
 export default {
   name: "UsersList",
   components: {
-    ListView
+    ListView,
+    SearchInput
   },
   data() {
     return {
@@ -111,7 +94,7 @@ export default {
         {
           slot: "state",
           label: this.$t("AccountState"),
-          width: "150px",
+          width: "100px",
           filters: [
             { text: this.$t("Active"), value: "active" },
             { text: this.$t("Inactive"), value: "inactive" }
@@ -120,7 +103,7 @@ export default {
         {
           slot: "roles",
           label: this.$t("UserRole"),
-          width: "150px",
+          width: "200px",
           filters: [
             { text: this.$t("SuperAdmin"), value: "super" },
             { text: this.$t("Admin"), value: "admin" },
@@ -132,18 +115,12 @@ export default {
         {
           prop: "username",
           label: this.$t("Account"),
-          width: "200px"
+          width: "150px"
         },
         {
           prop: "name",
           label: this.$t("Name"),
-          width: "180px"
-        },
-        {
-          slot: "action",
-          label: this.$t("Action"),
-          width: "180px",
-          fixed: "right",
+          width: "100px"
         }
       ]
     };
@@ -152,8 +129,13 @@ export default {
     ...mapGetters(["userRoles", "userState"])
   },
   methods: {
-    isSuperUser(row) {
-      return row.roles.includes("super");
+    showButton(selection, state) {
+      if (selection.length > 0) {
+        const allowEnable = selection.filter(item => item.state === state);
+        return allowEnable.length === selection.length;
+      } else {
+        return false;
+      }
     }
   }
 };

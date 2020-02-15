@@ -10,25 +10,14 @@
     delete-warning="此操作会删除所有视频中含有该被试信息的标注，此操作将永久删除, 是否继续?"
     entity="performers"
   >
-    <template #toolbar="{params,handleSearch}">
-      <el-input
-        v-model="params.name"
-        prefix-icon="el-icon-search"
-        :placeholder="$t('tipName')"
-        clearable
-        @keyup.enter="handleSearch"
-        @change="handleSearch"
-      />
-      <city-selector v-model="params.regionID" @update="handleSearch" />
-    </template>
-
-    <template #action="{row,handleDeleteItem}">
-      <el-button
-        type="danger"
+    <template #toolbar-search="{params, handleSearch}">
+      <city-selector
+        v-model="params.regionID"
         size="mini"
-        plain
-        @click.stop="handleDeleteItem(row.id)"
-      >{{ $t("Delete") }}</el-button>
+        class="city-selector"
+        @update="handleSearch"
+      />
+      <search-input v-model="params.name" :placeholder="$t('tipName')" @update="handleSearch" />
     </template>
   </list-view>
 </template>
@@ -48,6 +37,7 @@
 import { mapGetters } from "vuex";
 import PerformerForm from "@/views/dashboard/form/PerformerForm";
 import ListView from "@/components/ListView";
+import SearchInput from "@/components/form/SearchInput";
 import CitySelector from "@/components/form/CitySelector";
 import {
   GetPerformersList,
@@ -59,6 +49,7 @@ export default {
   name: "PerformersList",
   components: {
     ListView,
+    SearchInput,
     CitySelector
   },
   data() {
@@ -90,6 +81,16 @@ export default {
           prop: "gender",
           label: this.$t("Gender"),
           width: "100px",
+          filters: [
+            {
+              text: this.$t("Male"),
+              value: "M"
+            },
+            {
+              text: this.$t("Female"),
+              value: "F"
+            }
+          ],
           formatter: row => this.$t(this.genderTypes[row.gender].name)
         },
         {
@@ -98,12 +99,6 @@ export default {
           width: "200px",
           hideOverflow: true,
           formatter: row => this.$options.filters.getRegionName(row.regionID)
-        },
-        {
-          slot: "action",
-          label: this.$t("Action"),
-          width: "90px",
-          fixed: "right"
         }
       ]
     };
@@ -124,3 +119,10 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.city-selector {
+  width: 200px;
+  margin: 2px 5px;
+}
+</style>

@@ -1,14 +1,8 @@
 <template>
-  <list-view
-    :get-list-method="GetJsErrorList"
-    :allow-create-item="false"
-    :allow-detail-form="false"
-    :columns="columns"
-  >
-    <template #toolbar>
-      <el-button type="primary" plain @click="handleDump">
+  <list-view :get-list-method="GetJsErrorList" :allow-detail-form="false" :columns="columns">
+    <template #toolbar-button>
+      <el-button type="primary" size="mini" plain @click="handleDump">
         {{ $t("backup") }}
-        <i class="el-icon-s-cooperation el-icon--right" />
       </el-button>
     </template>
     <template #stack="{row}">
@@ -33,7 +27,7 @@
     "source": "错误来源",
     "stack": "堆栈错误信息",
     "storage": "存储数据",
-    "backup": "备份数据库"
+    "backup": "备份"
   },
   "en-US": {
     "url": "URL",
