@@ -181,31 +181,40 @@ export default {
             _this.fullscreen = e.state;
           });
         },
-        images_upload_handler(blobInfo, success, failure, progress) {
-          progress(0);
-          const formData = new FormData();
-          formData.append("file", blobInfo.blob());
-          UploadFile(formData, "news")
-            .then(res => {
-              const url = _this.$store.getters.settings.publicURL + res.data;
-              success(url);
-              progress(100);
-            })
-            .catch(() => {
-              failure("上传文件出错");
-            });
+        async images_upload_handler(blobInfo, success, failure, progress) {
+          try {
+            _this.loading = true;
+            progress(0);
+            const formData = new FormData();
+            formData.append("file", blobInfo.blob());
+            const res = await UploadFile(formData, "news");
+            const url = _this.$store.getters.settings.publicURL + res.data;
+            success(url);
+            progress(100);
+          } catch (err) {
+            console.error(err);
+            failure("上传文件出错");
+          } finally {
+            _this.loading = false;
+          }
         },
-        file_picker_callback: function(callback) {
+        file_picker_callback(callback) {
           const input = document.createElement("input");
           input.setAttribute("type", "file");
-          input.onchange = function() {
-            const file = this.files[0];
-            const formData = new FormData();
-            formData.append("file", file);
-            UploadFile(formData, "news").then(res => {
+          input.onchange = async function() {
+            try {
+              _this.loading = true;
+              const file = this.files[0];
+              const formData = new FormData();
+              formData.append("file", file);
+              const res = await UploadFile(formData, "news");
               const url = _this.$store.getters.settings.publicURL + res.data;
               callback(url);
-            });
+            } catch (err) {
+              console.error(err);
+            } finally {
+              _this.loading = false;
+            }
           };
           input.click();
         }
