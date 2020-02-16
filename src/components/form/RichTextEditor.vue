@@ -20,7 +20,7 @@ const toolbar = [
 
 const menubar = "file edit insert view format table";
 
-const tinymceCDN = "https://cdn.jsdelivr.net/npm/tinymce@5.1.6/tinymce.min.js";
+const tinymceCDN = "https://cdn.jsdelivr.net/npm/tinymce@5.2.0/tinymce.min.js";
 
 let callbacks = [];
 
@@ -85,7 +85,7 @@ export default {
   },
   watch: {
     value(val) {
-      if (this.hasInit) {
+      if (!this.hasChange && this.hasInit) {
         this.$nextTick(() => {
           window.tinymce.get(this.tinymceId).setContent(val);
         });
@@ -160,6 +160,7 @@ export default {
         plugins: plugins,
         end_container_on_empty_block: true,
         powerpaste_word_import: "clean",
+        paste_data_images: true,
         code_dialog_height: 400,
         code_dialog_width: 1000,
         imagetools_cors_hosts: ["https://ccsl.shu.edu.cn"],
@@ -187,7 +188,7 @@ export default {
             progress(0);
             const formData = new FormData();
             formData.append("file", blobInfo.blob());
-            const res = await UploadFile(formData, "news");
+            const res = await UploadFile(formData, "news", progress);
             const url = _this.$store.getters.settings.publicURL + res.data;
             success(url);
             progress(100);

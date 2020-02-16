@@ -2,7 +2,7 @@ import request from "@/utils/request";
 
 const baseURL = "/files";
 
-export function UploadFile(formData, dir) {
+export function UploadFile(formData, dir, progress) {
   return request({
     url: baseURL,
     method: "post",
@@ -11,6 +11,9 @@ export function UploadFile(formData, dir) {
     headers: {
       "Content-Type": "multipart/form-data"
     },
-    loading: true
+    onUploadProgress: progressEvent => {
+      const percentage = progressEvent.loaded / progressEvent.total | 0;
+      progress(percentage);
+    }
   });
 }

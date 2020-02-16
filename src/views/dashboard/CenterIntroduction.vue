@@ -7,7 +7,7 @@
       <el-tab-pane :label="$t('English')" name="en-US">
         <rich-text-editor v-model="$data['en-US']" height="600px" />
       </el-tab-pane>
-      <div class="table-toolbar">
+      <div class="save">
         <el-button v-if="checkDiff" type="primary" plain @click="handleSave">{{ $t("Save") }}</el-button>
       </div>
     </el-tabs>
@@ -67,5 +67,13 @@ export default {
 <style lang="scss" scoped>
 .el-tabs {
   margin: 30px;
+}
+
+.save {
+  margin: 20px auto;
+  text-align: center;
+  .el-button {
+    width: 200px;
+  }
 }
 </style>
