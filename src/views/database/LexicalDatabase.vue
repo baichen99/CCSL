@@ -78,25 +78,25 @@ export default {
       this.params.wordFormation = "";
       this.params.morpheme = "";
     },
-    getData() {
+    async getData() {
       this.loading = true;
-      GetLexicalVideosList(this.params)
-        .then(res => {
-          this.loading = false;
-          this.videos = res.data;
-          this.params.page = res.page;
-          this.params.limit = res.limit;
-          this.total = res.total;
-          if (this.total === 0) {
-            this.$notify.info({
-              title: this.$t("VideoNotFound"),
-              duration: 2000
-            });
-          }
-        })
-        .catch(() => {
-          this.loading = false;
-        });
+      try {
+        const res = await GetLexicalVideosList(this.params);
+        if (res.total === 0) {
+          this.$notify.info({
+            title: this.$t("VideoNotFound"),
+            duration: 2000
+          });
+        }
+        this.videos = res.data;
+        this.params.page = res.page;
+        this.params.limit = res.limit;
+        this.total = res.total;
+      } catch (err) {
+        console.error(err);
+      } finally {
+        this.loading = false;
+      }
     },
     changePage() {
       this.getData();

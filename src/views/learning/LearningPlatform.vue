@@ -69,25 +69,26 @@ export default {
       this.params.lexiconID = "";
       this.params.chinese = "";
     },
-    getData() {
+    async getData() {
       let params = this.params;
-      GetLexicalVideosList(params)
-        .then(res => {
-          this.loading = false;
-          this.videos = res.data;
-          this.params.page = res.page;
-          this.params.limit = res.limit;
-          this.total = res.total;
-          if (this.total === 0) {
-            this.$notify.info({
-              title: this.$t("VideoNotFound"),
-              duration: 2000
-            });
-          }
-        })
-        .catch(() => {
-          this.loading = false;
-        });
+      this.loading = true;
+      try {
+        const res = await GetLexicalVideosList(params);
+        if (res.total === 0) {
+          this.$notify.info({
+            title: this.$t("VideoNotFound"),
+            duration: 2000
+          });
+        }
+        this.videos = res.data;
+        this.params.page = res.page;
+        this.params.limit = res.limit;
+        this.total = res.total;
+      } catch (err) {
+        console.error(err);
+      } finally {
+        this.loading = false;
+      }
     },
     changePage() {
       this.getData();

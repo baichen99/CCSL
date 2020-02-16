@@ -25,10 +25,9 @@ export default {
     this.getData();
   },
   methods: {
-    getData() {
-      GetCarouselsList({ order: "desc", state: "published" }).then(res => {
-        this.carousels = res.data;
-      });
+    async getData() {
+      const res = await GetCarouselsList({ order: "desc", state: "published" });
+      this.carousels = res.data;
     }
   }
 };

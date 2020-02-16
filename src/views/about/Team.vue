@@ -63,10 +63,16 @@ export default {
     this.getData();
   },
   methods: {
-    getData() {
-      GetMembersList({ limit: 0, orderBy: "type,created_at" }).then(res => {
+    async getData() {
+      try {
+        const res = await GetMembersList({
+          limit: 0,
+          orderBy: "type,created_at"
+        });
         this.tableData = res.data;
-      });
+      } catch (err) {
+        console.error(err);
+      }
     },
     showDetail(id) {
       this.$router.push(`/about/team-detail/${id}`);

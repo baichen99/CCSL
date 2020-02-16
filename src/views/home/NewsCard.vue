@@ -60,7 +60,7 @@ export default {
     this.getList();
   },
   methods: {
-    getList() {
+    async getList() {
       const lang = this.$i18n.locale;
       const params = {
         column: this.column,
@@ -69,9 +69,8 @@ export default {
         state: "published",
         limit: 5
       };
-      GetNewsList(params).then(res => {
-        this.news = res.data;
-      });
+      const res = await GetNewsList(params);
+      this.news = res.data;
     },
     showDetail(item) {
       if (item.type === "link") {

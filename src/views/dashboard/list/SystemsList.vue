@@ -1,9 +1,7 @@
 <template>
   <list-view :get-list-method="GetJsErrorList" :allow-detail-form="false" :columns="columns">
     <template #toolbar-button>
-      <el-button type="primary" size="mini" plain @click="handleDump">
-        {{ $t("backup") }}
-      </el-button>
+      <el-button type="primary" size="mini" plain @click="handleDump">{{ $t("backup") }}</el-button>
     </template>
     <template #stack="{row}">
       <el-popover placement="top" width="400" trigger="hover">
@@ -83,15 +81,18 @@ export default {
     };
   },
   methods: {
-    handleDump() {
-      GetDatabaseDump(true).then(res => {
+    async handleDump() {
+      try {
+        const res = await GetDatabaseDump(true);
         const url = window.URL.createObjectURL(new Blob([res]));
         const link = document.createElement("a");
         link.href = url;
         link.setAttribute("download", `${new Date().toISOString()}.dump`);
         document.body.appendChild(link);
         link.click();
-      });
+      } catch (err) {
+        console.error(err);
+      }
     }
   }
 };

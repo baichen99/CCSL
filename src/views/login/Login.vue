@@ -126,23 +126,21 @@ export default {
       });
     },
     handleLogin() {
-      this.$refs.loginForm.validate(valid => {
+      this.$refs.loginForm.validate(async valid => {
         if (valid) {
           this.loading = true;
-          this.$store
-            .dispatch("user/login", {
+          try {
+            await this.$store.dispatch("user/login", {
               username: this.loginForm.username,
               password: this.loginForm.password
-            })
-            .then(() => {
-              const redirect = this.$route.query.redirect;
-              this.$router.push({ path: redirect || "/" });
-              this.loading = false;
-            })
-            .catch(err => {
-              console.error(err);
-              this.loading = false;
             });
+            const redirect = this.$route.query.redirect;
+            this.$router.push({ path: redirect || "/" });
+          } catch (err) {
+            console.error(err);
+          } finally {
+            this.loading = false;
+          }
         } else {
           return false;
         }

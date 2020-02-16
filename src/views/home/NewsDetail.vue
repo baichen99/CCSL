@@ -55,11 +55,10 @@ export default {
     window.addEventListener("scroll", this.getScroll);
   },
   methods: {
-    getData() {
+    async getData() {
       const newsID = this.$route.params.id;
-      GetNews(newsID).then(res => {
-        this.data = res.data;
-      });
+      const res = await GetNews(newsID);
+      this.data = res.data;
     },
     getScroll() {
       this.scroll =

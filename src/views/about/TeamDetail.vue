@@ -37,11 +37,10 @@ export default {
     this.getData();
   },
   methods: {
-    getData() {
+    async getData() {
       const id = this.$route.params.id;
-      GetMember(id).then(res => {
-        this.data = res.data;
-      });
+      const res = await GetMember(id);
+      this.data = res.data;
     }
   }
 };

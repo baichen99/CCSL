@@ -56,15 +56,14 @@ export default {
     this.getList();
   },
   methods: {
-    getList() {
+    async getList() {
       const lang = this.$i18n.locale;
       this.params.language = lang;
       const column = this.$route.params.column;
       this.params.column = column;
-      GetNewsList(this.params).then(res => {
-        this.list = res.data;
-        this.total = res.total;
-      });
+      const res = await GetNewsList(this.params);
+      this.list = res.data;
+      this.total = res.total;
     },
     showDetail(item) {
       if (item.type === "link") {

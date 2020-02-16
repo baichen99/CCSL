@@ -25,11 +25,14 @@ export default {
     this.initData();
   },
   methods: {
-    initData() {
+    async initData() {
       const lang = this.$i18n.locale;
-      GetAppInfo(`introduction-${lang}`).then(res => {
+      try {
+        const res = await GetAppInfo(`introduction-${lang}`);
         this.introduction = res.data;
-      });
+      } catch (err) {
+        console.error(err);
+      }
     }
   }
 };
