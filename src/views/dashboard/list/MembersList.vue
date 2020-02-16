@@ -64,7 +64,11 @@ export default {
           prop: "type",
           label: this.$t("Type"),
           width: "200px",
-          formatter: row => this.$t(this.memberTypes[row.type].name)
+          formatter: row =>
+            this.$t(
+              this.$options.filters.getObjectItem(this.memberTypes, row.type)
+                .text
+            )
         },
         {
           prop: "employer",

@@ -12,7 +12,7 @@
 
         <el-table-column :label="$t('Type')" align="center" width="180px">
           <template slot-scope="{row}">
-            <span>{{ $t(memberTypes[row.type].name) }}</span>
+            <span>{{ $t($options.filters.getObjectItem(memberTypes,row.type).text) }}</span>
           </template>
         </el-table-column>
 
@@ -25,7 +25,9 @@
 
         <el-table-column :label="$t('Degree')" align="center" width="100px">
           <template slot-scope="{row}">
-            <span v-if="row.degree">{{ $t(memberDegrees[row.degree].name) }}</span>
+            <span
+              v-if="row.degree"
+            >{{ $t($options.filters.getObjectItem(memberDegrees,row.degree).text) }}</span>
           </template>
         </el-table-column>
 

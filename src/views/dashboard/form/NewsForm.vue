@@ -6,7 +6,7 @@
     </el-form-item>
 
     <el-form-item :label="$t('Language')" prop="language">
-      <language-selector v-model="formData.language" />
+      <simple-selector v-model="formData.language" :options="languageTypes" />
     </el-form-item>
 
     <el-form-item :label="$t('Title')" prop="title">
@@ -14,7 +14,7 @@
     </el-form-item>
 
     <el-form-item :label="$t('State')" prop="state">
-      <news-state-selector v-model="formData.state" />
+      <simple-selector v-model="formData.state" :options="newsState" />
     </el-form-item>
 
     <el-form-item :label="$t('Date')" prop="date">
@@ -22,11 +22,11 @@
     </el-form-item>
 
     <el-form-item :label="$t('Column')" prop="column">
-      <news-column-selector v-model="formData.column" />
+      <simple-selector v-model="formData.column" :options="newsColumns" />
     </el-form-item>
 
     <el-form-item :label="$t('Type')" prop="type">
-      <news-type-selector v-model="formData.type" />
+      <simple-selector v-model="formData.type" :options="newsTypes" />
     </el-form-item>
 
     <el-form-item v-if="formData.type==='document'" :label="$t('Content')">
@@ -53,10 +53,8 @@
 </i18n>
 
 <script>
-import NewsStateSelector from "@/components/form/NewsStateSelector";
-import NewsTypeSelector from "@/components/form/NewsTypeSelector";
-import NewsColumnSelector from "@/components/form/NewsColumnSelector";
-import LanguageSelector from "@/components/form/LanguageSelector";
+import { mapGetters } from "vuex";
+import SimpleSelector from "@/components/form/SimpleSelector.vue";
 import RichTextEditor from "@/components/form/RichTextEditor";
 import DatePicker from "@/components/form/DatePicker";
 
@@ -64,10 +62,7 @@ import formMixin from "./formMixin";
 export default {
   name: "NewsForm",
   components: {
-    NewsStateSelector,
-    NewsTypeSelector,
-    NewsColumnSelector,
-    LanguageSelector,
+    SimpleSelector,
     RichTextEditor,
     DatePicker
   },
@@ -104,6 +99,9 @@ export default {
         ]
       }
     };
+  },
+  computed: {
+    ...mapGetters(["newsColumns", "newsState", "newsTypes", "languageTypes"])
   }
 };
 </script>

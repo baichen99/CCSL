@@ -31,13 +31,27 @@
     <el-collapse-transition>
       <el-card v-show="advancedSearch && showAdvance" shadow="never" class="advance">
         <div class="search-options">
-          <gender-selector v-model="searchParams.gender" />
-          <handshape-selector v-model="searchParams.leftHandshapeID" orientation="left" />
-          <handshape-selector v-model="searchParams.rightHandshapeID" orientation="right" />
-          <pos-selector v-model="searchParams.pos" />
-          <city-selector v-model="searchParams.regionID" />
-          <word-formation-selector v-model="searchParams.wordFormation" />
-          <morphemes-input v-model="searchParams.morpheme" style="width:200px" />
+          <!-- 
+          <gender-selector v-model="searchParams.gender" size="small" />
+          <pos-selector v-model="searchParams.pos" size="small" />
+          <word-formation-selector v-model="searchParams.wordFormation" size="small" />-->
+          <handshape-selector
+            v-model="searchParams.leftHandshapeID"
+            size="small"
+            orientation="left"
+          />
+          <handshape-selector
+            v-model="searchParams.rightHandshapeID"
+            size="small"
+            orientation="right"
+          />
+          <city-selector v-model="searchParams.regionID" size="small" />
+          <simple-selector
+            v-model="searchParams.wordFormation"
+            size="small"
+            :options="wordFormations"
+          />
+          <morphemes-input v-model="searchParams.morpheme" size="small" style="width:200px" />
         </div>
       </el-card>
     </el-collapse-transition>
@@ -57,11 +71,10 @@
 
 
 <script>
+import { mapGetters } from "vuex";
+import SimpleSelector from "@/components/form/SimpleSelector.vue";
 import HandshapeSelector from "@/components/form/HandshapeSelector.vue";
 import CitySelector from "@/components/form/CitySelector.vue";
-import GenderSelector from "@/components/form/GenderSelector.vue";
-import PosSelector from "@/components/form/PosSelector.vue";
-import WordFormationSelector from "@/components/form/WordFormationSelector.vue";
 import MorphemesInput from "@/components/form/MorphemesInput.vue";
 
 export default {
@@ -69,10 +82,8 @@ export default {
   components: {
     CitySelector,
     HandshapeSelector,
-    GenderSelector,
-    PosSelector,
-    WordFormationSelector,
-    MorphemesInput
+    MorphemesInput,
+    SimpleSelector
   },
   model: {
     prop: "params",
@@ -96,6 +107,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["wordFormations", "genderTypes"]),
     searchParams: {
       get() {
         return this.params;

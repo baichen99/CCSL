@@ -8,23 +8,6 @@ const SET_PERFORMER = "SET_PERFORMER";
 const SET_HANDSHAPE = "SET_HANDSHAPE";
 
 const state = {
-  wordPosTypes: [
-    "名词",
-    "动词/名词",
-    "助动词",
-    "数词",
-    "量词",
-    "名词/形容词",
-    "动词",
-    "连词",
-    "形容词/动词",
-    "疑问词",
-    "介词",
-    "副词",
-    "代词",
-    "形容词/副词",
-    "形容词"
-  ],
   wordInitial: [
     "A",
     "B",
@@ -52,79 +35,132 @@ const state = {
     "Z"
   ],
   wordFormations: {
-    compound: { name: "CompoundWord" },
-    simple: { name: "SimpleWord" }
+    data: [
+      { text: "CompoundWord", value: "compound" },
+      { text: "SimpleWord", value: "simple" }
+    ],
+    placeholder: {
+      "zh-CN": "请选择构词方式",
+      "en-US": "Select word formation"
+    }
   },
   userRoles: {
-    super: { name: "SuperAdmin", color: "danger" },
-    admin: { name: "Admin", color: "warning" },
-    student: { name: "Student", color: "info" },
-    dbuser: { name: "DatabaseUser", color: "" },
-    teacher: { name: "Teacher", color: "success" }
+    data: [
+      { text: "SuperAdmin", value: "super", color: "danger" },
+      { text: "Admin", value: "admin", color: "warning" },
+      { text: "DatabaseUser", value: "dbuser", color: "" },
+      { text: "Teacher", value: "teacher", color: "success" },
+      { text: "Student", value: "student", color: "info" }
+    ], placeholder: {
+      "zh-CN": "请选择用户角色",
+      "en-US": "Select user role"
+    }
   },
   userState: {
-    active: { name: "Active", color: "success" },
-    inactive: { name: "Inactive", color: "warning" }
+    data: [
+      { text: "Inactive", value: "inactive", color: "warning" },
+      { text: "Active", value: "active", color: "success" }
+    ],
+    placeholder: {
+      "zh-CN": "请选择账号状态",
+      "en-US": "Select user state"
+    }
   },
   genderTypes: {
-    M: { name: "Male" },
-    F: { name: "Female" }
+    data: [
+      { text: "Male", value: "M" },
+      { text: "Female", value: "F" }
+    ],
+    placeholder: {
+      "zh-CN": "请选择性别",
+      "en-US": "Select gender"
+    }
   },
   newsColumns: {
-    news: { icon: "news", name: "NewsColumn" },
-    activity: { icon: "activity", name: "ActivityColumn" },
-    notice: { icon: "notice", name: "NoticeColumn" },
-    research: { icon: "research", name: "ResearchColumn" }
+    data: [
+      { text: "NewsColumn", value: "news", icon: "news" },
+      { text: "ActivityColumn", value: "activity", icon: "activity" },
+      { text: "NoticeColumn", value: "notice", icon: "notice" },
+      { text: "ResearchColumn", value: "research", icon: "research" }
+    ],
+    placeholder: {
+      "zh-CN": "请选择新闻栏目",
+      "en-US": "Select news column"
+    }
   },
   newsState: {
-    draft: { color: "warning", name: "Draft" },
-    published: { color: "success", name: "Published" }
+    data: [
+      { text: "Draft", value: "draft", color: "warning" },
+      { text: "Published", value: "published", color: "success" }
+    ],
+    placeholder: {
+      "zh-CN": "请选择新闻状态",
+      "en-US": "Select news state"
+    }
   },
   newsTypes: {
-    link: { name: "Link" },
-    document: { name: "Document" }
+    data: [
+      { text: "Link", value: "link" },
+      { text: "Document", value: "document" }
+    ],
+    placeholder: {
+      "zh-CN": "请选择新闻类型",
+      "en-US": "Select news type"
+    }
   },
   memberTypes: {
-    consultant: {
-      name: "SeniorConsultant"
-    },
-    researchFellow: {
-      name: "ResearchFellow"
-    },
-    assistantResearchFellow: {
-      name: "AssistantResearchFellow"
-    },
-    signLanguageTranslator: {
-      name: "SignLanguageTranslator"
-    },
-    researchAssistantDeaf: {
-      name: "ResearchAssistantDeaf"
-    },
-    postgraduate: {
-      name: "Postgraduate"
+    data: [
+      { text: "SeniorConsultant", value: "consultant" },
+      { text: "ResearchFellow", value: "researchFellow" },
+      { text: "AssistantResearchFellow", value: "assistantResearchFellow" },
+      { text: "SignLanguageTranslator", value: "signLanguageTranslator" },
+      { text: "ResearchAssistantDeaf", value: "researchAssistantDeaf" },
+      { text: "Postgraduate", value: "postgraduate" }
+    ],
+    placeholder: {
+      "zh-CN": "请选择成员类型",
+      "en-US": "Select member type"
     }
   },
   memberDegrees: {
-    bachelor: { name: "Bachelor" },
-    master: { name: "Master" },
-    doctor: { name: "Doctor" }
+    data: [
+      { text: "Bachelor", value: "bachelor" },
+      { text: "Master", value: "master" },
+      { text: "Doctor", value: "doctor" }
+    ],
+    placeholder: {
+      "zh-CN": "请选择成员学位",
+      "en-US": "Select meber degree"
+    }
   },
   languageTypes: {
-    "zh-CN": { name: "Chinese" },
-    "en-US": { name: "English" }
+    data: [
+      { text: "Chinese", value: "zh-CN" },
+      { text: "English", value: "en-US" }
+    ],
+    placeholder: {
+      "zh-CN": "请选择语言",
+      "en-US": "Select language"
+    }
   },
   partOfSpeech: {
-    noun: { name: "Noun" },
-    verb: { name: "Verb" },
-    adjective: { name: "Adjective" },
-    auxiliary: { name: "Auxiliary" },
-    numeral: { name: "Numeral" },
-    classifier: { name: "Classifier" },
-    pronoun: { name: "Pronoun" },
-    conjunction: { name: "Conjunction" },
-    interrogative: { name: "Interrogative" },
-    adverb: { name: "Adverb" },
-    prepositions: { name: "Prepositions" }
+    data: [
+      { text: "Noun", value: "noun" },
+      { text: "Verb", value: "verb" },
+      { text: "Adjective", value: "adjective" },
+      { text: "Auxiliary", value: "auxiliary" },
+      { text: "Numeral", value: "numeral" },
+      { text: "Classifier", value: "classifier" },
+      { text: "Pronoun", value: "pronoun" },
+      { text: "Conjunction", value: "conjunction" },
+      { text: "Interrogative", value: "interrogative" },
+      { text: "Adverb", value: "adverb" },
+      { text: "Prepositions", value: "prepositions" }
+    ],
+    placeholder: {
+      "zh-CN": "请选择词性",
+      "en-US": "Select part of speech"
+    }
   },
   handshapes: {},
   lexicons: {},

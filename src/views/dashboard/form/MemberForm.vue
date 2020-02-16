@@ -13,11 +13,11 @@
     </el-form-item>
 
     <el-form-item :label="$t('Type')" prop="type">
-      <member-type-selector v-model="formData.type" />
+      <simple-selector v-model="formData.type" :options="memberTypes" />
     </el-form-item>
 
     <el-form-item :label="$t('Degree')" prop="degree">
-      <member-degree-selector v-model="formData.degree" />
+      <simple-selector v-model="formData.degree" :options="memberDegrees" />
     </el-form-item>
 
     <el-form-item :label="$t('EmployerZh')" prop="employerZh">
@@ -60,18 +60,17 @@
 </i18n>
 
 <script>
+import { mapGetters } from "vuex";
 import ImageUploader from "@/components/form/ImageUploader";
 import RichTextEditor from "@/components/form/RichTextEditor";
-import MemberTypeSelector from "@/components/form/MemberTypeSelector";
-import MemberDegreeSelector from "@/components/form/MemberDegreeSelector";
+import SimpleSelector from "@/components/form/SimpleSelector";
 import formMixin from "./formMixin";
 export default {
   name: "MemberForm",
   components: {
     ImageUploader,
     RichTextEditor,
-    MemberTypeSelector,
-    MemberDegreeSelector
+    SimpleSelector
   },
   mixins: [formMixin],
   data() {
@@ -84,6 +83,9 @@ export default {
         nameEn: [{ required: true, message: "请输入英文姓名", trigger: "blur" }]
       }
     };
+  },
+  computed: {
+    ...mapGetters(["memberTypes", "memberDegrees"])
   }
 };
 </script>

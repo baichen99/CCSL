@@ -22,7 +22,7 @@ type FileController struct {
 	Context iris.Context
 }
 
-const maxSize = 5 << 20 // 5MB
+const maxSize = 500 << 20 // 500MB
 
 // BeforeActivation will register routes for controllers
 func (c *FileController) BeforeActivation(app mvc.BeforeActivation) {

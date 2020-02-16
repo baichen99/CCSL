@@ -8,7 +8,9 @@ const getters = {
   avatar: state => state.user.avatar,
   name: state => state.user.name,
   roles: state => state.user.roles,
-  wordPosTypes: state => state.data.wordPosTypes,
+  handshapes: state => state.data.handshapes,
+  lexicons: state => state.data.lexicons,
+  performers: state => state.data.performers,
   wordInitial: state => state.data.wordInitial,
   wordFormations: state => state.data.wordFormations,
   userRoles: state => state.data.userRoles,
@@ -21,9 +23,6 @@ const getters = {
   memberTypes: state => state.data.memberTypes,
   memberDegrees: state => state.data.memberDegrees,
   partOfSpeech: state => state.data.partOfSpeech,
-  handshapes: state => state.data.handshapes,
-  lexicons: state => state.data.lexicons,
-  performers: state => state.data.performers
 };
 
 export default getters;

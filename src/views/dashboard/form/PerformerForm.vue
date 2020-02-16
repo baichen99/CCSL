@@ -9,19 +9,20 @@
     </el-form-item>
 
     <el-form-item :label="$t('Gender')" prop="gender">
-      <gender-selector v-model="formData.gender" />
+      <simple-selector v-model="formData.gender" :options="genderTypes" />
     </el-form-item>
   </el-form>
 </template>
 
 <script>
-import GenderSelector from "@/components/form/GenderSelector";
+import { mapGetters } from "vuex";
+import SimpleSelector from "@/components/form/SimpleSelector";
 import CitySelector from "@/components/form/CitySelector";
 import formMixin from "./formMixin";
 export default {
   name: "PerformerForm",
   components: {
-    GenderSelector,
+    SimpleSelector,
     CitySelector
   },
   mixins: [formMixin],
@@ -33,6 +34,9 @@ export default {
         gender: [{ required: true, message: "请选择性别", trigger: "blur" }]
       }
     };
+  },
+  computed: {
+    ...mapGetters(["genderTypes"])
   }
 };
 </script>

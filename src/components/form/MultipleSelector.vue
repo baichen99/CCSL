@@ -1,46 +1,43 @@
 <template>
   <el-select
     v-model="data"
-    :disabled="disabled"
-    :placeholder="$t('tip')"
+    :placeholder="options.placeholder[$i18n.locale]"
+    :size="size"
     clearable
+    multiple
     @clear="$emit('clear')"
   >
-    <el-option v-for="(item, key) in userState" :key="key" :label="$t(item.name)" :value="key" />
+    <el-option
+      v-for="item in options.data"
+      :key="item.value"
+      :label="$t(item.text)"
+      :value="item.value"
+    />
   </el-select>
 </template>
 
-<i18n>
-{
-  "zh-CN": {
-    "tip": "请选择用户状态"
-  },
-  "en-US": {
-    "tip": "Select state"
-  }
-}
-</i18n>
-
 <script>
-import { mapGetters } from "vuex";
 export default {
-  name: "UserStateSelector",
+  name: "MultipleSelector",
   model: {
     prop: "value",
     event: "update"
   },
   props: {
     value: {
+      type: Array,
+      default: () => []
+    },
+    size: {
       type: String,
       default: () => ""
     },
-    disabled: {
-      type: Boolean,
-      default: false
+    options: {
+      type: Object,
+      default: () => ({})
     }
   },
   computed: {
-    ...mapGetters(["userState"]),
     data: {
       get() {
         return this.value;

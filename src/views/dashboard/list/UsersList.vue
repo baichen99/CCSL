@@ -37,8 +37,8 @@
       <el-tag
         size="small"
         :disable-transitions="true"
-        :type="userState[row.state].color"
-      >{{ $t(userState[row.state].name) }}</el-tag>
+        :type="$options.filters.getObjectItem(userState, row.state).color"
+      >{{ $t($options.filters.getObjectItem(userState, row.state).text) }}</el-tag>
     </template>
     <template #roles="{row}">
       <el-tag
@@ -46,8 +46,8 @@
         :key="item"
         size="small"
         :disable-transitions="true"
-        :type="userRoles[item].color"
-      >{{ $t(userRoles[item].name) }}</el-tag>
+        :type="$options.filters.getObjectItem(userRoles, item).color"
+      >{{ $t($options.filters.getObjectItem(userRoles, item).text) }}</el-tag>
     </template>
   </list-view>
 </template>
@@ -104,13 +104,7 @@ export default {
           slot: "roles",
           label: this.$t("UserRole"),
           width: "200px",
-          filters: [
-            { text: this.$t("SuperAdmin"), value: "super" },
-            { text: this.$t("Admin"), value: "admin" },
-            { text: this.$t("Student"), value: "student" },
-            { text: this.$t("Teacher"), value: "teacher" },
-            { text: this.$t("DatabaseUser"), value: "dbuser" }
-          ]
+          filters: []
         },
         {
           prop: "username",

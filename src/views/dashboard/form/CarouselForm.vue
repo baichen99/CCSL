@@ -18,7 +18,7 @@
     </el-form-item>
 
     <el-form-item :label="$t('State')" prop="state">
-      <news-state-selector v-model="formData.state" />
+      <simple-selector v-model="formData.state" :options="newsState" />
     </el-form-item>
   </el-form>
 </template>
@@ -37,14 +37,15 @@
 </i18n>
 
 <script>
+import { mapGetters } from "vuex";
 import ImageUploader from "@/components/form/ImageUploader";
-import NewsStateSelector from "@/components/form/NewsStateSelector";
+import SimpleSelector from "@/components/form/SimpleSelector";
 import formMixin from "./formMixin";
 export default {
   name: "CarouselForm",
   components: {
     ImageUploader,
-    NewsStateSelector
+    SimpleSelector
   },
   mixins: [formMixin],
   data() {
@@ -60,6 +61,9 @@ export default {
         state: [{ required: true, message: "请选择状态", trigger: "blur" }]
       }
     };
+  },
+  computed: {
+    ...mapGetters(["newsState"])
   }
 };
 </script>

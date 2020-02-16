@@ -30,7 +30,10 @@
     </template>
 
     <template #state="{row}">
-      <el-tag size="small" :type="newsState[row.state].color">{{ $t(newsState[row.state].name) }}</el-tag>
+      <el-tag
+        size="small"
+        :type="$options.filters.getObjectItem(newsState,row.state).color"
+      >{{ $t($options.filters.getObjectItem(newsState,row.state).text) }}</el-tag>
     </template>
 
     <template #importance="{row}">
@@ -100,7 +103,10 @@ export default {
             { text: this.$t("NoticeColumn"), value: "notice" },
             { text: this.$t("ResearchColumn"), value: "research" }
           ],
-          formatter: row => this.$t(this.newsColumns[row.column].name)
+          formatter: row =>
+            this.$t(
+              this.newsColumns.data.find(item => row.column === item.value).text
+            )
         },
         {
           prop: "title",
@@ -116,7 +122,10 @@ export default {
             { text: this.$t("Link"), value: "link" },
             { text: this.$t("Document"), value: "document" }
           ],
-          formatter: row => this.$t(this.newsTypes[row.type].name)
+          formatter: row =>
+            this.$t(
+              this.$options.filters.getObjectItem(this.newsTypes, row.type).text
+            )
         },
         {
           prop: "language",
@@ -126,7 +135,13 @@ export default {
             { text: this.$t("Chinese"), value: "zh-CN" },
             { text: this.$t("English"), value: "en-US" }
           ],
-          formatter: row => this.$t(this.languageTypes[row.language].name)
+          formatter: row =>
+            this.$t(
+              this.$options.filters.getObjectItem(
+                this.languageTypes,
+                row.language
+              ).text
+            )
         },
         {
           slot: "importance",

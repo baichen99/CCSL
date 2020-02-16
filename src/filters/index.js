@@ -25,3 +25,7 @@ Vue.filter("getRegionName", regionID => {
     }
   }
 });
+
+Vue.filter("getObjectItem", (options, data) => {
+  return options.data.find(item => item.value === data)
+})

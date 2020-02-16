@@ -91,7 +91,10 @@ export default {
               value: "F"
             }
           ],
-          formatter: row => this.$t(this.genderTypes[row.gender].name)
+          formatter: row =>
+            this.$t(
+              this.genderTypes.data.find(item => item.value === row.gender).text
+            )
         },
         {
           prop: "region",

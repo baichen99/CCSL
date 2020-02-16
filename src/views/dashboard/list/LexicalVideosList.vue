@@ -216,7 +216,9 @@ export default {
       const rightHandshapes = [];
       const partOfSpeech = [];
       this.lexicons[item.lexiconID].pos.map(k => {
-        const v = this.$t(this.partOfSpeech[k].name);
+        const v = this.$t(
+          this.$options.filters.getObjectItem(this.partOfSpeech, k).name
+        );
         partOfSpeech.push(v);
       });
       item.leftHandshapesID.map(id => {

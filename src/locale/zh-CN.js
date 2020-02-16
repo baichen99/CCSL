@@ -72,7 +72,7 @@ export default {
   Publish: "发布",
   Recall: "撤回",
   Draft: "草稿",
-  Published: "已发布",
+  Published: "发布",
   Column: "栏目",
   Type: "类型",
   Link: "链接",

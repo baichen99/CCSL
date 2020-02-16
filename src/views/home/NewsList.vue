@@ -1,8 +1,8 @@
 <template>
   <el-card class="news-list">
     <div slot="header" class="list-header">
-      <svg-icon :icon-class="newsColumns[params.column].icon" />
-      <h2>{{ $t(newsColumns[params.column].name) }}</h2>
+      <svg-icon :icon-class="$options.filters.getObjectItem(newsColumns, params.column).icon" />
+      <h2>{{ $t($options.filters.getObjectItem(newsColumns, params.column).text) }}</h2>
     </div>
 
     <div class="list-content">

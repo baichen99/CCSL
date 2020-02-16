@@ -5,7 +5,7 @@
     </el-form-item>
 
     <el-form-item :label="$t('UserRole')" prop="roles">
-      <user-roles-selector v-model="formData.roles" />
+      <multiple-selector v-model="formData.roles" :options="userRoles" />
     </el-form-item>
 
     <el-form-item :label="$t('Account')" prop="username">
@@ -13,7 +13,7 @@
     </el-form-item>
 
     <el-form-item :label="$t('AccountState')" prop="state">
-      <user-state-selector v-model="formData.state" />
+      <simple-selector v-model="formData.state" :options="userState" />
     </el-form-item>
   </el-form>
 </template>
@@ -32,14 +32,15 @@
 </i18n>
 
 <script>
-import UserRolesSelector from "@/components/form/UserRolesSelector";
-import UserStateSelector from "@/components/form/UserStateSelector";
+import { mapGetters } from "vuex";
+import MultipleSelector from "@/components/form/MultipleSelector";
+import SimpleSelector from "@/components/form/SimpleSelector";
 import formMixin from "./formMixin";
 export default {
   name: "UserForm",
   components: {
-    UserRolesSelector,
-    UserStateSelector
+    MultipleSelector,
+    SimpleSelector
   },
   mixins: [formMixin],
   data() {
@@ -61,6 +62,9 @@ export default {
         ]
       }
     };
+  },
+  computed: {
+    ...mapGetters(["userRoles", "userState"])
   }
 };
 </script>

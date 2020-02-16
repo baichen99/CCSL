@@ -236,7 +236,7 @@ export default {
       return false;
     }
   },
-  created() {
+  mounted() {
     this.$nextTick(() => {
       this.getList();
     });

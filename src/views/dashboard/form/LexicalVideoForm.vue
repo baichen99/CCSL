@@ -15,7 +15,11 @@
     </el-form-item>
 
     <el-form-item :label="$t('WordFormation')" prop="wordFormation">
-      <word-formation-selector v-model="formData.wordFormation" @update="resetMorpheme" />
+      <simple-selector
+        v-model="formData.wordFormation"
+        :options="wordFormations"
+        @update="resetMorpheme"
+      />
     </el-form-item>
 
     <el-form-item :label="$t('Morpheme')" prop="morpheme">
@@ -35,7 +39,7 @@
 <script>
 import { mapGetters } from "vuex";
 import VideoUploader from "@/components/video/VideoUploader";
-import WordFormationSelector from "@/components/form/WordFormationSelector";
+import SimpleSelector from "@/components/form/SimpleSelector.vue";
 import MorphemesPicker from "@/components/form/MorphemesPicker";
 import PerformerSelector from "@/components/form/PerformerSelector";
 import WordSelector from "@/components/form/WordSelector";
@@ -44,7 +48,7 @@ import formMixin from "./formMixin";
 export default {
   name: "LexicalVideoForm",
   components: {
-    WordFormationSelector,
+    SimpleSelector,
     MorphemesPicker,
     PerformerSelector,
     WordSelector,
@@ -63,7 +67,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["settings"])
+    ...mapGetters(["settings", "wordFormations"])
   },
 
   methods: {

@@ -23,7 +23,7 @@
             size="small"
             class="tag"
           >
-            <span>{{ $t(partOfSpeech[value].name) }}</span>
+            <span>{{ $t($options.filters.getObjectItem(partOfSpeech,value).text) }}</span>
           </el-tag>
         </span>
         <span class="tag-label">{{ $t("English") }}</span>

@@ -30,7 +30,10 @@
     </template>
 
     <template #state="{row}">
-      <el-tag size="small" :type="newsState[row.state].color">{{ $t(newsState[row.state].name) }}</el-tag>
+      <el-tag
+        size="small"
+        :type="$options.filters.getObjectItem(newsState,row.state).color"
+      >{{ $t($options.filters.getObjectItem(newsState,row.state).text) }}</el-tag>
     </template>
 
     <template #importance="{row}">

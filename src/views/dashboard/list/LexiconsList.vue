@@ -28,7 +28,7 @@
         size="small"
         class="tags"
       >
-        <span>{{ $t(partOfSpeech[value].name) }}</span>
+        <span>{{ $t($options.filters.getObjectItem(partOfSpeech, value).name) }}</span>
       </el-tag>
     </template>
   </list-view>
@@ -109,19 +109,20 @@ export default {
         value: item
       });
     });
-    for (let item in this.partOfSpeech) {
-      const data = this.partOfSpeech[item];
+    this.partOfSpeech.data.map(item => {
       this.columns[3].filters.push({
-        text: this.$t(data.name),
-        value: item
+        text: this.$t(item.text),
+        value: item.value
       });
-    }
+    });
   },
   methods: {
     exportConfig(item) {
       const partOfSpeech = [];
       item.pos.map(k => {
-        const v = this.$t(this.partOfSpeech[k].name);
+        const v = this.$t(
+          this.$options.filters.getObjectItem(this.partOfSpeech, k).name
+        );
         partOfSpeech.push(v);
       });
       return {
