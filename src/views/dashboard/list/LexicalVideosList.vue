@@ -141,7 +141,10 @@ export default {
           formatter: row =>
             this.performers[row.performerID]
               ? this.$t(
-                  this.genderTypes[this.performers[row.performerID].gender].name
+                  this.$options.filters.getObjectItem(
+                    this.genderTypes,
+                    this.performers[row.performerID].gender
+                  ).text
                 )
               : ""
         },
@@ -176,7 +179,12 @@ export default {
           ],
           formatter: row =>
             row.wordFormation
-              ? this.$t(this.wordFormations[row.wordFormation].name)
+              ? this.$t(
+                  this.$options.filters.getObjectItem(
+                    this.wordFormations,
+                    row.wordFormation
+                  ).text
+                )
               : this.$t("NoData")
         },
         {
@@ -215,12 +223,14 @@ export default {
       const leftHandshapes = [];
       const rightHandshapes = [];
       const partOfSpeech = [];
-      this.lexicons[item.lexiconID].pos.map(k => {
-        const v = this.$t(
-          this.$options.filters.getObjectItem(this.partOfSpeech, k).name
-        );
-        partOfSpeech.push(v);
-      });
+      if (this.lexicons[item.lexiconID]) {
+        this.lexicons[item.lexiconID].pos.map(k => {
+          const v = this.$t(
+            this.$options.filters.getObjectItem(this.partOfSpeech, k).text
+          );
+          partOfSpeech.push(v);
+        });
+      }
       item.leftHandshapesID.map(id => {
         const handshape = this.handshapes[id];
         leftHandshapes.push(handshape.name);
@@ -232,23 +242,46 @@ export default {
       return {
         [this.$t("CreatedAt")]: new Date(item.createdAt),
         [this.$t("UpdatedAt")]: new Date(item.updatedAt),
-        [this.$t("Initial")]: this.lexicons[item.lexiconID].initial,
-        [this.$t("Chinese")]: this.lexicons[item.lexiconID].chinese,
-        [this.$t("English")]: this.lexicons[item.lexiconID].english,
+        [this.$t("Initial")]: this.lexicons[item.lexiconID]
+          ? this.lexicons[item.lexiconID].initial
+          : this.$t("NoData"),
+        [this.$t("Chinese")]: this.lexicons[item.lexiconID]
+          ? this.lexicons[item.lexiconID].chinese
+          : this.$t("NoData"),
+        [this.$t("English")]: this.lexicons[item.lexiconID]
+          ? this.lexicons[item.lexiconID].english
+          : this.$t("NoData"),
         [this.$t("PoS")]: partOfSpeech.join("/"),
         [this.$t("WordFormation")]: item.wordFormation
-          ? this.$t(this.wordFormations[item.wordFormation].name)
+          ? this.$t(
+              this.$options.filters.getObjectItem(
+                this.wordFormations,
+                item.wordFormation
+              ).text
+            )
           : this.$t("NoData"),
-        [this.$t("Morpheme")]: item.morpheme.join(","),
+        [this.$t("Morpheme")]:
+          item.morpheme.length > 0
+            ? item.morpheme.join(",")
+            : this.$t("NoData"),
         [this.$t("LeftHandshape")]: leftHandshapes.join(","),
         [this.$t("RightHandshape")]: rightHandshapes.join(","),
-        [this.$t("Name")]: this.performers[item.performerID].name,
-        [this.$t("Gender")]: this.$t(
-          this.genderTypes[this.performers[item.performerID].gender].name
-        ),
-        [this.$t("Region")]: this.$options.filters.getRegionName(
-          this.performers[item.performerID].regionID
-        )
+        [this.$t("Name")]: this.performers[item.performerID]
+          ? this.performers[item.performerID].name
+          : this.$t("NoData"),
+        [this.$t("Gender")]: this.performers[item.performerID]
+          ? this.$t(
+              this.$options.filters.getObjectItem(
+                this.genderTypes,
+                this.performers[item.performerID].gender
+              ).text
+            )
+          : this.$t("NoData"),
+        [this.$t("Region")]: this.performers[item.performerID]
+          ? this.$options.filters.getRegionName(
+              this.performers[item.performerID].regionID
+            )
+          : this.$t("NoData")
       };
     }
   }

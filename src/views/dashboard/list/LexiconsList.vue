@@ -28,7 +28,7 @@
         size="small"
         class="tags"
       >
-        <span>{{ $t($options.filters.getObjectItem(partOfSpeech, value).name) }}</span>
+        <span>{{ $t($options.filters.getObjectItem(partOfSpeech, value).text) }}</span>
       </el-tag>
     </template>
   </list-view>
@@ -121,7 +121,7 @@ export default {
       const partOfSpeech = [];
       item.pos.map(k => {
         const v = this.$t(
-          this.$options.filters.getObjectItem(this.partOfSpeech, k).name
+          this.$options.filters.getObjectItem(this.partOfSpeech, k).text
         );
         partOfSpeech.push(v);
       });

@@ -9,7 +9,7 @@
     </el-form-item>
 
     <el-form-item label="词性" prop="pos">
-      <multi-pos-selector v-model="formData.pos" />
+      <multiple-selector v-model="formData.pos" :options="partOfSpeech" />
     </el-form-item>
 
     <el-form-item label="音序" prop="initial">
@@ -19,13 +19,14 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import formMixin from "./formMixin";
-import MultiPosSelector from "@/components/form/MultiPosSelector";
+import MultipleSelector from "@/components/form/MultipleSelector";
 import WordInitialSelector from "@/components/form/WordInitialSelector";
 export default {
   name: "LexiconForm",
   components: {
-    MultiPosSelector,
+    MultipleSelector,
     WordInitialSelector
   },
   mixins: [formMixin],
@@ -40,6 +41,9 @@ export default {
         initial: [{ required: true, message: "请选择音序", trigger: "blur" }]
       }
     };
+  },
+  computed: {
+    ...mapGetters(["partOfSpeech"])
   }
 };
 </script>

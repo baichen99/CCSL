@@ -139,7 +139,7 @@ export default {
   Action: "Action",
   Warning: "Warning",
   SuccessfulOperation: "Successful Operation",
-  CanceledOperation: "Operation Canceled",
+  FailedOperation: "Failed Operation",
   VideoNotFound: "No related videos found ~",
   View: "View",
   New: "New",

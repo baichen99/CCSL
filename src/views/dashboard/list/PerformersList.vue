@@ -115,7 +115,7 @@ export default {
         [this.$t("CreatedAt")]: new Date(item.createdAt),
         [this.$t("UpdatedAt")]: new Date(item.updatedAt),
         [this.$t("Name")]: item.name,
-        [this.$t("Gender")]: this.$t(this.genderTypes[item.gender].name),
+        [this.$t("Gender")]: this.$t(this.genderTypes[item.gender].text),
         [this.$t("Region")]: this.$options.filters.getRegionName(item.regionID)
       };
     }

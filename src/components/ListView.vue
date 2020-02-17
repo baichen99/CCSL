@@ -373,7 +373,7 @@ export default {
         }
         this.handleModifyItem();
       } catch (_) {
-        this.showCancleNotification();
+        this.showFailedNotification();
       } finally {
         this.loading = false;
       }
@@ -392,7 +392,7 @@ export default {
         }
         this.handleModifyItem();
       } catch (_) {
-        this.showCancleNotification();
+        this.showFailedNotification();
       } finally {
         this.loading = false;
       }
@@ -402,12 +402,12 @@ export default {
       const params = lodash.cloneDeep(this.params);
       params.limit = 0;
       try {
-        const res = await this.getListMethod(params, true);
+        const res = await this.getListMethod(params);
         const sheetData = res.data.map(this.exportListConfig);
         this.handleDownloadSheet(sheetData, this.entity);
       } catch (error) {
         console.error(error);
-        this.showCancleNotification();
+        this.showFailedNotification();
       } finally {
         this.loading = false;
       }
@@ -432,10 +432,10 @@ export default {
         title: this.$t("SuccessfulOperation")
       });
     },
-    showCancleNotification() {
+    showFailedNotification() {
       this.$notify({
-        type: "info",
-        title: this.$t("CanceledOperation")
+        type: "error",
+        title: this.$t("FailedOperation")
       });
     }
   }

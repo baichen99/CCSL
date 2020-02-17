@@ -39,87 +39,64 @@ const mutations = {
 };
 
 const actions = {
-  login({ commit }, user) {
-    const { username, password } = user;
-    return new Promise((resolve, reject) => {
-      Login({ username: username.trim(), password: password })
-        .then(response => {
-          const token = response.data;
-          commit(SET_TOKEN, token);
-          const user = JSON.parse(atob(token.split(".")[1]));
-          const userID = user.user;
-          GetUser(userID)
-            .then(res => {
-              const { data } = res;
-              if (!data) {
-                reject("身份校验失败，请重新登录");
-              }
-              commit(SET_ID, data.id);
-              commit(SET_NAME, data.name);
-              commit(SET_ROLES, data.roles);
-              commit(SET_USERNAME, data.username);
-              commit(SET_AVATAR, data.avatar);
-              resolve(data);
-            })
-            .catch(err => {
-              reject(err);
-            });
-        })
-        .catch(error => {
-          reject(error);
-        });
-    });
+  async login({ commit }, user) {
+    try {
+      const { username, password } = user;
+      const response = await Login({ username: username.trim(), password: password })
+      const token = response.data;
+      commit(SET_TOKEN, token);
+      const userToken = JSON.parse(atob(token.split(".")[1]));
+      const userID = userToken.user;
+      const res = await GetUser(userID)
+      const { data } = res;
+      if (!data) {
+        throw new Error("身份校验失败，请重新登录");
+      }
+      commit(SET_ID, data.id);
+      commit(SET_NAME, data.name);
+      commit(SET_ROLES, data.roles);
+      commit(SET_USERNAME, data.username);
+      commit(SET_AVATAR, data.avatar);
+    } catch (err) {
+      console.error(err)
+    }
   },
 
   logout({ commit }) {
-    return new Promise(resolve => {
-      commit(SET_ID, "");
-      commit(SET_NAME, "");
-      commit(SET_ROLES, []);
-      commit(SET_USERNAME, "");
-      commit(SET_AVATAR, "");
-      commit(SET_TOKEN, "");
-      router.push("/login");
-      resolve();
-    });
+    commit(SET_ID, "");
+    commit(SET_NAME, "");
+    commit(SET_ROLES, []);
+    commit(SET_USERNAME, "");
+    commit(SET_AVATAR, "");
+    commit(SET_TOKEN, "");
+    router.push("/login");
   },
 
-  getUserInfo({ dispatch, commit, state }) {
-    return new Promise((resolve, reject) => {
-      const userID = state.id;
-      GetUser(userID)
-        .then(res => {
-          const { data } = res;
-          commit(SET_ID, data.id);
-          commit(SET_NAME, data.name);
-          commit(SET_ROLES, data.roles);
-          commit(SET_USERNAME, data.username);
-          commit(SET_AVATAR, data.avatar);
-          resolve(res.data);
-        })
-        .catch(err => {
-          dispatch("logout");
-          reject(err);
-        });
-    });
+  async getUserInfo({ dispatch, commit, state }) {
+    const userID = state.id;
+    try {
+      const res = await GetUser(userID);
+      const { data } = res;
+      commit(SET_ID, data.id);
+      commit(SET_NAME, data.name);
+      commit(SET_ROLES, data.roles);
+      commit(SET_USERNAME, data.username);
+      commit(SET_AVATAR, data.avatar);
+    }
+    catch (err) {
+      dispatch("logout");
+    }
   },
 
-  refreshToken({ dispatch, commit, state }) {
-    return new Promise((resolve, reject) => {
-      if (state.token) {
-        RefreshToken()
-          .then(res => {
-            commit(SET_TOKEN, res.data);
-            resolve();
-          })
-          .catch(err => {
-            dispatch("logout");
-            reject(err);
-          });
-      } else {
-        resolve();
+  async refreshToken({ dispatch, commit, state }) {
+    if (state.token) {
+      try {
+        const res = await RefreshToken();
+        commit(SET_TOKEN, res.data);
+      } catch (err) {
+        dispatch("logout");
       }
-    });
+    }
   }
 };
 

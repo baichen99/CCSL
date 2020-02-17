@@ -138,7 +138,7 @@ export default {
   Action: "操作",
   Warning: "警告",
   SuccessfulOperation: "操作成功",
-  CanceledOperation: "已取消操作",
+  FailedOperation: "操作失败",
   VideoNotFound: "没有找到相关的视频哦～",
   View: "查看",
   New: "添加",

@@ -186,58 +186,40 @@ const mutations = {
 };
 
 const actions = {
-  getLexicons({ commit, state }, force) {
-    return new Promise((resolve, reject) => {
-      if (force || lodash.isEmpty(state.lexicons)) {
-        GetWordsList({ limit: 0 })
-          .then(res => {
-            const { data } = res;
-            commit(SET_LEXICON, data);
-            resolve();
-          })
-          .catch(err => {
-            reject(err);
-          });
-      } else {
-        resolve();
+  async getLexicons({ commit, state }, force) {
+    if (force || lodash.isEmpty(state.lexicons)) {
+      try {
+        const res = await GetWordsList({ limit: 0 })
+        const { data } = res;
+        commit(SET_LEXICON, data);
+      } catch (err) {
+        console.error(err)
       }
-    });
+    }
   },
 
-  getPerformers({ commit, state }, force) {
-    return new Promise((resolve, reject) => {
-      if (force || lodash.isEmpty(state.performers)) {
-        GetPerformersList({ limit: 0 })
-          .then(res => {
-            const { data } = res;
-            commit(SET_PERFORMER, data);
-            resolve();
-          })
-          .catch(err => {
-            reject(err);
-          });
-      } else {
-        resolve();
+  async getPerformers({ commit, state }, force) {
+    if (force || lodash.isEmpty(state.performers)) {
+      try {
+        const res = await GetPerformersList({ limit: 0 })
+        const { data } = res;
+        commit(SET_PERFORMER, data);
+      } catch (err) {
+        console.error(err)
       }
-    });
+    }
   },
 
-  getHandshapes({ commit, state }, force) {
-    return new Promise((resolve, reject) => {
-      if (force || lodash.isEmpty(state.handshapes)) {
-        GetHandshapesList({ limit: 0 })
-          .then(res => {
-            const { data } = res;
-            commit(SET_HANDSHAPE, data);
-            resolve();
-          })
-          .catch(err => {
-            reject(err);
-          });
-      } else {
-        resolve();
+  async getHandshapes({ commit, state }, force) {
+    if (force || lodash.isEmpty(state.handshapes)) {
+      try {
+        const res = await GetHandshapesList({ limit: 0 })
+        const { data } = res;
+        commit(SET_HANDSHAPE, data);
+      } catch (err) {
+        console.error(err)
       }
-    });
+    }
   }
 };
 
