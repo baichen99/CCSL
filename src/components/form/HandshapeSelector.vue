@@ -1,6 +1,14 @@
 <template>
-  <el-select v-model="data" clearable :size="size" :placeholder="tip" @clear="$emit('clear')">
-    <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
+  <el-select
+    v-model="data"
+    filterable
+    clearable
+    :size="size"
+    :placeholder="tip"
+    :loading="loading"
+    @clear="$emit('clear')"
+  >
+    <el-option v-for="item in options" :key="item.id" :value="item.id" :label="item.name">
       <span>{{ item.name }}</span>
       <img :src="settings.publicURL + item.image" :alt="item.name" />
     </el-option>
@@ -67,9 +75,16 @@ export default {
   },
   created() {
     this.$nextTick(async () => {
-      await this.$store.dispatch("data/getHandshapes");
-      const data = this.$store.state.data.handshapes;
-      this.options = Object.values(data);
+      this.loading = true;
+      try {
+        await this.$store.dispatch("data/getHandshapes");
+        const data = this.$store.state.data.handshapes;
+        this.options = Object.values(data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        this.loading = false;
+      }
     });
   }
 };

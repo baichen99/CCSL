@@ -1,11 +1,18 @@
 <template>
-  <el-select v-model="data" filterable clearable :placeholder="$t('tip')" :loading="loading">
+  <el-select
+    v-model="data"
+    filterable
+    clearable
+    :placeholder="$t('tip')"
+    :loading="loading"
+    @clear="$emit('clear')"
+  >
     <el-option
       v-for="item in options"
       :key="item.id"
       :value="item.id"
       :label="item.name"
-    >{{ item.name }} - {{ $t(genderTypes[item.gender].name) }} - {{ item.regionID | getRegionName }}</el-option>
+    >{{ item.name }} - {{ $t($options.filters.getObjectItem(genderTypes,item.gender).text) }} - {{ item.regionID | getRegionName }}</el-option>
   </el-select>
 </template>
 
@@ -54,9 +61,15 @@ export default {
   created() {
     this.$nextTick(async () => {
       this.loading = true;
-      await this.$store.dispatch("data/getPerformers");
-      this.options = Object.values(this.$store.state.data.performers);
-      this.loading = false;
+      try {
+        await this.$store.dispatch("data/getPerformers");
+        const data = this.$store.state.data.performers;
+        this.options = Object.values(data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        this.loading = false;
+      }
     });
   }
 };

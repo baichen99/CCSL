@@ -64,6 +64,7 @@ export default {
       type: String,
       required: true
     },
+    // Allow all images or svg image
     type: {
       type: String,
       default: "all",
@@ -71,6 +72,7 @@ export default {
         return ["all", "svg"].indexOf(value) !== -1;
       }
     },
+    // Max size, default 2MB
     size: {
       type: Number,
       default: 2
