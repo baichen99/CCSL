@@ -18,12 +18,17 @@ type ClassController struct {
 
 // BeforeActivation will register routes for controllers
 func (c *ClassController) BeforeActivation(app mvc.BeforeActivation) {
+	app.Router().Use(middlewares.CheckToken)
 	app.Handle(iris.MethodGet, "/", "GetClassList")
 	app.Handle(iris.MethodGet, "/{id: string}", "GetClass")
-	app.Router().Use(middlewares.CheckToken, middlewares.CheckUserRole([]string{configs.RoleSuperUser}))
+	app.Router().Use(middlewares.CheckUserRole([]string{configs.RoleSuperUser}))
 	app.Handle(iris.MethodPost, "/", "CreateClass")
 	app.Handle(iris.MethodPut, "/{id: string}", "UpdateClass")
 	app.Handle(iris.MethodDelete, "/{id: string}", "DeleteClass")
+	app.Handle(iris.MethodPost, "/{id: string}/teachers/{uid: string}", "CreateTeacher")
+	app.Handle(iris.MethodDelete, "/{id: string}/teachers/{uid: string}", "DeleteTeacher")
+	app.Handle(iris.MethodPost, "/{id: string}/students", "CreateStudent")
+	app.Handle(iris.MethodDelete, "/{id: string}/students/{uid: string}", "DeleteStudent")
 }
 
 // GetClassList GET /classes
@@ -63,7 +68,7 @@ func (c *ClassController) GetClassList() {
 	}
 	c.Context.JSON(GetClassListResponse{
 		GetListResponse{
-			sucess,
+			success,
 			listParams.Page,
 			listParams.Limit,
 			count,
@@ -209,4 +214,33 @@ func (c *ClassController) DeleteClass() {
 
 	// Returns with 204 No Content status.
 	c.Context.StatusCode(iris.StatusNoContent)
+}
+
+func (c *ClassController) CreateTeacher() {
+	defer c.Context.Next()
+	// id := c.Context.Params().Get("id") class id
+	// uid := c.Context.Params().Get("uid") user id
+	// 将uid的老师添加到id班级
+}
+
+func (c *ClassController) DeleteTeacher() {
+	defer c.Context.Next()
+	// id := c.Context.Params().Get("id") class id
+	// uid := c.Context.Params().Get("uid") user id
+	// 将uid的老师从id班级中删除
+}
+
+func (c *ClassController) CreateStudent() {
+	defer c.Context.Next()
+	// id := c.Context.Params().Get("id") class id
+	// 提交的数据为 ClassStudentCreateForm表单
+	// 如果username已经存在，则将该用户添加到id班级
+	// 如果username不存在，那么创建一个用户，并设置用户权限为学生，再将该用户添加到id班级
+}
+
+func (c *ClassController) DeleteStudent() {
+	defer c.Context.Next()
+	// id := c.Context.Params().Get("id") class id
+	// uid := c.Context.Params().Get("uid") user id
+	// 将uid的学生从id班级中删除
 }

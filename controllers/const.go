@@ -371,6 +371,11 @@ type ClassUpdateForm struct {
 	Resources *string `json:"resources"  validate:"omitempty"`
 }
 
+type ClassStudentCreateForm struct {
+	Username string `json:"username" validate:"required,numeric|email"`
+	Name     string `json:"name" validate:"required"`
+}
+
 // GetClassListResponse Response for GetClassList
 type GetClassListResponse struct {
 	GetListResponse
@@ -379,8 +384,8 @@ type GetClassListResponse struct {
 
 // GetClassResponse Response for get class
 type GetClassResponse struct {
-	SuccessResponse
-	Data models.Class `json:"data"`
+	Message string       `json:"message" example:"success"`
+	Data    models.Class `json:"data"`
 }
 
 // >>> COURSE <<<
