@@ -89,17 +89,19 @@ func (c *LexicalVideoController) GetLexicalVideosList() {
 		return
 	}
 
-	c.Context.JSON(iris.Map{
-		message: success,
-		page:    listParams.Page,
-		limit:   listParams.Limit,
-		total:   count,
-		data:    videos,
+	c.Context.JSON(GetLexicalVideosListResponse{
+		GetListResponse{
+			success,
+			listParams.Page,
+			listParams.Limit,
+			count,
+		},
+		videos,
 	})
 }
 
-// GetVideosListResponse Response for GetLexicalVideosList
-type GetVideosListResponse struct {
+// GetLexicalVideosListResponse Response for GetLexicalVideosList
+type GetLexicalVideosListResponse struct {
 	GetListResponse
 	Data []models.LexicalVideo `json:"data"`
 }
@@ -122,24 +124,27 @@ func (c *LexicalVideoController) CreateLexicalVideo() {
 	}
 	// Return 201 Created
 	c.Context.StatusCode(iris.StatusCreated)
-	c.Context.JSON(iris.Map{
-		message: success,
-	})
+	c.Context.JSON(SuccessResponse{success})
 
 }
 
 // GetLexicalVideo GET /lexical/videos/{id:string}
 func (c *LexicalVideoController) GetLexicalVideo() {
 	defer c.Context.Next()
-	videoID := c.Context.Params().Get("id")
-	video, err := c.LexicalVideoService.GetLexicalVideo(videoID)
+	id := c.Context.Params().Get("id")
+	video, err := c.LexicalVideoService.GetLexicalVideo(id)
 	if err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "LexicalVideoService::GetLexicalVideo", errSQL)
 	}
-	c.Context.JSON(iris.Map{
-		message: success,
-		data:    video,
+	c.Context.JSON(GetLexicalVideoResponse{
+		success,
+		video,
 	})
+}
+
+type GetLexicalVideoResponse struct {
+	Message string              `json:"message" example:"success"`
+	Data    models.LexicalVideo `json:"data"`
 }
 
 // UpdateLexicalVideo PUT /lexical/videos/{id:string}
@@ -147,7 +152,7 @@ func (c *LexicalVideoController) UpdateLexicalVideo() {
 	defer c.Context.Next()
 
 	// Getting ID from parameters in the URL
-	videoID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
 	var form LexicalVideoUpdateForm
 
 	// Read JSON from request and validate request
@@ -159,7 +164,7 @@ func (c *LexicalVideoController) UpdateLexicalVideo() {
 	updateData := utils.MakeUpdateData(form)
 
 	// PSQL - Update of the given ID
-	if err := c.LexicalVideoService.UpdateLexicalVideo(videoID, updateData); err != nil {
+	if err := c.LexicalVideoService.UpdateLexicalVideo(id, updateData); err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "LexicalVideoService::UpdateLexicalVideo", errSQL)
 		return
 	}
@@ -172,10 +177,10 @@ func (c *LexicalVideoController) UpdateLexicalVideo() {
 func (c *LexicalVideoController) DeleteLexicalVideo() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
-	videoID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
 
 	// PSQL - Soft delete of the given ID
-	if err := c.LexicalVideoService.DeleteLexicalVideo(videoID); err != nil {
+	if err := c.LexicalVideoService.DeleteLexicalVideo(id); err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "WordService::DeleteWord", errSQL)
 		return
 	}

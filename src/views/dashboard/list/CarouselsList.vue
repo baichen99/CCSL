@@ -129,9 +129,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.el-tag {
-  margin: 3px;
-}
-</style>

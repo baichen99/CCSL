@@ -8,6 +8,13 @@
         @row-click="handleEditItem"
         @selection-change="handleSelectItems"
       >
+        <el-table-column
+          v-if="deleteItemMethod"
+          type="selection"
+          width="45"
+          align="center"
+          fixed="left"
+        />
         <el-table-column>
           <template slot="header">
             <div class="table-toolbar">
@@ -45,7 +52,6 @@
               </span>
             </div>
           </template>
-          <el-table-column v-if="deleteItemMethod" type="selection" width="45" align="center" />
           <template v-for="item in columns">
             <el-table-column
               v-if="item.slot"
@@ -442,7 +448,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 //main-container全局样式
 .app-container {
   padding: 20px;
@@ -453,11 +459,10 @@ export default {
   .el-pagination {
     text-align: center;
   }
-
+  .el-tag {
+    margin: 3px;
+  }
   .table-toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     .el-button,
     .el-select,
     .el-input {

@@ -54,7 +54,8 @@ export default {
   },
   data() {
     return {
-      options: []
+      options: [],
+      loading: false
     };
   },
   computed: {
@@ -99,7 +100,7 @@ export default {
   height: 60px;
   img {
     max-height: 100%;
-    max-width: 70px;
+    max-width: 50px;
     padding: 5px;
   }
 }

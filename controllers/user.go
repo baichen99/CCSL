@@ -75,12 +75,14 @@ func (c *UserController) GetUsersList() {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "UserService::GetUsersList", errSQL)
 		return
 	}
-	c.Context.JSON(iris.Map{
-		message: success,
-		page:    listParams.Page,
-		limit:   listParams.Limit,
-		total:   count,
-		data:    users,
+	c.Context.JSON(GetUsersListResponse{
+		GetListResponse{
+			success,
+			listParams.Page,
+			listParams.Limit,
+			count,
+		},
+		users,
 	})
 }
 
@@ -140,28 +142,33 @@ func (c *UserController) CreateUser() {
 func (c *UserController) GetUser() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
-	userID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
 
 	// Only super admin and user
 	tokenUser, tokenRole := middlewares.GetJWTParams(c.Context)
 
-	if !(middlewares.HasPermisson(tokenRole, configs.RoleSuperUser) || tokenUser == userID) {
+	if !(middlewares.HasPermisson(tokenRole, configs.RoleSuperUser) || tokenUser == id) {
 		utils.SetError(c.Context, iris.StatusForbidden, "UserController::GetUser", errRole)
 		return
 	}
 
 	// PSQL - Looking for specified user via the ID.
-	user, err := c.UserService.GetUser("id", userID)
+	user, err := c.UserService.GetUser("id", id)
 	if err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "UserService::GetUser", errSQL)
 		return
 	}
 
 	// Returning user information in data key.
-	c.Context.JSON(iris.Map{
-		message: success,
-		data:    user,
+	c.Context.JSON(GetUserResponse{
+		success,
+		user,
 	})
+}
+
+type GetUserResponse struct {
+	Message string      `json:"message" example:"success"`
+	Data    models.User `json:"data"`
 }
 
 // UpdateUser Controller: PUT /users/{id: string}
@@ -185,7 +192,7 @@ func (c *UserController) UpdateUser() {
 	defer c.Context.Next()
 
 	// Getting ID from parameters in the URL
-	userID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
 	var form UserUpdateForm
 
 	// Read JSON from request and validate request
@@ -196,7 +203,7 @@ func (c *UserController) UpdateUser() {
 
 	// Only super admin and user
 	tokenUser, tokenRole := middlewares.GetJWTParams(c.Context)
-	if !(middlewares.HasPermisson(tokenRole, configs.RoleSuperUser) || tokenUser == userID) {
+	if !(middlewares.HasPermisson(tokenRole, configs.RoleSuperUser) || tokenUser == id) {
 		utils.SetError(c.Context, iris.StatusForbidden, "UserController::UpdateUser", errRole)
 		return
 	}
@@ -210,7 +217,7 @@ func (c *UserController) UpdateUser() {
 	updateData := utils.MakeUpdateData(form)
 
 	// PSQL - Update of the given user ID.
-	if err := c.UserService.UpdateUser(userID, updateData); err != nil {
+	if err := c.UserService.UpdateUser(id, updateData); err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "UserService::UpdateUser", errSQL)
 		return
 	}
@@ -223,10 +230,10 @@ func (c *UserController) DeleteUser() {
 	defer c.Context.Next()
 
 	// Getting ID from parameters in the URL
-	userID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
 
 	// PSQL - Soft delete of the given user.
-	if err := c.UserService.DeleteUser(userID); err != nil {
+	if err := c.UserService.DeleteUser(id); err != nil {
 		utils.SetError(c.Context, iris.StatusBadRequest, "UserService::DeleteUser", errParams)
 		return
 	}

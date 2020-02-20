@@ -75,10 +75,10 @@ func (c *MemberController) CreateMember() {
 func (c *MemberController) GetMember() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
-	MemberID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
 
 	// PSQL - Looking for specified word viea the ID.
-	member, err := c.MemberService.GetMember(MemberID)
+	member, err := c.MemberService.GetMember(id)
 	if err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "MemberServcie:GetMember", errSQL)
 		return
@@ -96,7 +96,7 @@ func (c *MemberController) UpdateMember() {
 	defer c.Context.Next()
 
 	// Getting ID from parameters in the URL
-	memberID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
 	var form MemberUpdateForm
 
 	// Read JSON from request and validate request
@@ -107,7 +107,7 @@ func (c *MemberController) UpdateMember() {
 	updateData := utils.MakeUpdateData(form)
 
 	// PSQL - Update of the give ID
-	if err := c.MemberService.UpdateMember(memberID, updateData); err != nil {
+	if err := c.MemberService.UpdateMember(id, updateData); err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "MemberService::UpdateMember", errSQL)
 		return
 	}
@@ -120,10 +120,10 @@ func (c *MemberController) UpdateMember() {
 func (c *MemberController) DeleteMember() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
-	memberID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
 
 	// PSQL = Soft delete of the given ID
-	if err := c.MemberService.DeleteMember(memberID); err != nil {
+	if err := c.MemberService.DeleteMember(id); err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "MemberService::DeleteMember", errSQL)
 		return
 	}

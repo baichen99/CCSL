@@ -77,8 +77,8 @@ func (c *HandshapeController) CreateHandshape() {
 // GetHandshape GET  /handshapes/{id:string}
 func (c *HandshapeController) GetHandshape() {
 	defer c.Context.Next()
-	handshapeID := c.Context.Params().Get("id")
-	handshape, err := c.HandshapeService.GetHandshape(handshapeID)
+	id := c.Context.Params().Get("id")
+	handshape, err := c.HandshapeService.GetHandshape(id)
 	if err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "HandshapeService::GetHandshape", errSQL)
 		return
@@ -94,12 +94,12 @@ func (c *HandshapeController) GetHandshape() {
 func (c *HandshapeController) UpdateHandshape() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
-	handshapeID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
 	var form HandshapeUpdateForm
 	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
 		utils.SetError(c.Context, iris.StatusBadRequest, "HandshapeController::UpdateHandshape", errParams)
 	}
-	if err := c.HandshapeService.UpdateHandshape(handshapeID, utils.MakeUpdateData(form)); err != nil {
+	if err := c.HandshapeService.UpdateHandshape(id, utils.MakeUpdateData(form)); err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "HandshapeService::UpdateHandshape", errSQL)
 		return
 	}
@@ -112,10 +112,10 @@ func (c *HandshapeController) UpdateHandshape() {
 func (c *HandshapeController) DeleteHandshape() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
-	handshapeID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
 
 	// PSQL - Soft delete of the given ID
-	if err := c.HandshapeService.DeleteHandshape(handshapeID); err != nil {
+	if err := c.HandshapeService.DeleteHandshape(id); err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "HandshapeService::DeleteHandshape", errSQL)
 		return
 	}

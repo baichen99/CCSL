@@ -11,6 +11,7 @@ import (
 type SystemInterface interface {
 	CreateJsError(jsErr models.JsError) (err error)
 	GetJsErrorList(parameters utils.GetJsErrorListParameters) (errors []models.JsError, count int, err error)
+	DeleteJsError(id string) (err error)
 	GetCitiesList() (jProvinces []models.JSONProvince, err error)
 	GetAppInfo(key string) (data models.Info, err error)
 	UpdateAppInfo(key string, updatedData map[string]interface{}) (err error)
@@ -69,6 +70,15 @@ func (s *SystemService) GetJsErrorList(parameters utils.GetJsErrorListParameters
 		Find(&errors).
 		Error
 
+	return
+}
+
+// DeleteJsError delete js error by id
+func (s *SystemService) DeleteJsError(id string) (err error) {
+	err = s.PG.
+		Where("id = ?", id).
+		Delete(&models.JsError{}).
+		Error
 	return
 }
 

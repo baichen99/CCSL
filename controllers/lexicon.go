@@ -82,10 +82,10 @@ func (c *LexiconController) CreateWord() {
 func (c *LexiconController) GetWord() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
-	wordID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
 
 	// PSQL - Looking for specified word via the ID.
-	word, err := c.LexiconService.GetWord(wordID)
+	word, err := c.LexiconService.GetWord(id)
 	if err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "LexiconService::GetWord", errSQL)
 		return
@@ -103,7 +103,7 @@ func (c *LexiconController) UpdateWord() {
 	defer c.Context.Next()
 
 	// Getting ID from parameters in the URL
-	wordID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
 	var form LexiconUpdateForm
 
 	// Read JSON from request and validate request
@@ -115,7 +115,7 @@ func (c *LexiconController) UpdateWord() {
 	updateData := utils.MakeUpdateData(form)
 
 	// PSQL - Update of the given ID
-	if err := c.LexiconService.UpdateWord(wordID, updateData); err != nil {
+	if err := c.LexiconService.UpdateWord(id, updateData); err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "LexiconService::UpdateWord", errSQL)
 		return
 	}
@@ -128,10 +128,10 @@ func (c *LexiconController) UpdateWord() {
 func (c *LexiconController) DeleteWord() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
-	wordID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
 
 	// PSQL - Soft delete of the given ID
-	if err := c.LexiconService.DeleteWord(wordID); err != nil {
+	if err := c.LexiconService.DeleteWord(id); err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "LexiconService::DeleteWord", errSQL)
 		return
 	}

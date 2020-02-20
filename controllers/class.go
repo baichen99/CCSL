@@ -96,10 +96,10 @@ type GetClassListResponse struct {
 func (c *ClassController) GetClass() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
-	classID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
 
 	// PSQL - Looking for specified word via the ID.
-	class, err := c.ClassService.GetClass(classID)
+	class, err := c.ClassService.GetClass(id)
 	if err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "ClassService::GetClass", errSQL)
 		return
@@ -148,9 +148,7 @@ func (c *ClassController) CreateClass() {
 	}
 	// Return 201 Created
 	c.Context.StatusCode(iris.StatusCreated)
-	c.Context.JSON(iris.Map{
-		message: success,
-	})
+	c.Context.JSON(SuccessResponse{success})
 }
 
 // UpdateClass PUT /classes/{id:string}
@@ -174,7 +172,7 @@ func (c *ClassController) UpdateClass() {
 	defer c.Context.Next()
 
 	// Getting ID from parameters in the URL
-	classID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
 	var form ClassUpdateForm
 
 	// Read JSON from request and validate request
@@ -185,7 +183,7 @@ func (c *ClassController) UpdateClass() {
 	updateData := utils.MakeUpdateData(form)
 
 	// PSQL - Update of the given ID
-	if err := c.ClassService.UpdateClass(classID, updateData); err != nil {
+	if err := c.ClassService.UpdateClass(id, updateData); err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "ClassService::UpdateClass", errSQL)
 		return
 	}
@@ -213,10 +211,10 @@ func (c *ClassController) UpdateClass() {
 func (c *ClassController) DeleteClass() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
-	classID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
 
 	// PSQL - Soft delete of the given ID
-	if err := c.ClassService.DeleteClass(classID); err != nil {
+	if err := c.ClassService.DeleteClass(id); err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "ClassService::DeleteClass", errSQL)
 		return
 	}

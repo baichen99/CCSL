@@ -15,10 +15,10 @@ import (
 
 // AssignmentController is for assignment CRUD
 type AssignmentController struct {
-	Context                    iris.Context
-	AssignmentService          services.AssignmentInterface
-	CourseService              services.CourseInterface
-	ClassService               services.ClassInterface
+	Context           iris.Context
+	AssignmentService services.AssignmentInterface
+	CourseService     services.CourseInterface
+	ClassService      services.ClassInterface
 }
 
 // BeforeActivation will register routes for controllers
@@ -78,12 +78,14 @@ func (c *AssignmentController) GetAssignmentList() {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "AssignmentService::GetAssignmentList", errSQL)
 		return
 	}
-	c.Context.JSON(iris.Map{
-		message: success,
-		data:    assignments,
-		page:    listParams.Page,
-		limit:   listParams.Limit,
-		total:   count,
+	c.Context.JSON(GetAssignmentListResponse{
+		GetListResponse{
+			success,
+			listParameters.Page,
+			listParameters.Limit,
+			count,
+		},
+		assignments,
 	})
 }
 
@@ -125,9 +127,7 @@ func (c *AssignmentController) CreateAssignment() {
 	}
 	// Return 201 Created
 	c.Context.StatusCode(iris.StatusCreated)
-	c.Context.JSON(iris.Map{
-		message: success,
-	})
+	c.Context.JSON(SuccessResponse{success})
 }
 
 // GetAssignment GET /assignment/{id:string}
@@ -149,25 +149,25 @@ func (c *AssignmentController) CreateAssignment() {
 func (c *AssignmentController) GetAssignment() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
-	assignmentID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
 
 	// PSQL - Looking for specified word via the ID.
-	assignment, err := c.AssignmentService.GetAssignment(assignmentID)
+	assignment, err := c.AssignmentService.GetAssignment(id)
 	if err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "AssignmentService::GetAssignment", errSQL)
 		return
 	}
 	// Returning word information in data key.
-	c.Context.JSON(iris.Map{
-		message: success,
-		data:    assignment,
+	c.Context.JSON(GetAssignmentResponse{
+		success,
+		assignment,
 	})
 }
 
 // GetAssignmentResponse Response for get assignment
 type GetAssignmentResponse struct {
-	SuccessResponse
-	Data models.Assignment `json:"data"`
+	Message string            `json:"message" example:"success"`
+	Data    models.Assignment `json:"data"`
 }
 
 // UpdateAssignment PUT /assignments/{id:string}
@@ -191,7 +191,7 @@ func (c *AssignmentController) UpdateAssignment() {
 	defer c.Context.Next()
 
 	// Getting ID from parameters in the URL
-	assignmentID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
 	var form AssignmentUpdateForm
 
 	// Read JSON from request and validate request
@@ -202,7 +202,7 @@ func (c *AssignmentController) UpdateAssignment() {
 	updateData := utils.MakeUpdateData(form)
 
 	// PSQL - Update of the given ID
-	if err := c.AssignmentService.UpdateAssignment(assignmentID, updateData); err != nil {
+	if err := c.AssignmentService.UpdateAssignment(id, updateData); err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "AssignmentService::UpdateAssignment", errSQL)
 		return
 	}
@@ -230,10 +230,10 @@ func (c *AssignmentController) UpdateAssignment() {
 func (c *AssignmentController) DeleteAssignment() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
-	assignmentID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
 
 	// PSQL - Soft delete of the given ID
-	if err := c.AssignmentService.DeleteAssignment(assignmentID); err != nil {
+	if err := c.AssignmentService.DeleteAssignment(id); err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "AssignmentService::DeleteAssignment", errSQL)
 		return
 	}
@@ -286,19 +286,21 @@ func (c *AssignmentController) GetSubmittedAssignmentList() {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SubmittedAssignmentService::GetSubmittedAssignmentList", errSQL)
 		return
 	}
-	c.Context.JSON(iris.Map{
-		message: success,
-		data:    submittedAssignment,
-		page:    listParams.Page,
-		limit:   listParams.Limit,
-		total:   count,
+	c.Context.JSON(GetSubmmitedAssignmentListResponse{
+		GetListResponse{
+			success,
+			listParams.Page,
+			listParams.Limit,
+			count,
+		},
+		submittedAssignment,
 	})
 }
 
 // GetSubmmitedAssignmentListResponse Response for GetSubmmitedAssignmentList
 type GetSubmmitedAssignmentListResponse struct {
 	GetListResponse
-	Data []models.Assignment `json:"data"`
+	Data []models.SubmittedAssignment `json:"data"`
 }
 
 // CreateSubmittedAssignment POST /assignments/submitted
@@ -356,6 +358,7 @@ func (c *AssignmentController) CreateSubmittedAssignment() {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SubmittedAssignmentService::CreateSubmittedAssignment", errSQL)
 		return
 	}
+
 	flag := false
 	for _, student := range class.Students {
 		if student.ID.String() == tokenUser {
@@ -376,9 +379,7 @@ func (c *AssignmentController) CreateSubmittedAssignment() {
 	}
 	// Return 201 Created
 	c.Context.StatusCode(iris.StatusCreated)
-	c.Context.JSON(iris.Map{
-		message: success,
-	})
+	c.Context.JSON(SuccessResponse{success})
 }
 
 // GetSubmittedAssignment GET /assignments/submitted{id:string}
@@ -400,25 +401,25 @@ func (c *AssignmentController) CreateSubmittedAssignment() {
 func (c *AssignmentController) GetSubmittedAssignment() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
-	submittedAssignmentID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
 
 	// PSQL - Looking for specified word via the ID.
-	submittedAssignment, err := c.AssignmentService.GetSubmittedAssignment(submittedAssignmentID)
+	submittedAssignment, err := c.AssignmentService.GetSubmittedAssignment(id)
 	if err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SubmittedAssignmentService::GetSubmittedAssignment", errSQL)
 		return
 	}
 	// Returning word information in data key.
-	c.Context.JSON(iris.Map{
-		message: success,
-		data:    submittedAssignment,
+	c.Context.JSON(GetSubmittedAssignmentResponse{
+		success,
+		submittedAssignment,
 	})
 }
 
 // GetSubmittedAssignmentResponse Response for get submitted_assignment
 type GetSubmittedAssignmentResponse struct {
-	SuccessResponse
-	Data models.SubmittedAssignment `json:"data"`
+	Message string                     `json:"message" example:"success"`
+	Data    models.SubmittedAssignment `json:"data"`
 }
 
 // UpdateSubmittedAssignment PUT /assignments/submitted/{id:string}
@@ -442,7 +443,9 @@ func (c *AssignmentController) UpdateSubmittedAssignment() {
 	defer c.Context.Next()
 
 	// Getting ID from parameters in the URL
-	submittedAssignmentID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
+	updateData := make(map[string]interface{})
+
 	var form SubmittedAssignmentUpdateForm
 
 	// Read JSON from request and validate request
@@ -451,7 +454,7 @@ func (c *AssignmentController) UpdateSubmittedAssignment() {
 		return
 	}
 	// Check if out of date
-	submittedAssignment, err := c.AssignmentService.GetSubmittedAssignment(submittedAssignmentID)
+	submittedAssignment, err := c.AssignmentService.GetSubmittedAssignment(id)
 	if err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SubmittedAssignmentService::UpdateSubmittedAssignment", errSQL)
 		return
@@ -462,26 +465,28 @@ func (c *AssignmentController) UpdateSubmittedAssignment() {
 		return
 	}
 
-	// Check role, only teacher can update grade
+	// Check role, only teacher can update grade and comment
 	tokenUser, roles := middlewares.GetJWTParams(c.Context)
-	if form.Grade != nil {
-		if utils.StringsContains(roles, configs.RoleStudent) != -1 {
+	if form.Grade != nil || form.Comment != nil {
+		if !middlewares.HasPermisson(roles, configs.RoleTeacher) {
 			utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SubmittedAssignmentService::UpdateSubmittedAssignment", errRole)
+			return
+		}
+		updateData["GraderID"] = tokenUser
+	}
+
+	// After deadline, only teacher can update data
+	if assginment.Deadline != nil {
+		if time.Now().After(*assginment.Deadline) && !middlewares.HasPermisson(roles, configs.RoleTeacher) {
+			utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SubmittedAssignmentService::UpdateSubmittedAssignment", errOutdated)
 			return
 		}
 	}
 
-	// After deadline, only teacher can update data
-	if time.Now().After(*assginment.Deadline) && !middlewares.HasPermisson(roles, configs.RoleTeacher) {
-		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SubmittedAssignmentService::UpdateSubmittedAssignment", errOutdated)
-		return
-	}
-
-	updateData := utils.MakeUpdateData(form)
-	updateData["GraderID"] = tokenUser
+	updateData = utils.MakeUpdateData(form)
 
 	// PSQL - Update of the given ID
-	if err := c.AssignmentService.UpdateSubmittedAssignment(submittedAssignmentID, updateData); err != nil {
+	if err := c.AssignmentService.UpdateSubmittedAssignment(id, updateData); err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SubmittedAssignmentService::UpdateSubmittedAssignment", errSQL)
 		return
 	}
@@ -509,10 +514,10 @@ func (c *AssignmentController) UpdateSubmittedAssignment() {
 func (c *AssignmentController) DeleteSubmittedAssignment() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
-	submittedAssignmentID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
 
 	// PSQL - Soft delete of the given ID
-	if err := c.AssignmentService.DeleteSubmittedAssignment(submittedAssignmentID); err != nil {
+	if err := c.AssignmentService.DeleteSubmittedAssignment(id); err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SubmittedAssignmentService::DeleteSubmittedAssignment", errSQL)
 		return
 	}

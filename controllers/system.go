@@ -29,6 +29,7 @@ func (c *SystemController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Handle(iris.MethodPut, "/info/{key: string}", "UpdateAppInfo")
 	app.Router().Use(middlewares.CheckUserRole([]string{configs.RoleSuperUser}))
 	app.Handle(iris.MethodGet, "/error", "GetJsErrorList")
+	app.Handle(iris.MethodDelete, "/error/{id: string}", "DeleteJsError")
 	app.Handle(iris.MethodGet, "/login", "GetLoginHistoryList")
 	app.Handle(iris.MethodGet, "/dump", "DumpDatabase")
 }
@@ -112,6 +113,20 @@ func (c *SystemController) GetJsErrorList() {
 		limit:   listParams.Limit,
 		total:   count,
 	})
+}
+
+// DeleteJsError DELETE /systems/error/{id:string}
+func (c *SystemController) DeleteJsError() {
+	defer c.Context.Next()
+
+	id := c.Context.Params().Get("id")
+
+	if err := c.SystemService.DeleteJsError(id); err != nil {
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "SystemService::DeleteJsError", errSQL)
+		return
+	}
+
+	c.Context.StatusCode(iris.StatusNoContent)
 }
 
 // GetLoginHistoryList GET /systems/login

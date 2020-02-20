@@ -61,17 +61,19 @@ func (c *CourseController) GetCourseList() {
 		Content:           c.Context.URLParamDefault("content", ""),
 		ClassID:           c.Context.URLParamDefault("classID", ""),
 	}
-	course, count, err := c.CourseService.GetCoursesList(listParameters)
+	courses, count, err := c.CourseService.GetCoursesList(listParameters)
 	if err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "CourseService::GetCourseList", errSQL)
 		return
 	}
-	c.Context.JSON(iris.Map{
-		message: success,
-		data:    course,
-		page:    listParams.Page,
-		limit:   listParams.Limit,
-		total:   count,
+	c.Context.JSON(GetCourseListResponse{
+		GetListResponse{
+			success,
+			listParams.Page,
+			listParameters.Limit,
+			count,
+		},
+		courses,
 	})
 }
 
@@ -100,25 +102,25 @@ type GetCourseListResponse struct {
 func (c *CourseController) GetCourse() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
-	courseID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
 
 	// PSQL - Looking for specified word via the ID.
-	course, err := c.CourseService.GetCourse(courseID)
+	course, err := c.CourseService.GetCourse(id)
 	if err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "CourseService::GetCourse", errSQL)
 		return
 	}
 	// Returning word information in data key.
-	c.Context.JSON(iris.Map{
-		message: success,
-		data:    course,
+	c.Context.JSON(GetCourseResponse{
+		success,
+		course,
 	})
 }
 
 // GetCourseResponse Response for get course
 type GetCourseResponse struct {
-	SuccessResponse
-	Data models.Class `json:"data"`
+	Message string        `json:"message" example:"success"`
+	Data    models.Course `json:"data"`
 }
 
 // CreateCourse POST /courses
@@ -153,9 +155,7 @@ func (c *CourseController) CreateCourse() {
 	}
 	// Return 201 Created
 	c.Context.StatusCode(iris.StatusCreated)
-	c.Context.JSON(iris.Map{
-		message: success,
-	})
+	c.Context.JSON(SuccessResponse{success})
 }
 
 // UpdateCourse PUT /course/{id:string}
@@ -179,7 +179,7 @@ func (c *CourseController) UpdateCourse() {
 	defer c.Context.Next()
 
 	// Getting ID from parameters in the URL
-	courseID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
 	var form CourseUpdateForm
 
 	// Read JSON from request and validate request
@@ -190,7 +190,7 @@ func (c *CourseController) UpdateCourse() {
 	updateData := utils.MakeUpdateData(form)
 
 	// PSQL - Update of the given ID
-	if err := c.CourseService.UpdateCourse(courseID, updateData); err != nil {
+	if err := c.CourseService.UpdateCourse(id, updateData); err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "CourseService::UpdateCourse", errSQL)
 		return
 	}
@@ -218,10 +218,10 @@ func (c *CourseController) UpdateCourse() {
 func (c *CourseController) DeleteCourse() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
-	courseID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
 
 	// PSQL - Soft delete of the given ID
-	if err := c.CourseService.DeleteCourse(courseID); err != nil {
+	if err := c.CourseService.DeleteCourse(id); err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "CourseService::DeleteCourse", errSQL)
 		return
 	}

@@ -54,19 +54,25 @@ func (c *FileController) UploadFile() {
 	// Rename file, avoid file name conflict
 	// fileName = UUID + current timestamp + filename extension
 	fileName := filePrefix.String() + strconv.FormatInt(time.Now().Unix(), 10) + fileSuffix
-	filePath := fileDirName + "/" + fileName
+	filePath := path.Join(fileDirName, fileName)
 	// write file to directory
 	out, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "UploadFile::SaveFile", errParams)
 		return
 	}
+	data := path.Join(dir, fileName)
 	defer out.Close()
 	io.Copy(out, file)
-	c.Context.JSON(iris.Map{
-		message: success,
-		data:    dir + "/" + fileName,
+	c.Context.JSON(UploadFileResponse{
+		success,
+		data,
 	})
+}
+
+type UploadFileResponse struct {
+	Message string `json:"message" example:"success"`
+	Data    string `json:"data" example:"dir/filename.mp4"`
 }
 
 // // ResizeAndReplaceScreen process video and return file name

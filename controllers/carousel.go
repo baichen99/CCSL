@@ -85,8 +85,8 @@ func (c *CarouselController) CreateCarousel() {
 func (c *CarouselController) GetCarousel() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
-	carouselID := c.Context.Params().Get("id")
-	carousel, err := c.CarouselService.GetCarousel(carouselID)
+	id := c.Context.Params().Get("id")
+	carousel, err := c.CarouselService.GetCarousel(id)
 	if err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "CarouselCroller::GetCarousel", errSQL)
 		return
@@ -101,7 +101,7 @@ func (c *CarouselController) GetCarousel() {
 func (c *CarouselController) UpdateCarousel() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
-	carouselID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
 	var form CarouselUpdateForm
 
 	// Read JSON from request and validate request
@@ -111,7 +111,7 @@ func (c *CarouselController) UpdateCarousel() {
 	}
 	updateData := utils.MakeUpdateData(form)
 	// PSQL - Update of the given ID
-	if err := c.CarouselService.UpdateCarousel(carouselID, updateData); err != nil {
+	if err := c.CarouselService.UpdateCarousel(id, updateData); err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "CarouselService::UpdateCarousel", errSQL)
 		return
 	}
@@ -123,10 +123,10 @@ func (c *CarouselController) UpdateCarousel() {
 func (c *CarouselController) DeleteCarousel() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
-	carouselID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
 
 	// PSQL - Soft delete of the given ID
-	if err := c.CarouselService.DeleteCarousel(carouselID); err != nil {
+	if err := c.CarouselService.DeleteCarousel(id); err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "CarouselService::DeleteCarousel", errSQL)
 		return
 	}

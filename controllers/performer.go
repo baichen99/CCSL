@@ -81,10 +81,10 @@ func (c *PerformerController) CreatePerformer() {
 func (c *PerformerController) GetPerformer() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
-	performerID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
 
 	// PSQL - Looking for specified performer via the ID.
-	performer, err := c.PerformerService.GetPerformer(performerID)
+	performer, err := c.PerformerService.GetPerformer(id)
 	if err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "PerformerService::GetPerformer", errSQL)
 		return
@@ -101,7 +101,7 @@ func (c *PerformerController) GetPerformer() {
 func (c *PerformerController) UpdatePerformer() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
-	performerID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
 	var form PerformerUpdateForm
 
 	// Read JSON from request and validate request
@@ -112,7 +112,7 @@ func (c *PerformerController) UpdatePerformer() {
 	updateData := utils.MakeUpdateData(form)
 	// PSQL - Looking for specified performer via the ID.
 
-	if err := c.PerformerService.UpdatePerformer(performerID, updateData); err != nil {
+	if err := c.PerformerService.UpdatePerformer(id, updateData); err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "PerformerService::UpdatePerformer", errSQL)
 		return
 	}
@@ -126,10 +126,10 @@ func (c *PerformerController) DeletePerformer() {
 	defer c.Context.Next()
 
 	// Getting ID from parameters in the URL
-	performerID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
 
 	// PSQL - Soft delete of the given ID
-	if err := c.PerformerService.DeletePerformer(performerID); err != nil {
+	if err := c.PerformerService.DeletePerformer(id); err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "PerformerService::DeletePerformer", errSQL)
 		return
 	}

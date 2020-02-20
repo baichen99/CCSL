@@ -108,7 +108,7 @@ func (c *NewsController) UpdateNews() {
 	defer c.Context.Next()
 
 	// Getting ID from parameters in the URL
-	newsID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
 	var form NewsUpdateForm
 
 	// Read JSON from request and validate request
@@ -119,7 +119,7 @@ func (c *NewsController) UpdateNews() {
 	updateData := utils.MakeUpdateData(form)
 
 	// PSQL - Update of the given ID
-	if err := c.NewsService.UpdateNews(newsID, updateData); err != nil {
+	if err := c.NewsService.UpdateNews(id, updateData); err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "NewsService::UpdateNews", errSQL)
 		return
 	}
@@ -132,10 +132,10 @@ func (c *NewsController) UpdateNews() {
 func (c *NewsController) DeleteNews() {
 	defer c.Context.Next()
 	// Getting ID from parameters in the URL
-	newsID := c.Context.Params().Get("id")
+	id := c.Context.Params().Get("id")
 
 	// PSQL - Soft delete of the given ID
-	if err := c.NewsService.DeleteNews(newsID); err != nil {
+	if err := c.NewsService.DeleteNews(id); err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "NewsService::DeleteNews", errSQL)
 		return
 	}
