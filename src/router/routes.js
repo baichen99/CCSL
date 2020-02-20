@@ -102,24 +102,6 @@ const routes = [
     ]
   },
   {
-    path: "/users-management",
-    component: AdminLayout,
-    children: [
-      {
-        path: "/users-management",
-        name: "Users",
-        component: () => import("@/views/dashboard/list/UsersList"),
-        meta: {
-          title: "UserManagement",
-          icon: "user",
-          auth: true,
-          roles: [SuperUser]
-        }
-      }
-    ]
-  },
-
-  {
     path: "/website-management",
     component: AdminLayout,
     redirect: "/website-management/introduction",
@@ -131,7 +113,7 @@ const routes = [
     },
     children: [
       {
-        path: "introduction",
+        path: "introduction-management",
         name: "IntroductionManagement",
         component: () => import("@/views/dashboard/CenterIntroduction"),
         meta: {
@@ -141,8 +123,8 @@ const routes = [
         }
       },
       {
-        path: "carousels",
-        name: "Carousels",
+        path: "carousels-management",
+        name: "CarouselsManagement",
         component: () => import("@/views/dashboard/list/CarouselsList"),
         meta: {
           title: "CarouselManagement",
@@ -151,8 +133,8 @@ const routes = [
         }
       },
       {
-        path: "news",
-        name: "News",
+        path: "news-management",
+        name: "NewsManagement",
         component: () => import("@/views/dashboard/list/NewsList"),
         meta: {
           title: "NewsManagement",
@@ -161,8 +143,8 @@ const routes = [
         }
       },
       {
-        path: "members",
-        name: "Members",
+        path: "members-management",
+        name: "MembersManagement",
         component: () => import("@/views/dashboard/list/MembersList"),
         meta: {
           title: "MemberManagement",
@@ -182,12 +164,47 @@ const routes = [
         }
       },
       {
-        path: "systems",
-        name: "Systems",
+        path: "systems-management",
+        name: "SystemsManagement",
         component: () => import("@/views/dashboard/list/SystemsList"),
         meta: {
           title: "SystemManagement",
           icon: "maintain",
+          auth: true,
+          roles: [SuperUser]
+        }
+      },
+      {
+        path: "users-management",
+        name: "UsersManagement",
+        component: () => import("@/views/dashboard/list/UsersList"),
+        meta: {
+          title: "UserManagement",
+          icon: "user",
+          auth: true,
+          roles: [SuperUser]
+        }
+      }
+    ]
+  },
+  {
+    path: "/learning-platform-management",
+    component: AdminLayout,
+    redirect: "/learning-platform-management/classes-management",
+    name: "LearningPlatformManagement",
+    meta: {
+      title: "LearningPlatformManagement",
+      icon: "books",
+      roles: [SuperUser, TeacherUser]
+    },
+    children: [
+      {
+        path: "classes-management",
+        name: "ClassesManagement",
+        component: () => import("@/views/dashboard/list/ClassesList"),
+        meta: {
+          title: "ClassesManagement",
+          icon: "classes",
           auth: true,
           roles: [SuperUser]
         }
@@ -198,7 +215,7 @@ const routes = [
     path: "/database-management",
     component: AdminLayout,
     redirect: "/database-management/performers",
-    name: "LexicalDatabaseSetting",
+    name: "LexicalDatabaseManagement",
     meta: {
       title: "DatabaseManagement",
       icon: "contrast",
@@ -206,8 +223,8 @@ const routes = [
     },
     children: [
       {
-        path: "performers",
-        name: "Performers",
+        path: "performers-management",
+        name: "PerformersManagement",
         component: () => import("@/views/dashboard/list/PerformersList"),
         meta: {
           title: "PerformerManagement",
@@ -216,8 +233,8 @@ const routes = [
         }
       },
       {
-        path: "handshapes",
-        name: "Handshapes",
+        path: "handshapes-management",
+        name: "HandshapesManagement",
         component: () => import("@/views/dashboard/list/HandshapesList"),
         meta: {
           title: "HandshapeManagement",
@@ -226,8 +243,8 @@ const routes = [
         }
       },
       {
-        path: "lexicon",
-        name: "Lexicon",
+        path: "lexicon-management",
+        name: "LexiconManagement",
         component: () => import("@/views/dashboard/list/LexiconsList"),
         meta: {
           title: "LexiconManagement",
@@ -236,8 +253,8 @@ const routes = [
         }
       },
       {
-        path: "videos",
-        name: "LexicalVideos",
+        path: "lexical-videos-management",
+        name: "LexicalVideosManagement",
         component: () => import("@/views/dashboard/list/LexicalVideosList"),
         meta: {
           title: "LexicalVideoManagement",

@@ -107,6 +107,9 @@ export default {
     padding: 10px 30px;
     text-indent: 2em;
     line-height: 2rem;
+    img {
+      border-radius: 4px;
+    }
   }
   .back-to-top {
     position: fixed;

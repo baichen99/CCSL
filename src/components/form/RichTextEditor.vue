@@ -57,6 +57,10 @@ export default {
       type: [Number, String],
       required: false,
       default: "auto"
+    },
+    dir: {
+      type: String,
+      default: "news"
     }
   },
   data() {
@@ -188,7 +192,7 @@ export default {
             progress(0);
             const formData = new FormData();
             formData.append("file", blobInfo.blob());
-            const res = await UploadFile(formData, "news", progress);
+            const res = await UploadFile(formData, _this.dir, progress);
             const url = _this.$store.getters.settings.publicURL + res.data;
             success(url);
             progress(100);
@@ -208,7 +212,7 @@ export default {
               const file = this.files[0];
               const formData = new FormData();
               formData.append("file", file);
-              const res = await UploadFile(formData, "news");
+              const res = await UploadFile(formData, _this.dir);
               const url = _this.$store.getters.settings.publicURL + res.data;
               callback(url);
             } catch (err) {

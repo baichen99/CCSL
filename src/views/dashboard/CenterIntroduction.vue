@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-tabs v-model="activeTab" type="card">
+    <el-tabs v-model="activeTab" type="border-card">
       <el-tab-pane :label="$t('Chinese')" name="zh-CN">
         <rich-text-editor v-model="$data['zh-CN']" height="600px" />
       </el-tab-pane>

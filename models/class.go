@@ -6,7 +6,7 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-// Class model 班级
+// Class model
 type Class struct {
 	Base
 	Name      string   `json:"name"`
@@ -17,7 +17,7 @@ type Class struct {
 	Courses   []Course `json:"courses"`
 }
 
-// Course model 课程
+// Course model
 type Course struct {
 	Base
 	ClassID     uuid.UUID    `gorm:"type:uuid;not null;" json:"classID"`
@@ -26,7 +26,7 @@ type Course struct {
 	Assignments []Assignment `json:"assignments"`
 }
 
-// Assignment model 作业
+// Assignment model
 type Assignment struct {
 	Base
 	CourseID uuid.UUID  `gorm:"type:uuid;not null" json:"courseID"`
@@ -36,13 +36,13 @@ type Assignment struct {
 	Deadline *time.Time `json:"deadline"`
 }
 
-// SubmittedAssignment model 学生提交的作业
+// SubmittedAssignment model
 type SubmittedAssignment struct {
 	Base
 	CreatorID    uuid.UUID `gorm:"type:uuid" json:"creatorID"`
+	GraderID     uuid.UUID `gorm:"type:uuid" json:"graderID"`
 	AssignmentID uuid.UUID `gorm:"type:uuid" json:"assignmentID"`
 	Answer       string    `json:"answer"`
 	Grade        *int      `json:"grade"`
 	Comment      string    `json:"comment"`
-	GraderID     uuid.UUID `gorm:"type:uuid" json:"graderID"`
 }

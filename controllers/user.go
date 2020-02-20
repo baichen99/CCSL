@@ -23,10 +23,9 @@ type UserController struct {
 
 // BeforeActivation will register routes for controllers
 func (c *UserController) BeforeActivation(app mvc.BeforeActivation) {
-	app.Router().Use(middlewares.CheckRateLimit(2))
-	app.Handle(iris.MethodPost, "/login", "UserLogin")
+	app.Handle(iris.MethodPost, "/login", "UserLogin", middlewares.CheckRateLimit(2))
 	app.Router().Use(middlewares.CheckToken)
-	app.Handle(iris.MethodGet, "/refresh", "RefreshToken")
+	app.Handle(iris.MethodGet, "/refresh", "RefreshToken", middlewares.CheckRateLimit(2))
 	app.Handle(iris.MethodGet, "/{id: string}", "GetUser")
 	app.Handle(iris.MethodPut, "/{id: string}", "UpdateUser")
 	app.Router().Use(middlewares.CheckUserRole([]string{configs.RoleSuperUser}))

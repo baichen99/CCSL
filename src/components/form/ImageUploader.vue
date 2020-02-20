@@ -17,7 +17,7 @@
     :show-file-list="false"
     :with-credentials="true"
   >
-    <div v-if="fileUrl === ''" class="el-upload__text">
+    <div v-if="isEmpty">
       <i class="el-icon-upload" />
       <div class="upload-text">
         {{ $t("drag") }}
@@ -26,7 +26,9 @@
         {{ $t("size") }}
       </div>
     </div>
-    <img v-else :src="settings.publicURL + fileUrl" alt="image" />
+    <div v-else class="uploaded-image">
+      <img :src="settings.publicURL + fileUrl" alt="image" />
+    </div>
   </el-upload>
 </template>
 
@@ -94,6 +96,9 @@ export default {
       } else {
         return "image/*";
       }
+    },
+    isEmpty() {
+      return this.fileUrl === "";
     }
   },
   beforeDestroy() {
@@ -130,13 +135,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.upload-text {
-  margin: 30px;
-}
-
-img {
-  max-height: 100%;
-  max-width: 100%;
-  padding: 5px;
+.upload-container {
+  .upload-text {
+    margin: 30px;
+  }
+  .uploaded-image {
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  img {
+    max-height: 100%;
+    max-width: 100%;
+    border-radius: 4px;
+  }
 }
 </style>

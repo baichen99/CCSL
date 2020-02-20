@@ -18,7 +18,7 @@
                 <span>{{ row.title }}</span>
               </el-form-item>
               <el-form-item :label="$t('MessageContent')">
-                <span>{{ row.message }}</span>
+                <span v-html="row.message"></span>
               </el-form-item>
             </el-form>
           </template>
