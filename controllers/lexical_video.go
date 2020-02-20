@@ -3,7 +3,6 @@ package controllers
 import (
 	"ccsl/configs"
 	"ccsl/middlewares"
-	"ccsl/models"
 	"ccsl/services"
 	"ccsl/utils"
 	"errors"
@@ -100,12 +99,6 @@ func (c *LexicalVideoController) GetLexicalVideosList() {
 	})
 }
 
-// GetLexicalVideosListResponse Response for GetLexicalVideosList
-type GetLexicalVideosListResponse struct {
-	GetListResponse
-	Data []models.LexicalVideo `json:"data"`
-}
-
 // CreateLexicalVideo POST /lexical/videos
 func (c *LexicalVideoController) CreateLexicalVideo() {
 	defer c.Context.Next()
@@ -140,11 +133,6 @@ func (c *LexicalVideoController) GetLexicalVideo() {
 		success,
 		video,
 	})
-}
-
-type GetLexicalVideoResponse struct {
-	Message string              `json:"message" example:"success"`
-	Data    models.LexicalVideo `json:"data"`
 }
 
 // UpdateLexicalVideo PUT /lexical/videos/{id:string}

@@ -3,7 +3,6 @@ package controllers
 import (
 	"ccsl/configs"
 	"ccsl/middlewares"
-	"ccsl/models"
 	"ccsl/services"
 	"ccsl/utils"
 
@@ -72,15 +71,8 @@ func (c *CourseController) GetCourseList() {
 			listParams.Page,
 			listParameters.Limit,
 			count,
-		},
-		courses,
+		}, courses,
 	})
-}
-
-// GetCourseListResponse Response for GetCourseList
-type GetCourseListResponse struct {
-	GetListResponse
-	Data []models.Course `json:"data"`
 }
 
 // GetCourse GET /courses/{id:string}
@@ -115,12 +107,6 @@ func (c *CourseController) GetCourse() {
 		success,
 		course,
 	})
-}
-
-// GetCourseResponse Response for get course
-type GetCourseResponse struct {
-	Message string        `json:"message" example:"success"`
-	Data    models.Course `json:"data"`
 }
 
 // CreateCourse POST /courses

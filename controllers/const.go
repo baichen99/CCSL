@@ -212,6 +212,17 @@ type ResetPasswordForm struct {
 	Email string `json:"email" validate:"required"`
 }
 
+// GetUsersListResponse Response for GetUsersList
+type GetUsersListResponse struct {
+	GetListResponse
+	Data []models.User `json:"data"`
+}
+
+type GetUserResponse struct {
+	Message string      `json:"message" example:"success"`
+	Data    models.User `json:"data"`
+}
+
 // >>> PERFORMER <<<
 // ============
 
@@ -325,6 +336,17 @@ type LexicalVideoUpdateForm struct {
 	RightHandshapesID *[]string `json:"rightHandshapesID" validate:"omitempty,dive,uuid4"` // 右手手势
 }
 
+// GetLexicalVideosListResponse Response for GetLexicalVideosList
+type GetLexicalVideosListResponse struct {
+	GetListResponse
+	Data []models.LexicalVideo `json:"data"`
+}
+
+type GetLexicalVideoResponse struct {
+	Message string              `json:"message" example:"success"`
+	Data    models.LexicalVideo `json:"data"`
+}
+
 // >>> CLASS <<<
 // ============
 
@@ -349,6 +371,18 @@ type ClassUpdateForm struct {
 	Resources *string `json:"resources"  validate:"omitempty"`
 }
 
+// GetClassListResponse Response for GetClassList
+type GetClassListResponse struct {
+	GetListResponse
+	Data []models.Class `json:"data"`
+}
+
+// GetClassResponse Response for get class
+type GetClassResponse struct {
+	SuccessResponse
+	Data models.Class `json:"data"`
+}
+
 // >>> COURSE <<<
 // ============
 type CourseCreateForm struct {
@@ -371,6 +405,18 @@ type CourseUpdateForm struct {
 	ClassID *string `json:"classID" validate:"omitempty"`
 	Name    *string `json:"name"  validate:"omitempty"`
 	Content *string `json:"content"  validate:"omitempty"`
+}
+
+// GetCourseListResponse Response for GetCourseList
+type GetCourseListResponse struct {
+	GetListResponse
+	Data []models.Course `json:"data"`
+}
+
+// GetCourseResponse Response for get course
+type GetCourseResponse struct {
+	Message string        `json:"message" example:"success"`
+	Data    models.Course `json:"data"`
 }
 
 // >>> ASSIGNMENT <<<
@@ -403,6 +449,18 @@ type AssignmentUpdateForm struct {
 	Deadline *time.Time `json:"deadline" validate:"omitempty"`
 }
 
+// GetAssignmentListResponse Response for GetAssignmentList
+type GetAssignmentListResponse struct {
+	GetListResponse
+	Data []models.Assignment `json:"data"`
+}
+
+// GetAssignmentResponse Response for get assignment
+type GetAssignmentResponse struct {
+	Message string            `json:"message" example:"success"`
+	Data    models.Assignment `json:"data"`
+}
+
 // >>> SUBMITTED ASSIGNMENT <<<
 // ============
 type SubmittedAssignmentCreateForm struct {
@@ -424,4 +482,32 @@ type SubmittedAssignmentUpdateForm struct {
 	Answer       *string `json:"answer"  validate:"omitempty"`
 	Grade        *int    `json:"grade"  validate:"omitempty"`
 	Comment      *string `json:"comment"  validate:"omitempty"`
+}
+
+// GetSubmmitedAssignmentListResponse Response for GetSubmmitedAssignmentList
+type GetSubmmitedAssignmentListResponse struct {
+	GetListResponse
+	Data []models.SubmittedAssignment `json:"data"`
+}
+
+// GetSubmittedAssignmentResponse Response for get submitted_assignment
+type GetSubmittedAssignmentResponse struct {
+	Message string                     `json:"message" example:"success"`
+	Data    models.SubmittedAssignment `json:"data"`
+}
+
+// >>> NOTIFICATION <<<
+// ============
+
+// GetNotificationsListResponse Response for GetNotificationList
+type GetNotificationsListResponse struct {
+	GetListResponse
+	Unread int                   `json:"unread"`
+	Data   []models.Notification `json:"data"`
+}
+
+// GetNotificationResponse Response for get notification
+type GetNotificationResponse struct {
+	Message string              `json:"message" example:"success"`
+	Data    models.Notification `json:"data"`
 }

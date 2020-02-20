@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"ccsl/middlewares"
-	"ccsl/models"
 	"ccsl/services"
 	"ccsl/utils"
 	"time"
@@ -74,13 +73,6 @@ func (c *NotificationController) GetNotificationList() {
 	})
 }
 
-// GetNotificationsListResponse Response for GetNotificationList
-type GetNotificationsListResponse struct {
-	GetListResponse
-	Unread int                   `json:"unread"`
-	Data   []models.Notification `json:"data"`
-}
-
 // GetNotification GET /notifications/{id:string}
 // >>>>> DOCS  <<<<<
 // =================
@@ -124,12 +116,6 @@ func (c *NotificationController) GetNotification() {
 		success,
 		notification,
 	})
-}
-
-// GetNotificationResponse Response for get notification
-type GetNotificationResponse struct {
-	Message string              `json:"message" example:"success"`
-	Data    models.Notification `json:"data"`
 }
 
 // DeleteNotification DELETE /notifications/{id:string}

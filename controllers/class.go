@@ -3,7 +3,6 @@ package controllers
 import (
 	"ccsl/configs"
 	"ccsl/middlewares"
-	"ccsl/models"
 	"ccsl/services"
 	"ccsl/utils"
 
@@ -57,24 +56,19 @@ func (c *ClassController) GetClassList() {
 		GetListParameters: listParams,
 		Name:              c.Context.URLParamDefault("name", ""),
 	}
-	class, count, err := c.ClassService.GetClassesList(listParameters)
+	classes, count, err := c.ClassService.GetClassesList(listParameters)
 	if err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "ClassService::GetClassList", errSQL)
 		return
 	}
-	c.Context.JSON(iris.Map{
-		message: success,
-		data:    class,
-		page:    listParams.Page,
-		limit:   listParams.Limit,
-		total:   count,
+	c.Context.JSON(GetClassListResponse{
+		GetListResponse{
+			sucess,
+			listParams.Page,
+			listParams.Limit,
+			count,
+		}, classes,
 	})
-}
-
-// GetClassListResponse Response for GetClassList
-type GetClassListResponse struct {
-	GetListResponse
-	Data []models.Class `json:"data"`
 }
 
 // GetClass GET /classes/{id:string}
@@ -105,16 +99,10 @@ func (c *ClassController) GetClass() {
 		return
 	}
 	// Returning word information in data key.
-	c.Context.JSON(iris.Map{
-		message: success,
-		data:    class,
+	c.Context.JSON(GetClassResponse{
+		success,
+		class,
 	})
-}
-
-// GetClassResponse Response for get class
-type GetClassResponse struct {
-	SuccessResponse
-	Data models.Class `json:"data"`
 }
 
 // CreateClass POST /classes

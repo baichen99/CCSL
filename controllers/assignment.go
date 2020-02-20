@@ -3,7 +3,6 @@ package controllers
 import (
 	"ccsl/configs"
 	"ccsl/middlewares"
-	"ccsl/models"
 	"ccsl/services"
 	"ccsl/utils"
 	"time"
@@ -89,12 +88,6 @@ func (c *AssignmentController) GetAssignmentList() {
 	})
 }
 
-// GetAssignmentListResponse Response for GetAssignmentList
-type GetAssignmentListResponse struct {
-	GetListResponse
-	Data []models.Assignment `json:"data"`
-}
-
 // CreateAssignment POST /assignment
 // >>>>> DOCS  <<<<<
 // =================
@@ -162,12 +155,6 @@ func (c *AssignmentController) GetAssignment() {
 		success,
 		assignment,
 	})
-}
-
-// GetAssignmentResponse Response for get assignment
-type GetAssignmentResponse struct {
-	Message string            `json:"message" example:"success"`
-	Data    models.Assignment `json:"data"`
 }
 
 // UpdateAssignment PUT /assignments/{id:string}
@@ -297,12 +284,6 @@ func (c *AssignmentController) GetSubmittedAssignmentList() {
 	})
 }
 
-// GetSubmmitedAssignmentListResponse Response for GetSubmmitedAssignmentList
-type GetSubmmitedAssignmentListResponse struct {
-	GetListResponse
-	Data []models.SubmittedAssignment `json:"data"`
-}
-
 // CreateSubmittedAssignment POST /assignments/submitted
 // >>>>> DOCS  <<<<<
 // =================
@@ -414,12 +395,6 @@ func (c *AssignmentController) GetSubmittedAssignment() {
 		success,
 		submittedAssignment,
 	})
-}
-
-// GetSubmittedAssignmentResponse Response for get submitted_assignment
-type GetSubmittedAssignmentResponse struct {
-	Message string                     `json:"message" example:"success"`
-	Data    models.SubmittedAssignment `json:"data"`
 }
 
 // UpdateSubmittedAssignment PUT /assignments/submitted/{id:string}

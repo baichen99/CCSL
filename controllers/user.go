@@ -81,15 +81,8 @@ func (c *UserController) GetUsersList() {
 			listParams.Page,
 			listParams.Limit,
 			count,
-		},
-		users,
+		}, users,
 	})
-}
-
-// GetUsersListResponse Response for GetUsersList
-type GetUsersListResponse struct {
-	GetListResponse
-	Data []models.User `json:"data"`
 }
 
 // CreateUser POST /users
@@ -133,9 +126,7 @@ func (c *UserController) CreateUser() {
 
 	// Return 201 Created
 	c.Context.StatusCode(iris.StatusCreated)
-	c.Context.JSON(iris.Map{
-		message: success,
-	})
+	c.Context.JSON(SuccessResponse{success})
 }
 
 // GetUser GET /users/{id:string}
@@ -164,11 +155,6 @@ func (c *UserController) GetUser() {
 		success,
 		user,
 	})
-}
-
-type GetUserResponse struct {
-	Message string      `json:"message" example:"success"`
-	Data    models.User `json:"data"`
 }
 
 // UpdateUser Controller: PUT /users/{id: string}
