@@ -103,10 +103,10 @@ export default {
     ...mapGetters(["wordInitial", "partOfSpeech"])
   },
   created() {
-    this.wordInitial.map(item => {
+    this.wordInitial.data.map(item => {
       this.columns[0].filters.push({
-        text: item,
-        value: item
+        text: item.text,
+        value: item.value
       });
     });
     this.partOfSpeech.data.map(item => {

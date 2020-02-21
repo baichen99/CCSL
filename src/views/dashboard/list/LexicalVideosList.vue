@@ -211,10 +211,10 @@ export default {
     await this.$store.dispatch("data/getPerformers");
     await this.$store.dispatch("data/getLexicons");
     await this.$store.dispatch("data/getHandshapes");
-    this.wordInitial.map(item => {
+    this.wordInitial.data.map(item => {
       this.columns[0].filters.push({
-        text: item,
-        value: item
+        text: item.text,
+        value: item.value
       });
     });
   },
@@ -301,6 +301,6 @@ export default {
 }
 
 .city-selector {
-  width: 200px;
+  width: 180px;
 }
 </style>

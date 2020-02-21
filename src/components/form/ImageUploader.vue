@@ -23,7 +23,7 @@
         {{ $t("drag") }}
         <em>{{ $t("click") }}</em>
         <br />
-        {{ $t("size") }}
+        {{ $t("size", {size}) }}
       </div>
     </div>
     <div v-else class="uploaded-image">
@@ -37,13 +37,13 @@
   "zh-CN": {
     "drag": "将文件拖到此处，或",
     "click": "点击上传",
-    "size": "大小不超过2Mb",
+    "size": "文件大小不超过{size}Mb",
     "sizeError": "文件太大，请压缩后再上传"
   },
   "en-US": {
     "drag": "Drag file to here, or",
     "click": "click to upload",
-    "size": "Maximal file size 2Mb",
+    "size": "Maximal file size {size}Mb",
     "sizeError": "File size exceed limitation, please compress it"
   }
 }
@@ -74,10 +74,10 @@ export default {
         return ["all", "svg"].indexOf(value) !== -1;
       }
     },
-    // Max size, default 2MB
+    // Max size, default 3MB
     size: {
       type: Number,
-      default: 2
+      default: 3
     }
   },
   computed: {

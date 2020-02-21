@@ -96,10 +96,8 @@ export default {
   display: flex;
   justify-content: space-around;
   align-items: center;
-
   height: 60px;
   img {
-    max-height: 100%;
     max-width: 50px;
     padding: 5px;
   }

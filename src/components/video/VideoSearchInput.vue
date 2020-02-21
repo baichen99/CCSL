@@ -31,10 +31,6 @@
     <el-collapse-transition>
       <el-card v-show="advancedSearch && showAdvance" shadow="never" class="advance">
         <div class="search-options">
-          <!-- 
-          <gender-selector v-model="searchParams.gender" size="small" />
-          <pos-selector v-model="searchParams.pos" size="small" />
-          <word-formation-selector v-model="searchParams.wordFormation" size="small" />-->
           <handshape-selector
             v-model="searchParams.leftHandshapeID"
             size="small"
@@ -45,13 +41,19 @@
             size="small"
             orientation="right"
           />
-          <city-selector v-model="searchParams.regionID" size="small" />
+          <simple-selector v-model="searchParams.gender" size="small" :options="genderTypes" />
           <simple-selector
             v-model="searchParams.wordFormation"
             size="small"
             :options="wordFormations"
           />
-          <morphemes-input v-model="searchParams.morpheme" size="small" style="width:200px" />
+          <simple-selector v-model="searchParams.pos" size="small" :options="partOfSpeech" />
+          <search-input
+            v-model="searchParams.morpheme"
+            size="small"
+            :placeholder="$t('morphemesTip')"
+          />
+          <city-selector v-model="searchParams.regionID" size="small" />
         </div>
       </el-card>
     </el-collapse-transition>
@@ -61,7 +63,7 @@
 <i18n>
 {
   "zh-CN": {
-    "morphemesTip": "请输入复合词构成词语"
+    "morphemesTip": "请输入构词语素"
   },
   "en-US": {
     "morphemesTip": "Input morphemes(Chinese)"
@@ -75,15 +77,15 @@ import { mapGetters } from "vuex";
 import SimpleSelector from "@/components/form/SimpleSelector.vue";
 import HandshapeSelector from "@/components/form/HandshapeSelector.vue";
 import CitySelector from "@/components/form/CitySelector.vue";
-import MorphemesInput from "@/components/form/MorphemesInput.vue";
+import SearchInput from "@/components/form/SearchInput.vue";
 
 export default {
   name: "VideoSearchInput",
   components: {
     CitySelector,
     HandshapeSelector,
-    MorphemesInput,
-    SimpleSelector
+    SimpleSelector,
+    SearchInput
   },
   model: {
     prop: "params",
@@ -107,7 +109,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["wordFormations", "genderTypes"]),
+    ...mapGetters(["wordFormations", "genderTypes", "partOfSpeech"]),
     searchParams: {
       get() {
         return this.params;
@@ -155,7 +157,11 @@ export default {
       margin: 5px 5px;
     }
     .el-cascader {
-      min-width: 250px;
+      width: 200px;
+    }
+    .el-input,
+    .el-select {
+      width: 150px;
     }
   }
 }

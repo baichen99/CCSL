@@ -13,7 +13,7 @@
     </el-form-item>
 
     <el-form-item label="音序" prop="initial">
-      <word-initial-selector v-model="formData.initial" />
+      <simple-selector v-model="formData.initial" :options="wordInitial" />
     </el-form-item>
   </el-form>
 </template>
@@ -22,12 +22,12 @@
 import { mapGetters } from "vuex";
 import formMixin from "./formMixin";
 import MultipleSelector from "@/components/form/MultipleSelector";
-import WordInitialSelector from "@/components/form/WordInitialSelector";
+import SimpleSelector from "@/components/form/SimpleSelector";
 export default {
   name: "LexiconForm",
   components: {
     MultipleSelector,
-    WordInitialSelector
+    SimpleSelector
   },
   mixins: [formMixin],
   data() {
@@ -43,7 +43,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["partOfSpeech"])
+    ...mapGetters(["partOfSpeech", "wordInitial"])
   }
 };
 </script>

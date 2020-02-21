@@ -20,7 +20,7 @@
       :visible.sync="showDetail"
       :show-close="false"
       :destroy-on-close="true"
-      top="10px"
+      top="100px"
     >
       <video-detail :video="videoDetail" />
     </el-dialog>

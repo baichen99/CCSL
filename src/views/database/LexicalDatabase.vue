@@ -59,7 +59,8 @@ export default {
         pos: "", // 词性
         initial: "",
         wordFormation: "",
-        morpheme: ""
+        morpheme: "",
+        orderBy: "lexicons.initial, lexicons.id, performers.region_id, performers.gender"
       }
     };
   },

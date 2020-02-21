@@ -8,32 +8,38 @@ const SET_PERFORMER = "SET_PERFORMER";
 const SET_HANDSHAPE = "SET_HANDSHAPE";
 
 const state = {
-  wordInitial: [
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "H",
-    "I",
-    "J",
-    "K",
-    "L",
-    "M",
-    "N",
-    "O",
-    "P",
-    "Q",
-    "R",
-    "S",
-    "T",
-    "W",
-    "X",
-    "Y",
-    "Z"
-  ],
+  wordInitial: {
+    data: [
+      { text: "A", value: "A" },
+      { text: "B", value: "B" },
+      { text: "C", value: "C" },
+      { text: "D", value: "D" },
+      { text: "E", value: "E" },
+      { text: "F", value: "F" },
+      { text: "G", value: "G" },
+      { text: "H", value: "H" },
+      { text: "I", value: "I" },
+      { text: "J", value: "J" },
+      { text: "K", value: "K" },
+      { text: "L", value: "L" },
+      { text: "M", value: "M" },
+      { text: "N", value: "N" },
+      { text: "O", value: "O" },
+      { text: "P", value: "P" },
+      { text: "Q", value: "Q" },
+      { text: "R", value: "R" },
+      { text: "S", value: "S" },
+      { text: "T", value: "T" },
+      { text: "W", value: "W" },
+      { text: "X", value: "X" },
+      { text: "Y", value: "Y" },
+      { text: "Z", value: "Z" }
+    ],
+    placeholder: {
+      "zh-CN": "请选择拼音音序",
+      "en-US": "Select initial"
+    }
+  },
   wordFormations: {
     data: [
       { text: "CompoundWord", value: "compound" },

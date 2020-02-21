@@ -104,7 +104,13 @@ export default {
           slot: "roles",
           label: this.$t("UserRole"),
           width: "200px",
-          filters: []
+          filters: [
+            { text: this.$t("SuperAdmin"), value: "super" },
+            { text: this.$t("Admin"), value: "admin" },
+            { text: this.$t("Student"), value: "student" },
+            { text: this.$t("Teacher"), value: "teacher" },
+            { text: this.$t("DatabaseUser"), value: "dbuser" }
+          ]
         },
         {
           prop: "username",
