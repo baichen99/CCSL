@@ -6,11 +6,27 @@
     :delete-item-method="DeleteClass"
     :list-form-component="ClassForm"
     :columns="columns"
-  ></list-view>
+  >
+    <template #toolbar-search="{params, handleSearch}">
+      <search-input v-model="params.name" :placeholder="$t('tip')" @update="handleSearch" />
+    </template>
+  </list-view>
 </template>
+
+<i18n>
+{
+  "zh-CN": {
+    "tip": "请输入班级名称"
+  },
+  "en-US": {
+    "tip": "Input class name"
+  }
+}
+</i18n>
 
 <script>
 import ListView from "@/components/ListView";
+import SearchInput from "@/components/form/SearchInput";
 import ClassForm from "@/views/dashboard/form/ClassForm";
 import {
   GetClassesList,
@@ -21,7 +37,8 @@ import {
 export default {
   name: "ClassesList",
   components: {
-    ListView
+    ListView,
+    SearchInput
   },
   data() {
     return {
@@ -42,6 +59,12 @@ export default {
           label: this.$t("UpdatedAt"),
           width: "180px",
           formatter: row => this.$d(new Date(row.updatedAt), "long")
+        },
+        {
+          prop: "name",
+          label: this.$t("ClassName"),
+          width: "300px",
+          hideOverflow: true
         }
       ]
     };

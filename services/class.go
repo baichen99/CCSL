@@ -100,7 +100,9 @@ func (s *ClassService) DeleteClass(id string) (err error) {
 func (s *ClassService) CreateTeacher(id string, uid string) (err error) {
 	var class models.Class
 	var user models.User
-	user.ID, err = uuid.FromString(uid)
+	if user.ID, err = uuid.FromString(uid); err != nil {
+		return
+	}
 	err = s.PG.
 		Where("id = ?", id).
 		Take(&class).
@@ -114,7 +116,9 @@ func (s *ClassService) CreateTeacher(id string, uid string) (err error) {
 func (s *ClassService) DeleteTeacher(id string, uid string) (err error) {
 	var class models.Class
 	var user models.User
-	user.ID, err = uuid.FromString(uid)
+	if user.ID, err = uuid.FromString(uid); err != nil {
+		return
+	}
 	err = s.PG.
 		Where("id = ?", id).
 		Take(&class).
@@ -128,7 +132,9 @@ func (s *ClassService) DeleteTeacher(id string, uid string) (err error) {
 func (s *ClassService) CreateStudent(id string, uid string) (err error) {
 	var class models.Class
 	var user models.User
-	user.ID, err = uuid.FromString(uid)
+	if user.ID, err = uuid.FromString(uid); err != nil {
+		return
+	}
 	err = s.PG.
 		Where("id = ?", id).
 		Take(&class).
@@ -142,7 +148,9 @@ func (s *ClassService) CreateStudent(id string, uid string) (err error) {
 func (s *ClassService) DeleteStudent(id string, uid string) (err error) {
 	var class models.Class
 	var user models.User
-	user.ID, err = uuid.FromString(uid)
+	if user.ID, err = uuid.FromString(uid); err != nil {
+		return
+	}
 	err = s.PG.
 		Where("id = ?", id).
 		Take(&class).

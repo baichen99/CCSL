@@ -34,6 +34,13 @@ export function GetJsErrorList(params) {
   });
 }
 
+export function DeleteJsError(id) {
+  return request({
+    url: `${baseURL}/error/${id}`,
+    method: "delete"
+  })
+}
+
 export function GetAppInfo(key) {
   return request({
     url: `${baseURL}/info/${key}`,

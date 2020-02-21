@@ -1,5 +1,10 @@
 <template>
-  <list-view :get-list-method="GetJsErrorList" :allow-detail-form="false" :columns="columns">
+  <list-view
+    :get-list-method="GetJsErrorList"
+    :delete-item-method="DeleteJsError"
+    :allow-detail-form="false"
+    :columns="columns"
+  >
     <template #toolbar-button>
       <el-button type="primary" size="mini" plain @click="handleDump">{{ $t("backup") }}</el-button>
     </template>
@@ -38,7 +43,7 @@
 </i18n>
 
 <script>
-import { GetDatabaseDump, GetJsErrorList } from "@/api/systems";
+import { GetDatabaseDump, GetJsErrorList, DeleteJsError } from "@/api/systems";
 import ListView from "@/components/ListView";
 import VueJsonPretty from "vue-json-pretty";
 export default {
@@ -50,6 +55,7 @@ export default {
   data() {
     return {
       GetJsErrorList,
+      DeleteJsError,
       columns: [
         {
           prop: "createdAt",

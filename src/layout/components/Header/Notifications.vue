@@ -10,8 +10,26 @@
       :visible.sync="show"
       @close="getList"
     >
-      <el-table ref="table" v-loading="loading" :data="list" @row-click="handleView">
-        <el-table-column type="expand">
+      <el-table
+        ref="table"
+        v-loading="loading"
+        :data="list"
+        stripe
+        @row-click="handleView"
+        @selection-change="handleSelectItems"
+      >
+        <el-table-column type="selection" width="45" align="center" fixed="left" />
+
+        <el-table-column type="expand" width="100">
+          <template slot="header">
+            <el-button
+              :disabled="selection.length<=0"
+              plain
+              type="danger"
+              size="mini"
+              @click="handleDelete"
+            >{{ $t("Delete") }}</el-button>
+          </template>
           <template #default="{row}">
             <el-form label-position="left" inline>
               <el-form-item :label="$t('Title')">
@@ -41,17 +59,6 @@
               >{{ $t('Unread') }}</el-tag>
               {{ row.title }}
             </span>
-          </template>
-        </el-table-column>
-
-        <el-table-column :label="$t('Action')" align="center" width="100px" fixed="right">
-          <template #default="{row}">
-            <el-button
-              type="danger"
-              size="mini"
-              plain
-              @click.stop="handleDelete(row.id)"
-            >{{ $t("Delete") }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -84,7 +91,8 @@ export default {
       order: "desc"
     },
     total: 0,
-    unread: 0
+    unread: 0,
+    selection: []
   }),
   watch: {
     "params.page"() {
@@ -115,14 +123,19 @@ export default {
       this.$refs.table.toggleRowExpansion(row);
       row.readAt = new Date().toISOString();
     },
-    async handleDelete(id) {
+    async handleDelete() {
+      this.loading = true;
       try {
-        this.loading = true;
-        await DeleteNotification(id);
+        for (const item of this.selection) {
+          await DeleteNotification(item.id);
+        }
         await this.getList();
       } finally {
         this.loading = false;
       }
+    },
+    handleSelectItems(value) {
+      this.selection = value;
     }
   }
 };
