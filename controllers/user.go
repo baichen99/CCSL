@@ -247,7 +247,7 @@ func (c *UserController) UserLogin() {
 	}
 
 	// Only active user can login
-	if user.State != "active" {
+	if user.State != configs.UserStateActive {
 		utils.SetError(c.Context, iris.StatusUnauthorized, "UserController::UserLogin", errors.New("InactiveAccount"))
 		return
 	}

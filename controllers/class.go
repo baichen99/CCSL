@@ -1,14 +1,14 @@
 package controllers
 
 import (
-    "ccsl/configs"
-    "ccsl/middlewares"
-    "ccsl/models"
-    "ccsl/services"
-    "ccsl/utils"
+	"ccsl/configs"
+	"ccsl/middlewares"
+	"ccsl/models"
+	"ccsl/services"
+	"ccsl/utils"
 
-    "github.com/kataras/iris/v12"
-    "github.com/kataras/iris/v12/mvc"
+	"github.com/kataras/iris/v12"
+	"github.com/kataras/iris/v12/mvc"
 )
 
 // ClassController is for class CRUD
@@ -218,7 +218,7 @@ func (c *ClassController) DeleteClass() {
 	c.Context.StatusCode(iris.StatusNoContent)
 }
 
-// CreateTeacher POST /classes/{id:string}/teachers/{id:string}
+// CreateTeacher POST /classes/{id:string}/teachers/{uid:string}
 func (c *ClassController) CreateTeacher() {
 	defer c.Context.Next()
 	id := c.Context.Params().Get("id")
@@ -264,7 +264,7 @@ func (c *ClassController) CreateStudent() {
 				Username: form.Username,
 				Name:     form.Name,
 				Roles:    []string{configs.RoleStudent},
-				State:    "active",
+				State:    configs.UserStateActive,
 			})
 		user, _ = c.UserService.GetUser("username", form.Username)
 	}
@@ -274,7 +274,7 @@ func (c *ClassController) CreateStudent() {
 	c.Context.JSON(SuccessResponse{success})
 }
 
-// DeleteStudent DELETE /classes/{id:string}/students/{id:string}
+// DeleteStudent DELETE /classes/{id:string}/students/{uid:string}
 func (c *ClassController) DeleteStudent() {
 	defer c.Context.Next()
 	id := c.Context.Params().Get("id")

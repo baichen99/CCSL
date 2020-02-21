@@ -51,28 +51,28 @@ func InitTestUser(pg *gorm.DB) {
 			Name:     "Admin User",
 			Password: password,
 			Roles:    []string{configs.RoleAdminUser},
-			State:    "active",
+			State:    configs.UserStateActive,
 		},
 		models.User{
 			Username: "user@ccsl.shu.edu.cn",
 			Name:     "User",
 			Password: password,
 			Roles:    []string{configs.RoleDatabaseUser},
-			State:    "active",
+			State:    configs.UserStateActive,
 		},
 		models.User{
 			Username: "learner@ccsl.shu.edu.cn",
 			Name:     "Learner",
 			Password: password,
 			Roles:    []string{configs.RoleStudent},
-			State:    "active",
+			State:    configs.UserStateActive,
 		},
 		models.User{
 			Username: "super@ccsl.shu.edu.cn",
 			Name:     "Super User",
 			Password: password,
 			Roles:    []string{configs.RoleSuperUser},
-			State:    "active",
+			State:    configs.UserStateActive,
 		},
 	}
 	for _, user := range testUsers {

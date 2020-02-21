@@ -96,7 +96,7 @@ func main() {
 	// })
 
 	mvc.Configure(app.Party("/classes"), func(app *mvc.Application) {
-		app.Register(services.NewClassService(pg))
+		app.Register(services.NewClassService(pg), services.NewUserService(pg))
 		app.Handle(new(controllers.ClassController))
 	})
 	mvc.Configure(app.Party("/courses"), func(app *mvc.Application) {
@@ -104,9 +104,7 @@ func main() {
 		app.Handle(new(controllers.CourseController))
 	})
 	mvc.Configure(app.Party("/assignments"), func(app *mvc.Application) {
-		app.Register(services.NewAssignmentService(pg))
-		app.Register(services.NewCourseService(pg))
-		app.Register(services.NewClassService(pg))
+		app.Register(services.NewAssignmentService(pg), services.NewCourseService(pg), services.NewClassService(pg))
 		app.Handle(new(controllers.AssignmentController))
 	})
 	host := fmt.Sprintf("%s:%d", configs.Conf.Listener.Server, configs.Conf.Listener.Port)
