@@ -17,5 +17,6 @@ type Reply struct {
 	Base
 	Creator   User      `json:"creator"`
 	CreatorID uuid.UUID `gorm:"not null" json:"creatorID"`
+	PostID    uuid.UUID `gorm:"not null" json:"postID"`
 	Content   string    `json:"content"`
 }
