@@ -5,6 +5,7 @@ import (
 	"ccsl/utils"
 
 	"github.com/jinzhu/gorm"
+	uuid "github.com/satori/go.uuid"
 )
 
 // ClassInterface struct
@@ -14,6 +15,10 @@ type ClassInterface interface {
 	GetClass(id string) (class models.Class, err error)
 	UpdateClass(id string, updatedData map[string]interface{}) (err error)
 	DeleteClass(id string) (err error)
+	CreateTeacher(id string, uid string) (err error)
+	DeleteTeacher(id string, uid string) (err error)
+	CreateStudent(id string, uid string) (err error)
+	DeleteStudent(id string, uid string) (err error)
 }
 
 // ClassService implements class interface
@@ -87,6 +92,62 @@ func (s *ClassService) DeleteClass(id string) (err error) {
 	err = s.PG.
 		Where("id = ?", id).
 		Delete(&class).
+		Error
+	return
+}
+
+// CreateTeacher associate a class with a teacher
+func (s *ClassService) CreateTeacher(id string, uid string) (err error) {
+	var class models.Class
+	var user models.User
+	user.ID, err = uuid.FromString(uid)
+	err = s.PG.
+		Where("id = ?", id).
+		Take(&class).
+		Association("Teachers").
+		Append(&user).
+		Error
+	return
+}
+
+// DeleteTeacher delete class's association with a teacher
+func (s *ClassService) DeleteTeacher(id string, uid string) (err error) {
+	var class models.Class
+	var user models.User
+	user.ID, err = uuid.FromString(uid)
+	err = s.PG.
+		Where("id = ?", id).
+		Take(&class).
+		Association("Teachers").
+		Delete(&user).
+		Error
+	return
+}
+
+// CreateStudent associate a class with a student
+func (s *ClassService) CreateStudent(id string, uid string) (err error) {
+	var class models.Class
+	var user models.User
+	user.ID, err = uuid.FromString(uid)
+	err = s.PG.
+		Where("id = ?", id).
+		Take(&class).
+		Association("Students").
+		Append(&user).
+		Error
+	return
+}
+
+// DeleteStudent associate a class with a student
+func (s *ClassService) DeleteStudent(id string, uid string) (err error) {
+	var class models.Class
+	var user models.User
+	user.ID, err = uuid.FromString(uid)
+	err = s.PG.
+		Where("id = ?", id).
+		Take(&class).
+		Association("Students").
+		Delete(&user).
 		Error
 	return
 }

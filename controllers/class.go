@@ -1,19 +1,21 @@
 package controllers
 
 import (
-	"ccsl/configs"
-	"ccsl/middlewares"
-	"ccsl/services"
-	"ccsl/utils"
+    "ccsl/configs"
+    "ccsl/middlewares"
+    "ccsl/models"
+    "ccsl/services"
+    "ccsl/utils"
 
-	"github.com/kataras/iris/v12"
-	"github.com/kataras/iris/v12/mvc"
+    "github.com/kataras/iris/v12"
+    "github.com/kataras/iris/v12/mvc"
 )
 
 // ClassController is for class CRUD
 type ClassController struct {
 	Context      iris.Context
 	ClassService services.ClassInterface
+	UserService  services.UserInterface
 }
 
 // BeforeActivation will register routes for controllers
@@ -216,31 +218,72 @@ func (c *ClassController) DeleteClass() {
 	c.Context.StatusCode(iris.StatusNoContent)
 }
 
+// CreateTeacher POST /classes/{id:string}/teachers/{id:string}
 func (c *ClassController) CreateTeacher() {
 	defer c.Context.Next()
-	// id := c.Context.Params().Get("id") class id
-	// uid := c.Context.Params().Get("uid") user id
+	id := c.Context.Params().Get("id")
+	uid := c.Context.Params().Get("uid")
 	// 将uid的老师添加到id班级
+	if err := c.ClassService.CreateTeacher(id, uid); err != nil {
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "ClassService::CreateTeacher", errSQL)
+		return
+	}
+	// Return 201 Created
+	c.Context.StatusCode(iris.StatusCreated)
+	c.Context.JSON(SuccessResponse{success})
 }
 
+// DeleteTeacher POST /classes/{id:string}/teachers/{id:string}
 func (c *ClassController) DeleteTeacher() {
 	defer c.Context.Next()
-	// id := c.Context.Params().Get("id") class id
-	// uid := c.Context.Params().Get("uid") user id
-	// 将uid的老师从id班级中删除
+	id := c.Context.Params().Get("id")
+	uid := c.Context.Params().Get("uid")
+	if err := c.ClassService.DeleteTeacher(id, uid); err != nil {
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "ClassService::DeleteTeacher", errSQL)
+		return
+	}
+	// Returns with 204 No Content status.
+	c.Context.StatusCode(iris.StatusNoContent)
 }
 
+// CreateStudent POST /classes/{id:string}/students
 func (c *ClassController) CreateStudent() {
 	defer c.Context.Next()
-	// id := c.Context.Params().Get("id") class id
-	// 提交的数据为 ClassStudentCreateForm表单
-	// 如果username已经存在，则将该用户添加到id班级
-	// 如果username不存在，那么创建一个用户，并设置用户权限为学生，再将该用户添加到id班级
+	var form ClassStudentCreateForm
+	id := c.Context.Params().Get("id")
+	// Read JSON from request and validate request
+	if err := utils.ReadValidateForm(c.Context, &form); err != nil {
+		utils.SetError(c.Context, iris.StatusBadRequest, "ClassController::CreateStudent", errParams)
+		return
+	}
+	// Check if user already exists
+	user, err := c.UserService.GetUser("username", form.Username)
+	if err != nil {
+		c.UserService.CreateUser(
+			models.User{
+				Username: form.Username,
+				Name:     form.Name,
+				Roles:    []string{configs.RoleStudent},
+				State:    "active",
+			})
+		user, _ = c.UserService.GetUser("username", form.Username)
+	}
+	c.ClassService.CreateStudent(id, user.ID.String())
+	// Return 201 Created
+	c.Context.StatusCode(iris.StatusCreated)
+	c.Context.JSON(SuccessResponse{success})
 }
 
+// DeleteStudent DELETE /classes/{id:string}/students/{id:string}
 func (c *ClassController) DeleteStudent() {
 	defer c.Context.Next()
-	// id := c.Context.Params().Get("id") class id
-	// uid := c.Context.Params().Get("uid") user id
+	id := c.Context.Params().Get("id")
+	uid := c.Context.Params().Get("uid")
 	// 将uid的学生从id班级中删除
+	if err := c.ClassService.DeleteStudent(id, uid); err != nil {
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "ClassService::DeleteStudent", errSQL)
+		return
+	}
+	// Returns with 204 No Content status.
+	c.Context.StatusCode(iris.StatusNoContent)
 }
