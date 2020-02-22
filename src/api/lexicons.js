@@ -2,12 +2,11 @@ import request from "@/utils/request";
 
 const baseURL = "/lexicons";
 
-export function GetWordsList(params, loading) {
+export function GetWordsList(params) {
   return request({
     url: baseURL,
     method: "get",
     params,
-    loading
   });
 }
 

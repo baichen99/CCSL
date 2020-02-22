@@ -29,6 +29,7 @@ export default {
   HandshapeManagement: "Handshapes",
   LearningPlatformManagement: "Learning Platform",
   ClassesManagement: "Classes",
+  AssignmentsManagement: "Assignments",
   ISP: "ISP",
   Longitude: "Longitude",
   Latitude: "Latitude",

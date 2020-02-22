@@ -2,12 +2,11 @@ import request from "@/utils/request";
 
 const baseURL = "/handshapes";
 
-export function GetHandshapesList(params, loading) {
+export function GetHandshapesList(params) {
   return request({
     url: baseURL,
     method: "get",
     params,
-    loading
   });
 }
 

@@ -2,11 +2,10 @@ import request from "@/utils/request";
 
 const baseURL = "/systems";
 
-export function GetDatabaseDump(loading) {
+export function GetDatabaseDump() {
   return request({
     url: `${baseURL}/dump`,
-    method: "get",
-    loading
+    method: "get"
   });
 }
 

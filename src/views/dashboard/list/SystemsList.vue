@@ -1,5 +1,6 @@
 <template>
   <list-view
+    v-loading="loading"
     :get-list-method="GetJsErrorList"
     :delete-item-method="DeleteJsError"
     :allow-detail-form="false"
@@ -54,6 +55,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       GetJsErrorList,
       DeleteJsError,
       columns: [
@@ -88,8 +90,9 @@ export default {
   },
   methods: {
     async handleDump() {
+      this.loading = true;
       try {
-        const res = await GetDatabaseDump(true);
+        const res = await GetDatabaseDump();
         const url = window.URL.createObjectURL(new Blob([res]));
         const link = document.createElement("a");
         link.href = url;
@@ -98,6 +101,8 @@ export default {
         link.click();
       } catch (err) {
         console.error(err);
+      } finally {
+        this.loading = false;
       }
     }
   }

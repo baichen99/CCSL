@@ -1,17 +1,18 @@
 import request from "@/utils/request";
 
-export function GetCarouselsList(params, loading) {
+const baseURL = "/carousels"
+
+export function GetCarouselsList(params) {
   return request({
-    url: "/carousels",
+    url: baseURL,
     method: "get",
     params,
-    loading
   });
 }
 
 export function CreateCarousel(data) {
   return request({
-    url: "/carousels",
+    url: baseURL,
     method: "post",
     data
   });
@@ -19,7 +20,7 @@ export function CreateCarousel(data) {
 
 export function UpdateCarousel(id, data) {
   return request({
-    url: `/carousels/${id}`,
+    url: `${baseURL}/${id}`,
     method: "put",
     data
   });
@@ -27,7 +28,7 @@ export function UpdateCarousel(id, data) {
 
 export function DeleteCarousel(id) {
   return request({
-    url: `/carousels/${id}`,
+    url: `${baseURL}/${id}`,
     method: "delete"
   });
 }

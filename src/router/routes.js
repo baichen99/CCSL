@@ -208,6 +208,17 @@ const routes = [
           auth: true,
           roles: [SuperUser]
         }
+      },
+      {
+        path: "assignments-management",
+        name: "AssignmentsManagement",
+        component: () => import("@/views/dashboard/list/AssignmentsList"),
+        meta: {
+          title: "AssignmentsManagement",
+          icon: "assignment",
+          auth: true,
+          roles: [SuperUser, TeacherUser]
+        }
       }
     ]
   },

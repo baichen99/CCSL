@@ -29,6 +29,7 @@ export default {
   HandshapeManagement: "手形管理",
   LearningPlatformManagement: "学习平台管理",
   ClassesManagement: "班级管理",
+  AssignmentsManagement: "作业管理",
   ISP: "运营商",
   Longitude: "经度",
   Latitude: "纬度",

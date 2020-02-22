@@ -2,12 +2,11 @@ import request from "@/utils/request";
 
 const baseURL = "/members";
 
-export function GetMembersList(params, loading) {
+export function GetMembersList(params) {
   return request({
     url: baseURL,
     method: "get",
     params,
-    loading
   });
 }
 
