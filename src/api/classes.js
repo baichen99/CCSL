@@ -39,3 +39,32 @@ export function DeleteClass(id) {
         method: "delete"
     })
 }
+
+export function CreateClassStudent(id, data) {
+    return request({
+        url: `${baseURL}/${id}/students`,
+        method: "post",
+        data
+    })
+}
+
+export function DeleteClassStudent(id, uid) {
+    return request({
+        url: `${baseURL}/${id}/students/${uid}`,
+        method: "delete"
+    })
+}
+
+export function CreateClassTeacher(id, uid) {
+    return request({
+        url: `${baseURL}/${id}/teachers/${uid}`,
+        method: "post"
+    })
+}
+
+export function DeleteClassTeacher(id, uid) {
+    return request({
+        url: `${baseURL}/${id}/teachers/${uid}`,
+        method: "delete"
+    })
+}

@@ -154,6 +154,7 @@ export default {
   Loading: "努力加载中...",
   Edit: "编辑",
   Delete: "删除",
+  Remove: "移除",
   Cancel: "取消",
   Confirm: "确认",
   NoData: "暂无数据",

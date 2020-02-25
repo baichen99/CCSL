@@ -1,5 +1,12 @@
 <template>
-  <el-select v-model="data" filterable clearable :loading="loading" @clear="$emit('clear')">
+  <el-select
+    v-model="data"
+    filterable
+    clearable
+    :loading="loading"
+    :size="size"
+    @clear="$emit('clear')"
+  >
     <el-option v-for="item in options" :key="item.id" :value="item.id" :label="formatter(item)">
       <slot :item="item"></slot>
     </el-option>
@@ -31,6 +38,10 @@ export default {
       default: () => ({
         limit: 0
       })
+    },
+    size: {
+      type: String,
+      default: () => ""
     }
   },
   data() {

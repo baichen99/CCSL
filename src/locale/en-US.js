@@ -155,6 +155,7 @@ export default {
   Loading: "Loading...",
   Edit: "Edit",
   Delete: "Delete",
+  Remove: "Remove",
   Cancel: "Cancel",
   Confirm: "Confirm",
   NoData: "No Data",

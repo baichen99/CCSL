@@ -58,7 +58,7 @@ func (c *UserController) BeforeActivation(app mvc.BeforeActivation) {
 // =================
 func (c *UserController) GetUsersList() {
 	defer c.Context.Next()
-	listParams, err := utils.GetListParamsFromContext(c.Context, "users.username")
+	listParams, err := utils.GetListParamsFromContext(c.Context, "users.created_at")
 	if err != nil {
 		utils.SetError(c.Context, iris.StatusBadRequest, "UserController::GetUsersList", errParams)
 		return
