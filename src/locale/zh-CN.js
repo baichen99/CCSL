@@ -1,6 +1,7 @@
 import zhElementLocale from "element-ui/lib/locale/lang/zh-CN";
 export default {
   ...zhElementLocale,
+  Password: "密码",
   Noun: "名词",
   Verb: "动词",
   Adjective: "形容词",

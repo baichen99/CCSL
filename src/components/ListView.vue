@@ -308,13 +308,13 @@ export default {
       this.openFormDrawer = false;
     },
     handleNewItem() {
-      this.openFormDrawer = true;
       this.mode = "create";
+      this.openFormDrawer = true;
     },
     handleEditItem(data) {
       if (this.allowDetailForm) {
-        this.openFormDrawer = true;
         this.mode = "edit";
+        this.openFormDrawer = true;
         this.originalItemData = lodash.cloneDeep(data);
         this.itemData = lodash.cloneDeep(data);
       }

@@ -7,6 +7,10 @@ const formMixin = {
     data: {
       type: Object,
       default: () => ({})
+    },
+    mode: {
+      type: String,
+      default: () => ""
     }
   },
   computed: {

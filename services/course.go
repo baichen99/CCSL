@@ -83,10 +83,9 @@ func (s *CourseService) UpdateCourse(id string, updatedData map[string]interface
 
 // DeleteCourse delete a course model
 func (s *CourseService) DeleteCourse(id string) (err error) {
-	var course models.Course
 	err = s.PG.
 		Where("id = ?", id).
-		Delete(&course).
+		Delete(&models.Course{}).
 		Error
 	return
 }

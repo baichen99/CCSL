@@ -12,6 +12,10 @@
       <el-input v-model="formData.username" :placeholder="$t('tipAccount')" />
     </el-form-item>
 
+    <el-form-item v-if="mode==='create'" :label="$t('Password')" prop="password">
+      <el-input v-model="formData.password" type="password" :placeholder="$t('tipPassword')" />
+    </el-form-item>
+
     <el-form-item :label="$t('AccountState')" prop="state">
       <simple-selector v-model="formData.state" :options="userState" />
     </el-form-item>
@@ -21,12 +25,14 @@
 <i18n>
 {
   "zh-CN": {
-    "tipAccount": "请输入学号或者工号",
-    "tipName": "请输入姓名"
+    "tipAccount": "请输入学工号或者邮箱",
+    "tipName": "请输入姓名",
+    "tipPassword": "请输入密码（校内用户请留空）"
   },
   "en-US": {
     "tipAccount": "Input account",
-    "tipName": "Input name"
+    "tipName": "Input name",
+    "tipPassword": "Input password(Leave it empty if is SHU user)"
   }
 }
 </i18n>
@@ -51,12 +57,12 @@ export default {
         username: [
           {
             required: true,
-            message: "请输入用户学号或者工号",
+            message: "请输入用户学工号或者邮箱",
             trigger: "blur"
           },
           {
-            pattern: /^[0-9]{8}$/,
-            message: "请检查学工号是否正确（应为8位数字）",
+            pattern: /(^[0-9]{8}$)|(^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$)/,
+            message: "请检查学工号或者邮箱",
             trigger: "blur"
           }
         ]

@@ -15,6 +15,8 @@ type ClassInterface interface {
 	GetClass(id string) (class models.Class, err error)
 	UpdateClass(id string, updatedData map[string]interface{}) (err error)
 	DeleteClass(id string) (err error)
+	GetStudentClass(id string) (classes []models.Class, count int, err error)
+	GetTeacherClass(id string) (classes []models.Class, count int, err error)
 	CreateTeacher(id string, uid string) (err error)
 	DeleteTeacher(id string, uid string) (err error)
 	CreateStudent(id string, uid string) (err error)
@@ -88,11 +90,32 @@ func (s *ClassService) UpdateClass(id string, updatedData map[string]interface{}
 
 // DeleteClass delete a class model
 func (s *ClassService) DeleteClass(id string) (err error) {
-	var class models.Class
 	err = s.PG.
 		Where("id = ?", id).
-		Delete(&class).
+		Delete(&models.Class{}).
 		Error
+	return
+}
+
+// GetStudentClass get student classes
+func (s *ClassService) GetStudentClass(id string) (classes []models.Class, count int, err error) {
+	var user models.User
+	if user.ID, err = uuid.FromString(id); err != nil {
+		return
+	}
+	err = s.PG.Model(&user).Related(&classes, "StudentClass").Error
+	count = len(classes)
+	return
+}
+
+// GetTeacherClass get teacher class
+func (s *ClassService) GetTeacherClass(id string) (classes []models.Class, count int, err error) {
+	var user models.User
+	if user.ID, err = uuid.FromString(id); err != nil {
+		return
+	}
+	err = s.PG.Model(&user).Related(&classes, "TeacherClass").Error
+	count = len(classes)
 	return
 }
 

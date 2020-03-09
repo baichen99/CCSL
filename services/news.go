@@ -46,7 +46,9 @@ func (s *NewsService) GetNewsList(parameters utils.GetNewsListParameters) (news 
 	}
 
 	err = db.
-		Preload("Creator").
+		Preload("Creator", func(pg *gorm.DB) *gorm.DB {
+			return pg.Select("id, name")
+		}).
 		Order("importance desc").
 		Scopes(utils.FilterByListParameters(parameters.GetListParameters)).
 		Find(&news).
@@ -57,7 +59,9 @@ func (s *NewsService) GetNewsList(parameters utils.GetNewsListParameters) (news 
 
 func (s *NewsService) GetNews(id string) (news models.News, err error) {
 	err = s.PG.
-		Preload("Creator").
+		Preload("Creator", func(pg *gorm.DB) *gorm.DB {
+			return pg.Select("id, name")
+		}).
 		Where("id = ?", id).
 		Take(&news).
 		Error

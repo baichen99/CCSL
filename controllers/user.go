@@ -194,8 +194,8 @@ func (c *UserController) UpdateUser() {
 		return
 	}
 
-	// Only super user can change user role
-	if form.Roles != nil && !middlewares.HasPermisson(tokenRole, configs.RoleSuperUser) {
+	// Only super user can change user role, state and username
+	if (form.Roles != nil || form.State != nil || form.Username != nil) && !middlewares.HasPermisson(tokenRole, configs.RoleSuperUser) {
 		utils.SetError(c.Context, iris.StatusForbidden, "UserController::UpdateUser", errRole)
 		return
 	}

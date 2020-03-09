@@ -1,6 +1,7 @@
 import enElementLocale from "element-ui/lib/locale/lang/en";
 export default {
   ...enElementLocale,
+  Password: "Password",
   Noun: "Noun",
   Verb: "Verb",
   Adjective: "Adjective",

@@ -23,6 +23,7 @@ func (c *ClassController) BeforeActivation(app mvc.BeforeActivation) {
 	app.Router().Use(middlewares.CheckToken)
 	app.Handle(iris.MethodGet, "/", "GetClassList")
 	app.Handle(iris.MethodGet, "/{id: string}", "GetClass")
+	app.Handle(iris.MethodGet, "/my", "GetMyClass", middlewares.CheckUserRole([]string{configs.RoleStudent, configs.RoleTeacher}))
 	app.Router().Use(middlewares.CheckUserRole([]string{configs.RoleSuperUser}))
 	app.Handle(iris.MethodPost, "/", "CreateClass")
 	app.Handle(iris.MethodPut, "/{id: string}", "UpdateClass")
@@ -110,6 +111,36 @@ func (c *ClassController) GetClass() {
 		success,
 		class,
 	})
+}
+
+func (c *ClassController) GetMyClass() {
+	defer c.Context.Next()
+	tokenUser, tokenRoles := middlewares.GetJWTParams(c.Context)
+	if middlewares.HasPermisson(tokenRoles, configs.RoleStudent) {
+		classes, count, err := c.ClassService.GetStudentClass(tokenUser)
+		if err != nil {
+			utils.SetError(c.Context, iris.StatusUnprocessableEntity, "ClassService::GetMyClass", errSQL)
+			return
+		}
+		c.Context.JSON(GetClassListResponse{
+			GetListResponse{
+				success,
+				1, 0, count,
+			}, classes,
+		})
+	} else if middlewares.HasPermisson(tokenRoles, configs.RoleTeacher) {
+		classes, count, err := c.ClassService.GetTeacherClass(tokenUser)
+		if err != nil {
+			utils.SetError(c.Context, iris.StatusUnprocessableEntity, "ClassService::GetMyClass", errSQL)
+			return
+		}
+		c.Context.JSON(GetClassListResponse{
+			GetListResponse{
+				success,
+				1, 0, count,
+			}, classes,
+		})
+	}
 }
 
 // CreateClass POST /classes
