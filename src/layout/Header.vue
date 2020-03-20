@@ -8,7 +8,13 @@
           <span class="en">Center for CSL and Deaf Studies</span>
         </div>
       </div>
-      <el-menu :default-active="activeMenu" mode="horizontal" router active-text-color="#2363C3">
+      <el-menu
+        v-show="showMenu"
+        :default-active="activeMenu"
+        mode="horizontal"
+        router
+        active-text-color="#2363C3"
+      >
         <el-menu-item index="/">{{ $t("HomeMenu") }}</el-menu-item>
         <el-menu-item v-permission="[StudentUser]" index="/learning-platform">{{ $t("LearnMenu") }}</el-menu-item>
         <el-submenu index="/research">
@@ -91,6 +97,14 @@ export default {
     },
     login() {
       return this.$store.getters.token;
+    },
+    showMenu() {
+      const route = this.$route;
+      const { meta } = route;
+      if (meta.hideMenu) {
+        return false;
+      }
+      return true;
     }
   },
   methods: {

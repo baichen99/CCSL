@@ -37,6 +37,7 @@
 
 <script>
 import { GetNews } from "@/api/news";
+import Plyr from "plyr";
 export default {
   name: "NewsDetail",
   data() {
@@ -50,9 +51,10 @@ export default {
       scroll: 0
     };
   },
-  mounted() {
-    this.getData();
+  async mounted() {
+    await this.getData();
     window.addEventListener("scroll", this.getScroll);
+    this.setupVideos();
   },
   methods: {
     async getData() {
@@ -79,6 +81,11 @@ export default {
           clearInterval(scrollToptimer);
         }
       }, 30);
+    },
+    setupVideos() {
+      Plyr.setup("video", {
+        controls: ["play-large", "progress", "fullscreen", "pip", "volume"]
+      });
     }
   }
 };

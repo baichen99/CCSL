@@ -68,6 +68,12 @@ const routes = [
         meta: { activeMenu: "/about/contact" }
       },
       {
+        path: "/privacy",
+        name: "Privacy",
+        component: () => import("@/views/about/Privacy"),
+        meta: { hideMenu: true }
+      },
+      {
         path: "/learning-platform",
         name: "LearningPlatform",
         component: () => import("@/views/learning/LearningPlatform"),
