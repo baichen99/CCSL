@@ -82,7 +82,17 @@ const routes = [
           auth: true,
           activeMenu: "/learning-platform"
         }
+      },
+      {
+        path: "/discuss",
+        name: "Discuss",
+        component: () => import("@/views/discuss/Discuss"),
+        meta: {
+          roles: [StudentUser, SuperUser, AdminUser],
+          auth: true,
+        }
       }
+
     ]
   },
   {
