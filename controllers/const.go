@@ -454,6 +454,42 @@ type AssignmentUpdateForm struct {
 	Deadline *time.Time `json:"deadline" validate:"omitempty"`
 }
 
+// >>> POST <<<
+// ============
+type PostCreateForm struct {
+	//CreatorID string `json:"creatorID" validate:"required,uuid4"`
+	Title   string `json:"title" validate:"required"`
+	Content string `json:"content" validate:"required"`
+}
+
+func (f PostCreateForm) ConvertToModel() (post models.Post) {
+	//creatorID, _ := uuid.FromString(f.CreatorID)
+	post = models.Post{
+		Title:   f.Title,
+		Content: f.Content,
+		//CreatorID: creatorID,
+	}
+	return
+}
+
+type PostUpdateForm struct {
+	PostID  *string `json:"postID" validate:"omitempty,uuid4"`
+	Title   *string `json:"title" validate:"omitempty"`
+	Content *string `json:"content" validate:"omitempty"`
+}
+
+// GetPostListResponse for GetPostList
+type GetPostListResponse struct {
+	GetListResponse
+	Data []models.Post `json:"data"`
+}
+
+// GetPostResponse for GetPost
+type GetPostResponse struct {
+	Message string      `json:"message" example:"success"`
+	Data    models.Post `json:"data"`
+}
+
 // GetAssignmentListResponse Response for GetAssignmentList
 type GetAssignmentListResponse struct {
 	GetListResponse

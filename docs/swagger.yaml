@@ -162,11 +162,30 @@ definitions:
   controllers.GetCourseResponse:
     properties:
       data:
-        $ref: '#/definitions/models.Class'
+        $ref: '#/definitions/models.Course'
         type: object
       message:
         example: success
         type: string
+    type: object
+  controllers.GetLexicalVideosListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.LexicalVideo'
+        type: array
+      limit:
+        example: 10
+        type: integer
+      message:
+        example: success
+        type: string
+      page:
+        example: 1
+        type: integer
+      total:
+        example: 100
+        type: integer
     type: object
   controllers.GetNotificationResponse:
     properties:
@@ -198,6 +217,34 @@ definitions:
       unread:
         type: integer
     type: object
+  controllers.GetPostListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.Post'
+        type: array
+      limit:
+        example: 10
+        type: integer
+      message:
+        example: success
+        type: string
+      page:
+        example: 1
+        type: integer
+      total:
+        example: 100
+        type: integer
+    type: object
+  controllers.GetPostResponse:
+    properties:
+      data:
+        $ref: '#/definitions/models.Post'
+        type: object
+      message:
+        example: success
+        type: string
+    type: object
   controllers.GetSubmittedAssignmentResponse:
     properties:
       data:
@@ -211,7 +258,7 @@ definitions:
     properties:
       data:
         items:
-          $ref: '#/definitions/models.Assignment'
+          $ref: '#/definitions/models.SubmittedAssignment'
         type: array
       limit:
         example: 10
@@ -245,24 +292,16 @@ definitions:
         example: 100
         type: integer
     type: object
-  controllers.GetVideosListResponse:
+  controllers.PostCreateForm:
     properties:
-      data:
-        items:
-          $ref: '#/definitions/models.LexicalVideo'
-        type: array
-      limit:
-        example: 10
-        type: integer
-      message:
-        example: success
+      content:
         type: string
-      page:
-        example: 1
-        type: integer
-      total:
-        example: 100
-        type: integer
+      title:
+        description: CreatorID string `json:"creatorID" validate:"required,uuid4"`
+        type: string
+    required:
+    - content
+    - title
     type: object
   controllers.SubmittedAssignmentCreateForm:
     properties:
@@ -511,6 +550,54 @@ definitions:
         example: "2019-10-21T09:20:39.943618Z"
         type: string
     type: object
+  models.Post:
+    properties:
+      content:
+        type: string
+      createdAt:
+        example: "2019-10-21T09:20:39.943618Z"
+        type: string
+      creator:
+        $ref: '#/definitions/models.User'
+        type: object
+      creatorID:
+        type: string
+      id:
+        example: 550e8400-e29b-41d4-a716-446655440000
+        format: uuid
+        type: string
+      replies:
+        items:
+          $ref: '#/definitions/models.Reply'
+        type: array
+      title:
+        type: string
+      updatedAt:
+        example: "2019-10-21T09:20:39.943618Z"
+        type: string
+    type: object
+  models.Reply:
+    properties:
+      content:
+        type: string
+      createdAt:
+        example: "2019-10-21T09:20:39.943618Z"
+        type: string
+      creator:
+        $ref: '#/definitions/models.User'
+        type: object
+      creatorID:
+        type: string
+      id:
+        example: 550e8400-e29b-41d4-a716-446655440000
+        format: uuid
+        type: string
+      postID:
+        type: string
+      updatedAt:
+        example: "2019-10-21T09:20:39.943618Z"
+        type: string
+    type: object
   models.SubmittedAssignment:
     properties:
       answer:
@@ -656,7 +743,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/controllers.AssignmentCreateForm'
-          type: object
       produces:
       - application/json
       responses:
@@ -768,7 +854,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/controllers.AssignmentUpdateForm'
-          type: object
       produces:
       - application/json
       responses:
@@ -872,7 +957,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/controllers.SubmittedAssignmentCreateForm'
-          type: object
       produces:
       - application/json
       responses:
@@ -947,7 +1031,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/controllers.SubmittedAssignmentUpdateForm'
-          type: object
       produces:
       - application/json
       responses:
@@ -1073,7 +1156,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/controllers.ClassCreateForm'
-          type: object
       produces:
       - application/json
       responses:
@@ -1185,7 +1267,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/controllers.ClassUpdateForm'
-          type: object
       produces:
       - application/json
       responses:
@@ -1281,7 +1362,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/controllers.CourseCreateForm'
-          type: object
       produces:
       - application/json
       responses:
@@ -1393,7 +1473,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/controllers.CourseUpdateForm'
-          type: object
       produces:
       - application/json
       responses:
@@ -1508,7 +1587,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controllers.GetVideosListResponse'
+            $ref: '#/definitions/controllers.GetLexicalVideosListResponse'
         "400":
           description: Bad Request
           schema:
@@ -1649,6 +1728,171 @@ paths:
       summary: Get notification
       tags:
       - Notifications
+  /posts:
+    get:
+      consumes:
+      - application/json
+      description: get notifications list
+      parameters:
+      - description: select from page
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      - description: limit number
+        in: query
+        minimum: 0
+        name: limit
+        type: integer
+      - description: order by field
+        in: query
+        name: order
+        type: string
+      - description: order by asc or desc
+        enum:
+        - asc
+        - desc
+        in: query
+        name: orderBy
+        type: string
+      - description: search message of notification
+        in: query
+        name: message
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.GetPostListResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: List posts
+      tags:
+      - Posts
+    post:
+      consumes:
+      - application/json
+      description: create a new post
+      parameters:
+      - description: create post
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.PostCreateForm'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/controllers.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Create post
+      tags:
+      - Posts
+  /posts/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete a post by id
+      parameters:
+      - description: post id
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204": {}
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Delete post
+      tags:
+      - Posts
+    get:
+      consumes:
+      - application/json
+      description: Get a post by id
+      parameters:
+      - description: post id
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.GetPostResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Get post
+      tags:
+      - Posts
+  /posts{id}:
+    put:
+      consumes:
+      - application/json
+      description: delete a class by id
+      parameters:
+      - description: post id
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204": {}
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Delete post
+      tags:
+      - Posts
   /users:
     get:
       consumes:
@@ -1733,7 +1977,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/controllers.UserCreateForm'
-          type: object
       produces:
       - application/json
       responses:
@@ -1774,7 +2017,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/controllers.UserUpdateForm'
-          type: object
       produces:
       - application/json
       responses:

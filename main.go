@@ -53,6 +53,10 @@ func main() {
 		app.Register(services.NewUserService(pg), services.NewNotificationService(pg))
 		app.Handle(new(controllers.UserController))
 	})
+	mvc.Configure(app.Party("/posts"), func(app *mvc.Application) {
+		app.Register(services.NewPostService(pg))
+		app.Handle(new(controllers.PostController))
+	})
 	mvc.Configure(app.Party("/handshapes"), func(app *mvc.Application) {
 		app.Register(services.NewHandshapeService(pg))
 		app.Handle(new(controllers.HandshapeController))
@@ -107,6 +111,7 @@ func main() {
 		app.Register(services.NewAssignmentService(pg), services.NewCourseService(pg), services.NewClassService(pg))
 		app.Handle(new(controllers.AssignmentController))
 	})
+
 	host := fmt.Sprintf("%s:%d", configs.Conf.Listener.Server, configs.Conf.Listener.Port)
 	app.Run(iris.Addr(host), iris.WithOptimizations, iris.WithoutStartupLog)
 }
@@ -177,6 +182,8 @@ func initDB(app *iris.Application) *gorm.DB {
 		&models.Course{},
 		&models.Assignment{},
 		&models.SubmittedAssignment{},
+		&models.Post{},
+		&models.Reply{},
 	)
 
 	// Don't use UNIQUE to declare gorm models because you can't create a already deleted object with the same value, manually Add UNIQUE key for table columns

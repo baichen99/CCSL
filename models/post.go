@@ -1,6 +1,6 @@
 package models
 
-import uuid "github.com/iris-contrib/go.uuid"
+import uuid "github.com/satori/go.uuid"
 
 // Post model 讨论区帖子
 type Post struct {
