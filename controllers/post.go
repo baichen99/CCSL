@@ -9,7 +9,7 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-//NotificationController is for Notification CRUD
+// NotificationController is for Notification CRUD
 type PostController struct {
 	Context     iris.Context
 	PostService services.PostInterface

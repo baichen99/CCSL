@@ -29,8 +29,8 @@ func (p PostService) GetPostList(parameters utils.GetPostListParameters) (post [
 
 	db := p.PG.
 		Scopes(
+			utils.FilterByColumn("posts.creator_id", parameters.CreatorID),
 			utils.SearchByColumn("posts.title", parameters.Title),
-			utils.SearchByColumn("posts.creator_id", parameters.CreatorID),
 		)
 
 	err = db.
