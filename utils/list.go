@@ -270,7 +270,7 @@ type GetPostListParameters struct {
 }
 
 // ReplyListParameters parameters for get Reply list queries
-type ReplyListParameters struct {
+type GetReplyListParameters struct {
 	GetListParameters
 	PostID    string
 	CreatorID string

@@ -245,6 +245,34 @@ definitions:
         example: success
         type: string
     type: object
+  controllers.GetReplyListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.Reply'
+        type: array
+      limit:
+        example: 10
+        type: integer
+      message:
+        example: success
+        type: string
+      page:
+        example: 1
+        type: integer
+      total:
+        example: 100
+        type: integer
+    type: object
+  controllers.GetReplyResponse:
+    properties:
+      data:
+        $ref: '#/definitions/models.Reply'
+        type: object
+      message:
+        example: success
+        type: string
+    type: object
   controllers.GetSubmittedAssignmentResponse:
     properties:
       data:
@@ -302,6 +330,17 @@ definitions:
     required:
     - content
     - title
+    type: object
+  controllers.ReplyCreateForm:
+    properties:
+      content:
+        type: string
+      postID:
+        description: ReplyID string `json:"replyID" validate:"required"`
+        type: string
+    required:
+    - content
+    - postID
     type: object
   controllers.SubmittedAssignmentCreateForm:
     properties:
@@ -1770,10 +1809,6 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/controllers.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/controllers.ErrorResponse'
         "422":
           description: Unprocessable Entity
           schema:
@@ -1788,7 +1823,7 @@ paths:
       parameters:
       - description: create post
         in: body
-        name: user
+        name: post
         required: true
         schema:
           $ref: '#/definitions/controllers.PostCreateForm'
@@ -1866,7 +1901,7 @@ paths:
     put:
       consumes:
       - application/json
-      description: delete a class by id
+      description: update a post by id
       parameters:
       - description: post id
         format: uuid
@@ -1890,9 +1925,168 @@ paths:
           description: Unprocessable Entity
           schema:
             $ref: '#/definitions/controllers.ErrorResponse'
-      summary: Delete post
+      summary: Update post
       tags:
       - Posts
+  /replies:
+    get:
+      consumes:
+      - application/json
+      description: get replies list
+      parameters:
+      - description: select from page
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      - description: limit number
+        in: query
+        minimum: 0
+        name: limit
+        type: integer
+      - description: order by field
+        in: query
+        name: order
+        type: string
+      - description: order by asc or desc
+        enum:
+        - asc
+        - desc
+        in: query
+        name: orderBy
+        type: string
+      - description: search message of notification
+        in: query
+        name: message
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.GetReplyListResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: List Replies
+      tags:
+      - Replies
+    post:
+      consumes:
+      - application/json
+      description: create a new reply
+      parameters:
+      - description: create reply
+        in: body
+        name: reply
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.ReplyCreateForm'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/controllers.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Create reply
+      tags:
+      - Replies
+  /replies/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete a post by id
+      parameters:
+      - description: reply id
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204": {}
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Delete reply
+      tags:
+      - Replies
+    get:
+      consumes:
+      - application/json
+      description: Get a reply by id
+      parameters:
+      - description: reply id
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.GetReplyResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Get replies
+      tags:
+      - Replies
+    put:
+      consumes:
+      - application/json
+      description: update a reply by id
+      parameters:
+      - description: reply id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204": {}
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Update reply
+      tags:
+      - Replies
   /users:
     get:
       consumes:

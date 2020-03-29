@@ -57,6 +57,10 @@ func main() {
 		app.Register(services.NewPostService(pg))
 		app.Handle(new(controllers.PostController))
 	})
+	mvc.Configure(app.Party("/replies"), func(app *mvc.Application) {
+		app.Register(services.NewReplyService(pg))
+		app.Handle(new(controllers.ReplyController))
+	})
 	mvc.Configure(app.Party("/handshapes"), func(app *mvc.Application) {
 		app.Register(services.NewHandshapeService(pg))
 		app.Handle(new(controllers.HandshapeController))

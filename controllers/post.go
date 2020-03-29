@@ -41,7 +41,6 @@ func (c *PostController) BeforeActivation(app mvc.BeforeActivation) {
 // @Param message 	query string false 	"search message of notification"
 // @Success 200 {object} controllers.GetPostListResponse
 // @Failure 400 {object} controllers.ErrorResponse
-// @Failure 401 {object} controllers.ErrorResponse
 // @Failure 422 {object} controllers.ErrorResponse
 // =================
 func (c *PostController) GetPostList() {
@@ -112,7 +111,7 @@ func (c *PostController) GetPost() {
 // @Accept json
 // @Produce json
 // @Router /posts   [POST]
-// @Param   user    body        controllers.PostCreateForm  true    "create post"
+// @Param   post    body        controllers.PostCreateForm  true    "create post"
 // @Success 201     {object}    controllers.SuccessResponse
 // @Failure 400     {object}    controllers.ErrorResponse
 // @Failure 422     {object}    controllers.ErrorResponse
@@ -139,12 +138,12 @@ func (c *PostController) CreatePost() {
 	c.Context.JSON(SuccessResponse{success})
 }
 
-// UpdatePosts PUT /post/{id: string}
+// UpdatePosts PUT /posts/{id: string}
 // >>>>> DOCS  <<<<<
 // =================
 // @Tags Posts
-// @Summary Delete post
-// @Description delete a class by id
+// @Summary Update post
+// @Description update a post by id
 // @Accept  json
 // @Produce json
 // @Router  /posts{id}  [PUT]
@@ -173,7 +172,7 @@ func (c *PostController) UpdatePost() {
 	tokenID, _ := uuid.FromString(tokenUser)
 	if tokenID != post.CreatorID {
 		// Returns 401 Unauthorized
-		utils.SetError(c.Context, iris.StatusUnauthorized, "PostController::UpdatePost::UnauthorizedUser", errAuth)
+		utils.SetError(c.Context, iris.StatusUnauthorized, "PostController::UpdatePost", errAuth)
 		return
 	}
 
@@ -191,7 +190,7 @@ func (c *PostController) UpdatePost() {
 	c.Context.StatusCode(iris.StatusNoContent)
 }
 
-// DeletePost DELETE /post/{id: string}
+// DeletePost DELETE /posts/{id: string}
 // >>>>> DOCS  <<<<<
 // =================
 // @Tags Posts
@@ -214,12 +213,12 @@ func (c *PostController) DeletePost() {
 	tokenUser, _ := middlewares.GetJWTParams(c.Context)
 	tokenID, _ := uuid.FromString(tokenUser)
 	if tokenID != post.CreatorID {
-		utils.SetError(c.Context, iris.StatusUnauthorized, "PostController::UpdatePost::UnauthorizedUser", errAuth)
+		utils.SetError(c.Context, iris.StatusUnauthorized, "PostController::DeleteReply", errAuth)
 		return
 	}
 
 	if err := c.PostService.DeletePost(id); err != nil {
-		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "PostService:DeletePost", errSQL)
+		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "PostService::DeletePost", errSQL)
 		return
 	}
 
