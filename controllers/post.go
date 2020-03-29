@@ -59,6 +59,7 @@ func (c *PostController) GetPostList() {
 	posts, count, err := c.PostService.GetPostList(listParameters)
 	if err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "PostService::GetPostList", errSQL)
+		return
 	}
 	c.Context.JSON(GetPostListResponse{
 		GetListResponse{
