@@ -86,6 +86,13 @@ func (p PostService) UpdatePost(id string, updateData map[string]interface{}) (e
 
 // DeletePost delete post by id
 func (p PostService) DeletePost(id string) (err error) {
+	r := ReplyService{p.PG}
+	post, _ := p.GetPost(id)
+	println(post.Replies)
+	for reply := range post.Replies {
+		_ = r.DeleteReply(post.Replies[reply].Base.ID.String())
+	}
+
 	err = p.PG.
 		Where("id = ?", id).
 		Delete(&models.Post{}).
