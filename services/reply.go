@@ -41,7 +41,9 @@ func (r ReplyService) GetReplyList(parameters utils.GetReplyListParameters) (rep
 	}
 
 	err = db.
-		Preload("Creator").
+		Preload("Creator", func(pg *gorm.DB) *gorm.DB {
+			return pg.Select("id, name, avatar, username")
+		}).
 		Scopes(utils.FilterByListParameters(parameters.GetListParameters)).
 		Find(&reply).
 		Error
@@ -52,7 +54,9 @@ func (r ReplyService) GetReplyList(parameters utils.GetReplyListParameters) (rep
 // GetReply get reply by id
 func (r ReplyService) GetReply(id string) (reply models.Reply, err error) {
 	err = r.PG.
-		Preload("Creator").
+		Preload("Creator", func(pg *gorm.DB) *gorm.DB {
+			return pg.Select("id, name, avatar, username")
+		}).
 		Where("id = ?", id).
 		Take(&reply).
 		Error

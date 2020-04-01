@@ -56,8 +56,13 @@ func (p PostService) GetPostList(parameters utils.GetPostListParameters) (post [
 // GetPost get post by id
 func (p PostService) GetPost(id string) (post models.Post, err error) {
 	err = p.PG.
-		Preload("Creator").
+		Preload("Creator", func(pg *gorm.DB) *gorm.DB {
+			return pg.Select("id, name, avatar, username")
+		}).
 		Preload("Replies").
+		Preload("Replies.Creator", func(pg *gorm.DB) *gorm.DB {
+			return pg.Select("id, name, avatar, username")
+		}).
 		Where("id = ?", id).
 		Take(&post).
 		Error
