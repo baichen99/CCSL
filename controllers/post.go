@@ -124,6 +124,8 @@ func (c *PostController) CreatePost() {
 		utils.SetError(c.Context, iris.StatusBadRequest, "PostController::CreatPost", errParams)
 		return
 	}
+	form.Content = middlewares.FilterUserInput(form.Content)
+	form.Title = middlewares.FilterUserInput(form.Title)
 
 	post := form.ConvertToModel()
 	tokenUser, _ := middlewares.GetJWTParams(c.Context)

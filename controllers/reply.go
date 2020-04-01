@@ -122,6 +122,7 @@ func (c *ReplyController) CreateReply() {
 		utils.SetError(c.Context, iris.StatusBadRequest, "ReplyController:CreateReply", errParams)
 		return
 	}
+	form.Content = middlewares.FilterUserInput(form.Content)
 	reply := form.ConvertToModel()
 	tokenUser, _ := middlewares.GetJWTParams(c.Context)
 	tokenID, _ := uuid.FromString(tokenUser)
