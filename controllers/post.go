@@ -177,8 +177,6 @@ func (c *PostController) UpdatePost() {
 	}
 
 	// Make UpdateData into object & update in database
-	uuidString := post.Base.ID.String()
-	form.PostID = &uuidString
 	updateData := utils.MakeUpdateData(form)
 	if err := c.PostService.UpdatePost(id, updateData); err != nil {
 		// Returns 422 UnprocessableEntity

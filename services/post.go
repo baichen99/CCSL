@@ -44,7 +44,7 @@ func (p PostService) GetPostList(parameters utils.GetPostListParameters) (post [
 
 	err = db.
 		Preload("Creator", func(pg *gorm.DB) *gorm.DB {
-			return pg.Select("id, name, avatar, state, roles")
+			return pg.Select("id, name, avatar, username")
 		}).
 		Scopes(utils.FilterByListParameters(parameters.GetListParameters)).
 		Find(&post).

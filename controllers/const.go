@@ -473,8 +473,6 @@ func (f PostCreateForm) ConvertToModel() (post models.Post) {
 }
 
 type PostUpdateForm struct {
-	// json:"PostID" is not given by request's json, it's given by URL
-	PostID  *string `json:"postID" validate:"omitempty,uuid4"`
 	Title   *string `json:"title" validate:"omitempty"`
 	Content *string `json:"content" validate:"omitempty"`
 }
@@ -482,7 +480,6 @@ type PostUpdateForm struct {
 // >>> REPLY <<<
 // ============
 type ReplyCreateForm struct {
-	//ReplyID string `json:"replyID" validate:"required"`
 	PostID  string `json:"postID" validate:"required,uuid4"`
 	Content string `json:"content" validate:"required"`
 }
@@ -497,8 +494,6 @@ func (f ReplyCreateForm) ConvertToModel() (reply models.Reply) {
 }
 
 type ReplyUpdateForm struct {
-	// json:"replyID" is not given by request's json, it's given by URL
-	ReplyID *string `json:"replyID" validate:"omitempty,uuid4"`
 	Content *string `json:"content" validate:"omitempty"`
 }
 

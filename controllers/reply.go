@@ -1,6 +1,5 @@
 package controllers
 
-import "C"
 import (
 	"ccsl/middlewares"
 	"ccsl/services"
@@ -169,8 +168,6 @@ func (c *ReplyController) UpdateReply() {
 		return
 	}
 
-	uuidString := reply.Base.ID.String()
-	form.ReplyID = &uuidString
 	updateData := utils.MakeUpdateData(form)
 	if err := c.ReplyService.UpdateReply(id, updateData); err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "ReplyService::UpdateReply", errSQL)
