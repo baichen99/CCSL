@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"ccsl/configs"
 	"ccsl/middlewares"
 	"ccsl/services"
 	"ccsl/utils"
@@ -196,9 +197,10 @@ func (c *ReplyController) DeleteReply() {
 
 	reply, _ := c.ReplyService.GetReply(id)
 
-	tokenUser, _ := middlewares.GetJWTParams(c.Context)
+	tokenUser, tokenRole := middlewares.GetJWTParams(c.Context)
 	tokenID, _ := uuid.FromString(tokenUser)
-	if tokenID != reply.CreatorID {
+
+	if !(tokenID == reply.CreatorID || middlewares.HasPermisson(tokenRole, configs.RoleSuperUser)) {
 		utils.SetError(c.Context, iris.StatusUnauthorized, "ReplyController::DeleteReply", errAuth)
 		return
 	}
