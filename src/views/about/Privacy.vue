@@ -44,12 +44,13 @@
 
 <style lang="scss" scoped>
 .el-card {
+  h1 {
+    text-align: center;
+  }
+  
   max-width: 900px;
   margin: 0 auto;
   padding: 20px 50px;
   line-height: 2rem;
-  h2 {
-    text-align: center;
-  }
 }
 </style>

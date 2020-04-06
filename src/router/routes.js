@@ -74,6 +74,12 @@ const routes = [
         meta: { hideMenu: true }
       },
       {
+        path: "/terms-of-service",
+        name: "TermsOfService",
+        component: () => import("@/views/about/TermsOfService"),
+        meta: { hideMenu: true }
+      },
+      {
         path: "/learning-platform",
         name: "LearningPlatform",
         component: () => import("@/views/learning/LearningPlatform"),
