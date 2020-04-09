@@ -261,3 +261,17 @@ type GetSubmittedAssignmentsListParameters struct {
 	Answer       string
 	Comment      string
 }
+
+// GetPostListParameters parameters for get Post list queries
+type GetPostListParameters struct {
+	GetListParameters
+	Title     string
+	CreatorID string
+}
+
+// ReplyListParameters parameters for get Reply list queries
+type GetReplyListParameters struct {
+	GetListParameters
+	PostID    string
+	CreatorID string
+}
