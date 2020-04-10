@@ -454,6 +454,71 @@ type AssignmentUpdateForm struct {
 	Deadline *time.Time `json:"deadline" validate:"omitempty"`
 }
 
+// >>> POST <<<
+// ============
+type PostCreateForm struct {
+	//CreatorID string `json:"creatorID" validate:"required,uuid4"`
+	Title   string `json:"title" validate:"required"`
+	Content string `json:"content" validate:"required"`
+}
+
+func (f PostCreateForm) ConvertToModel() (post models.Post) {
+	//creatorID, _ := uuid.FromString(f.CreatorID)
+	post = models.Post{
+		Title:   f.Title,
+		Content: f.Content,
+		//CreatorID: creatorID,
+	}
+	return
+}
+
+type PostUpdateForm struct {
+	Title   *string `json:"title" validate:"omitempty"`
+	Content *string `json:"content" validate:"omitempty"`
+}
+
+// >>> REPLY <<<
+// ============
+type ReplyCreateForm struct {
+	PostID  string `json:"postID" validate:"required,uuid4"`
+	Content string `json:"content" validate:"required"`
+}
+
+func (f ReplyCreateForm) ConvertToModel() (reply models.Reply) {
+	postID, _ := uuid.FromString(f.PostID)
+	reply = models.Reply{
+		PostID:  postID,
+		Content: f.Content,
+	}
+	return
+}
+
+type ReplyUpdateForm struct {
+	Content *string `json:"content" validate:"omitempty"`
+}
+
+type GetReplyListResponse struct {
+	GetListResponse
+	Data []models.Reply `json:"data"`
+}
+
+type GetReplyResponse struct {
+	Message string       `json:"message" example:"success"`
+	Data    models.Reply `json:"data"`
+}
+
+// GetPostListResponse for GetPostList
+type GetPostListResponse struct {
+	GetListResponse
+	Data []models.Post `json:"data"`
+}
+
+// GetPostResponse for GetPost
+type GetPostResponse struct {
+	Message string      `json:"message" example:"success"`
+	Data    models.Post `json:"data"`
+}
+
 // GetAssignmentListResponse Response for GetAssignmentList
 type GetAssignmentListResponse struct {
 	GetListResponse

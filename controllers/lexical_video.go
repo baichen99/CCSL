@@ -54,7 +54,7 @@ func (c *LexicalVideoController) BeforeActivation(app mvc.BeforeActivation) {
 // @Param morpheme 	        query string false "search by morpheme"
 // @Param wordFormation     query string false "filter by word formation" 	enums(simple, compound)
 // @Param performerID	    query string false "filter by performer ID"
-// @Success 200 {object} controllers.GetVideosListResponse
+// @Success 200 {object} controllers.GetLexicalVideosListResponse
 // @Failure 400 {object} controllers.ErrorResponse
 // @Failure 401 {object} controllers.ErrorResponse
 // @Failure 422 {object} controllers.ErrorResponse

@@ -141,7 +141,7 @@ func (c *NotificationController) DeleteNotification() {
 	id := c.Context.Params().Get("id")
 
 	// Check notification.UserID == userID
-	notfication, err := c.NotificationService.GetNotification(id)
+	notification, err := c.NotificationService.GetNotification(id)
 	if err != nil {
 		utils.SetError(c.Context, iris.StatusUnprocessableEntity, "NotificationService::GetNotification", errSQL)
 		return
@@ -149,7 +149,7 @@ func (c *NotificationController) DeleteNotification() {
 
 	tokenUser, _ := middlewares.GetJWTParams(c.Context)
 
-	if notfication.UserID.String() != tokenUser {
+	if notification.UserID.String() != tokenUser {
 		utils.SetError(c.Context, iris.StatusForbidden, "NotificationService::GetNotification", errRole)
 		return
 	}
