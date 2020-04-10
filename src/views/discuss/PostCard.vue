@@ -5,7 +5,9 @@
         <h2 class="title" @click="showDetail(post.id)">{{ post.title }}</h2>
         <div class="user-info">{{ $t('Publisher') }}: {{ post.creator.name }}</div>
       </div>
-      <el-button v-show="showDelete" type="danger" plain @click="deletePost">{{ $t('Delete') }}</el-button>
+      <div>
+        <el-button v-show="showDelete" type="danger" plain @click="deletePost">{{ $t('Delete') }}</el-button>
+      </div>
     </div>
 
     <div class="content" v-html="post.content"></div>
@@ -55,12 +57,16 @@ export default {
   },
   methods: {
     showDetail() {
-      this.$router.push(`/posts/${this.post.id}`).catch(err => {err})
+      this.$router.push(`/learning-plartform/posts/${this.post.id}`).catch(err => {err})
     },
     deletePost() {
       DeletePost(this.post.id).
         then(() => {
-          this.$router.push('/posts')
+          if(this.$route.path != '/learning-plartform/posts') {
+            this.$router.push('/learning-plartform/posts')
+          } else {
+            this.$emit('delete');
+          }
           this.$notify.success({
             title: this.$t("DeletePost"),
             duration: 2000

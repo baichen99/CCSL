@@ -1,14 +1,30 @@
 <template>
   <div class="container">
-    <topBar v-model="params" @search="searchByButton" @createPost="createPost" />
+    <topBar 
+      v-model="params" 
+      @search="searchByButton" 
+      @createPost="createPost" 
+    />
     <SearchResult 
       v-model="params.page"
       :posts="posts" 
       :total="total"
-      @page-change="changePage" 
+      @page-change="changePage"
+      @deletePost="getData"
     />
   </div>
 </template>
+
+<i18n>
+{
+  "zh-CN": {
+    "PostNotFound": "未找到相关帖子"
+  },
+  "en-US": {
+    "PostNotFound": "No posts found"
+  }
+}
+</i18n>
 
 <script>
 import topBar from "./TopBar"

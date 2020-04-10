@@ -82,13 +82,15 @@ export default {
               duration: 2000
             });
           });
-        this.$emit('createPost', this.form)
+        this.$emit('createPost');
         this.$notify.info({
           title: this.$t("SuccessfulOperation"),
           duration: 2000
         });
+
       } finally {
         this.loading = false;
+        this.toggleForm();
       }
     }
   }

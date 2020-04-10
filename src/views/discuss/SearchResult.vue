@@ -1,6 +1,11 @@
 <template>
   <div class="searchResult">
-    <PostCard v-for="post in posts" :key="post.id" :post="post" />
+    <PostCard 
+      v-for="post in posts" 
+      :key="post.id" 
+      :post="post" 
+      @delete="$emit('deletePost')"
+    />
     <el-pagination
       background
       layout="total, prev, pager, next"

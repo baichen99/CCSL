@@ -306,6 +306,45 @@ const routes = [
     ]
   },
   {
+    path: "/learning-plartform",
+    component: AdminLayout,
+    name: "LearningPlatform",
+    meta: {
+      title: "LearningPlatform",
+      icon: "learn",
+      roles: [StudentUser, TeacherUser, SuperUser, AdminUser]
+    },
+    children: [
+      {
+        path: "posts",
+        name: "Discuss",
+        component: () => import("@/views/discuss/Discuss"),
+        meta: {
+          title: "DiscussArea",
+          icon: "discuss",
+          auth: true
+        }
+      },
+      {
+        path: "posts/:id",
+        name: "PostDetail",
+        hidden:true,
+        component: () => import("@/views/discuss/PostDetail"),
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path: "placeholder",
+        name: "Placeholder",
+        component: () => import("@/views/dashboard/list/LexiconsList"),
+        meta: {
+          title: "placeholder"
+        }
+      },
+    ]
+  },
+  {
     path: "/404",
     name: "404Error",
     component: () => import("@/views/error/404"),

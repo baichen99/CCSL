@@ -31,6 +31,8 @@ export default {
   LearningPlatformManagement: "学习平台管理",
   ClassesManagement: "班级管理",
   AssignmentsManagement: "作业管理",
+  DiscussArea: "讨论区",
+  LearningPlatform: "学习平台",
   ISP: "运营商",
   Longitude: "经度",
   Latitude: "纬度",
