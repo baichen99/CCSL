@@ -90,15 +90,23 @@ const routes = [
         }
       },
       {
-        path: "/discuss",
-        name: "Discuss",
+        path: "/posts",
+        name: "Posts",
         component: () => import("@/views/discuss/Discuss"),
+        meta: {
+          roles: [StudentUser, SuperUser, AdminUser],
+          auth: false,
+        }
+      },
+      {
+        path: "/posts/:id",
+        name: "PostDetail",
+        component: () => import("@/views/discuss/PostDetail"),
         meta: {
           roles: [StudentUser, SuperUser, AdminUser],
           auth: true,
         }
       }
-
     ]
   },
   {

@@ -1,6 +1,6 @@
 <template>
   <div class="searchResult">
-    <TopicCard v-for="topic in topics" :key="topic.id" :topic="topic" />
+    <PostCard v-for="post in posts" :key="post.id" :post="post" />
     <el-pagination
       background
       layout="total, prev, pager, next"
@@ -13,17 +13,17 @@
 </template>
 
 <script>
-import TopicCard from "./TopicCard"
+import PostCard from "./PostCard"
 export default {
   components: {
-    TopicCard,
+    PostCard,
   },
   model: {
     prop: 'page',
-    event: 'update',
+    event: 'update:page',
   },
   props: {
-    topics: {
+    posts: {
       type: Array,
       default: ()=>([]),
     },
@@ -40,11 +40,6 @@ export default {
       default: 1
     }
   },
-  data() {
-    return {
-
-    }
-  },
   computed: {
     pageNumber: {
       get() {
@@ -54,9 +49,6 @@ export default {
         this.$emit("update:page", page);
       }
     }
-  },
-  created() {
-    // get data
   },
   methods: {
     showDetail(id) {
@@ -72,6 +64,9 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
+    .PostCard {
+      margin-top: 10px;
+    }
     .el-pagination {
       margin-top: 20px;
     }
